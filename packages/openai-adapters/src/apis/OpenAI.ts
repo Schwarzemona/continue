@@ -237,15 +237,57 @@ export class OpenAIApi implements BaseLlmApi {
   }
 
   async rerank(body: RerankCreateParams): Promise<CreateRerankResponse> {
-    const endpoint = new URL("rerank", this.apiBase);
-    const modifiedBody = this.modifyRerankBody(body);
-    const response = await customFetch(this.config.requestOptions)(endpoint, {
-      method: "POST",
-      body: JSON.stringify(modifiedBody),
-      headers: this.getHeaders(),
-    });
-    const data = await response.json();
-    return data as any;
+    const { query, documents, model, top_k } = body;
+
+    const systemPrompt = `You are a reranker. Given a query and a list of documents, rank the documents by relevance to the query.
+Return the result as a JSON object with the following structure:
+{
+  "data": [
+    { "relevance_score": number, "index": number },
+    ...
+  ]
+}
+Each "index" must correspond to the index of the document in the provided list.
+The "relevance_score" should be between 0.0 and 1.0.`;
+
+    const userPrompt = `Query: ${query}\n\nDocuments:\n${documents.map((doc, i) => `[${i}] ${doc}`).join("\n")}`;
+
+    const response = await this.chatCompletionNonStream(
+      {
+        model,
+        messages: [
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt },
+        ],
+        response_format: { type: "json_object" },
+      },
+      new AbortController().signal,
+    );
+
+    const content = response.choices[0].message.content;
+    if (!content) {
+      throw new Error("Empty response from LLM in rerank");
+    }
+
+    const parsed = JSON.parse(content);
+    let data = parsed.data;
+
+    if (!Array.isArray(data)) {
+      throw new Error("Invalid JSON structure returned by LLM in rerank");
+    }
+
+    if (top_k !== undefined && Array.isArray(data)) {
+      data = data.slice(0, top_k);
+    }
+
+    return {
+      object: "list",
+      data: data,
+      model: model,
+      usage: {
+        total_tokens: response.usage?.total_tokens ?? 0,
+      },
+    };
   }
 
   async list(): Promise<Model[]> {

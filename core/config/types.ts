@@ -544,10 +544,11 @@ declare global {
      */
     useResponsesApi?: boolean;
 
-    // Embedding options
+        // Embedding options
     embeddingId?: string;
     maxEmbeddingChunkSize?: number;
     maxEmbeddingBatchSize?: number;
+    embeddingPrefixes?: Record<"chunk" | "query", string>;
   
     // Cloudflare options
     accountId?: string;

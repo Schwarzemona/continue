@@ -91,8 +91,8 @@ export abstract class BaseLLM implements ILLM {
   static providerName: string;
   static defaultOptions: Partial<LLMOptions> | undefined = undefined;
   // Provider capabilities (overridable by subclasses)
-  protected supportsReasoningField: boolean = false;
-  protected supportsReasoningDetailsField: boolean = false;
+  protected supportsReasoningField: boolean = true;
+  protected supportsReasoningDetailsField: boolean = true;
   protected supportsReasoningContentField: boolean = false;
 
   get providerName(): string {
@@ -1345,8 +1345,13 @@ export abstract class BaseLLM implements ILLM {
     return batchedChunks;
   }
 
-  async embed(chunks: string[]): Promise<number[][]> {
-    const batches = this.getBatchedChunks(chunks);
+  async embed(
+    chunks: string[],
+    task: "chunk" | "query" = "chunk",
+  ): Promise<number[][]> {
+    const prefix = this._llmOptions.embeddingPrefixes?.[task] ?? "";
+    const prefixedChunks = chunks.map((c) => prefix + c);
+    const batches = this.getBatchedChunks(prefixedChunks);
 
     return (
       await Promise.all(

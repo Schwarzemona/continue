@@ -142,7 +142,7 @@ export interface ILLM
     options: LLMFullCompletionOpeions,
   ): CompiledChatMessagesReport;
 
-  embed(chunks: string[]): Promise<number[][]>;
+  embed(chunks: string[], task?: "chunk" | "query"): Promise<number[][]>;
 
   rerank(query: string, chunks: Chunk[]): Promise<number[]>;
 
@@ -682,6 +682,7 @@ export interface LLMOptions {
   embeddingId?: string;
   maxEmbeddingChunkSize?: number;
   maxEmbeddingBatchSize?: number;
+  embeddingPrefixes?: Record<string, string>;
 
   // Cloudflare options
   accountId?: string;

@@ -1,3 +1,13 @@
+> [!IMPORTANT]
+> This repository is a fork of the original [Continue](https://github.com/continuedev/continue) project.
+
+## Key Features in this Fork
+
+- Added support for task-specific embedding prefixes (e.g., "chunk" and "query") for indexing and retrieval.
+- Enabled support for reasoning fields and details by default in the LLM core.
+- Added Gemma 4 models to the recommended agent model list.
+- Changed the OpenAI adapter's reranking endpoint to `completions`.
+
 <h1 align="center">Continue</h1>
 
 <p align="center">Pioneering open-source coding agent</p>
