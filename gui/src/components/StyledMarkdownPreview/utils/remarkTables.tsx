@@ -53,9 +53,14 @@ export function remarkTables() {
         positions.push({ start, end: bufferString.length, node: item });
       });
 
+      console.log(
+        "[remarkTables] bufferString to test:",
+        JSON.stringify(bufferString),
+      );
+
       const tableRegex =
-        /((?:\| *[^|\r\n]+ *)+\|)(?:\r?\n)((?:\|[ :]?-+[ :]?)+\|)((?:(?:\r?\n)(?:\| *[^|\r\n]+ *)+\|)+)/g;
-      //// header                // newline // |:---|----:|      // new line  // table rows
+        /((?:\| *[^|\r\n]+ *)+\|)(?:\r?\n)((?:\| *:?-+ *:?)+\|)((?:(?:\r?\n)(?:\| *[^|\r\n]+ *)+\|)+)/g;
+      //// header                // newline // |:---|----:|        // new line  // table rows
 
       // prevent modifying if no markdown tables are present
       if (!bufferString.match(tableRegex)) {
@@ -68,6 +73,7 @@ export function remarkTables() {
       let failed = false;
 
       while ((match = tableRegex.exec(bufferString)) !== null) {
+        console.log("[remarkTables] Table match found!", match[0]);
         const fullTableString = match[0];
         const headerGroup = match[1];
         const separatorGroup = match[2];

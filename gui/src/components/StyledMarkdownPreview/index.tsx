@@ -230,7 +230,7 @@ const StyledMarkdownPreview = memo(function StyledMarkdownPreview(
       [
         remarkMath,
         {
-          singleDollarTextMath: false,
+          singleDollarTextMath: true,
         },
       ],
       () => (tree: any) => {

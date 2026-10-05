@@ -1,5 +1,6 @@
 > [!IMPORTANT]
-> This repository is a fork of the original [Continue](https://github.com/continuedev/continue) project.
+> This repository is a fork of the original [Continue](https://github.com/continuedev/continue) project,
+> customized for enhanced reasoning and retrieval capabilities.
 
 ## Key Features in this Fork
 
@@ -7,6 +8,7 @@
 - Enabled support for reasoning fields and details by default in the LLM core.
 - Added Gemma 4 models to the recommended agent model list.
 - Changed the OpenAI adapter's reranking endpoint to `completions`.
+- Fixed Markdown rendering for inline math symbols ($\to$) and GFM tables in the VS Code extension.
 
 <h1 align="center">Continue</h1>
 
