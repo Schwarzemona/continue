@@ -7,16 +7,16 @@ export const readSkillTool: GetTool = async (params) => {
   return {
     type: "function",
     displayTitle: "Read Skill",
-    wouldLikeTo: "read skill {{{ skillName }}}",
-    isCurrently: "reading skill {{{ skillName }}}",
-    hasAlready: "read skill {{{ skillName }}}",
+    wouldLikeTo: "{{{ skillName }}}を参照します",
+    isCurrently: "{{{ skillName }}}を参照中",
+    hasAlready: "{{{ skillName }}}を参照",
     readonly: true,
     isInstant: true,
     group: BUILT_IN_GROUP_NAME,
     function: {
       name: BuiltInToolNames.ReadSkill,
       description: `
-Use this tool to read the content of a skill by its name. Skills contain detailed instructions for specific tasks. The skill name should match one of the available skills listed below: 
+スキル名でスキルの内容を読み取ります。descriptionに当てはまるタイミングには、そのスキルを必ず読み取ります。利用可能なスキル: 
 ${skills.map((skill) => `\nname: ${skill.name}\ndescription: ${skill.description}\n`)}`,
       parameters: {
         type: "object",
@@ -25,7 +25,7 @@ ${skills.map((skill) => `\nname: ${skill.name}\ndescription: ${skill.description
           skillName: {
             type: "string",
             description:
-              "The name of the skill to read. This should match the name from the available skills.",
+              "読み取るスキルの名前。利用可能なスキルの名前と一致する必要があります。",
           },
         },
       },

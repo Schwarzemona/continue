@@ -90,7 +90,7 @@ function IndexingProgressErrorText({ update }: IndexingProgressErrorTextProps) {
               className="flex items-center !px-1.5 !py-0.5 text-xs"
             >
               <ClipboardIcon className="mr-1 h-3 w-3" />
-              <span>Copy output</span>
+              <span>出力をコピー</span>
             </GhostButton>
 
             {/* Open dev tools to view logs */}
@@ -101,7 +101,7 @@ function IndexingProgressErrorText({ update }: IndexingProgressErrorTextProps) {
               className="flex items-center !px-1.5 !py-0.5 text-xs"
             >
               <ArrowTopRightOnSquareIcon className="mr-1 h-3 w-3" />
-              <span>View Logs</span>
+              <span>ログを表示</span>
             </GhostButton>
           </div>
         </div>

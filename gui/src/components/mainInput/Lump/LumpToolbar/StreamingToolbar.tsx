@@ -8,7 +8,7 @@ interface StreamingToolbarProps {
 
 export function StreamingToolbar({
   onStop,
-  displayText = "Stop",
+  displayText = "生成中止",
 }: StreamingToolbarProps) {
   const jetbrains = isJetBrains();
 

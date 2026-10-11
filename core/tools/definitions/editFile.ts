@@ -1,5 +1,4 @@
 import { Tool } from "../..";
-import { EDIT_CODE_INSTRUCTIONS } from "../../llm/defaultSystemMessages";
 import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 
 export interface EditToolArgs {
@@ -8,23 +7,23 @@ export interface EditToolArgs {
 }
 
 export const NO_PARALLEL_TOOL_CALLING_INSTRUCTION =
-  "This tool CANNOT be called in parallel with any other tools, including itself";
+  "このツールは他のどのツールとも並行して呼び出すことはできません。";
 
 const CHANGES_DESCRIPTION =
-  "Any modifications to the file, showing only needed changes. Do NOT wrap this in a codeblock or write anything besides the code changes. In larger files, use brief language-appropriate placeholders for large unmodified sections, e.g. '// ... existing code ...'";
+  "ファイルへの変更内容。必要な変更のみを示します。これをコードブロックで囲んだり、コードの変更以外の内容を書いたりしません。大きなファイルの場合は、変更のない大きなセクションに対して、言語に適した簡潔なプレースホルダーを使用します（例: 「// ... existing code ...」。";
 
 export const editFileTool: Tool = {
   type: "function",
   displayTitle: "Edit File",
-  wouldLikeTo: "edit {{{ filepath }}}",
-  isCurrently: "editing {{{ filepath }}}",
-  hasAlready: "edited {{{ filepath }}}",
+  wouldLikeTo: "{{{ filepath }}}を編集します",
+  isCurrently: "{{{ filepath }}}を編集中",
+  hasAlready: "{{{ filepath }}}を編集",
   group: BUILT_IN_GROUP_NAME,
   readonly: false,
   isInstant: false,
   function: {
     name: BuiltInToolNames.EditExistingFile,
-    description: `Use this tool to edit an existing file. If you don't know the contents of the file, read it first.\n${EDIT_CODE_INSTRUCTIONS}\n${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
+    description: `既存のファイルを編集します。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
     parameters: {
       type: "object",
       required: ["filepath", "changes"],
@@ -32,7 +31,7 @@ export const editFileTool: Tool = {
         filepath: {
           type: "string",
           description:
-            "The path of the file to edit, relative to the root of the workspace.",
+            "編集するファイルのパス。ワークスペースのルートからの相対パス。",
         },
         changes: {
           type: "string",

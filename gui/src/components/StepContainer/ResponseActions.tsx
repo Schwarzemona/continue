@@ -47,11 +47,7 @@ export default function ResponseActions({
     <div className="text-description-muted mx-2 flex cursor-default items-center justify-end space-x-1 bg-transparent pb-0 text-xs">
       <HeaderButtonWithToolTip
         testId={`compact-button-${index}`}
-        text={
-          showLabel
-            ? "Summarize conversation to reduce context length"
-            : "Compact conversation"
-        }
+        text={showLabel ? "会話を要約してコンテキスト量を削減" : "会話を圧縮"}
         tabIndex={-1}
         onClick={() => compactConversation(index)}
       >
@@ -63,7 +59,7 @@ export default function ResponseActions({
             <span
               className={`text-xs ${buttonColorClass || "text-description-muted"}`}
             >
-              Compact conversation
+              会話を圧縮
             </span>
           )}
         </div>
@@ -72,7 +68,7 @@ export default function ResponseActions({
       {isTruncated && (
         <HeaderButtonWithToolTip
           tabIndex={-1}
-          text="Continue generation"
+          text="生成を続行させる"
           onClick={onContinueGeneration}
         >
           <BarsArrowDownIcon className="text-description-muted h-3.5 w-3.5" />
@@ -81,7 +77,7 @@ export default function ResponseActions({
 
       <HeaderButtonWithToolTip
         testId={`delete-button-${index}`}
-        text="Delete"
+        text="削除"
         tabIndex={-1}
         onClick={onDelete}
       >

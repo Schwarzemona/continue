@@ -85,13 +85,13 @@ function InputToolbar(props: InputToolbarProps) {
       >
         <div className="xs:gap-1.5 flex flex-row items-center gap-1">
           {!isInEdit && (
-            <ToolTip place="top" content="Select Mode">
+            <ToolTip place="top" content="モードを選択">
               <HoverItem className="!p-0">
                 <ModeSelect />
               </HoverItem>
             </ToolTip>
           )}
-          <ToolTip place="top" content="Select Model">
+          <ToolTip place="top" content="モデルを選択">
             <HoverItem className="!p-0">
               <ModelSelect />
             </HoverItem>
@@ -116,7 +116,7 @@ function InputToolbar(props: InputToolbarProps) {
                     }}
                   />
 
-                  <ToolTip place="top" content="Attach Image">
+                  <ToolTip place="top" content="画像を添付">
                     <HoverItem className="">
                       <PhotoIcon
                         className="h-3 w-3 hover:brightness-125"
@@ -129,7 +129,7 @@ function InputToolbar(props: InputToolbarProps) {
                 </>
               ))}
             {props.toolbarOptions?.hideAddContext || (
-              <ToolTip place="top" content="Attach Context">
+              <ToolTip place="top" content="コンテキストを添付">
                 <HoverItem onClick={props.onAddContextItem}>
                   <AtSymbolIcon className="h-3 w-3 hover:brightness-125" />
                 </HoverItem>
@@ -151,11 +151,7 @@ function InputToolbar(props: InputToolbarProps) {
               >
                 <ToolTip
                   place="top"
-                  content={
-                    hasReasoningEnabled
-                      ? "Disable model reasoning"
-                      : "Enable model reasoning"
-                  }
+                  content={hasReasoningEnabled ? "推論を無効" : "推論を有効"}
                 >
                   {hasReasoningEnabled ? (
                     <LightBulbIconSolid className="h-3 w-3 brightness-200 hover:brightness-150" />
@@ -196,13 +192,15 @@ function InputToolbar(props: InputToolbarProps) {
                   place="top-end"
                   content={`${
                     useActiveFile
-                      ? "Send Without Active File"
-                      : "Send With Active File"
+                      ? "アクティブファイルなしで送信"
+                      : "アクティブなファイルも送信"
                   } (${getMetaKeyLabel()}⏎)`}
                 >
                   <span>
                     {getMetaKeyLabel()}⏎{" "}
-                    {useActiveFile ? "No active file" : "Active file"}
+                    {useActiveFile
+                      ? "アクティブファイルなし"
+                      : "アクティブファイル送信"}
                   </span>
                 </ToolTip>
               </HoverItem>
@@ -217,11 +215,11 @@ function InputToolbar(props: InputToolbarProps) {
               }}
             >
               <span>
-                <i>Esc</i> to exit Edit
+                <i>Esc</i>で編集を終了
               </span>
             </HoverItem>
           )}
-          <ToolTip place="top" content="Send (⏎)">
+          <ToolTip place="top" content="送信(⏎)">
             <Button
               variant={props.isMainInput ? "primary" : "secondary"}
               size="sm"

@@ -58,7 +58,7 @@ export default function AcceptRejectAllButtons({
       className="flex flex-row items-center justify-evenly gap-3 px-3"
       data-testid="accept-reject-all-buttons"
     >
-      <ToolTip content={`Reject All (${rejectShortcut})`}>
+      <ToolTip content={`全て却下(${rejectShortcut})`}>
         <button
           className="text-foreground flex cursor-pointer flex-row flex-wrap justify-center gap-1 border-none bg-transparent p-0 text-xs opacity-80 hover:opacity-100 hover:brightness-125"
           onClick={() => handleAcceptOrReject("rejectDiff")}
@@ -66,7 +66,7 @@ export default function AcceptRejectAllButtons({
         >
           <div className="flex flex-row items-center gap-1">
             <XMarkIcon className="text-error h-4 w-4" />
-            <span className="hidden sm:inline">Reject</span>
+            <span className="hidden sm:inline">却下</span>
             <span className="text-lightgray -ml-1.5 hidden scale-75 text-xs md:inline">
               {rejectShortcut}
             </span>
@@ -74,7 +74,7 @@ export default function AcceptRejectAllButtons({
         </button>
       </ToolTip>
 
-      <ToolTip content={`Accept All (${acceptShortcut})`}>
+      <ToolTip content={`全て承認(${acceptShortcut})`}>
         <button
           className="text-foreground flex cursor-pointer flex-row flex-wrap justify-center gap-1 border-none bg-transparent p-0 text-xs opacity-80 hover:opacity-100 hover:brightness-125"
           onClick={() => handleAcceptOrReject("acceptDiff")}
@@ -82,7 +82,7 @@ export default function AcceptRejectAllButtons({
         >
           <div className="flex flex-row items-center gap-1">
             <CheckIcon className="text-success h-4 w-4" />
-            <span className="hidden sm:inline">Accept</span>
+            <span className="hidden sm:inline">承認</span>
             <span className="text-lightgray -ml-1.5 hidden scale-75 text-xs md:inline">
               {acceptShortcut}
             </span>

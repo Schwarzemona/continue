@@ -4,23 +4,23 @@ import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 export const globSearchTool: Tool = {
   type: "function",
   displayTitle: "Glob File Search",
-  wouldLikeTo: 'search for files like "{{{ pattern }}}"',
-  isCurrently: 'searching for files like "{{{ pattern }}}"',
-  hasAlready: 'searched for files like "{{{ pattern }}}"',
+  wouldLikeTo: '"{{{ pattern }}}"のファイル名を検索します',
+  isCurrently: '"{{{ pattern }}}"のファイル名を検索中',
+  hasAlready: '"{{{ pattern }}}"のファイル名を検索',
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.FileGlobSearch,
     description:
-      "Search for files recursively in the project using glob patterns. Supports ** for recursive directory search. Will not show many build, cache, secrets dirs/files (can use ls tool instead). Output may be truncated; use targeted patterns",
+      "Globパターンを使用してプロジェクト内のファイル名を再帰的に検索します。出力が切り詰められることがあるため、対象を絞ったパターンを使用します。",
     parameters: {
       type: "object",
       required: ["pattern"],
       properties: {
         pattern: {
           type: "string",
-          description: "Glob pattern for file path matching",
+          description: "Globパターンでファイルパスを照合します。",
         },
       },
     },

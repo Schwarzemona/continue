@@ -4,23 +4,22 @@ import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 export const fetchUrlContentTool: Tool = {
   type: "function",
   displayTitle: "Read URL",
-  wouldLikeTo: "fetch {{{ url }}}",
-  isCurrently: "fetching {{{ url }}}",
-  hasAlready: "fetched {{{ url }}}",
+  wouldLikeTo: "{{{ url }}}を取得します",
+  isCurrently: "{{{ url }}}を取得中",
+  hasAlready: "{{{ url }}}を取得",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.FetchUrlContent,
-    description:
-      "Can be used to view the contents of a website using a URL. Do NOT use this for files.",
+    description: "URLを使用してウェブサイトの内容を表示します。",
     parameters: {
       type: "object",
       required: ["url"],
       properties: {
         url: {
           type: "string",
-          description: "The URL to read",
+          description: "読み込むURL。",
         },
       },
     },

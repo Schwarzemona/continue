@@ -30,7 +30,7 @@ export default function ConversationSummary(props: ConversationSummaryProps) {
       <div className="mx-1.5 mb-4 mt-2">
         <div className="bg-vsc-input-background rounded-md shadow-sm">
           <div className="text-description flex items-center justify-start px-3 py-2 text-xs">
-            <span>Generating conversation summary</span>
+            <span>会話の要約を生成中</span>
             <AnimatedEllipsis />
           </div>
         </div>
@@ -51,9 +51,9 @@ export default function ConversationSummary(props: ConversationSummaryProps) {
           ) : (
             <ChevronDownIcon className="h-3 w-3" />
           )}
-          <span className="flex-1">Conversation Summary</span>
+          <span className="flex-1">会話の要約</span>
           <HeaderButtonWithToolTip
-            text="Delete summary"
+            text="要約を削除"
             onClick={(e) => {
               e.stopPropagation();
               deleteCompaction(props.index);

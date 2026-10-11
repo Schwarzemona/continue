@@ -179,3 +179,8 @@ keys
 .copy-status
 .copy-log
 
+# agents
+adrs/
+knowledge/
+themes/
+AGENTS.md

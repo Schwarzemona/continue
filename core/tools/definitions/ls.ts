@@ -8,27 +8,28 @@ import { evaluateFileAccessPolicy } from "../policies/fileAccess";
 export const lsTool: Tool = {
   type: "function",
   displayTitle: "ls",
-  wouldLikeTo: "list files in {{{ dirPath }}}",
-  isCurrently: "listing files in {{{ dirPath }}}",
-  hasAlready: "listed files in {{{ dirPath }}}",
+  wouldLikeTo: "{{{ dirPath }}}内を確認します",
+  isCurrently: "{{{ dirPath }}}内を確認中",
+  hasAlready: "{{{ dirPath }}}内を確認",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.LSTool,
-    description: "List files and folders in a given directory",
+    description:
+      "指定されたディレクトリ内のファイルとフォルダを一覧表示します。",
     parameters: {
       type: "object",
       properties: {
         dirPath: {
           type: "string",
           description:
-            "The directory path. Can be relative to project root, absolute path, tilde path (~/...), or file:// URI. Use forward slash paths",
+            "ディレクトリのパス。プロジェクトルートからの相対パス、絶対パス、チルダパス(~/...)、またはfile://URIが指定できます。スラッシュ(/)を使用したパスを指定します。",
         },
         recursive: {
           type: "boolean",
           description:
-            "If true, lists files and folders recursively. To prevent unexpected large results, use this sparingly",
+            "true の場合、ファイルとフォルダを再帰的に一覧表示します。予期しない大量の結果を防ぐため、使用は控えめにします。",
         },
       },
     },

@@ -7,16 +7,15 @@ import { evaluateFileAccessPolicy } from "../policies/fileAccess";
 export const readFileTool: Tool = {
   type: "function",
   displayTitle: "Read File",
-  wouldLikeTo: "read {{{ filepath }}}",
-  isCurrently: "reading {{{ filepath }}}",
-  hasAlready: "read {{{ filepath }}}",
+  wouldLikeTo: "{{{ filepath }}}を読み込みます",
+  isCurrently: "{{{ filepath }}}を読み込み中",
+  hasAlready: "{{{ filepath }}}を読み込み",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ReadFile,
-    description:
-      "Use this tool if you need to view the contents of an existing file.",
+    description: "既存のファイルを読みます。",
     parameters: {
       type: "object",
       required: ["filepath"],
@@ -24,7 +23,7 @@ export const readFileTool: Tool = {
         filepath: {
           type: "string",
           description:
-            "The path of the file to read. Can be a relative path (from workspace root), absolute path, tilde path (~/...), or file:// URI",
+            "読むファイルのパス。プロジェクトルートからの相対パス、絶対パス、チルダパス(~/...)、またはfile://URIが指定できます。",
         },
       },
     },

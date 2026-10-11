@@ -1,7 +1,6 @@
 import * as vscode from "vscode";
 
 import { VerticalDiffCodeLens } from "../../../diff/vertical/manager";
-import { getMetaKeyLabel } from "../../../util/util";
 
 export class VerticalDiffCodeLensProvider implements vscode.CodeLensProvider {
   private _eventEmitter: vscode.EventEmitter<void> =
@@ -43,12 +42,12 @@ export class VerticalDiffCodeLensProvider implements vscode.CodeLensProvider {
 
       codeLenses.push(
         new vscode.CodeLens(range, {
-          title: `Accept`,
+          title: `承認`,
           command: "continue.acceptVerticalDiffBlock",
           arguments: [uri, i],
         }),
         new vscode.CodeLens(range, {
-          title: `Reject`,
+          title: `却下`,
           command: "continue.rejectVerticalDiffBlock",
           arguments: [uri, i],
         }),

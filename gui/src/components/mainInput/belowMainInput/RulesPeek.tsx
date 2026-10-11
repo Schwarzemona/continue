@@ -33,18 +33,18 @@ export function RulesPeekItem({ rule }: RulesPeekItemProps) {
 
         <div className="flex min-w-0 flex-1 gap-2 text-xs">
           <div className="max-w-[50%] flex-shrink-0 truncate font-medium">
-            {rule.name || "Agent rule"}
+            {rule.name || "エージェントルール"}
           </div>
 
           <div className="min-w-0 flex-1 overflow-hidden truncate whitespace-nowrap text-xs text-gray-500">
             {isGlobal
-              ? "Always applied"
-              : `Pattern: ${typeof rule.globs === "string" ? rule.globs : Array.isArray(rule.globs) ? rule.globs.join(", ") : ""}`}
+              ? "常に適用"
+              : `パターン: ${typeof rule.globs === "string" ? rule.globs : Array.isArray(rule.globs) ? rule.globs.join(", ") : ""}`}
           </div>
         </div>
       </div>
       <div className="mt-1 pl-6 pr-2 text-xs text-gray-500">
-        Source: {getRuleSourceDisplayName(rule)}
+        ソース: {getRuleSourceDisplayName(rule)}
       </div>
     </div>
   );

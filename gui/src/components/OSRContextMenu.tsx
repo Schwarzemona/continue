@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
-import useIsOSREnabled from "../hooks/useIsOSREnabled";
 import { IdeMessengerContext } from "../context/IdeMessenger";
+import useIsOSREnabled from "../hooks/useIsOSREnabled";
 import { getPlatform } from "../util";
 
 interface Position {
@@ -173,7 +173,7 @@ const OSRContextMenu = () => {
             document.execCommand("copy");
           }}
         >
-          Copy
+          コピー
         </div>
       )}
       {canCut && (
@@ -184,7 +184,7 @@ const OSRContextMenu = () => {
             document.execCommand("cut");
           }}
         >
-          Cut
+          カット
         </div>
       )}
       {/* PASTING is currently broken, can't get the clipboard text */}
@@ -213,7 +213,7 @@ const OSRContextMenu = () => {
           ideMessenger.post("toggleDevTools", undefined);
         }}
       >
-        Open Dev Tools
+        開発者ツールを開く
       </div>
     </div>
   );

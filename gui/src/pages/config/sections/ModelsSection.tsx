@@ -72,7 +72,7 @@ export function ModelsSection() {
   return (
     <div className="space-y-4">
       <ConfigHeader
-        title="Models"
+        title="モデル"
         onAddClick={handleAddModel}
         addButtonTooltip="Add model"
       />
@@ -80,7 +80,7 @@ export function ModelsSection() {
       <Card>
         <ModelRoleRow
           role="chat"
-          displayName="Chat"
+          displayName="チャット"
           shortcut={
             <span className="text-2xs text-description-muted">
               (<Shortcut>{`cmd ${jetbrains ? "J" : "L"}`}</Shortcut>)
@@ -88,14 +88,14 @@ export function ModelsSection() {
           }
           description={
             <span>
-              Used in Chat, Plan, Agent mode (
+              チャットモード、プランモード、エージェントモードに使うモデル(
               <a
                 href={MODEL_DOCS_URLS.chat.learnMore}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-inherit underline hover:brightness-125"
               >
-                Learn more
+                参考
               </a>
               )
             </span>
@@ -111,17 +111,17 @@ export function ModelsSection() {
 
         <ModelRoleRow
           role="autocomplete"
-          displayName="Autocomplete"
+          displayName="オートコンプリート"
           description={
             <span>
-              Used in inline code completions as you type (
+              インラインコード補完に使うモデル(
               <a
                 href={MODEL_DOCS_URLS.autocomplete.learnMore}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-inherit underline hover:brightness-125"
               >
-                Learn more
+                参考
               </a>
               )
             </span>
@@ -139,7 +139,7 @@ export function ModelsSection() {
             <Divider />
             <ModelRoleRow
               role="edit"
-              displayName="Edit"
+              displayName="編集"
               shortcut={
                 <span className="text-2xs text-description-muted">
                   (<Shortcut>cmd I</Shortcut>)
@@ -147,14 +147,14 @@ export function ModelsSection() {
               }
               description={
                 <span>
-                  Used to transform a selected section of code (
+                  選択したコードのセクションで編集に使うモデル(
                   <a
                     href={MODEL_DOCS_URLS.edit.learnMore}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-inherit underline hover:brightness-125"
                   >
-                    Learn more
+                    参考
                   </a>
                   )
                 </span>
@@ -173,14 +173,14 @@ export function ModelsSection() {
         <Toggle
           isOpen={showAdditionalRoles}
           onToggle={() => setShowAdditionalRoles(!showAdditionalRoles)}
-          title="Additional model roles"
-          subtitle="Apply, Embed, Rerank"
+          title="追加のモデルロール"
+          subtitle="適用、組み込み、リランカー"
         >
           <div className="flex flex-col">
             <ModelRoleRow
               role="apply"
-              displayName="Apply"
-              description="Used to apply generated codeblocks to files"
+              displayName="適用"
+              description="生成したコードブロックをファイルに適用するのに使うモデル"
               models={config.modelsByRole.apply}
               selectedModel={config.selectedModelByRole.apply ?? undefined}
               onSelect={(model) => handleRoleUpdate("apply", model)}
@@ -192,8 +192,8 @@ export function ModelsSection() {
 
             <ModelRoleRow
               role="embed"
-              displayName="Embed"
-              description="Used to generate and query embeddings for the @codebase and @docs context providers"
+              displayName="組み込み"
+              description="@codebaseと@docsの生成およびクエリに使うモデル"
               models={config.modelsByRole.embed}
               selectedModel={config.selectedModelByRole.embed ?? undefined}
               onSelect={(model) => handleRoleUpdate("embed", model)}
@@ -205,8 +205,8 @@ export function ModelsSection() {
 
             <ModelRoleRow
               role="rerank"
-              displayName="Rerank"
-              description="Used for reranking results from the @codebase and @docs context providers"
+              displayName="リランカー"
+              description="@codebaseと@docsからの結果をリランクするモデル"
               models={config.modelsByRole.rerank}
               selectedModel={config.selectedModelByRole.rerank ?? undefined}
               onSelect={(model) => handleRoleUpdate("rerank", model)}

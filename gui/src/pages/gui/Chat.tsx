@@ -46,10 +46,9 @@ import { ToolCallDiv } from "./ToolCallDiv";
 import { useStore } from "react-redux";
 import FeedbackDialog from "../../components/dialogs/FeedbackDialog";
 
-import { DeprecationBanner } from "../../components/DeprecationBanner";
 import { FatalErrorIndicator } from "../../components/config/FatalErrorNotice";
+import { DeprecationBanner } from "../../components/DeprecationBanner";
 import InlineErrorMessage from "../../components/mainInput/InlineErrorMessage";
-import { resolveEditorContent } from "../../components/mainInput/TipTapEditor/utils/resolveEditorContent";
 import { setDialogMessage, setShowDialog } from "../../redux/slices/uiSlice";
 import { RootState } from "../../redux/store";
 import { cancelStream } from "../../redux/thunks/cancelStream";
@@ -436,7 +435,7 @@ export function Chat() {
                   className="flex items-center gap-2"
                 >
                   <ArrowLeftIcon className="h-3 w-3" />
-                  <span className="text-xs">Last Session</span>
+                  <span className="text-xs">最後のセッション</span>
                 </NewSessionButton>
               )}
             </div>

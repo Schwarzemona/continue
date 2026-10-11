@@ -7,28 +7,27 @@ import { evaluateFileAccessPolicy } from "../policies/fileAccess";
 export const createNewFileTool: Tool = {
   type: "function",
   displayTitle: "Create New File",
-  wouldLikeTo: "create {{{ filepath }}}",
-  isCurrently: "creating {{{ filepath }}}",
-  hasAlready: "created {{{ filepath }}}",
+  wouldLikeTo: "{{{ filepath }}}を作成します",
+  isCurrently: "{{{ filepath }}}を作成中",
+  hasAlready: "{{{ filepath }}}を作成",
   group: BUILT_IN_GROUP_NAME,
   readonly: false,
   isInstant: true,
   function: {
     name: BuiltInToolNames.CreateNewFile,
-    description:
-      "Create a new file. Only use this when a file doesn't exist and should be created",
+    description: "新しいファイルを作成します。上書きはできません。",
     parameters: {
       type: "object",
       required: ["filepath", "contents"],
       properties: {
         filepath: {
           type: "string",
-          description:
-            "The path where the new file should be created. Can be a relative path (from workspace root), absolute path, tilde path (~/...), or file:// URI.",
+          description: "新しいファイルを作成するパス。",
         },
         contents: {
           type: "string",
-          description: "The contents to write to the new file",
+          description:
+            "新しいファイルに書き込む内容。プロジェクトルートからの相対パス、絶対パス、チルダパス(~/...)、またはfile://URIが指定できます。",
         },
       },
     },

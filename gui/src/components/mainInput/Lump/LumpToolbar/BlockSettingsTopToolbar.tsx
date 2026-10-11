@@ -71,7 +71,7 @@ export function BlockSettingsTopToolbar() {
     <div className="flex flex-1 items-center justify-between gap-3">
       <div className="flex items-center gap-1">
         {shouldShowError && (
-          <ToolTip delayShow={700} content="View configuration errors">
+          <ToolTip delayShow={700} content="構成エラーの表示">
             <div
               role="button"
               tabIndex={0}
@@ -95,19 +95,19 @@ export function BlockSettingsTopToolbar() {
 
         {!hasActiveContent && (
           <div className="flex items-center gap-1.5">
-            <ToolTip content="Configure rules">
+            <ToolTip content="ルールの設定">
               <HoverItem onClick={handleRulesClick} px={2}>
                 <PencilIcon className="text-description-muted h-3 w-3 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
 
-            <ToolTip content="Configure tools">
+            <ToolTip content="ツールの設定">
               <HoverItem onClick={handleToolsClick} px={2}>
                 <WrenchScrewdriverIcon className="text-description-muted h-3 w-3 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
 
-            <ToolTip content="Configure models">
+            <ToolTip content="モデルの設定">
               <HoverItem onClick={handleModelsClick} px={2}>
                 <CubeIcon className="text-description-muted h-3 w-3 hover:brightness-125" />
               </HoverItem>
@@ -116,7 +116,7 @@ export function BlockSettingsTopToolbar() {
         )}
       </div>
 
-      <ToolTip place="top" content="Select Config">
+      <ToolTip place="top" content="設定の選択">
         <div>
           <AssistantAndOrgListbox variant="lump" />
         </div>

@@ -294,7 +294,7 @@ function MCPServerPreview({
                     "h-3.5 w-3.5 flex-shrink-0 cursor-pointer text-gray-400 text-inherit hover:brightness-125"
                   }
                 />
-                Edit
+                編集
               </ListboxOption>
 
               {server.status === "connected" && (
@@ -303,8 +303,7 @@ function MCPServerPreview({
                   onClick={onDisconnect}
                   className="justify-start gap-x-1.5"
                 >
-                  <StopCircleIcon className="h-4 w-4 flex-shrink-0" />{" "}
-                  Disconnect
+                  <StopCircleIcon className="h-4 w-4 flex-shrink-0" /> 切断
                 </ListboxOption>
               )}
 
@@ -319,7 +318,7 @@ function MCPServerPreview({
                   ) : (
                     <ArrowPathIcon className="h-4 w-4 flex-shrink-0" />
                   )}
-                  Reload
+                  再実行
                 </ListboxOption>
               )}
             </ListboxOptions>
@@ -462,16 +461,16 @@ export function ToolsSection() {
 
   const availableToolsMessage =
     mode === "chat"
-      ? "All tools disabled in Chat, switch to Plan or Agent mode to use tools"
+      ? "チャットではすべてのツールが無効になっています。ツールを使用するには、プランモードまたはエージェントモードに切り替えてください。"
       : mode === "plan"
-        ? "Read-only tools available in Plan mode"
+        ? "プランモードでは読み取り専用ツールのみ使用可能です。"
         : "";
 
   return (
     <>
       <ConfigHeader
-        title="Tools"
-        subtext="Manage MCP servers and tool policies"
+        title="ツール"
+        subtext="MCPサーバーとツールの管理"
         className="mb-2"
       />
       {!!availableToolsMessage && (
@@ -485,29 +484,28 @@ export function ToolsSection() {
         <ToolPoliciesGroup
           showIcon={false}
           groupName={BUILT_IN_GROUP_NAME}
-          displayName={"Built-in Tools"}
+          displayName={"ビルドインツール"}
           allToolsOff={allToolsOff}
           duplicateDetection={duplicateDetection}
         />
         <ConfigHeader
           className="pr-2"
-          title="MCP Servers"
+          title="MCPサーバー"
           variant="sm"
           onAddClick={handleAddMcpServer}
-          addButtonTooltip="Add MCP server"
+          addButtonTooltip="MCPを追加"
           showAddButton={!disableMcp}
         />
         {disableMcp ? (
           <Card>
-            <EmptyState message="MCP servers are disabled in your organization" />
+            <EmptyState message="組織内でMCPサーバーが無効になっています。" />
           </Card>
         ) : (
           <>
             {mode === "chat" && (
               <Alert type="info" size="sm">
                 <span className="text-2xs italic">
-                  All MCPs are disabled in Chat, switch to Plan or Agent mode to
-                  use MCPs
+                  チャットモードではすべてのMCPが無効になっています。MCPを使用するには、プランモードまたはエージェントモードに切り替えてください。
                 </span>
               </Alert>
             )}
@@ -523,7 +521,7 @@ export function ToolsSection() {
               ))
             ) : (
               <Card>
-                <EmptyState message="No MCP servers configured. Click the + button to add your first server." />
+                <EmptyState message="MCPサーバーが設定されていません。「+」ボタンをクリックすると、サーバーを追加できます。" />
               </Card>
             )}
           </>

@@ -80,7 +80,7 @@ export function AssistantOption({
             <Cog6ToothIcon className="h-3.5 w-3.5" />
           </Button>
           {profile.errors && profile.errors?.length > 0 && (
-            <ToolTip content="View errors">
+            <ToolTip content="エラーを表示">
               <Button
                 variant="ghost"
                 size="sm"

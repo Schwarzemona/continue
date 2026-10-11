@@ -7,23 +7,22 @@ import { evaluateFileAccessPolicy } from "../policies/fileAccess";
 export const viewSubdirectoryTool: Tool = {
   type: "function",
   displayTitle: "View Subdirectory",
-  wouldLikeTo: 'view a map of "{{{ directory_path }}}"',
-  isCurrently: 'getting a map of "{{{ directory_path }}}"',
-  hasAlready: 'viewed a map of "{{{ directory_path }}}"',
+  wouldLikeTo: '"{{{ directory_path }}}"のマップを取得します',
+  isCurrently: '"{{{ directory_path }}}"のマップを取得中',
+  hasAlready: '"{{{ directory_path }}}"のマップを取得',
   readonly: true,
   group: BUILT_IN_GROUP_NAME,
   isInstant: true,
   function: {
     name: BuiltInToolNames.ViewSubdirectory,
-    description: "View the contents of a subdirectory",
+    description: "サブディレクトリの内容を表示します。",
     parameters: {
       type: "object",
       required: ["directory_path"],
       properties: {
         directory_path: {
           type: "string",
-          description:
-            "The path of the subdirectory to view, relative to the root of the workspace",
+          description: "表示するサブディレクトリのパス。",
         },
       },
     },

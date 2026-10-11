@@ -47,7 +47,7 @@ export const IndexedPagesTooltip = ({
         <EyeIcon
           className="ml-2 h-4 w-4 cursor-pointer text-red-500 transition-colors hover:text-red-400"
           onClick={handleEyeIconClick}
-          title="View detailed docs information"
+          title="詳細なドキュメント情報を表示する"
         />
       </div>
       <div className="max-h-48 overflow-y-auto px-1">

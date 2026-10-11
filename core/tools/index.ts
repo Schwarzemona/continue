@@ -8,11 +8,11 @@ export const getBaseToolDefinitions = () => [
   toolDefinitions.createNewFileTool,
   toolDefinitions.runTerminalCommandTool,
   toolDefinitions.globSearchTool,
-  toolDefinitions.viewDiffTool,
   toolDefinitions.readCurrentlyOpenFileTool,
   toolDefinitions.lsTool,
   toolDefinitions.createRuleBlock,
-  toolDefinitions.fetchUrlContentTool,
+  toolDefinitions.readFileRangeTool,
+  toolDefinitions.codebaseTool,
 ];
 
 export const getConfigDependentToolDefinitions = async (
@@ -24,14 +24,13 @@ export const getConfigDependentToolDefinitions = async (
   tools.push(await toolDefinitions.requestRuleTool(params));
   tools.push(await toolDefinitions.readSkillTool(params));
 
-  tools.push(toolDefinitions.searchWebTool);
-
   if (enableExperimentalTools) {
     tools.push(
       toolDefinitions.viewRepoMapTool,
       toolDefinitions.viewSubdirectoryTool,
-      toolDefinitions.codebaseTool,
-      toolDefinitions.readFileRangeTool,
+      toolDefinitions.searchWebTool,
+      toolDefinitions.viewDiffTool,
+      toolDefinitions.fetchUrlContentTool,
     );
   }
 

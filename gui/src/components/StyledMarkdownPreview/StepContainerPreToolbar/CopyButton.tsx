@@ -11,7 +11,7 @@ export function CopyButton({ text }: CopyButtonProps) {
   const { copyText, copied } = useCopy(text);
 
   return (
-    <ToolTip place="top" content="Copy Code">
+    <ToolTip place="top" content="コードをコピー">
       <HoverItem className="!p-0">
         <div
           className="text-lightgray flex cursor-pointer items-center border-none bg-transparent text-xs outline-none hover:brightness-125"

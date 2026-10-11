@@ -24,7 +24,7 @@ export function ConfigsSection() {
   return (
     <>
       <ConfigHeader
-        title="Configs"
+        title="設定ファイル"
         onAddClick={handleAddConfig}
         addButtonTooltip="Add config"
       />
@@ -98,7 +98,7 @@ export function ConfigsSection() {
             );
           })
         ) : (
-          <EmptyState message="No agents configured. Click the + button to add your first agent." />
+          <EmptyState message="エージェントが設定されていません。「+」ボタンをクリックするとエージェントを追加できます。" />
         )}
       </Card>
     </>

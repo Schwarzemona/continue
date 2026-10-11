@@ -38,8 +38,8 @@ export function getPlaceholderText(
   }
 
   return historyLength === 0
-    ? "Ask anything, '@' to add context"
-    : "Ask a follow-up";
+    ? "@でコンテキスト、/でプロンプトを追加できます"
+    : "追加の入力";
 }
 
 /**

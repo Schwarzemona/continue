@@ -1,9 +1,9 @@
 import { parseConfigYaml } from "@continuedev/config-yaml";
 import { IndexingStatus } from "core";
 import { useMemo } from "react";
+import { EmptyState } from "../../../../components/ui";
 import { useAuth } from "../../../../context/Auth";
 import { useAppSelector } from "../../../../redux/hooks";
-import { EmptyState } from "../../../../components/ui";
 import DocsIndexingStatus from "./DocsIndexingStatus";
 
 function DocsIndexingStatuses() {
@@ -50,7 +50,7 @@ function DocsIndexingStatuses() {
 
   if (sortedConfigDocs.length === 0) {
     return (
-      <EmptyState message="No documentation sources configured. Click the + button to add your first docs." />
+      <EmptyState message="ドキュメントのソースが設定されていません。「+」ボタンをクリックするとドキュメントを追加できます。" />
     );
   }
 

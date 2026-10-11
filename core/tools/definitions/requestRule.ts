@@ -24,7 +24,7 @@ export function getRequestRuleDescription(
   rules: ConfigDependentToolParams["rules"],
 ): string {
   const prefix =
-    "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n";
+    "ルール名でルールの内容を取得します。descriptionに当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n";
   return prefix + getAvailableRules(rules);
 }
 
@@ -40,9 +40,9 @@ function getRequestRuleSystemMessageDescription(
 export const requestRuleTool: GetTool = async ({ rules }) => ({
   type: "function",
   displayTitle: "Request Rules",
-  wouldLikeTo: "request rule {{{ name }}}",
-  isCurrently: "reading rule {{{ name }}}",
-  hasAlready: "read rule {{{ name }}}",
+  wouldLikeTo: "{{{ name }}}を取得します",
+  isCurrently: "{{{ name }}}を取得中",
+  hasAlready: "{{{ name }}}を取得",
   group: BUILT_IN_GROUP_NAME,
   readonly: false,
   function: {
@@ -54,7 +54,8 @@ export const requestRuleTool: GetTool = async ({ rules }) => ({
       properties: {
         name: {
           type: "string",
-          description: "Name of the rule",
+          description:
+            "ルール名。利用可能なルールの名前と一致する必要があります。",
         },
       },
     },

@@ -15,26 +15,15 @@ export interface SingleFindAndReplaceArgs {
 export const singleFindAndReplaceTool: Tool = {
   type: "function",
   displayTitle: "Find and Replace",
-  wouldLikeTo: "edit {{{ filepath }}}",
-  isCurrently: "editing {{{ filepath }}}",
-  hasAlready: "edited {{{ filepath }}}",
+  wouldLikeTo: "{{{ filepath }}}を編集します",
+  isCurrently: "{{{ filepath }}}を編集中",
+  hasAlready: "{{{ filepath }}}を編集",
   group: BUILT_IN_GROUP_NAME,
   readonly: false,
   isInstant: false,
   function: {
     name: BuiltInToolNames.SingleFindAndReplace,
-    description: `Performs exact string replacements in a file.
-
-IMPORTANT:
-- ALWAYS use the \`${BuiltInToolNames.ReadFile}\` tool just before making edits, to understand the file's up-to-date contents and context. The user can also edit the file while you are working with it.
-- ${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}
-- When editing text from \`${BuiltInToolNames.ReadFile}\` tool output, ensure you preserve exact whitespace/indentation.
-- Only use emojis if the user explicitly requests it. Avoid adding emojis to files unless asked.
-- Use \`replace_all\` for replacing and renaming strings across the file. This parameter is useful if you want to rename a variable, for instance.
-
-WARNINGS:
-- When not using \`replace_all\`, the edit will FAIL if \`old_string\` is not unique in the file. Either provide a larger string with more surrounding context to make it unique or use \`replace_all\` to change every instance of \`old_string\`.
-- The edit will likely fail if you have not recently used the \`${BuiltInToolNames.ReadFile}\` tool to view up-to-date file contents.`,
+    description: `ファイル内で正確な文字列置換を実行します。\`replace_all\`を使用しない場合、\`old_string\`がファイル内で一意でないと編集は失敗します。一意にするために周囲のコンテキストを含めたより長い文字列を指定するか、\`replace_all\`を使用して\`old_string\`のすべてのインスタンスを変更します。ユーザーが作業中にファイルを編集することもあります。編集を行う直前に、常に\`${BuiltInToolNames.ReadFile}\`ツールを使用して、ファイルの最新のコンテンツとコンテキストを理解します。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
     parameters: {
       type: "object",
       required: ["filepath", "old_string", "new_string"],
@@ -42,21 +31,22 @@ WARNINGS:
         filepath: {
           type: "string",
           description:
-            "The path to the file to modify, relative to the root of the workspace",
+            "修正するファイルのパス。ワークスペースのルートからの相対パス。",
         },
         old_string: {
           type: "string",
           description:
-            "The text to replace - must be exact including whitespace/indentation",
+            "置換するテキスト。空白やインデントを含め、正確に一致する必要があります",
         },
         new_string: {
           type: "string",
           description:
-            "The text to replace it with (MUST be different from old_string)",
+            "置換後のテキスト(old_string とは異なる必要があります)。",
         },
         replace_all: {
           type: "boolean",
-          description: "Replace all occurrences of old_string (default false)",
+          description:
+            "ファイル内のold_stringのすべての出現箇所を置換します(デフォルトはfalse)。",
         },
       },
     },

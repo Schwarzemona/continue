@@ -8,18 +8,18 @@ export const readFileRangeTool: Tool = {
   type: "function",
   displayTitle: "Read File Range",
   wouldLikeTo:
-    "read lines {{{ startLine }}}-{{{ endLine }}} of {{{ filepath }}}",
+    "{{{ filepath }}}の{{{ startLine }}}-{{{ endLine }}}行目を読み込みます",
   isCurrently:
-    "reading lines {{{ startLine }}}-{{{ endLine }}} of {{{ filepath }}}",
+    "{{{ filepath }}}の{{{ startLine }}}-{{{ endLine }}}行目を読み込み中",
   hasAlready:
-    "read lines {{{ startLine }}}-{{{ endLine }}} of {{{ filepath }}}",
+    "{{{ filepath }}}の{{{ startLine }}}-{{{ endLine }}}行目を読み込み",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ReadFileRange,
     description:
-      "Use this tool to read a specific range of lines from an existing file. Only supports positive line numbers (1-based from start). For reading from the end of a file, use the terminal tool with 'tail' command instead.",
+      "既存のファイルから特定の行範囲を読み取るために使用します。範囲が100行を超えないよう指定します。",
     parameters: {
       type: "object",
       required: ["filepath", "startLine", "endLine"],
@@ -27,17 +27,17 @@ export const readFileRangeTool: Tool = {
         filepath: {
           type: "string",
           description:
-            "The path of the file to read, relative to the root of the workspace (NOT uri or absolute path)",
+            "読み込むファイルのパス。ワークスペースのルートからの相対パス(uriと絶対パスは使用できません)。",
         },
         startLine: {
           type: "number",
           description:
-            "The starting line number (1-based from start). Must be a positive integer. Example: 1 = first line, 10 = tenth line",
+            "開始行番号(開始からの1始まり)。正の整数である必要があります。例: 1 = 1行目、10 = 10行目。",
         },
         endLine: {
           type: "number",
           description:
-            "The ending line number (1-based from start). Must be a positive integer greater than or equal to startLine. Example: 10 = tenth line, 20 = twentieth line",
+            "終了行番号(開始からの1始まり)。startLine以上の正の整数である必要があります。例: 10 = 10行目, 20 = 20行目。",
         },
       },
     },

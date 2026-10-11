@@ -89,30 +89,33 @@ export default function Details({ interaction }: DetailsProps) {
     <div className="m-0 flex min-w-0 flex-1 shrink grow flex-col">
       <div className="shrink-0 text-base">
         <div className="columns-3 gap-0 border-0 border-b-2 border-solid border-[color:var(--vscode-panel-border)] p-0">
-          <Cell label="Type" value={summary.type}></Cell>
+          <Cell label="タイプ" value={summary.type}></Cell>
           <CustomCell>
             Result: <StatusIcon interaction={interaction}></StatusIcon>
             {summary.result}
           </CustomCell>
         </div>
         <div className="columns-3 gap-0 border-0 border-b-2 border-solid border-[color:var(--vscode-panel-border)] p-0">
-          <Cell label="Prompt Tokens" value={summary.promptTokens}></Cell>
-          <Cell label="Generated Tokens" value={summary.generatedTokens}></Cell>
-          <Cell label="ThinkingTokens" value={summary.thinkingTokens}></Cell>
+          <Cell
+            label="プロンプトトークン数"
+            value={summary.promptTokens}
+          ></Cell>
+          <Cell label="生成トークン数" value={summary.generatedTokens}></Cell>
+          <Cell label="推論トークン数" value={summary.thinkingTokens}></Cell>
         </div>
         <div className="columns-3 gap-0 border-0 border-b-2 border-solid border-[color:var(--vscode-panel-border)] p-0">
           <Cell
-            label="Total Time"
+            label="合計時間"
             value={summary.totalTime}
             format={formatSeconds}
           ></Cell>
           <Cell
-            label="To First Token"
+            label="生成開始時間"
             value={summary.toFirstToken}
             format={formatSeconds}
           ></Cell>
           <Cell
-            label="Tokens/s"
+            label="トークン/秒"
             value={summary.tokensPerSecond}
             format={(v: number) => v.toFixed(1)}
           ></Cell>

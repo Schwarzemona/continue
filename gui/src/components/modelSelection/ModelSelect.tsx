@@ -312,7 +312,7 @@ function ModelSelect() {
               >
                 <span className="text-description text-2xs flex flex-row items-center">
                   <PlusIcon className="mr-1.5 h-3.5 w-3.5" />
-                  Add Chat model
+                  追加のチャットモデル
                 </span>
               </ListboxOption>
 

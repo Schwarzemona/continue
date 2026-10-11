@@ -148,15 +148,15 @@ export class GUISelectors {
   }
 
   public static getHistoryNavButton(view: WebView) {
-    return SelectorUtils.getElementByAriaLabel(view, "View History");
+    return SelectorUtils.getElementByAriaLabel(view, "履歴を表示");
   }
 
   public static getSettingsNavButton(view: WebView) {
-    return SelectorUtils.getElementByAriaLabel(view, "Open Settings");
+    return SelectorUtils.getElementByAriaLabel(view, "設定を表示");
   }
 
   public static getNewSessionNavButton(view: WebView) {
-    return SelectorUtils.getElementByAriaLabel(view, "New Session");
+    return SelectorUtils.getElementByAriaLabel(view, "新しいセッション");
   }
 
   public static async getInputBoxCodeBlockAtIndex(

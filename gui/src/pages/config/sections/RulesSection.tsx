@@ -339,7 +339,7 @@ function PromptsSubSection() {
   return (
     <div>
       <ConfigHeader
-        title="Prompts"
+        title="プロンプト"
         variant="sm"
         onAddClick={handleAddPrompt}
         addButtonTooltip="Add prompt"
@@ -361,7 +361,7 @@ function PromptsSubSection() {
         </Card>
       ) : (
         <Card>
-          <EmptyState message="No prompts configured. Click the + button to add your first prompt." />
+          <EmptyState message="プロンプトが設定されていません。「+」ボタンをクリックするとプロンプトを追加できます。" />
         </Card>
       )}
     </div>
@@ -413,8 +413,8 @@ function addDefaultSystemMessage(
 
 // Define dropdown options for global rules
 const globalRulesOptions = [
-  { value: "workspace", label: "Current workspace" },
-  { value: "global", label: "Global" },
+  { value: "workspace", label: "現在のワークスペース" },
+  { value: "global", label: "グローバル" },
 ];
 
 function RulesSubSection() {
@@ -486,11 +486,11 @@ function RulesSubSection() {
   return (
     <div>
       <DropdownButton
-        title="Rules"
+        title="ルール"
         variant="sm"
         options={globalRulesOptions}
         onOptionClick={handleOptionClick}
-        addButtonTooltip="Add rules"
+        addButtonTooltip="ルールを追加"
       />
 
       <Card>
@@ -516,7 +516,7 @@ function RulesSubSection() {
 export function RulesSection() {
   return (
     <>
-      <ConfigHeader title="Rules" />
+      <ConfigHeader title="ルール" />
 
       <div className="space-y-6">
         <RulesSubSection />

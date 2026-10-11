@@ -54,18 +54,21 @@ function AddRuleDialog({ mode }: { mode: "workspace" | "global" }) {
     }
   };
 
-  const title = mode === "global" ? "Add global rule" : "Add workspace rule";
+  const title =
+    mode === "global"
+      ? "グローバルのルールを追加"
+      : "ワークスペースのルールを追加";
 
   return (
     <div className="px-2 pt-4 sm:px-4">
       <div>
         <h1 className="mb-0">{title}</h1>
         <p className="m-0 mt-2 p-0 text-stone-500">
-          Choose a name for the new rule file.
+          新しいルールファイルの名前を選択してください。
         </p>
         <form onSubmit={handleSubmit} className="mt-3 flex flex-col gap-2">
           <label className="flex w-full flex-col gap-1">
-            <span>Rule name</span>
+            <span>ルール名</span>
             <Input
               ref={inputRef}
               type="text"
@@ -81,14 +84,14 @@ function AddRuleDialog({ mode }: { mode: "workspace" | "global" }) {
               disabled={isSubmitting}
               type="submit"
             >
-              Create
+              作成
             </SecondaryButton>
             <SecondaryButton
               type="button"
               className="min-w-16"
               onClick={closeDialog}
             >
-              Cancel
+              キャンセル
             </SecondaryButton>
           </div>
         </form>

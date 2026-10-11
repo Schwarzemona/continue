@@ -30,7 +30,7 @@ function OllamaModelDownload({
       {hasDownloaded ? (
         <OllamaCompletedStep text={command} />
       ) : (
-        <ToolTip place="top" content="Copy into terminal">
+        <ToolTip place="top" content="ターミナルにコピー">
           <StyledActionButton onClick={onClick} className="gap-2">
             <p className="lines m-0 px-0 py-2 font-mono text-xs">{command}</p>
             <CommandLineIcon width={16} height={16} />

@@ -86,8 +86,8 @@ export function ToolPoliciesGroup({
             allToolsOff
               ? "Tools disabled in current mode"
               : isGroupEnabled
-                ? `Disable all tools in ${groupName} group`
-                : `Enable all tools in ${groupName} group`
+                ? `${groupName}グループのツールを無効化`
+                : `${groupName}グループのツールを有効化`
           }
         >
           <div>

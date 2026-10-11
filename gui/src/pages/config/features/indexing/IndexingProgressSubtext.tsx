@@ -9,14 +9,14 @@ const STATUS_TO_SUBTITLE_TEXT: Record<
   IndexingProgressUpdate["status"],
   string | undefined
 > = {
-  done: "Click to re-index",
+  done: "再インデックス",
   loading: "",
   waiting: "",
-  indexing: "Click to pause",
-  paused: "Click to resume",
-  failed: "Click to retry",
-  disabled: "Click to open configuration",
-  cancelled: "Click to restart",
+  indexing: "ポーズ",
+  paused: "再開",
+  failed: "リトライ",
+  disabled: "設定を開く",
+  cancelled: "再スタート",
 };
 
 function IndexingProgressSubtext({

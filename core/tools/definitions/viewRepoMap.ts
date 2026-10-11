@@ -5,15 +5,15 @@ import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 export const viewRepoMapTool: Tool = {
   type: "function",
   displayTitle: "View Repo Map",
-  wouldLikeTo: "view the repository map",
-  isCurrently: "getting the repository map",
-  hasAlready: "viewed the repository map",
+  wouldLikeTo: "リポジトリマップを取得します",
+  isCurrently: "リポジトリマップを取得中",
+  hasAlready: "リポジトリマップを取得",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ViewRepoMap,
-    description: "View the repository map",
+    description: "リポジトリマップを表示します。",
     parameters: {
       type: "object",
       properties: {},

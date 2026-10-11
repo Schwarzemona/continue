@@ -65,11 +65,11 @@ function Stats() {
         backgroundColor: vscBackground,
       }}
     >
-      <PageHeader title="More" onTitleClick={() => navigate(-1)} showBorder />
+      <PageHeader title="戻る" onTitleClick={() => navigate(-1)} showBorder />
 
       <div className="p-2">
         <div className="flex items-center gap-2">
-          <h2 className="ml-2">Tokens per Day</h2>
+          <h2 className="ml-2">日次トークン使用量</h2>
           <CopyIconButton
             text={generateTable(
               ([["Day", "Generated Tokens", "Prompt Tokens"]] as any).concat(
@@ -85,9 +85,9 @@ function Stats() {
         <table className="w-full border-collapse">
           <thead>
             <Tr>
-              <Th>Day</Th>
-              <Th>Generated Tokens</Th>
-              <Th>Prompt Tokens</Th>
+              <Th>日付</Th>
+              <Th>生成トークン</Th>
+              <Th>プロンプトトークン</Th>
             </Tr>
           </thead>
           <tbody>
@@ -102,7 +102,7 @@ function Stats() {
         </table>
 
         <div className="flex items-center gap-2">
-          <h2 className="ml-2">Tokens per Model</h2>
+          <h2 className="ml-2">モデルごとのトークン数</h2>
           <CopyIconButton
             text={generateTable(
               ([["Model", "Generated Tokens", "Prompt Tokens"]] as any).concat(
@@ -118,9 +118,9 @@ function Stats() {
         <table className="w-full border-collapse">
           <thead>
             <Tr>
-              <Th>Model</Th>
-              <Th>Generated Tokens</Th>
-              <Th>Prompt Tokens</Th>
+              <Th>モデル</Th>
+              <Th>生成トークン</Th>
+              <Th>プロンプトトークン</Th>
             </Tr>
           </thead>
           <tbody>

@@ -187,11 +187,11 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
     <FormProvider {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-md p-6">
-          <h1 className="mb-0 text-center text-2xl">Add Chat model</h1>
+          <h1 className="mb-0 text-center text-2xl">追加のチャットモデル</h1>
 
           <div className="my-8 flex flex-col gap-6">
             <div>
-              <label className="block text-sm font-medium">Provider</label>
+              <label className="block text-sm font-medium">プロバイダー</label>
               <ModelSelectionListbox
                 selectedProvider={selectedProvider}
                 setSelectedProvider={(val: DisplayInfo) => {
@@ -207,16 +207,16 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                 searchPlaceholder="Search providers..."
               />
               <span className="text-description-muted mt-1 block text-xs">
-                Don't see your provider?{" "}
+                プロバイダーがありませんか？{" "}
                 <a
                   className="cursor-pointer text-inherit underline hover:text-inherit"
                   onClick={() =>
                     ideMessenger.post("openUrl", MODEL_PROVIDERS_URL)
                   }
                 >
-                  Click here
+                  ここをクリック
                 </a>{" "}
-                to view the full list
+                で全てのリストが確認できます。
               </span>
             </div>
 
@@ -306,7 +306,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                   }
                   return staticOther;
                 })()}
-                otherOptionsLabel="Additional models"
+                otherOptionsLabel="追加のモデル"
               />
             </div>
 
@@ -315,8 +315,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                 <Alert>
                   <p className="m-0 text-sm font-bold">Codestral API key</p>
                   <p className="m-0 mt-1">
-                    Note that codestral requires a different API key from other
-                    Mistral models
+                    Codestralは、他のMistralモデルとは異なるAPIキーを必要とすることにご注意ください。
                   </p>
                 </Alert>
               </div>
@@ -354,9 +353,9 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                         }
                       }}
                     >
-                      Click here
+                      ここをクリック
                     </a>{" "}
-                    to create a {selectedProvider.title} API key
+                    して{selectedProvider.title}のAPIキーを作成
                   </span>
                 </>
               </div>
@@ -392,11 +391,11 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
 
           <div className="mt-4 w-full">
             <Button type="submit" className="w-full" disabled={isDisabled()}>
-              Connect
+              接続
             </Button>
 
             <span className="text-description-muted block w-full text-center text-xs">
-              This will update your{" "}
+              これで更新:{" "}
               <span
                 className="cursor-pointer underline hover:brightness-125"
                 onClick={() =>
@@ -405,7 +404,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                   })
                 }
               >
-                config file
+                設定ファイル
               </span>
             </span>
           </div>

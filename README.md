@@ -9,6 +9,7 @@
 - Added Gemma 4 models to the recommended agent model list.
 - Changed the OpenAI adapter's reranking endpoint to `completions`.
 - Fixed Markdown rendering for inline math symbols ($\to$) and GFM tables in the VS Code extension.
+- Localization into Japanese.
 
 <h1 align="center">Continue</h1>
 

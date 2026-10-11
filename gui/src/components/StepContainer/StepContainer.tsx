@@ -67,7 +67,7 @@ export default function StepContainer(props: StepContainerProps) {
       {
         messageType: "userInput",
         data: {
-          input: "Continue your response exactly where you left off:",
+          input: "中断したところから再開して。",
         },
       },
       "*",
@@ -125,7 +125,7 @@ export default function StepContainer(props: StepContainerProps) {
           <div className="flex items-center">
             <div className="border-border flex-1 border-t border-solid"></div>
             <span className="text-description mx-3 text-xs">
-              Previous Conversation Compacted
+              以前の会話を折りたたむ
             </span>
             <div className="border-border flex-1 border-t border-solid"></div>
           </div>

@@ -4,24 +4,23 @@ import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 export const grepSearchTool: Tool = {
   type: "function",
   displayTitle: "Grep Search",
-  wouldLikeTo: 'search for "{{{ query }}}"',
-  isCurrently: 'searching for "{{{ query }}}"',
-  hasAlready: 'searched for "{{{ query }}}"',
+  wouldLikeTo: '"{{{ query }}}"を検索します',
+  isCurrently: '"{{{ query }}}"を検索中',
+  hasAlready: '"{{{ query }}}"を検索',
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.GrepSearch,
     description:
-      "Performs a regular expression (regex) search over the repository using ripgrep. Will not include results for many build, cache, secrets dirs/files. Output may be truncated, so use targeted queries",
+      "ripgrepを使用してリポジトリ全体のファイル内容に対して正規表現で検索します。出力が切り詰められることがあるため、対象を絞ったクエリを使用します。",
     parameters: {
       type: "object",
       required: ["query"],
       properties: {
         query: {
           type: "string",
-          description:
-            "The regex pattern to search for within file contents. Use regex with alternation (e.g., 'word1|word2|word3') or character classes to find multiple potential words in a single search.",
+          description: "ファイル内容で検索する正規表現パターン。",
         },
       },
     },

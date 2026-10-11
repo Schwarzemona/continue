@@ -303,7 +303,7 @@ const AtMentionDropdown = forwardRef((props: AtMentionDropdownProps, ref) => {
       });
     } else if (subMenuTitle === "Mention rules files") {
       items.push({
-        title: "Add new rule",
+        title: "新しいルールを追加",
         type: "action",
         action: () => {
           void ideMessenger.request("config/addLocalWorkspaceBlock", {
@@ -319,7 +319,7 @@ const AtMentionDropdown = forwardRef((props: AtMentionDropdownProps, ref) => {
           }
           props.onClose(); // Escape the mention list after creating a new rule
         },
-        description: "Creates a rule file",
+        description: "ルールファイルを作成",
       });
     }
     setLoadingSubmenuItem(items.find((item) => item.id === "loading"));

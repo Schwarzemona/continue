@@ -108,7 +108,7 @@ export function AssistantAndOrgListbox({
           >
             <div className="flex items-center justify-between px-1.5 py-1">
               <span className="text-description text-2xs font-medium">
-                Configs
+                設定ファイル
               </span>
               <div className="flex items-center gap-0.5">
                 <Button
@@ -160,7 +160,7 @@ export function AssistantAndOrgListbox({
                         configLoading && "animate-spin-slow",
                       )}
                     />
-                    <span className="text-2xs">Reload</span>
+                    <span className="text-2xs">リロード</span>
                   </div>
                 </Button>
               </div>
@@ -170,7 +170,7 @@ export function AssistantAndOrgListbox({
             <div>
               <div className="text-description flex items-center justify-start px-2 py-1">
                 <span className="block" style={{ fontSize: tinyFont }}>
-                  <code>{getMetaKeyLabel()} ⇧ '</code> to toggle config
+                  <code>{getMetaKeyLabel()} ⇧ '</code>で設定ファイル切り替え
                 </span>
               </div>
             </div>

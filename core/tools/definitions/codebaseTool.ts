@@ -4,16 +4,16 @@ import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 export const codebaseTool: Tool = {
   type: "function",
   displayTitle: "Codebase Search",
-  wouldLikeTo: "search the codebase for: {{{ query }}}",
-  isCurrently: "searching the codebase for: {{{ query }}}",
-  hasAlready: "searched the codebase for: {{{ query }}}",
+  wouldLikeTo: "{{{ query }}}をコードベースから検索します",
+  isCurrently: "{{{ query }}}をコードベースから検索中",
+  hasAlready: "{{{ query }}}をコードベースから検索",
   readonly: true,
   isInstant: false,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.CodebaseTool,
     description:
-      "Use this tool to semantically search through the codebase and retrieve relevant code snippets based on a natural language query. This helps find relevant code context for understanding or working with the codebase.",
+      "自然言語のクエリに基づいて関連するコードスニペットを取得します。",
     parameters: {
       type: "object",
       required: ["query"],
@@ -21,7 +21,7 @@ export const codebaseTool: Tool = {
         query: {
           type: "string",
           description:
-            "Natural language description of what you're looking for in the codebase (e.g., 'authentication logic', 'database connection setup', 'error handling')",
+            "コードベース内で探しているものの自然言語による説明(例: 「認証ロジック」、「データベース接続の設定」、「エラーハンドリング」)。",
         },
       },
     },

@@ -7,3 +7,9 @@ docs/docs/languages
 **/*.scm
 **/*.diff
 .continue/
+
+# agents
+!adrs/
+!knowledge/
+!themes/
+!AGENTS.md

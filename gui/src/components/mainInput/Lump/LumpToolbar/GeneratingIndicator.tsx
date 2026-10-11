@@ -1,7 +1,7 @@
 import { AnimatedEllipsis } from "../../../AnimatedEllipsis";
 
 export function GeneratingIndicator({
-  text = "Generating",
+  text = "生成中",
   testId,
 }: {
   text?: string;

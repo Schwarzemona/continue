@@ -152,7 +152,7 @@ export function History() {
         <input
           className="bg-vsc-input-background text-vsc-foreground flex-1 rounded-md border border-none py-1 pl-2 pr-8 text-sm outline-none focus:outline-none"
           ref={searchInputRef}
-          placeholder="Search past sessions"
+          placeholder="履歴を検索"
           type="text"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -174,7 +174,7 @@ export function History() {
         {filteredAndSortedSessions.length === 0 && (
           <div className="m-3 text-center">
             {isSessionMetadataLoading ? (
-              "Loading Sessions..."
+              "履歴読み込み中..."
             ) : (
               <>
                 No past sessions found. To start a new session, either click the
@@ -211,13 +211,13 @@ export function History() {
 
       <div className="border-border flex flex-col items-end justify-center border-0 border-t border-solid px-2 py-3 text-xs">
         <Button variant="secondary" size="sm" onClick={showClearSessionsDialog}>
-          Clear chats
+          履歴の消去
         </Button>
         <span
           className="text-description text-2xs"
           data-testid="history-sessions-note"
         >
-          Chat history is saved to{" "}
+          履歴保存パス:{" "}
           <span className="italic">
             {platform === "windows"
               ? "%USERPROFILE%/.continue"

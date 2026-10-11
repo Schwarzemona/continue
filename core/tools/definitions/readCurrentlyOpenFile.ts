@@ -4,16 +4,16 @@ import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 export const readCurrentlyOpenFileTool: Tool = {
   type: "function",
   displayTitle: "Read Currently Open File",
-  wouldLikeTo: "read the current file",
-  isCurrently: "reading the current file",
-  hasAlready: "read the current file",
+  wouldLikeTo: "現在開いているファイルを確認します",
+  isCurrently: "現在開いているファイルを確認中",
+  hasAlready: "現在開いているファイルを確認",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ReadCurrentlyOpenFile,
     description:
-      "Read the currently open file in the IDE. If the user seems to be referring to a file that you can't see, or is requesting an action on content that seems missing, try using this tool.",
+      "IDEで現在開かれているファイルを読み取ります。ユーザーが見えていないファイルについて言及している場合は、このツールを試します。",
     parameters: {
       type: "object",
       properties: {},

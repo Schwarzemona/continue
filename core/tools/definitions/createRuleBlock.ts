@@ -2,32 +2,32 @@ import { Tool } from "../..";
 import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 
 const NAME_ARG_DESC =
-  "Short, descriptive name summarizing the rule's purpose (e.g. 'React Standards', 'Type Hints')";
+  "番号(00-) + 名前。小文字、数字、ハイフンのみ使用します。";
 const RULE_ARG_DESC =
-  "Clear, imperative instruction for future code generation (e.g. 'Use named exports', 'Add Python type hints'). Each rule should focus on one specific standard.";
+  "将来のコード生成のための、明確で命令的な指示を記述します。";
 const DESC_ARG_DESC =
-  "Description of when this rule should be applied. Required for Agent Requested rules (AI decides when to apply). Optional for other types.";
+  "具体的に記述し、重要な用語を含めます。ルールが何を行うのかと、使用すべき特定のトリガー/コンテキストの両方を含めます。";
 const GLOB_ARG_DESC =
-  "Optional file patterns to which this rule applies (e.g. ['**/*.{ts,tsx}'] or ['src/**/*.ts', 'tests/**/*.ts'])";
+  "このルールが適用されるファイル名の正規表現パターン(例: ['**/*.{ts,tsx}'] または ['src/**/*.ts', 'tests/**/*.ts'])。";
 const REGEX_ARG_DESC =
-  "Optional regex patterns to match against file content. Rule applies only to files whose content matches the pattern (e.g. 'useEffect' for React hooks or '\\bclass\\b' for class definitions)";
+  "このルールが適用されるファイル内容の正規表現パターン(例: Reactフック用の'useEffect'やクラス定義用の'\\bclass\\b')。";
 
 const ALWAYS_APPLY_DESC =
-  "Whether this rule should always be applied. Set to false for Agent Requested and Manual rules. Omit or set to true for Always and Auto Attached rules.";
+  "このルールを常に適用すべきかどうか。基本的にfalseに設定します。";
 
 export const createRuleBlock: Tool = {
   type: "function",
   displayTitle: "Create Rule Block",
-  wouldLikeTo: 'create a rule block for "{{{ name }}}"',
-  isCurrently: 'creating a rule block for "{{{ name }}}"',
-  hasAlready: 'created a rule block for "{{{ name }}}"',
+  wouldLikeTo: '"{{{ name }}}"のルールブロックを作成します',
+  isCurrently: '"{{{ name }}}"のルールブロックを作成中',
+  hasAlready: '"{{{ name }}}"のルールブロックを作成',
   readonly: false,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.CreateRuleBlock,
     description:
-      'Creates a "rule" that can be referenced in future conversations. This should be used whenever you want to establish code standards / preferences that should be applied consistently, or when you want to avoid making a mistake again. To modify existing rules, use the edit tool instead.\n\nRule Types:\n- Always: Include only "rule" (always included in model context)\n- Auto Attached: Include "rule", "globs", and/or "regex" (included when files match patterns)\n- Agent Requested: Include "rule" and "description" (AI decides when to apply based on description)\n- Manual: Include only "rule" (only included when explicitly mentioned using @ruleName)',
+      "システムプロンプトに注入するルールを作成します。既存のルールを変更するには、編集ツールを使用します。",
     parameters: {
       type: "object",
       required: ["name", "rule"],
