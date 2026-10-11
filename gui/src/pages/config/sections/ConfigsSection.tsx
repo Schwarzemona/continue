@@ -26,7 +26,7 @@ export function ConfigsSection() {
       <ConfigHeader
         title="設定ファイル"
         onAddClick={handleAddConfig}
-        addButtonTooltip="Add config"
+        addButtonTooltip="設定を追加"
       />
 
       <Card>
@@ -82,7 +82,7 @@ export function ConfigsSection() {
                       )}
                     </div>
                   </div>
-                  <ToolTip content="Open configuration">
+                  <ToolTip content="構成を開く">
                     <Button
                       onClick={() => handleConfigureAgent(profile.id)}
                       variant="ghost"

@@ -11,10 +11,10 @@ export function ToolCallStatusMessage({
   tool,
   toolCallState,
 }: ToolCallStatusMessageProps) {
-  if (!tool) return "Agent tool use";
+  if (!tool) return "エージェントツール使用";
 
   const toolName = tool.displayTitle ?? tool.function.name;
-  const defaultToolDescription = `${toolName} tool`;
+  const defaultToolDescription = `${toolName}ツール`;
 
   const futureMessage: string = tool.wouldLikeTo
     ? Mustache.render(tool.wouldLikeTo, toolCallState.parsedArgs)
@@ -32,7 +32,7 @@ export function ToolCallStatusMessage({
   ) {
     message = tool.hasAlready
       ? Mustache.render(tool.hasAlready, toolCallState.parsedArgs)
-      : `used the ${defaultToolDescription}`;
+      : `${defaultToolDescription}を使用`;
   } else {
     switch (toolCallState.status) {
       case "generating":
@@ -44,7 +44,7 @@ export function ToolCallStatusMessage({
       case "calling":
         message = tool.isCurrently
           ? Mustache.render(tool.isCurrently, toolCallState.parsedArgs)
-          : `calling the ${defaultToolDescription}`;
+          : `${defaultToolDescription}を呼び出し中`;
         break;
       default:
         message = defaultToolDescription;
@@ -56,7 +56,7 @@ export function ToolCallStatusMessage({
       className="text-description line-clamp-4 min-w-0 break-words"
       data-testid="tool-call-title"
     >
-      {`Continue ${intro} ${message}`}
+      {`Continue${intro}${message}`}
     </div>
   );
 }

@@ -2,7 +2,7 @@
   "name": "continue",
   "icon": "media/icon.png",
   "author": "Continue Dev, Inc",
-  "version": "1.3.40",
+  "version": "2.1.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/continuedev/continue"
@@ -215,7 +215,7 @@
       {
         "command": "continue.openConfigPage",
         "category": "Continue",
-        "title": "Open Settings",
+        "title": "設定を開く",
         "icon": "$(gear)",
         "group": "Continue"
       },
@@ -239,7 +239,7 @@
       {
         "command": "continue.newSession",
         "category": "Continue",
-        "title": "New Session",
+        "title": "新しいセッション",
         "icon": "$(add)",
         "group": "Continue"
       },
@@ -252,7 +252,7 @@
       {
         "command": "continue.viewHistory",
         "category": "Continue",
-        "title": "View History",
+        "title": "履歴を表示",
         "icon": "$(history)",
         "group": "Continue"
       },
@@ -327,12 +327,6 @@
         "command": "continue.docsReIndex",
         "category": "Continue",
         "title": "Docs Force Re-Index",
-        "group": "Continue"
-      },
-      {
-        "command": "continue.focusContinueInput",
-        "category": "Continue",
-        "title": "Focus Continue Chat",
         "group": "Continue"
       },
       {

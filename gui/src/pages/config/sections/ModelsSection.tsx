@@ -74,7 +74,7 @@ export function ModelsSection() {
       <ConfigHeader
         title="モデル"
         onAddClick={handleAddModel}
-        addButtonTooltip="Add model"
+        addButtonTooltip="モデルを追加"
       />
 
       <Card>

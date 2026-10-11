@@ -27,7 +27,9 @@ export function ToolTruncateHistoryIcon({
 
   return (
     <ToolbarButtonWithTooltip
-      tooltipContent={isStreaming ? "" : "Trim chat to this message"}
+      tooltipContent={
+        isStreaming ? "" : "このメッセージまでチャットを切り詰める"
+      }
       onClick={() => {
         if (isStreaming) {
           return;

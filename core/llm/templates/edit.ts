@@ -216,17 +216,17 @@ Rewrite the above code to satisfy this request (without changing existing code c
 Sure! Here's the code you requested:
 \`\`\`{{{language}}}`;
 
-const gemmaEditPrompt = `<start_of_turn>user
-You are an expert programmer and write code on the first attempt without any errors or fillers. Rewrite the code to satisfy this request (without changing existing code comments): "{{{userInput}}}"
-
+const gemmaEditPrompt = `# タスク
+- やり直しがきかないため、assistantはエラーや不要な記述なしに一発でコードを書き上げます。
+- 以下のリクエストを満たすように、assistantはコードを書き直してください(既存のコードコメントは変更しないでください)。
+# リクエスト
+\`\`\`
+{{{userInput}}}
+\`\`\`
+# コード
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
-\`\`\`<end_of_turn>
-<start_of_turn>model
-Sure! Here's the code you requested:
-
-\`\`\`{{{language}}}
-`;
+\`\`\``;
 
 export {
   alpacaEditPrompt,

@@ -62,7 +62,7 @@ export function ApplyActions(props: ApplyActionsProps) {
       }
 
       return (
-        <ToolTip place="top" content="Apply Code">
+        <ToolTip place="top" content="コードを適用">
           <HoverItem
             data-tooltip-id="codeblock-apply-code-button-tooltip"
             className="!p-0"
@@ -74,7 +74,7 @@ export function ApplyActions(props: ApplyActionsProps) {
             >
               <div className="text-lightgray flex items-center gap-1">
                 <PlayIcon className="h-3.5 w-3.5" />
-                <span className="xs:inline hidden">Apply</span>
+                <span className="xs:inline hidden">適用</span>
               </div>
             </button>
           </HoverItem>

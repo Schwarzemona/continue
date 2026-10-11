@@ -51,7 +51,7 @@ export function ModelRoleRow({
           />
         </div>
         {selectedModel && (
-          <ToolTip content="Configure">
+          <ToolTip content="設定">
             <Button
               variant="ghost"
               size="sm"

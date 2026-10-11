@@ -182,7 +182,7 @@ export function ExpandableToolbarPreview(props: ExpandableToolbarPreviewProps) {
           {props.title}
         </div>
         <div className="flex items-center gap-1">
-          <HeaderButtonWithToolTip text={hidden ? "Show" : "Hide"}>
+          <HeaderButtonWithToolTip text={hidden ? "表示" : "隠す"}>
             {!!props.children &&
               (hidden ? (
                 <EyeIcon className="h-2.5 w-2.5" />
@@ -192,7 +192,7 @@ export function ExpandableToolbarPreview(props: ExpandableToolbarPreviewProps) {
           </HeaderButtonWithToolTip>
           {props.onDelete && (
             <HeaderButtonWithToolTip
-              text="Delete"
+              text="消去"
               onClick={(e) => {
                 e.stopPropagation();
                 props.onDelete?.();
@@ -215,9 +215,7 @@ export function ExpandableToolbarPreview(props: ExpandableToolbarPreviewProps) {
 
           {contentDims.height > MAX_PREVIEW_HEIGHT && (
             <ChevronContainer>
-              <HeaderButtonWithToolTip
-                text={isExpanded ? "Collapse" : "Expand"}
-              >
+              <HeaderButtonWithToolTip text={isExpanded ? "収納" : "展開"}>
                 <ChevronDownIcon
                   className="h-3 w-3 transition-all"
                   style={{

@@ -62,7 +62,7 @@ export function RulesPeek({ appliedRules, icon }: RulesPeekProps) {
   return (
     <ToggleDiv
       icon={icon}
-      title={`${rules.length} rule${rules.length > 1 ? "s" : ""}`}
+      title={`${rules.length}つのルールを適用中${rules.length > 1 ? "" : ""}`}
       testId="rules-peek"
     >
       {rules.map((rule, idx) => (

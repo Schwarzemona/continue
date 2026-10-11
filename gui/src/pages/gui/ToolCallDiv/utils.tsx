@@ -15,42 +15,43 @@ export function getStatusIntro(
   isInstant?: boolean,
 ): string {
   if (status === "done" || (isInstant && status === "calling")) {
-    return "";
+    return "は";
   }
 
   switch (status) {
     case "generating":
-      return "will";
+      return "は";
     case "generated":
-      return "wants to";
+      return "は";
     case "calling":
-      return "is";
+      return "は";
     case "canceled":
+      return "は";
     case "errored":
-      return "tried to";
+      return "は";
     default:
-      return "";
+      return "は";
   }
 }
 
 // Helper function to get the appropriate verb for group actions
 export function getGroupActionVerb(toolCallStates: ToolCallState[]): string {
-  if (toolCallStates.length === 0) return "Performing";
+  if (toolCallStates.length === 0) return "実施中";
 
   // Get the most "active" status from all tool calls
   const statuses = toolCallStates.map((state) => state.status);
 
   // Priority order: calling > generating > generated > done > errored/canceled
   if (statuses.includes("calling")) {
-    return "Performing";
+    return "実施中";
   } else if (statuses.includes("generating")) {
-    return "Generating";
+    return "生成中";
   } else if (statuses.includes("generated")) {
-    return "Pending";
+    return "保留中";
   } else if (statuses.some((s) => s === "done")) {
-    return "Performed";
+    return "実施";
   } else if (statuses.some((s) => s === "errored" || s === "canceled")) {
-    return "Attempted";
+    return "試行";
   }
 
   return "Performing";

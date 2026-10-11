@@ -50,7 +50,7 @@ function ThinkingBlockPeek({
     } else if (startTime) {
       const endTime = Date.now();
       const diff = endTime - startTime;
-      const diffString = `${(diff / 1000).toFixed(1)}s`;
+      const diffString = `${(diff / 1000).toFixed(1)}秒`;
       setElapsedTime(diffString);
     }
   }, [inProgress]);
@@ -69,14 +69,14 @@ function ThinkingBlockPeek({
           >
             {inProgress ? (
               <span>
-                {redactedThinking ? "Redacted Thinking" : "推論中"}
+                {redactedThinking ? "検閲された推論中" : "推論中"}
                 <AnimatedEllipsis />
               </span>
             ) : redactedThinking ? (
-              "Redacted Thinking"
+              "検閲された推論"
             ) : (
               "推論" +
-              (elapsedTime ? ` for ${elapsedTime}` : "") +
+              (elapsedTime ? `${elapsedTime}` : "") +
               (tokens ? ` (${tokens} tokens)` : "")
             )}
             {open ? (
@@ -94,7 +94,7 @@ function ThinkingBlockPeek({
         >
           {redactedThinking ? (
             <div className="text-description pl-5 text-xs italic">
-              Thinking content redacted due to safety reasons.
+              安全上の理由により、思考内容は検閲されています。
             </div>
           ) : (
             <MarkdownWrapper>

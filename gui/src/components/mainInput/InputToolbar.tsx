@@ -151,7 +151,7 @@ function InputToolbar(props: InputToolbarProps) {
               >
                 <ToolTip
                   place="top"
-                  content={hasReasoningEnabled ? "推論を無効" : "推論を有効"}
+                  content={hasReasoningEnabled ? "推論が有効" : "推論が無効"}
                 >
                   {hasReasoningEnabled ? (
                     <LightBulbIconSolid className="h-3 w-3 brightness-200 hover:brightness-150" />

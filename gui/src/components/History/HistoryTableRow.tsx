@@ -152,7 +152,7 @@ export function HistoryTableRow({
           {
             <>
               <HeaderButtonWithToolTip
-                text="Edit"
+                text="タイトル変更"
                 onClick={async (e) => {
                   e.stopPropagation();
                   setEditing(true);
@@ -162,7 +162,7 @@ export function HistoryTableRow({
               </HeaderButtonWithToolTip>
               {shareSessionSupported && (
                 <HeaderButtonWithToolTip
-                  text="Save Chat as Markdown"
+                  text="チャットをMarkdownとして保存"
                   onClick={async (e) => {
                     e.stopPropagation();
                     await shareSession(sessionMetadata.sessionId);
@@ -172,7 +172,7 @@ export function HistoryTableRow({
                 </HeaderButtonWithToolTip>
               )}
               <HeaderButtonWithToolTip
-                text="Delete"
+                text="消去"
                 onClick={async (e) => {
                   e.stopPropagation();
                   await dispatch(deleteSession(sessionMetadata.sessionId));

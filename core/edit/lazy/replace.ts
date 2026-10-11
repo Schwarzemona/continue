@@ -59,27 +59,24 @@ export async function* getReplacementWithLlm(
   abortController: AbortController,
 ): AsyncGenerator<string> {
   const userPrompt = dedent`
-    ORIGINAL CODE:
+    # タスク
+    - 元の文字列に提案された変更を適用し、assistantは修正後のファイル全体を出力してください。
+    - 内容**のみ**をassistantは出力してください。変更内容の説明、要約、記述は行わないでください。
+    - 変更に伴う修正が必要な場合を除き、assistantは既存のコメントはそのまま残してください。
+    - assistantは変更のない文字列をすべて、そのまま維持してください。
+    # 元の文字列
     \`\`\`
     ${oldCode}
     \`\`\`
-
-    UPDATED CODE:
+    # 提案された変更
     \`\`\`
     ${linesBefore.join("\n")}
     ${REPLACE_HERE}
     ${linesAfter.join("\n")}
     \`\`\`
-
-    Above is an original version of a file, followed by a newer version that is in the process of being written. The new version contains a section which is exactly the same as in the original code, and has been marked with "${REPLACE_HERE}". Your task is to give the exact snippet of code from the original code that should replace "${REPLACE_HERE}" in the new version.
-
-    Your output should be a single code block. We will paste the contents of that code block directly into the new version, so make sure that it has correct indentation.
   `;
 
-  const assistantPrompt = dedent`
-    Here is the snippet of code that will replace "${REPLACE_HERE}" in the new version:
-    \`\`\`
-  `;
+  const assistantPrompt = dedent``;
 
   const completion = await llm.streamChat(
     [

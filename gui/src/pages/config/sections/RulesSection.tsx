@@ -223,27 +223,27 @@ const RuleCard: React.FC<RuleCardProps> = ({ rule }) => {
               </div>
             )}
             <div className="flex flex-row items-start gap-1">
-              <HeaderButtonWithToolTip onClick={onClickExpand} text="Expand">
+              <HeaderButtonWithToolTip onClick={onClickExpand} text="拡大">
                 <ArrowsPointingOutIcon className="h-3 w-3 text-gray-400" />
               </HeaderButtonWithToolTip>{" "}
               {rule.source === "default-chat" ||
               rule.source === "default-agent" ? (
                 <HeaderButtonWithToolTip
                   onClick={() => openRule(rule)}
-                  text="View"
+                  text="閲覧"
                 >
                   <EyeIcon className="h-3 w-3 text-gray-400" />
                 </HeaderButtonWithToolTip>
               ) : (
                 <HeaderButtonWithToolTip
                   onClick={() => openRule(rule)}
-                  text="Edit"
+                  text="編集"
                 >
                   <PencilIcon className="h-3 w-3 text-gray-400" />
                 </HeaderButtonWithToolTip>
               )}
               {canDeleteRule && (
-                <HeaderButtonWithToolTip onClick={handleDelete} text="Delete">
+                <HeaderButtonWithToolTip onClick={handleDelete} text="削除">
                   <TrashIcon className="h-3 w-3 text-gray-400" />
                 </HeaderButtonWithToolTip>
               )}
@@ -342,7 +342,7 @@ function PromptsSubSection() {
         title="プロンプト"
         variant="sm"
         onAddClick={handleAddPrompt}
-        addButtonTooltip="Add prompt"
+        addButtonTooltip="プロンプトを追加"
       />
 
       {sortedCommands.length > 0 ? (

@@ -230,12 +230,12 @@ export function UserSettingsSection() {
 
           {/* Experimental Settings */}
           <div>
-            <ConfigHeader title="実験中" variant="sm" />
+            <ConfigHeader title="実験機能" variant="sm" />
             <Card>
               <Toggle
                 isOpen={showExperimental}
                 onToggle={() => setShowExperimental(!showExperimental)}
-                title="実験中機能を表示"
+                title="実験機能を表示"
               >
                 <div className="flex flex-col gap-x-1 gap-y-4">
                   <UserSetting

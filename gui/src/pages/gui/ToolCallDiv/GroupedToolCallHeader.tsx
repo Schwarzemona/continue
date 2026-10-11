@@ -29,8 +29,9 @@ export function GroupedToolCallHeader({
           open={open}
           onClick={onToggle}
         />
-        {getGroupActionVerb(toolCallStates)} {activeCalls.length}{" "}
-        {activeCalls.length === 1 ? "action" : "actions"}
+        {activeCalls.length}
+        {"つの行動を"}
+        {getGroupActionVerb(toolCallStates)}
       </div>
     </div>
   );
