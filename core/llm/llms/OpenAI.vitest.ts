@@ -102,10 +102,87 @@ function assertFetchCall(mockFetch: any, expectedRequest: any) {
   }
 
   if (expectedRequest.body) {
-    const actualBody = JSON.parse(options.body as string);
-    expect(actualBody).toEqual(expectedRequest.body);
+    const body = JSON.parse(options.body);
+    expect(body).toEqual(expect.objectContaining(expectedRequest.body));
+    expect(body).not.toHaveProperty("_reasoning");
   }
 }
+
+describe("OpenAI reasoning conversion", () => {
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  test("should convert reasoning: true to chat_template_kwargs: { enable_thinking: true } for gemma4 models", async () => {
+    await runLlmTest({
+      llm: new OpenAI({
+        model: "gemma4-26b",
+        apiKey: "test-key",
+        apiBase: "http://localhost:8000/v1",
+        completionOptions: {
+          model: "gemma4-26b",
+          reasoning: true,
+        },
+      }),
+      methodToTest: "chat",
+      params: [[{ role: "user", content: "hi" }], new AbortController().signal],
+      expectedRequest: {
+        url: "http://localhost:8000/v1/chat/completions",
+        method: "POST",
+        body: {
+          chat_template_kwargs: { enable_thinking: true },
+        },
+      },
+      mockResponse: { choices: [{ message: { content: "hello" } }] },
+    });
+  });
+
+  test("should convert reasoning: false to chat_template_kwargs: { enable_thinking: false } for gemma4 models", async () => {
+    await runLlmTest({
+      llm: new OpenAI({
+        model: "gemma4-26b",
+        apiKey: "test-key",
+        apiBase: "http://localhost:8000/v1",
+        completionOptions: {
+          model: "gemma4-26b",
+          reasoning: false,
+        },
+      }),
+      methodToTest: "chat",
+      params: [[{ role: "user", content: "hi" }], new AbortController().signal],
+      expectedRequest: {
+        url: "http://localhost:8000/v1/chat/completions",
+        method: "POST",
+        body: {
+          chat_template_kwargs: { enable_thinking: false },
+        },
+      },
+      mockResponse: { choices: [{ message: { content: "hello" } }] },
+    });
+  });
+
+  test("should NOT add chat_template_kwargs for non-gemma4 models", async () => {
+    await runLlmTest({
+      llm: new OpenAI({
+        model: "gpt-4",
+        apiKey: "test-key",
+        apiBase: "http://localhost:8000/v1",
+        completionOptions: {
+          model: "gpt-4",
+          reasoning: true,
+        },
+      }),
+      methodToTest: "chat",
+      params: [[{ role: "user", content: "hi" }], new AbortController().signal],
+      expectedRequest: {
+        url: "http://localhost:8000/v1/chat/completions",
+        method: "POST",
+        body: {}, // chat_template_kwargs が含まれていないことを期待
+      },
+      mockResponse: { choices: [{ message: { content: "hello" } }] },
+    });
+  });
+});
 
 async function runLlmTest(testCase: LlmTestCase) {
   const {

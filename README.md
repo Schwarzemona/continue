@@ -6,6 +6,7 @@
 
 - Added support for task-specific embedding prefixes (e.g., "chunk" and "query") for indexing and retrieval.
 - Enabled support for reasoning fields and details by default in the LLM core.
+- Automatically converts `reasoning` option to `chat_template_kwargs` for Gemma 4 models to enable native thinking/reasoning capabilities.
 - Added Gemma 4 models to the recommended agent model list.
 - Changed the OpenAI adapter's reranking endpoint to `completions`.
 - Fixed Markdown rendering for inline math symbols ($\to$) and GFM tables in the VS Code extension.

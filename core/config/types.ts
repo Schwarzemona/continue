@@ -937,6 +937,7 @@ declare global {
     numGpu?: number;
     raw?: boolean;
     stream?: boolean;
+    reasoning?: boolean;
     prediction?: Prediction;
     tools?: Tool[];
   }
