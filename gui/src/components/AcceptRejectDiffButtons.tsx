@@ -50,8 +50,8 @@ export default function AcceptRejectAllButtons({
     }
   }
 
-  const rejectShortcut = `${getMetaKeyLabel()}⇧⌫`;
-  const acceptShortcut = `${getMetaKeyLabel()}⇧⏎`;
+  const rejectShortcut = `${getMetaKeyLabel()}+⇧+⌫`;
+  const acceptShortcut = `${getMetaKeyLabel()}+⇧+⏎`;
 
   return (
     <div

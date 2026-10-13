@@ -194,10 +194,10 @@ function InputToolbar(props: InputToolbarProps) {
                     useActiveFile
                       ? "アクティブファイルなしで送信"
                       : "アクティブなファイルも送信"
-                  } (${getMetaKeyLabel()}⏎)`}
+                  } (${getMetaKeyLabel()} + ⏎)`}
                 >
                   <span>
-                    {getMetaKeyLabel()}⏎{" "}
+                    {getMetaKeyLabel()} + ⏎{" "}
                     {useActiveFile
                       ? "アクティブファイルなし"
                       : "アクティブファイル送信"}

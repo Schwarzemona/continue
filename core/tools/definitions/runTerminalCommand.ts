@@ -14,7 +14,7 @@ function getPreferredShell(): string {
   const platform = os.platform();
 
   if (platform === "win32") {
-    return "powershell.exe";
+    return "pwsh.exe";
   } else if (platform === "darwin") {
     return process.env.SHELL || "/bin/zsh";
   } else {
@@ -23,7 +23,7 @@ function getPreferredShell(): string {
   }
 }
 
-const PLATFORM_INFO = `Choose terminal commands and scripts optimized for ${os.platform()} and ${os.arch()} and shell ${getPreferredShell()}.`;
+const PLATFORM_INFO = `${os.platform()}、${os.arch()}、およびシェル${getPreferredShell()}に最適化されたターミナルコマンドとスクリプトを選択してください。`;
 
 const RUN_COMMAND_NOTES = `シェルはステートフルではなく、以前のコマンドを記憶しません。\
       特別な権限や管理者権限を必要とするコマンドを実行しません。\

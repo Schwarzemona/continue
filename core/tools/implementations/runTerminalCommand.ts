@@ -26,7 +26,7 @@ function getShellCommand(command: string): { shell: string; args: string[] } {
   if (process.platform === "win32") {
     // Windows: Use PowerShell
     return {
-      shell: "powershell.exe",
+      shell: "pwsh.exe",
       args: ["-NoLogo", "-ExecutionPolicy", "Bypass", "-Command", command],
     };
   } else {
@@ -451,7 +451,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
                 } else {
                   const error = new ContinueError(
                     ContinueErrorReason.CommandExecutionFailed,
-                    `Command failed with exit code ${code}`,
+                    `コマンドが終了コード${code}で失敗`,
                   );
                   (error as any).stderr = stderr;
                   reject(error);

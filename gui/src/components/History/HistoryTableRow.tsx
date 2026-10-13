@@ -117,9 +117,9 @@ export function HistoryTableRow({
 
             {sessionMetadata.messageCount !== undefined && (
               <ToolTip
-                content={`${sessionMetadata.messageCount} message${
-                  sessionMetadata.messageCount === 1 ? " is" : "s are"
-                } present in this session`}
+                content={`${sessionMetadata.messageCount}つのメッセージ${
+                  sessionMetadata.messageCount === 1 ? "が" : "が"
+                }このセッションに存在します。`}
               >
                 <span className="bg-vsc-background text-secondary-foreground ml-auto inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
                   {sessionMetadata.messageCount}

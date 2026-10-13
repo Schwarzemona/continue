@@ -282,9 +282,7 @@ function IndicatorOnly({
     <div className="flex justify-center">
       <SpoilerButton onClick={onToggle}>
         <ButtonContent>
-          <span>
-            {isExpanded ? "Collapse" : `+${hiddenLinesCount} more lines`}
-          </span>
+          <span>{isExpanded ? "格納" : `+${hiddenLinesCount}行表示`}</span>
           <ChevronDownIcon
             className={`h-3 w-3 ${isExpanded ? "rotate-180" : ""}`}
           />

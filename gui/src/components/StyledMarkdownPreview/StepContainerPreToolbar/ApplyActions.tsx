@@ -40,7 +40,7 @@ export function ApplyActions(props: ApplyActionsProps) {
             <ToolbarButtonWithTooltip
               data-testid="codeblock-toolbar-reject"
               onClick={onClickReject}
-              tooltipContent={`全て却下(${getMetaKeyLabel()}⇧⌫)`}
+              tooltipContent={`全て却下(${getMetaKeyLabel()}+⇧+⌫)`}
             >
               <XMarkIcon className="text-error h-3.5 w-3.5 flex-shrink-0 hover:brightness-125" />
             </ToolbarButtonWithTooltip>
@@ -48,7 +48,7 @@ export function ApplyActions(props: ApplyActionsProps) {
             <ToolbarButtonWithTooltip
               data-testid="codeblock-toolbar-accept"
               onClick={props.onClickAccept}
-              tooltipContent={`全て承認(${getMetaKeyLabel()}⇧⏎)`}
+              tooltipContent={`全て承認(${getMetaKeyLabel()}+⇧+⏎)`}
             >
               <CheckIcon className="text-success h-3.5 w-3.5 flex-shrink-0 hover:brightness-125" />
             </ToolbarButtonWithTooltip>

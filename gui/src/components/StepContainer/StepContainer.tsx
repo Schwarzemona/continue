@@ -125,7 +125,7 @@ export default function StepContainer(props: StepContainerProps) {
           <div className="flex items-center">
             <div className="border-border flex-1 border-t border-solid"></div>
             <span className="text-description mx-3 text-xs">
-              以前の会話を折りたたむ
+              以前の会話を圧縮
             </span>
             <div className="border-border flex-1 border-t border-solid"></div>
           </div>

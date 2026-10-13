@@ -91,7 +91,7 @@ export default function Details({ interaction }: DetailsProps) {
         <div className="columns-3 gap-0 border-0 border-b-2 border-solid border-[color:var(--vscode-panel-border)] p-0">
           <Cell label="タイプ" value={summary.type}></Cell>
           <CustomCell>
-            Result: <StatusIcon interaction={interaction}></StatusIcon>
+            結果: <StatusIcon interaction={interaction}></StatusIcon>
             {summary.result}
           </CustomCell>
         </div>

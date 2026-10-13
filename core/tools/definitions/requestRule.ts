@@ -24,7 +24,7 @@ export function getRequestRuleDescription(
   rules: ConfigDependentToolParams["rules"],
 ): string {
   const prefix =
-    "ルール名でルールの内容を取得します。descriptionに当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n";
+    "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n";
   return prefix + getAvailableRules(rules);
 }
 

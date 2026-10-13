@@ -1,8 +1,7 @@
 import { Tool } from "../..";
 import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 
-const NAME_ARG_DESC =
-  "番号(00-) + 名前。小文字、数字、ハイフンのみ使用します。";
+const NAME_ARG_DESC = "名前。小文字、数字、ハイフンのみ使用します。";
 const RULE_ARG_DESC =
   "将来のコード生成のための、明確で命令的な指示を記述します。";
 const DESC_ARG_DESC =

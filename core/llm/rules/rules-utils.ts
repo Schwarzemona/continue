@@ -11,26 +11,26 @@ export function getRuleDisplayName(rule: RuleMetadata): string {
 export function getRuleSourceDisplayName(rule: RuleMetadata): string {
   switch (rule.source) {
     case ".continuerules":
-      return "Project rules";
+      return "プロジェクトルール";
     case "default-chat":
-      return "Default chat system message";
+      return "デフォルトチャットシステムメッセージ";
     case "default-plan":
-      return "Default plan mode system message";
+      return "デフォルトプランモードシステムメッセージ";
     case "default-agent":
-      return "Default agent system message";
+      return "デフォルトエージェントシステムメッセージ";
     case "json-systemMessage":
-      return "System Message (JSON)";
+      return "システムメッセージ(JSON)";
     case "model-options-agent":
-      return "Base System Agent Message";
+      return "ベースシステムエージェントメッセージ";
     case "model-options-plan":
-      return "Base System Plan Message";
+      return "ベースシステムプランメッセージ";
     case "model-options-chat":
-      return "Base System Chat Message";
+      return "ベースシステムチャットメッセージ";
     case "agentFile":
       if (rule.sourceFile) {
         return getLastNPathParts(rule.sourceFile, 2);
       } else {
-        return "Agent file";
+        return "エージェントファイル";
       }
     case "colocated-markdown":
       if (rule.sourceFile) {
@@ -39,7 +39,7 @@ export function getRuleSourceDisplayName(rule: RuleMetadata): string {
         return "rules.md";
       }
     case "rules-block":
-      return "Rules Block";
+      return "ルールブロック";
     default:
       return rule.source;
   }

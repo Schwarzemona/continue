@@ -21,14 +21,14 @@ export default function Start({ item }: StartProps) {
           case "startChat":
             return (
               <>
-                <Expander label="Prompt">
+                <Expander label="プロンプト">
                   <div className="p-1">
                     {item.messages.map((message, i) => (
                       <Message key={i} message={message}></Message>
                     ))}
                   </div>
                 </Expander>
-                <Expander label="Options">
+                <Expander label="設定">
                   <pre className="m-0">
                     {JSON.stringify(item.options, undefined, 2)}
                   </pre>
@@ -39,10 +39,10 @@ export default function Start({ item }: StartProps) {
           case "startComplete":
             return (
               <>
-                <Expander label="Prompt">
+                <Expander label="プロンプト">
                   <pre className="m-0">{item.prompt}</pre>
                 </Expander>
-                <Expander label="Options">
+                <Expander label="設定">
                   <pre className="m-0">
                     {JSON.stringify(item.options, undefined, 2)}
                   </pre>
@@ -53,13 +53,13 @@ export default function Start({ item }: StartProps) {
           case "startFim":
             return (
               <>
-                <Expander label="Prefix">
+                <Expander label="接頭辞">
                   <pre className="m-0">{item.prefix}</pre>
                 </Expander>
-                <Expander label="Suffix">
+                <Expander label="接尾辞">
                   <pre className="m-0">{item.suffix}</pre>
                 </Expander>
-                <Expander label="Options">
+                <Expander label="設定">
                   <pre className="m-0">
                     {JSON.stringify(item.options, undefined, 2)}
                   </pre>

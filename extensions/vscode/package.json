@@ -598,7 +598,7 @@
       "panel": [
         {
           "id": "continueConsole",
-          "title": "Continue Console",
+          "title": "Continueコンソール",
           "icon": "$(window)"
         }
       ]
@@ -617,7 +617,7 @@
         {
           "type": "webview",
           "id": "continue.continueConsoleView",
-          "name": "Continue Console",
+          "name": "Continueコンソール",
           "icon": "$(window)",
           "visibility": "visible",
           "when": "config.continue.enableConsole"

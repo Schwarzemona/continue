@@ -54,11 +54,11 @@ const ContextStatus = () => {
         content={
           <div className="flex flex-col gap-0 text-left text-xs">
             <span className="inline-block">
-              {`${percent}% of context filled.`}
+              {`${percent}%コンテキストが埋まりました。`}
             </span>
             {isPruned && (
               <span className="inline-block">
-                {`Oldest messages are being removed.`}
+                {`最も古いメッセージが削除されています。`}
               </span>
             )}
             {history.length > 0 && (
@@ -68,7 +68,7 @@ const ContextStatus = () => {
                     className="hover:text-link inline-block cursor-pointer underline"
                     onClick={() => compactConversation(history.length - 1)}
                   >
-                    Compact conversation
+                    会話を圧縮
                   </span>
                   {"\n"}
                   <span
@@ -82,7 +82,7 @@ const ContextStatus = () => {
                       );
                     }}
                   >
-                    Start a new session
+                    新しいセッションを開始
                   </span>
                 </div>
               </div>

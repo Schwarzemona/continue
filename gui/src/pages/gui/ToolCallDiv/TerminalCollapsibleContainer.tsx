@@ -28,7 +28,7 @@ export function TerminalCollapsibleContainer({
       {((!isExpanded && hiddenLinesCount > 0) ||
         (isExpanded && collapsible)) && (
         <IndicatorBar
-          text={isExpanded ? "Collapse" : `+${hiddenLinesCount} more lines`}
+          text={isExpanded ? "格納" : `+${hiddenLinesCount}行表示`}
           isExpanded={isExpanded}
         />
       )}

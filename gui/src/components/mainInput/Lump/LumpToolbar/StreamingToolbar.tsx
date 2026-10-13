@@ -22,7 +22,7 @@ export function StreamingToolbar({
         <span className="text-description">{displayText}</span>
         {/* JetBrains overrides cmd+backspace, so we have to use another shortcut */}
         <span className="text-description-muted ml-1 opacity-75">
-          {jetbrains ? getAltKeyLabel() : getMetaKeyLabel()}⌫
+          {jetbrains ? getAltKeyLabel() : getMetaKeyLabel()} + ⌫
         </span>
       </div>
     </div>

@@ -142,15 +142,15 @@ function ThemePage() {
 
         <div className="flex items-center gap-2">
           <CheckCircleIcon className="text-success h-4 w-4" />
-          <span className="text-success">Success</span>
+          <span className="text-success">成功</span>
         </div>
         <div className="flex items-center gap-2">
           <ExclamationCircleIcon className="text-warning h-4 w-4" />
-          <span className="text-warning">Warning</span>
+          <span className="text-warning">警告</span>
         </div>
         <div className="flex items-center gap-2">
           <ExclamationTriangleIcon className="text-error h-4 w-4" />
-          <span className="text-error">Error</span>
+          <span className="text-error">エラー</span>
         </div>
 
         <div

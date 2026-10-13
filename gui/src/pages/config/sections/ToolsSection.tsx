@@ -318,7 +318,7 @@ function MCPServerPreview({
                   ) : (
                     <ArrowPathIcon className="h-4 w-4 flex-shrink-0" />
                   )}
-                  再実行
+                  実行
                 </ListboxOption>
               )}
             </ListboxOptions>
@@ -331,7 +331,7 @@ function MCPServerPreview({
         <ToolPoliciesGroup
           showIcon={true}
           groupName={server.name}
-          displayName={"Tools"}
+          displayName={"ツール"}
           allToolsOff={allToolsOff}
           duplicateDetection={duplicateDetection}
         />
