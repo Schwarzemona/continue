@@ -275,16 +275,49 @@ class OpenAI extends BaseLLM {
     options: CompletionOptions,
     messages: ChatMessage[],
   ): ChatCompletionCreateParams {
-    const body = toChatBody(messages, options, {
+    const finalOptions = toChatBody(messages, options, {
       includeReasoningField: this.supportsReasoningField,
       includeReasoningDetailsField: this.supportsReasoningDetailsField,
       includeReasoningContentField: this.supportsReasoningContentField,
     });
 
-    (body as any)._reasoning =
-      options.reasoning ?? (this.completionOptions as any).reasoning;
+    if (options.reasoning) {
+      finalOptions.reasoning_effort = "medium";
+    }
 
-    return this.modifyChatBody(body);
+    finalOptions.stop = options.stop?.slice(0, this.getMaxStopWords());
+
+    // OpenAI o1-preview and o1-mini or o3-mini:
+    if (this.isOSeriesOrGpt5PlusModel(options.model)) {
+      // a) use max_completion_tokens instead of max_tokens
+      finalOptions.max_completion_tokens = options.maxTokens;
+      finalOptions.max_tokens = undefined;
+
+      // b) don't support system message
+      finalOptions.messages = formatMessageForO1OrGpt5(finalOptions.messages);
+    }
+
+    if (options.model === "o1") {
+      finalOptions.stream = false;
+    }
+
+    if (options.prediction && this.supportsPrediction(options.model)) {
+      if (finalOptions.presence_penalty) {
+        // prediction doesn't support > 0
+        finalOptions.presence_penalty = undefined;
+      }
+      if (finalOptions.frequency_penalty) {
+        // prediction doesn't support > 0
+        finalOptions.frequency_penalty = undefined;
+      }
+      finalOptions.max_completion_tokens = undefined;
+
+      finalOptions.prediction = options.prediction;
+    } else {
+      finalOptions.prediction = undefined;
+    }
+
+    return finalOptions;
   }
 
   protected _convertArgsResponses(
@@ -412,16 +445,14 @@ class OpenAI extends BaseLLM {
 
     // Gemma 4 reasoning conversion
     const currentModel = (body.model ?? "").toLowerCase();
-    const reasoningValue = (body as any)._reasoning;
-    console.log(
-      `[Continue-Gemma4-Verify] Model: ${currentModel}, ReasoningValue: ${reasoningValue}`,
-    );
+    const reasoningValue = body.reasoning_effort;
     if (currentModel.includes("gemma4") && reasoningValue !== undefined) {
-      console.log(
-        `[Continue-Gemma4-Verify] Applying chat_template_kwargs: { enable_thinking: ${reasoningValue} }`,
-      );
       (body as any).chat_template_kwargs = {
-        enable_thinking: reasoningValue,
+        enable_thinking: true,
+      };
+    } else {
+      (body as any).chat_template_kwargs = {
+        enable_thinking: false,
       };
     }
 
@@ -450,9 +481,6 @@ class OpenAI extends BaseLLM {
         body.frequency_penalty = undefined;
       }
       body.max_completion_tokens = undefined;
-      // body.prediction is already set by toChatBody
-    } else {
-      body.prediction = undefined;
     }
 
     if (body.tools?.length) {
@@ -471,7 +499,6 @@ class OpenAI extends BaseLLM {
       }
     }
 
-    delete (body as any)._reasoning;
     return body;
   }
 

@@ -1192,6 +1192,9 @@ export abstract class BaseLLM implements ILLM {
             includeReasoningDetailsField: this.supportsReasoningDetailsField,
             includeReasoningContentField: this.supportsReasoningContentField,
           });
+          if (completionOptions.reasoning) {
+            body.reasoning_effort = "medium";
+          }
           body = this.modifyChatBody(body);
 
           if (logEnabled) {
