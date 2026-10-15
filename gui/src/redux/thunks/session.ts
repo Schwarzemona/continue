@@ -209,9 +209,14 @@ export const saveCurrentSession = createAsyncThunk<
         !getState().config.config?.disableSessionTitles &&
         selectedChatModel
       ) {
-        let assistantResponse = session.history
-          ?.filter((h) => h.message.role === "assistant")[0]
-          ?.message?.content?.toString();
+        const firstAssistantMessage = session.history?.find(
+          (h) =>
+            h.message.role === "assistant" &&
+            renderChatMessage(h.message).length > 0,
+        );
+        const assistantResponse = firstAssistantMessage
+          ? renderChatMessage(firstAssistantMessage.message)
+          : "";
 
         if (assistantResponse && generateTitle) {
           try {

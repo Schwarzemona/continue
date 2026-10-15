@@ -10,7 +10,7 @@ import { convertFromUnifiedHistory } from "./messageConversion";
 export class ChatDescriber {
   static maxTokens = 16; // Increased from 12 to meet GPT-5 minimum requirement
   static prompt: string | undefined =
-    "Given the following... please reply with a title for the chat that is 3-4 words in length, all words used should be directly related to the content of the chat, avoid using verbs unless they are directly related to the content of the chat, no additional text or explanation, you don't need ending punctuation.\n\n";
+    "下記に基づき、チャットのタイトルを回答してください。\n- 長さは16文字まで\n- 言語はチャットの言語を使用すること\n- 内容に直接関係ない限り、動詞の使用は避けること\n- 追加の説明やテキストは一切含めないこと\n- 文末の句読点は不要\n\n";
   static messenger: IMessenger<ToCoreProtocol, FromCoreProtocol>;
 
   static async describe(
@@ -30,13 +30,18 @@ export class ChatDescriber {
     }
 
     completionOptions.maxTokens = ChatDescriber.maxTokens;
+    completionOptions.reasoning = false;
 
     // Prompt the user's current LLM for the title
     const titleResponse = await model.chat(
       [
         {
+          role: "system",
+          content: ChatDescriber.prompt,
+        },
+        {
           role: "user",
-          content: ChatDescriber.prompt + message,
+          content: message,
         },
       ],
       new AbortController().signal,
@@ -85,6 +90,7 @@ export class ChatDescriber {
         messages: openaiMessages,
         max_tokens: ChatDescriber.maxTokens,
         stream: false as const,
+        reasoning: false,
       };
 
       // Call the LLM

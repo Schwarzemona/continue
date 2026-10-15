@@ -1,5 +1,5 @@
 export const DEFAULT_SYSTEM_MESSAGES_URL =
-  "https://github.com/Schwarzemona/continue/blob/main/core/llm/defaultSystemMessages.ts";
+  "https://github.com/Schwarzemona/continue/blob/Branch_main/core/llm/defaultSystemMessages.ts";
 
 export const CODEBLOCK_FORMATTING_INSTRUCTIONS = `\
 - コードブロックを記述する際は、assistantは必ず情報文字列に言語とファイル名を含める。

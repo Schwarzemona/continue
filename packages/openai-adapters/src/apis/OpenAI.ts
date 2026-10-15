@@ -240,13 +240,6 @@ export class OpenAIApi implements BaseLlmApi {
     const { query, documents, model, top_k } = body;
 
     const systemPrompt = `You are a reranker. Given a query and a list of documents, rank the documents by relevance to the query.
-Return the result as a JSON object with the following structure:
-{
-  "data": [
-    { "relevance_score": number, "index": number },
-    ...
-  ]
-}
 Each "index" must correspond to the index of the document in the provided list.
 The "relevance_score" should be between 0.0 and 1.0.`;
 
@@ -259,7 +252,33 @@ The "relevance_score" should be between 0.0 and 1.0.`;
           { role: "system", content: systemPrompt },
           { role: "user", content: userPrompt },
         ],
-        response_format: { type: "json_object" },
+        response_format: {
+          type: "json_schema",
+          json_schema: {
+            name: "rerank_response",
+            strict: true,
+            schema: {
+              type: "object",
+              properties: {
+                data: {
+                  type: "array",
+                  items: {
+                    type: "object",
+                    properties: {
+                      relevance_score: { type: "number" },
+                      index: { type: "number" },
+                    },
+                    required: ["relevance_score", "index"],
+                    additionalProperties: false,
+                  },
+                },
+              },
+              required: ["data"],
+              additionalProperties: false,
+            },
+          },
+        },
+        reasoning_effort: undefined,
       },
       new AbortController().signal,
     );

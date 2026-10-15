@@ -4,13 +4,14 @@
 
 ## Key Features in this Fork
 
-- Added support for task-specific embedding prefixes (e.g., "chunk" and "query") for indexing and retrieval.
+- Localization into Japanese.
 - Enabled support for reasoning fields and details by default in the LLM core.
+- Fixed Markdown rendering for inline math symbols ($\to$) and GFM tables in the VS Code extension.
+- Improve session title generation
 - Automatically converts `reasoning` option to `chat_template_kwargs` for Gemma 4 models to enable native thinking/reasoning capabilities.
 - Added Gemma 4 models to the recommended agent model list.
+- Added support for task-specific embedding prefixes (e.g., "chunk" and "query") for indexing and retrieval.
 - Changed the OpenAI adapter's reranking endpoint to `completions`.
-- Fixed Markdown rendering for inline math symbols ($\to$) and GFM tables in the VS Code extension.
-- Localization into Japanese.
 
 <h1 align="center">Continue</h1>
 
