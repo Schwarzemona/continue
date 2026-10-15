@@ -239,47 +239,49 @@ export class OpenAIApi implements BaseLlmApi {
   async rerank(body: RerankCreateParams): Promise<CreateRerankResponse> {
     const { query, documents, model, top_k } = body;
 
-    const systemPrompt = `You are a reranker. Given a query and a list of documents, rank the documents by relevance to the query.
-Each "index" must correspond to the index of the document in the provided list.
-The "relevance_score" should be between 0.0 and 1.0.`;
+    const systemPrompt = `You are a reranker. Given a query and a list of documents, rank the documents by relevance to the query. Each "index" must correspond to the index of the document in the provided list. The "relevance_score" should be between 0.0 and 1.0.`;
 
     const userPrompt = `Query: ${query}\n\nDocuments:\n${documents.map((doc, i) => `[${i}] ${doc}`).join("\n")}`;
 
-    const response = await this.chatCompletionNonStream(
-      {
-        model,
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: userPrompt },
-        ],
-        response_format: {
-          type: "json_schema",
-          json_schema: {
-            name: "rerank_response",
-            strict: true,
-            schema: {
-              type: "object",
-              properties: {
-                data: {
-                  type: "array",
-                  items: {
-                    type: "object",
-                    properties: {
-                      relevance_score: { type: "number" },
-                      index: { type: "number" },
-                    },
-                    required: ["relevance_score", "index"],
-                    additionalProperties: false,
+    // Set up completion options for non-streaming
+    const completionOptions = {
+      model: model,
+      messages: [
+        { role: "system" as const, content: systemPrompt },
+        { role: "user" as const, content: userPrompt },
+      ],
+      response_format: {
+        type: "json_schema",
+        json_schema: {
+          name: "rerank_response",
+          strict: true,
+          schema: {
+            type: "object",
+            properties: {
+              data: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    relevance_score: { type: "number" },
+                    index: { type: "number" },
                   },
+                  required: ["relevance_score", "index"],
+                  additionalProperties: false,
                 },
               },
-              required: ["data"],
-              additionalProperties: false,
             },
+            required: ["data"],
+            additionalProperties: false,
           },
         },
-        reasoning_effort: undefined,
-      },
+      } as const,
+      max_tokens: 2048,
+      stream: false as const,
+    };
+
+    const response = await this.chatCompletionNonStream(
+      completionOptions,
       new AbortController().signal,
     );
 
