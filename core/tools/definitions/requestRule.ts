@@ -12,7 +12,7 @@ function getAvailableRules(rules: ConfigDependentToolParams["rules"]) {
   );
 
   if (agentRequestedRules.length === 0) {
-    return "No rules available.";
+    return "なし";
   }
 
   return agentRequestedRules

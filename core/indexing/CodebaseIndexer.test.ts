@@ -253,7 +253,7 @@ describe("CodebaseIndexer", () => {
 
     test("should create git repo for testing", async () => {
       execSync(
-        `cd ${TEST_DIR_PATH} && git init && git checkout -b main && git add -A && git commit -m "First commit"`,
+        `cd ${TEST_DIR_PATH} && git init && git checkout -B main && git add -A && git commit -m "First commit"`,
       );
     });
 

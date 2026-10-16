@@ -25,8 +25,8 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     expect(result).toBe(
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
-        "No rules available.",
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
+        "なし",
     );
   });
 
@@ -70,7 +70,7 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     const expected =
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
       "Agent Rule 1: First agent-requested rule\n" +
       "Agent Rule 2: Second agent-requested rule";
 
@@ -91,7 +91,7 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     const expected =
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
       "Rule Without Description: undefined";
 
     expect(result).toBe(expected);
@@ -111,7 +111,7 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     const expected =
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
       "undefined: Rule without name";
 
     expect(result).toBe(expected);
@@ -131,7 +131,7 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     const expected =
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
       "Rule Without File: Rule without file path";
 
     expect(result).toBe(expected);
@@ -160,7 +160,7 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     const expected =
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
       "Valid Agent Rule: This should be included";
 
     expect(result).toBe(expected);
@@ -199,7 +199,7 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     const expected =
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
       "Valid Agent Rule: This should be included";
 
     expect(result).toBe(expected);
@@ -211,8 +211,8 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     expect(result).toBe(
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
-        "No rules available.",
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
+        "なし",
     );
   });
 
@@ -231,7 +231,7 @@ describe("getRequestRuleDescription", () => {
     const result = getRequestRuleDescription(rules);
 
     const expected =
-      "Use this tool to retrieve additional 'rules' that contain more context/instructions based on their descriptions. Available rules:\n" +
+      "ルール名でルールの内容を取得します。ルールが当てはまるタイミングには、そのルールを必ず取得します。利用可能なルール:\n" +
       "Single Rule: The only agent-requested rule";
 
     expect(result).toBe(expected);

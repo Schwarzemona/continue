@@ -58,11 +58,11 @@ npm link @continuedev/core
 npm run package
 popd
 
-echo "Installing binary dependencies..."
-pushd binary
-npm install
-npm run build
-popd
+#echo "Installing binary dependencies..."
+#pushd binary
+#npm install
+#npm run build
+#popd
 
 echo "Installing docs dependencies..."
 pushd docs

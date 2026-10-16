@@ -15,10 +15,22 @@ export function pathToUriPathSegment(path: string) {
     .join("/");
 }
 
+/**
+ * Cleans a URI path by removing leading/trailing slashes and normalizing
+ * directory separators to forward slashes.
+ *
+ * This function handles URI-encoded characters (e.g., %5C for \) to ensure
+ * consistent behavior across different operating systems.
+ */
 export function getCleanUriPath(uri: string) {
   const path = URI.parse(uri).path ?? "";
-  let clean = path.replace(/^\//, ""); // remove start slash
-  clean = clean.replace(/\/$/, ""); // remove end slash
+
+  // 1. Decode URI-encoded segments (e.g., %5C -> \) to allow normalization of OS-specific separators.
+  // 2. Convert all backslashes to forward slashes for cross-platform consistency.
+  let clean = decodeURIComponent(path).replace(/\\/g, "/");
+
+  clean = clean.replace(/^\//, ""); // remove leading slash
+  clean = clean.replace(/\/$/, ""); // remove trailing slash
   return clean;
 }
 
