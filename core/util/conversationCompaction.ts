@@ -78,21 +78,21 @@ export async function compactConversation({
   if (summaryContent) {
     messages.unshift({
       role: "user",
-      content: `Previous conversation summary:\n\n${summaryContent}`,
+      content: `${summaryContent}\n\nこれまでの会話を要約してください。`,
     });
   }
 
   const compactionPrompt = {
     role: "user" as const,
     content:
-      "Create a comprehensive summary of this conversation that captures all essential information needed to continue the work seamlessly. Structure your response to preserve technical accuracy and context continuity.\n\nYour summary should include:\n\n1. **Conversation Overview**: Describe the main topic and progression of the discussion, including any shifts in focus or direction.\n\n2. **Active Development**: Detail what was being implemented, modified, or debugged most recently. Include specific technical approaches and methodologies used.\n\n3. **Technical Stack**: List all relevant technologies, frameworks, libraries, coding patterns, and architectural decisions discussed.\n\n4. **File Operations**: Document all files that were created, modified, or referenced, including their purposes and key changes. Include important code snippets and their locations.\n\n5. **Solutions & Troubleshooting**: Summarize problems encountered and how they were resolved, including any debugging steps or workarounds applied.\n\n6. **Outstanding Work**: Clearly identify any incomplete tasks, pending implementations, or next steps that were discussed. Include direct references to user requests and current progress.\n\nIf there's a previous summary in the conversation, integrate its relevant information while removing outdated details. Focus on technical precision and include specific identifiers (file paths, function names, class names, etc.) that would be essential for continuation. Write in third person and maintain an objective, technical tone.",
+      "この対話の包括的な要約を作成してください。作業を円滑に継続するために必要なすべての重要な情報を含め、技術的な正確性と文脈の連続性が維持される構成にしてください。\n\n要約には以下を含めてください：\n\n1. **対話の概要**: 主なトピックと議論の進展（焦点や方向性の変化を含む）を記述してください。\n\n2. **進行中の開発**: 直近で実装、修正、またはデバッグされていた内容を詳細に記述してください。採用された具体的な技術的アプローチや手法を含めてください。\n\n3. **技術スタック**: 議論された関連技術、フレームワーク、ライブラリ、コーディングパターン、およびアーキテクチャ上の決定事項を列挙してください。\n\n4. **ファイル操作**: 作成、修正、または参照されたすべてのファイルについて、その目的と主な変更点を記録してください。重要なコードスニペットとその箇所も併記してください。\n\n5. **解決策とトラブルシューティング**: 直面した問題と、それに対してどのようなデバッグ手順や回避策（ワークアラウンド）を用いて解決したかを要約してください。\n\n6. **残課題**: 未完了のタスク、保留中の実装、または議論された次のステップを明確に示してください。ユーザーからの要望や現在の進捗状況への言及を含めてください。\n\n対話の中に以前の要約が含まれている場合は、その内容を統合し、古くなった情報は削除してください。技術的な正確性に重点を置き、作業継続に不可欠な具体的な識別子（ファイルパス、関数名、クラス名など）を記載してください。三人称を用い、客観的かつ技術的なトーンで記述してください。",
   };
 
   // Generate the summary using the current model
   const response = await currentModel.chat(
     [...messages, compactionPrompt],
     new AbortController().signal,
-    {},
+    { reasoning: false },
   );
 
   // Update the target message with the conversation summary

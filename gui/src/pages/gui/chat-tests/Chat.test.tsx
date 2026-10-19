@@ -15,7 +15,7 @@ test("should render input box", async () => {
 
 test("should be able to toggle modes", async () => {
   await renderWithProviders(<Chat />);
-  await getElementByText("Agent");
+  await getElementByText("エージェント");
 
   // Simulate cmd+. keyboard shortcut to toggle modes
   act(() => {
@@ -28,7 +28,7 @@ test("should be able to toggle modes", async () => {
   });
 
   // Check that it switched to Chat mode
-  await getElementByText("Chat");
+  await getElementByText("チャット");
 
   act(() => {
     document.dispatchEvent(
@@ -40,7 +40,7 @@ test("should be able to toggle modes", async () => {
   });
 
   // Check that it switched to Plan mode
-  await getElementByText("Plan");
+  await getElementByText("プラン");
 
   act(() => {
     document.dispatchEvent(
@@ -51,7 +51,7 @@ test("should be able to toggle modes", async () => {
     );
   });
 
-  await getElementByText("Agent");
+  await getElementByText("エージェント");
 });
 
 test("should send a message and receive a response", async () => {

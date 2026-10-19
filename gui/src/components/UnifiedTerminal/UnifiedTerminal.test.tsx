@@ -145,14 +145,14 @@ describe("UnifiedTerminalCommand", () => {
       />,
     );
 
-    // Should show the "+X more lines" indicator
-    expect(screen.getByText(/\+\d+ more lines/)).toBeInTheDocument();
+    // Should show the "+X行表示" indicator
+    expect(screen.getByText(/\+\d+行表示/)).toBeInTheDocument();
 
     // Should initially show only some of the last lines
     expect(container.textContent).toMatch(/Line 25/);
 
-    // Click to expand using the "+X more lines" button
-    const expandButton = screen.getByText(/\+\d+ more lines/);
+    // Click to expand using the "+X行表示" button
+    const expandButton = screen.getByText(/\+\d+行表示/);
     await user.click(expandButton);
 
     // Should now show all lines
@@ -161,7 +161,7 @@ describe("UnifiedTerminalCommand", () => {
     });
 
     // Should show collapse option
-    expect(screen.getByText(/Collapse/)).toBeInTheDocument();
+    expect(screen.getByText(/格納/)).toBeInTheDocument();
   });
 
   test("renders ANSI colors and formatting", async () => {
@@ -328,7 +328,7 @@ describe("UnifiedTerminalCommand", () => {
     );
 
     // Should show correct number of hidden lines
-    expect(screen.getByText(/\+15 more lines/)).toBeInTheDocument();
+    expect(screen.getByText(/\+15行表示/)).toBeInTheDocument();
 
     // Should show the last lines
     expect(container.textContent).toMatch(/Line 25/);
@@ -348,8 +348,8 @@ describe("UnifiedTerminalCommand", () => {
       />,
     );
 
-    // Click on the "+15 more lines" button to expand
-    const expandButton = screen.getByText(/\+15 more lines/);
+    // Click on the "+15行表示" button to expand
+    const expandButton = screen.getByText(/\+15行表示/);
     await user.click(expandButton);
 
     // Should expand and show all content
@@ -358,6 +358,6 @@ describe("UnifiedTerminalCommand", () => {
     });
 
     // Should show collapse option after expansion
-    expect(screen.getByText(/Collapse/)).toBeInTheDocument();
+    expect(screen.getByText(/格納/)).toBeInTheDocument();
   });
 });

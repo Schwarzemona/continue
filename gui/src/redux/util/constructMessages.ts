@@ -207,8 +207,8 @@ export function constructMessages(
   let finalSystemMessage = systemMessage;
   if (summaryContent) {
     finalSystemMessage = systemMessage
-      ? `${systemMessage}\n\nPrevious conversation summary:\n\n ${summaryContent}`
-      : `Previous conversation summary:\n\n ${summaryContent}`;
+      ? `${systemMessage}\n\nこれまでの会話の要約:\n\n ${summaryContent}`
+      : `これまでの会話の要約:\n\n ${summaryContent}`;
   }
 
   if (finalSystemMessage.trim()) {

@@ -239,7 +239,7 @@ describe("FindAndReplaceDisplay", () => {
       // When diff generation errors, component shows a friendly message
       // without rendering the expand/collapse container
       expect(
-        screen.getByText("The searched string was not found in the file"),
+        screen.getByText("検索した文字列はファイル内に見つかりませんでした。"),
       ).toBeInTheDocument();
     });
 
