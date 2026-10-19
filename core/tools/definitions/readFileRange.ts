@@ -18,7 +18,8 @@ export const readFileRangeTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ReadFileRange,
-    description: "既存のファイルから特定の行範囲を読み取るために使用します。",
+    description:
+      "既存のファイルから100行以内の範囲を読み取るために使用します。",
     parameters: {
       type: "object",
       required: ["filepath", "startLine", "endLine"],

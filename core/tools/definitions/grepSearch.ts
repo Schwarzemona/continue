@@ -13,7 +13,7 @@ export const grepSearchTool: Tool = {
   function: {
     name: BuiltInToolNames.GrepSearch,
     description:
-      "ripgrepを使用してリポジトリ全体のファイル内容に対して正規表現で検索します。出力が切り詰められることがあるため、対象を絞ったクエリを使用します。",
+      "ripgrepを使用してリポジトリ全体のファイル内容に対して正規表現で検索し、結果をファイル名と行数で返します。",
     parameters: {
       type: "object",
       required: ["query"],

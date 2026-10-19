@@ -26,7 +26,7 @@ function getPreferredShell(): string {
 const PLATFORM_INFO = `${os.platform()}、${os.arch()}、およびシェル${getPreferredShell()}に最適化されたターミナルコマンドとスクリプトを選択してください。`;
 
 const RUN_COMMAND_NOTES = `シェルはステートフルではなく、以前のコマンドを記憶しません。\
-      特別な権限や管理者権限を必要とするコマンドを実行しません。\
+      特別な権限や管理者権限を必要とするコマンドは実行できません。\
       重要: ファイルを編集するには、コマンド（sed, awkなど）の代わりに必ずEdit/MultiEditツールを使用します。\
       ${PLATFORM_INFO}`;
 

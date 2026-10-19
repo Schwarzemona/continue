@@ -9,7 +9,7 @@ export async function throwIfFileExceedsHalfOfContext(
 ) {
   if (model) {
     const tokens = await countTokensAsync(content, model.title);
-    const tokenLimit = model.contextLength / 2;
+    const tokenLimit = model.contextLength / 200;
     if (tokens > tokenLimit) {
       throw new ContinueError(
         ContinueErrorReason.FileTooLarge,

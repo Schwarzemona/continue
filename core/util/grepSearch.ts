@@ -1,7 +1,7 @@
 /*
   Formats the output of a grep search to reduce unnecessary indentation, lines, etc
   Assumes a command with these params
-    ripgrep -i --ignore-file .continueignore --ignore-file .gitignore -C 2 --heading -m 100 -e <query> .
+    ripgrep -i --line-number --ignore-file .continueignore --ignore-file .gitignore -C 1 --heading -m 100 -e <query> .
   
   Also can truncate the output to a specified number of characters
 */
@@ -31,33 +31,17 @@ export function formatGrepSearchResults(
     // Add path
     keepLines.push(resultPath);
 
-    // Find the minimum indentation of content lines
-    let minIndent = Infinity;
     for (const line of resultContent) {
-      const indent = countLeadingSpaces(line);
-      if (indent < minIndent) {
-        minIndent = indent;
+      const match = line.match(/^(\d+):/);
+      if (match) {
+        keepLines.push(match[1]);
       }
-    }
-
-    // Make all lines line up to 2-space indent
-    const changeIndentBy = 2 - minIndent;
-    if (changeIndentBy === 0) {
-      keepLines.push(...resultContent);
-    } else if (changeIndentBy < 0) {
-      keepLines.push(
-        ...resultContent.map((line) => line.substring(-changeIndentBy)),
-      );
-    } else {
-      keepLines.push(
-        ...resultContent.map((line) => " ".repeat(changeIndentBy) + line),
-      );
     }
   };
 
   let resultLines: string[] = [];
   for (const line of results.split("\n").filter((l) => !!l)) {
-    if (line.startsWith("./") || line === "--") {
+    if (line.startsWith("./") || line.startsWith(".\\") || line === "--") {
       processResult(resultLines); // process previous result
       resultLines = [line];
       numResults++;

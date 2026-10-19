@@ -29,10 +29,10 @@ export const readFileRangeImpl: ToolImpl = async (args, extras) => {
       "endLine must be 1 or greater. Negative line numbers are not supported - use the terminal tool with 'tail' command for reading from file end.",
     );
   }
-  if (endLine < startLine) {
+  if (endLine - startLine > 100) {
     throw new ContinueError(
-      ContinueErrorReason.InvalidLineNumber,
-      `endLine (${endLine}) must be greater than or equal to startLine (${startLine})`,
+      ContinueErrorReason.FileTooLarge,
+      `Requested line range (${startLine}-${endLine}) is too large. Maximum range is 100 lines.`,
     );
   }
 

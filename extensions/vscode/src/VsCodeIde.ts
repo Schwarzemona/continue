@@ -593,12 +593,13 @@ class VsCodeIde implements IDE {
     for (const dir of await this.getWorkspaceDirs()) {
       const dirResults = await this.runRipgrepQuery(dir, [
         "-i", // Case-insensitive search
+        "--line-number", // Add line number
         "--ignore-file",
         ".continueignore",
         "--ignore-file",
         ".gitignore",
         "-C",
-        "2", // Show 2 lines of context
+        "1", // Show 1 lines of context
         "--heading", // Only show filepath once per result
         // Use a single glob with all default ignores
         "--glob",
