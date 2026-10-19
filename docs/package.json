@@ -13,7 +13,7 @@
   "license": "ISC",
   "type": "commonjs",
   "devDependencies": {
-    "mintlify": "^4.2.1063"
+    "mintlify": "^4.2.1065"
   },
   "dependencies": {
     "@c15t/react": "^3.1.0",
@@ -29,6 +29,16 @@
     "lodash": "^4.17.23",
     "zod": "^3.24.0",
     "@orpc/openapi": "^1.13.11",
-    "kysely": "^0.28.14"
+    "kysely": "^0.28.14",
+    "sharp": "^0.35.5",
+    "image-size": "^2.0.4",
+    "braces": "^3.0.3",
+    "axios": "^1.20.0",
+    "adm-zip": "^0.6.1",
+    "fflate": "^0.8.3",
+    "katex": "^0.19.0",
+    "postcss-selector-parser": "^7.1.6",
+    "chokidar": "^5.0.0",
+    "micromatch": "^0.1.0"
   }
 }
