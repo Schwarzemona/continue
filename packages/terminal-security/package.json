@@ -14,12 +14,16 @@
   "author": "Continue Dev, Inc",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^20.11.19",
+    "@types/node": "^24.19.2",
     "@types/shell-quote": "^1.7.5",
     "typescript": "^5.5.2",
-    "vitest": "^3.2.4"
+    "vitest": "^5.0.5"
   },
   "dependencies": {
     "shell-quote": "^1.8.1"
+  },
+  "overrides": {
+    "vitest": "^5.0.5",
+    "tinypool": "^2.2.0"
   }
 }

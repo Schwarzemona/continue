@@ -12,6 +12,7 @@
 - Added Gemma 4 models to the recommended agent model list.
 - Added support for task-specific embedding prefixes (e.g., "chunk" and "query") for indexing and retrieval.
 - Changed the OpenAI adapter's reranking endpoint to `completions`.
+- Node.js v24.22.0 or higher
 
 <h1 align="center">Continue</h1>
 

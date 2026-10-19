@@ -1,7 +1,7 @@
 import { ChatMessage } from "core";
 import { renderChatMessage } from "core/util/messageContent";
 import { v4 as uuidv4 } from "uuid";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi, type Mock } from "vitest";
 import { addToolCallDeltaToState } from "../../util/toolCallState";
 import { ChatHistoryItemWithMessageId, sessionSlice } from "./sessionSlice";
 
@@ -10,7 +10,7 @@ vi.mock("uuid");
 vi.mock("core/util/messageContent");
 vi.mock("../../util/toolCallState");
 
-const mockUuidv4 = vi.mocked(uuidv4);
+const mockUuidv4 = vi.mocked(uuidv4) as unknown as Mock<() => string>;
 const mockRenderChatMessage = vi.mocked(renderChatMessage);
 const mockAddToolCallDeltaToState = vi.mocked(addToolCallDeltaToState);
 
