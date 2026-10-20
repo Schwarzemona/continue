@@ -11,7 +11,7 @@ export function ToolCallStatusMessage({
   tool,
   toolCallState,
 }: ToolCallStatusMessageProps) {
-  if (!tool) return "エージェントツール使用";
+  if (!tool) return "ツールを使用";
 
   const toolName = tool.displayTitle ?? tool.function.name;
   const defaultToolDescription = `${toolName}ツール`;

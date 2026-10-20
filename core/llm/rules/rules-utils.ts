@@ -13,11 +13,11 @@ export function getRuleSourceDisplayName(rule: RuleMetadata): string {
     case ".continuerules":
       return "プロジェクトルール";
     case "default-chat":
-      return "デフォルトチャットシステムメッセージ";
+      return "会話モードシステムプロンプト";
     case "default-plan":
-      return "デフォルトプランモードシステムメッセージ";
+      return "計画モードシステムプロンプト";
     case "default-agent":
-      return "デフォルトエージェントシステムメッセージ";
+      return "自律モードシステムプロンプト";
     case "json-systemMessage":
       return "システムメッセージ(JSON)";
     case "model-options-agent":

@@ -15,7 +15,7 @@ export const INIT_PROMPT_CONTENT = `
 - ${BuiltInToolNames.LSTool}: ディレクトリ構造を調査するため
 - ${BuiltInToolNames.CreateNewFile}: ${initFilename}ファイルを生成するため
 
-これらのツールがいずれも利用できない場合は、作業を進める前に、それらを有効化し、Continueでエージェントモードを有効にする必要があることを伝えます。
+これらのツールがいずれも利用できない場合は、作業を進める前に、それらを有効化し、Continueで自律モードを有効にする必要があることを伝えます。
 
 ## ステップ2: プロジェクト分析
 プロジェクトの構造と主要なファイルを分析し、以下を把握します。

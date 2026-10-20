@@ -20,7 +20,7 @@ import {
 } from "../../redux/slices/sessionSlice";
 import { setDialogMessage, setShowDialog } from "../../redux/slices/uiSlice";
 import { refreshSessionMetadata } from "../../redux/thunks/session";
-import { useFontSize, getPlatform } from "../../util";
+import { getFontSize, getPlatform } from "../../util";
 import { ROUTES } from "../../util/navigation";
 import ConfirmationDialog from "../dialogs/ConfirmationDialog";
 import { Button } from "../ui";
@@ -145,7 +145,7 @@ export function History() {
 
   return (
     <div
-      style={{ fontSize: useFontSize() }}
+      style={{ fontSize: getFontSize() }}
       className="flex flex-1 flex-col overflow-auto overflow-x-hidden px-1"
     >
       <div className="relative my-2 mt-4 flex justify-center space-x-2">

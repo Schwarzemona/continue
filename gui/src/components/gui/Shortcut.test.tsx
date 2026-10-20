@@ -9,14 +9,14 @@ vi.mock("../../util", () => ({
   getPlatform: vi.fn(),
   getMetaKeyLabel: vi.fn(),
   getAltKeyLabel: vi.fn(),
-  useFontSize: vi.fn(),
+  getFontSize: vi.fn(),
 }));
 
 describe("Shortcut component", () => {
   beforeEach(() => {
     vi.resetAllMocks();
     vi.mocked(util.getPlatform).mockReturnValue("windows");
-    vi.mocked(util.useFontSize).mockReturnValue(14);
+    vi.mocked(util.getFontSize).mockReturnValue(14);
   });
   describe("Meta key rendering across platforms", () => {
     const metaKeyInputs = ["meta", "cmd", "ctrl", "^", "⌘"];
@@ -117,7 +117,7 @@ describe("Shortcut component", () => {
   describe("Font class application for option/alt key", () => {
     it("should apply 'keyboard-key-special' class for option/alt key", () => {
       vi.mocked(util.getPlatform).mockReturnValue("windows");
-      vi.mocked(util.useFontSize).mockReturnValue(14);
+      vi.mocked(util.getFontSize).mockReturnValue(14);
       vi.mocked(util.getAltKeyLabel).mockImplementation(() => "Alt");
       const { container } = render(<Shortcut>alt</Shortcut>);
       const kbdElement = container.querySelector("kbd");

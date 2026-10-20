@@ -8,6 +8,7 @@ import styled from "styled-components";
 import { AnimatedEllipsis } from "../../AnimatedEllipsis";
 import StyledMarkdownPreview from "../../StyledMarkdownPreview";
 import { Button } from "../../ui";
+import { getFontSize } from "../../../util";
 
 const MarkdownWrapper = styled.div`
   & > div > *:first-child {
@@ -57,11 +58,14 @@ function ThinkingBlockPeek({
 
   return duplicateRedactedThinkingBlock ? null : (
     <div className="thread-message">
-      <div className="mt-1 flex flex-col px-4">
+      <div
+        className="mt-1 flex flex-col px-4"
+        style={{ fontSize: getFontSize() - 2 }}
+      >
         <div>
           <Button
             variant="outline"
-            className="text-description flex-0 border-border m-0 mb-2 flex min-w-0 cursor-pointer flex-row items-center gap-1.5 rounded-full border-[0.5px] border-solid px-3 transition-colors duration-200 ease-in-out hover:brightness-125"
+            className="text-description flex-0 border-border m-0 mb-0 flex min-w-0 cursor-pointer flex-row items-center gap-1.5 rounded-full border-[0.5px] border-solid transition-colors duration-200 ease-in-out hover:brightness-125"
             data-testid="thinking-block-peek"
             aria-expanded={open}
             aria-controls={`thinking-block-content-${index}`}

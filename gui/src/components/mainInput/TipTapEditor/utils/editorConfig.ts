@@ -20,7 +20,7 @@ import { selectUseActiveFile } from "../../../../redux/selectors";
 import { selectSelectedChatModel } from "../../../../redux/slices/configSlice";
 import { AppDispatch } from "../../../../redux/store";
 import { exitEdit } from "../../../../redux/thunks/edit";
-import { useFontSize, isJetBrains } from "../../../../util";
+import { getFontSize, isJetBrains } from "../../../../util";
 import { CodeBlock, Mention, PromptBlock, SlashCommand } from "../extensions";
 import { TipTapEditorProps } from "../TipTapEditor";
 import {
@@ -380,7 +380,7 @@ export function createEditorConfig(options: {
           ? "editor-input-main"
           : `editor-input-${props.inputId}`,
         class: "ProseMirror outline-none overflow-hidden",
-        style: `font-size: ${useFontSize()}px;`,
+        style: `font-size: ${getFontSize()}px;`,
       },
     },
     content: props.editorState,

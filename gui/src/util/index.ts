@@ -47,12 +47,12 @@ export function getAltKeyLabel(): string {
   }
 }
 
-export function useFontSize(): number {
+export function getFontSize(): number {
   return getLocalStorage("fontSize") ?? (isJetBrains() ? 15 : 14);
 }
 
 export function fontSize(n: number): string {
-  return `${useFontSize() + n}px`;
+  return `${getFontSize() + n}px`;
 }
 
 export function isJetBrains() {

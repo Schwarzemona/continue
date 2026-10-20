@@ -10,7 +10,7 @@ import { useCallback, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 import { selectSelectedChatModel } from "../../redux/slices/configSlice";
 import { setMode } from "../../redux/slices/sessionSlice";
-import { useFontSize, getMetaKeyLabel } from "../../util";
+import { getFontSize, getMetaKeyLabel } from "../../util";
 import { ToolTip } from "../gui/Tooltip";
 import { useMainEditor } from "../mainInput/TipTapEditor";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "../ui";
@@ -91,18 +91,14 @@ export function ModeSelect() {
       <div className="relative">
         <ListboxButton
           data-testid="mode-select-button"
-          className="xs:px-2 text-description bg-lightgray/20 gap-1 rounded-full border-none px-1.5 py-0.5 transition-colors duration-200 hover:brightness-110"
+          className="xs:px-3 text-description bg-lightgray/20 gap-1 rounded-full border-none px-1.5 py-0.5 transition-colors duration-200 hover:brightness-110"
         >
           <ModeIcon mode={mode} />
           <span className="hidden sm:block">
-            {mode === "chat"
-              ? "チャット"
-              : mode === "agent"
-                ? "エージェント"
-                : "プラン"}
+            {mode === "chat" ? "会話" : mode === "agent" ? "自律" : "計画"}
           </span>
           <ChevronDownIcon
-            className="h-2 w-2 flex-shrink-0"
+            className="h-3 w-3 flex-shrink-0"
             aria-hidden="true"
           />
         </ListboxButton>
@@ -110,7 +106,7 @@ export function ModeSelect() {
           <ListboxOption value="chat">
             <div className="flex flex-row items-center gap-1.5">
               <ModeIcon mode="chat" />
-              <span className="">チャット</span>
+              <span className="">会話</span>
               <ToolTip
                 style={{
                   zIndex: 200001,
@@ -119,11 +115,11 @@ export function ModeSelect() {
               >
                 <InformationCircleIcon
                   data-tooltip-id="chat-tip"
-                  className="h-2.5 w-2.5 flex-shrink-0"
+                  className="h-3 w-3 flex-shrink-0"
                 />
               </ToolTip>
               <span
-                className={`text-description-muted text-[${useFontSize() - 1}px] mr-auto`}
+                className={`text-description-muted text-[${getFontSize() - 3}px] mr-auto`}
               >
                 {getMetaKeyLabel()}L
               </span>
@@ -133,14 +129,14 @@ export function ModeSelect() {
           <ListboxOption value="plan" className={"gap-1"}>
             <div className="flex flex-row items-center gap-1.5">
               <ModeIcon mode="plan" />
-              <span className="">プラン</span>
+              <span className="">計画</span>
               <ToolTip
                 style={{
                   zIndex: 200001,
                 }}
                 content="読み取り専用ツール/MCPツールが利用可能"
               >
-                <InformationCircleIcon className="h-2.5 w-2.5 flex-shrink-0" />
+                <InformationCircleIcon className="h-3 w-3 flex-shrink-0" />
               </ToolTip>
             </div>
             {!isGoodAtAgentMode && notGreatAtAgent("Plan")}
@@ -152,14 +148,14 @@ export function ModeSelect() {
           <ListboxOption value="agent" className={"gap-1"}>
             <div className="flex flex-row items-center gap-1.5">
               <ModeIcon mode="agent" />
-              <span className="">エージェント</span>
+              <span className="">自律</span>
               <ToolTip
                 style={{
                   zIndex: 200001,
                 }}
                 content="全てのツールが利用可能"
               >
-                <InformationCircleIcon className="h-2.5 w-2.5 flex-shrink-0" />
+                <InformationCircleIcon className="h-3 w-3 flex-shrink-0" />
               </ToolTip>
             </div>
             {!isGoodAtAgentMode && notGreatAtAgent("Agent")}

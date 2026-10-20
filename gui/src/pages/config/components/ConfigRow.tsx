@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "../../../components/ui/Button";
 import { cn } from "../../../util/cn";
+import { fontSize } from "../../../util";
 
 export interface ConfigRowProps {
   title: string;
@@ -60,8 +61,15 @@ export function ConfigRow({
         data-config-row
       >
         <div className="flex flex-col">
-          <span className="font-medium">{title}</span>
-          <p className="mt-0.5 text-gray-500">{description}</p>
+          <span className="font-medium" style={{ fontSize: fontSize(0) }}>
+            {title}
+          </span>
+          <p
+            className="mt-0.5 text-gray-500"
+            style={{ fontSize: fontSize(-1) }}
+          >
+            {description}
+          </p>
         </div>
         <div className="flex items-center gap-4">
           {children}
@@ -77,8 +85,12 @@ export function ConfigRow({
       data-config-row
     >
       <div className="flex flex-col">
-        <span className="font-medium">{title}</span>
-        <p className="mt-0.5 text-gray-500">{description}</p>
+        <span className="font-medium" style={{ fontSize: fontSize(0) }}>
+          {title}
+        </span>
+        <p className="mt-0.5 text-gray-500" style={{ fontSize: fontSize(-1) }}>
+          {description}
+        </p>
       </div>
       <div className="flex items-center gap-4">
         {children}

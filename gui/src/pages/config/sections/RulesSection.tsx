@@ -98,10 +98,16 @@ function PromptRow({
       }}
     >
       <div className="flex min-w-0 flex-col">
-        <span className="text-vscForeground shrink-0 font-medium">
+        <span
+          className="text-vscForeground shrink-0 font-medium"
+          style={{ fontSize: fontSize(0) }}
+        >
           {prompt.name}
         </span>
-        <span className="line-clamp-2 text-[11px] text-gray-400">
+        <span
+          className="line-clamp-2 text-[11px] text-gray-400"
+          style={{ fontSize: fontSize(-1) }}
+        >
           {prompt.description}
         </span>
       </div>

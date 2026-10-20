@@ -2,7 +2,7 @@ import React from "react";
 import "../../../src/index.css";
 import {
   getAltKeyLabel,
-  useFontSize,
+  getFontSize,
   getMetaKeyLabel,
   getPlatform,
 } from "../../util";
@@ -12,7 +12,7 @@ interface ShortcutProps {
   children: string;
 }
 
-const fontSize = useFontSize();
+const fontSize = getFontSize();
 
 const metaKeys = ["meta", "⌘", "ctrl", "cmd", "^"];
 const altKeys = ["alt", "option", "opt", "⌥"];
@@ -85,8 +85,8 @@ const Shortcut: React.FC<ShortcutProps> = ({ children }) => {
                     key &&
                     modifierKeys.includes(key.toLowerCase()) &&
                     platform === "mac"
-                      ? `${fontSize}px`
-                      : `${fontSize - 1}px`,
+                      ? `${fontSize - 2}px`
+                      : `${fontSize - 3}px`,
                 }}
               >
                 {key || "?"}

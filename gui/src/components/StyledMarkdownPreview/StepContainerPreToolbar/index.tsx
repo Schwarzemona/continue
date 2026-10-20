@@ -12,7 +12,7 @@ import {
   selectApplyStateByStreamId,
   selectApplyStateByToolCallId,
 } from "../../../redux/slices/sessionSlice";
-import { useFontSize } from "../../../util";
+import { getFontSize } from "../../../util";
 import Spinner from "../../gui/Spinner";
 import { isTerminalCodeBlock } from "../utils";
 import { ApplyActions } from "./ApplyActions";
@@ -295,7 +295,7 @@ export function StepContainerPreToolbar({
     <div className="outline-command-border -outline-offset-0.5 rounded-default bg-editor !my-2 flex min-w-0 flex-col outline outline-1">
       <div
         className={`find-widget-skip bg-editor sticky -top-2 z-10 m-0 flex items-center justify-between gap-3 px-1.5 py-1 ${isExpanded ? "rounded-t-default border-command-border border-b" : "rounded-default"}`}
-        style={{ fontSize: `${useFontSize()}px` }}
+        style={{ fontSize: `${getFontSize() - 2}px` }}
       >
         <div className="flex max-w-[50%] flex-row items-center">
           {toolCallStatusIcon}

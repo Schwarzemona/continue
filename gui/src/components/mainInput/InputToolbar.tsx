@@ -71,8 +71,8 @@ function InputToolbar(props: InputToolbarProps) {
 
   const supportsReasoning = modelSupportsReasoning(defaultModel);
 
-  const smallFont = useFontSize();
-  const tinyFont = useFontSize(-1);
+  const smallFont = useFontSize(-2);
+  const tinyFont = useFontSize(-3);
 
   return (
     <>
@@ -119,7 +119,7 @@ function InputToolbar(props: InputToolbarProps) {
                   <ToolTip place="top" content="画像を添付">
                     <HoverItem className="">
                       <PhotoIcon
-                        className="h-3 w-3 text-green-600 hover:brightness-125"
+                        className="h-4 w-4 text-green-600 hover:brightness-125"
                         onClick={(e) => {
                           fileInputRef.current?.click();
                         }}
@@ -131,7 +131,7 @@ function InputToolbar(props: InputToolbarProps) {
             {props.toolbarOptions?.hideAddContext || (
               <ToolTip place="top" content="コンテキストを添付">
                 <HoverItem onClick={props.onAddContextItem}>
-                  <AtSymbolIcon className="h-3 w-3 text-blue-600 hover:brightness-125" />
+                  <AtSymbolIcon className="h-4 w-4 text-blue-600 hover:brightness-125" />
                 </HoverItem>
               </ToolTip>
             )}
@@ -154,9 +154,9 @@ function InputToolbar(props: InputToolbarProps) {
                   content={hasReasoningEnabled ? "推論が有効" : "推論が無効"}
                 >
                   {hasReasoningEnabled ? (
-                    <LightBulbIconOutline className="h-3 w-3 text-yellow-600" />
+                    <LightBulbIconOutline className="h-4 w-4 text-yellow-600" />
                   ) : (
-                    <LightBulbIconSolid className="h-3 w-3 hover:brightness-150" />
+                    <LightBulbIconSolid className="h-4 w-4 hover:brightness-150" />
                   )}
                 </ToolTip>
               </HoverItem>
@@ -222,7 +222,6 @@ function InputToolbar(props: InputToolbarProps) {
           <ToolTip place="top" content="送信(⏎)">
             <Button
               variant={props.isMainInput ? "primary" : "secondary"}
-              size="sm"
               data-testid="submit-input-button"
               onClick={async (e) => {
                 if (props.onEnter) {

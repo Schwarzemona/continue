@@ -97,19 +97,19 @@ export function BlockSettingsTopToolbar() {
           <div className="flex items-center gap-1.5">
             <ToolTip content="ルールの設定">
               <HoverItem onClick={handleRulesClick} px={2}>
-                <PencilIcon className="text-description-muted h-3 w-3 hover:brightness-125" />
+                <PencilIcon className="text-description-muted h-4 w-4 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
 
             <ToolTip content="ツールの設定">
               <HoverItem onClick={handleToolsClick} px={2}>
-                <WrenchScrewdriverIcon className="text-description-muted h-3 w-3 hover:brightness-125" />
+                <WrenchScrewdriverIcon className="text-description-muted h-4 w-4 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
 
             <ToolTip content="モデルの設定">
               <HoverItem onClick={handleModelsClick} px={2}>
-                <CubeIcon className="text-description-muted h-3 w-3 hover:brightness-125" />
+                <CubeIcon className="text-description-muted h-4 w-4 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
           </div>

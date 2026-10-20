@@ -148,7 +148,6 @@ export function AssistantAndOrgListbox({
                     void refreshProfiles("Manual refresh from assistant list");
                   }}
                   variant="ghost"
-                  size="sm"
                   className="text-description hover:bg-input my-0 w-full justify-start py-1.5 pl-1 text-left"
                 >
                   <div className="flex w-full items-center">
@@ -158,7 +157,7 @@ export function AssistantAndOrgListbox({
                         configLoading && "animate-spin-slow",
                       )}
                     />
-                    <span className="">リロード</span>
+                    <span style={{ fontSize: tinyFont }}>リロード</span>
                   </div>
                 </Button>
               </div>

@@ -88,7 +88,7 @@ export function ModelsSection() {
           }
           description={
             <span>
-              チャットモード、プランモード、エージェントモードに使うモデル(
+              会話モード、計画モード、自律モードに使うモデル(
               <a
                 href={MODEL_DOCS_URLS.chat.learnMore}
                 target="_blank"

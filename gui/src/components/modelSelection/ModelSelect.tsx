@@ -128,7 +128,7 @@ function ModelSelect() {
   const [options, setOptions] = useState<Option[]>([]);
   const [sortedOptions, setSortedOptions] = useState<Option[]>([]);
   const { selectedProfile } = useAuth();
-  const tinyFont = useFontSize(-2);
+  const tinyFont = useFontSize(-4);
 
   let selectedModel = null;
   let allModels = null;
@@ -319,7 +319,7 @@ function ModelSelect() {
               <Divider className="!my-0" />
               <div className="text-description flex items-center justify-start p-2">
                 <span className="block" style={{ fontSize: tinyFont }}>
-                  <code>{getMetaKeyLabel()}'</code> to toggle model
+                  <code>{getMetaKeyLabel()} + '</code>でモデルを切り替え
                 </span>
               </div>
             </>

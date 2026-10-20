@@ -1,7 +1,7 @@
 import { useContext } from "react";
 import styled from "styled-components";
 import { IdeMessengerContext } from "../../../../context/IdeMessenger";
-import { useFontSize } from "../../../../util";
+import { getFontSize } from "../../../../util";
 import { GeneratingIndicator } from "./GeneratingIndicator";
 
 const Container = styled.div`
@@ -12,7 +12,7 @@ const Container = styled.div`
 `;
 
 const StopButton = styled.div`
-  font-size: ${useFontSize()}px;
+  font-size: ${getFontSize()}px;
   padding: 2px;
   padding-right: 4px;
   cursor: pointer;

@@ -50,7 +50,7 @@ export function ToolPolicyItem(props: ToolPolicyItemProps) {
     return undefined;
   }, [props.tool.function.parameters]);
 
-  const fontSize = useFontSize();
+  const fontSize = useFontSize(-2);
 
   const disabled =
     !props.isGroupEnabled ||
@@ -140,22 +140,22 @@ export function ToolPolicyItem(props: ToolPolicyItemProps) {
                 >
                   <span className="">
                     {disabled || policy === "disabled"
-                      ? "無効"
+                      ? "使用不可"
                       : policy === "allowedWithoutPermission"
-                        ? "自動"
-                        : "承認制"}
+                        ? "自動承認"
+                        : "手動承認"}
                   </span>
                   <ChevronDownIcon className="h-3 w-3" />
                 </ListboxButton>
                 {!disabled && (
                   <ListboxOptions className="min-w-0">
                     <ListboxOption value="allowedWithoutPermission">
-                      自動
+                      自動承認
                     </ListboxOption>
                     <ListboxOption value="allowedWithPermission">
-                      承認制
+                      手動承認
                     </ListboxOption>
-                    <ListboxOption value="disabled">無効</ListboxOption>
+                    <ListboxOption value="disabled">使用不可</ListboxOption>
                   </ListboxOptions>
                 )}
               </div>
