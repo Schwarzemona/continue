@@ -14,7 +14,7 @@ export function CopyButton({ text }: CopyButtonProps) {
     <ToolTip place="top" content="コードをコピー">
       <HoverItem className="!p-0">
         <div
-          className="text-lightgray flex cursor-pointer items-center border-none bg-transparent text-xs outline-none hover:brightness-125"
+          className="text-lightgray flex cursor-pointer items-center border-none bg-transparent outline-none hover:brightness-125"
           onClick={copyText}
         >
           <div className="flex items-center gap-1 transition-colors duration-200 hover:brightness-125">

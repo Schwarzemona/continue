@@ -26,13 +26,13 @@ function OllamaModelDownload({
 
   return (
     <div className="flex flex-col">
-      <p className="text-foreground mb-1 mt-4 text-sm font-semibold">{title}</p>
+      <p className="text-foreground mb-1 mt-4 font-semibold">{title}</p>
       {hasDownloaded ? (
         <OllamaCompletedStep text={command} />
       ) : (
         <ToolTip place="top" content="ターミナルにコピー">
           <StyledActionButton onClick={onClick} className="gap-2">
-            <p className="lines m-0 px-0 py-2 font-mono text-xs">{command}</p>
+            <p className="lines m-0 px-0 py-2 font-mono">{command}</p>
             <CommandLineIcon width={16} height={16} />
           </StyledActionButton>
         </ToolTip>

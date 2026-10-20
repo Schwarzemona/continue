@@ -14,7 +14,7 @@ function KeyboardShortcut(props: KeyboardShortcutProps) {
       className={`flex flex-col items-start p-2 sm:flex-row sm:items-center ${props.isEven ? "" : "bg-table-oddRow"}`}
     >
       <div className="w-full flex-grow pb-1 pr-4 sm:w-auto sm:pb-0">
-        <span className="block break-words text-xs">{props.description}:</span>
+        <span className="block break-words">{props.description}:</span>
       </div>
       <div className="flex-shrink-0 whitespace-nowrap">
         <Shortcut>{props.shortcut}</Shortcut>
@@ -137,7 +137,7 @@ function KeyboardShortcuts() {
 
   return (
     <div className="h-full overflow-auto">
-      <h3 className="mb-3 text-xl">Keyboard shortcuts</h3>
+      <h3 className="mb-3">Keyboard shortcuts</h3>
       <div>
         {shortcuts.map((shortcut, i) => {
           return (

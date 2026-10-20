@@ -227,7 +227,7 @@ export const useFindWidget = (
         }}
         placeholder="Search..."
       />
-      <p className="xs:block hidden min-w-12 whitespace-nowrap px-1 text-center text-xs">
+      <p className="xs:block hidden min-w-12 whitespace-nowrap px-1 text-center">
         {matches.length === 0
           ? "No results"
           : `${(currentMatch?.index ?? 0) + 1} of ${matches.length}`}
@@ -271,7 +271,7 @@ export const useFindWidget = (
           e.stopPropagation();
           setCaseSensitive((curr) => !curr);
         }}
-        className="h-5 w-6 rounded-full border text-xs focus:outline-none focus:ring"
+        className="h-5 w-6 rounded-full border focus:outline-none focus:ring"
       >
         Aa
       </HeaderButtonWithToolTip>

@@ -27,7 +27,7 @@ const HeaderButtonWithToolTip = React.forwardRef<
   return (
     <ToolTip
       place={props.tooltipPlacement ?? "bottom"}
-      content={<span className="text-xs">{props.text}</span>}
+      content={<span className="">{props.text}</span>}
     >
       <HeaderButton
         hoverBackgroundColor={props.hoverBackgroundColor}

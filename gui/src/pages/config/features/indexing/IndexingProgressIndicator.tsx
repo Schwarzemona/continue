@@ -30,7 +30,7 @@ function IndexingProgressIndicator({ update }: IndexingProgressIndicatorProps) {
 
   return (
     <div className="text-lightgray flex items-center justify-between gap-1">
-      {showProgress && <span className="text-xs">{progressPercentage}%</span>}
+      {showProgress && <span className="">{progressPercentage}%</span>}
 
       {Icon && (
         <div className="flex items-center">

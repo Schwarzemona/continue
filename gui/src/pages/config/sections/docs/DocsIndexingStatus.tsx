@@ -122,9 +122,7 @@ function DocsIndexingStatus({
 
   return (
     <div className="mt-1 flex w-full flex-col">
-      <div
-        className={`flex flex-row items-center justify-between gap-2 text-sm`}
-      >
+      <div className={`flex flex-row items-center justify-between gap-2`}>
         <div
           className={`flex flex-row items-center gap-1`}
           onClick={() => {
@@ -135,7 +133,7 @@ function DocsIndexingStatus({
         >
           <p
             style={{
-              fontSize: fontSize(-3),
+              fontSize: fontSize(-1),
             }}
             className={`m-0 line-clamp-1 p-0 text-left ${status?.url ? "cursor-pointer hover:underline" : ""}`}
           >
@@ -147,9 +145,9 @@ function DocsIndexingStatus({
           <div className="flex flex-row items-center gap-2 text-gray-400">
             {status?.status === "indexing" && (
               <span
-                className="text-xs"
+                className=""
                 style={{
-                  fontSize: fontSize(-3),
+                  fontSize: fontSize(-1),
                 }}
               >
                 {progressPercentage}%
@@ -192,12 +190,10 @@ function DocsIndexingStatus({
       </div>
 
       {status && (
-        <div
-          className={`flex flex-row items-center justify-between gap-2 text-sm`}
-        >
+        <div className={`flex flex-row items-center justify-between gap-2`}>
           <p
             style={{
-              fontSize: fontSize(-4),
+              fontSize: fontSize(-2),
             }}
             className={`m-0 line-clamp-1 p-0 text-left text-gray-400 ${isComplete ? "cursor-pointer hover:underline" : ""}`}
             onClick={() => {

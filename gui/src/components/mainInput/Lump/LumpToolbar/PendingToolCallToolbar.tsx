@@ -42,7 +42,7 @@ export function PendingToolCallToolbar() {
           key={toolCall.toolCallId}
           className="border-input bg-input flex items-center gap-2 rounded border"
         >
-          <span className="text-description flex-1 truncate text-xs italic">
+          <span className="text-description flex-1 truncate italic">
             {toolCall.tool?.displayTitle ?? toolCall.toolCall.function.name}
           </span>
 
@@ -59,7 +59,7 @@ export function PendingToolCallToolbar() {
             >
               {/* JetBrains overrides cmd+backspace, so we have to use another shortcut */}
               {index === 0 && (
-                <span className="text-2xs mr-1">
+                <span className="mr-1">
                   {jetbrains ? getAltKeyLabel() : getMetaKeyLabel()}⌫
                 </span>
               )}
@@ -77,7 +77,7 @@ export function PendingToolCallToolbar() {
               )}
             >
               {index === 0 && (
-                <span className="text-2xs mr-1">{getMetaKeyLabel()}⏎</span>
+                <span className="mr-1">{getMetaKeyLabel()}⏎</span>
               )}
               <span>承認</span>
             </Button>

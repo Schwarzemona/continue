@@ -123,7 +123,7 @@ export function ContextItemsPeekItem({
   return (
     <div
       onClick={() => openContextItem(contextItem, ideMessenger)}
-      className="mr-2 flex cursor-pointer flex-row items-center gap-1.5 whitespace-nowrap rounded px-1.5 py-1 text-xs hover:bg-white/10"
+      className="mr-2 flex cursor-pointer flex-row items-center gap-1.5 whitespace-nowrap rounded px-1.5 py-1 hover:bg-white/10"
       data-testid="context-items-peek-item"
     >
       {getContextItemIcon()}
@@ -131,7 +131,7 @@ export function ContextItemsPeekItem({
         {contextItem.name}
       </span>
       <div
-        className={`text-description-muted group flex flex-row items-center gap-1.5 pr-1.5 text-xs ${isUrl ? "hover:underline" : ""}`}
+        className={`text-description-muted group flex flex-row items-center gap-1.5 pr-1.5 ${isUrl ? "hover:underline" : ""}`}
         onClick={
           isUrl
             ? (e) => {
@@ -196,9 +196,7 @@ export function ContextItemsPeek({
           <ContextItemsPeekItem key={idx} contextItem={contextItem} />
         ))
       ) : (
-        <div className="text-description-muted pl-2 text-xs italic">
-          No results
-        </div>
+        <div className="text-description-muted pl-2 italic">No results</div>
       )}
     </ToggleDiv>
   );

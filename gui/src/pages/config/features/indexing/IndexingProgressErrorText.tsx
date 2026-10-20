@@ -76,7 +76,7 @@ function IndexingProgressErrorText({ update }: IndexingProgressErrorTextProps) {
           {/* Warning messages */}
           <div className="space-y-1">
             {update.warnings.map((warning, index) => (
-              <div key={index} className="text-xs">
+              <div key={index} className="">
                 • {warning}
               </div>
             ))}
@@ -87,7 +87,7 @@ function IndexingProgressErrorText({ update }: IndexingProgressErrorTextProps) {
             {/* Copy all warnings to clipboard */}
             <GhostButton
               onClick={() => copyWarningsToClipboard(update.warnings)}
-              className="flex items-center !px-1.5 !py-0.5 text-xs"
+              className="flex items-center !px-1.5 !py-0.5"
             >
               <ClipboardIcon className="mr-1 h-3 w-3" />
               <span>出力をコピー</span>
@@ -98,7 +98,7 @@ function IndexingProgressErrorText({ update }: IndexingProgressErrorTextProps) {
               onClick={() => {
                 ideMessenger.post("toggleDevTools", undefined);
               }}
-              className="flex items-center !px-1.5 !py-0.5 text-xs"
+              className="flex items-center !px-1.5 !py-0.5"
             >
               <ArrowTopRightOnSquareIcon className="mr-1 h-3 w-3" />
               <span>ログを表示</span>

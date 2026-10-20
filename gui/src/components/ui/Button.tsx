@@ -22,8 +22,8 @@ const buttonVariants = {
 };
 
 const buttonSizes = {
-  sm: "px-1.5 py-0.5 text-2xs",
-  lg: "px-2 py-1 text-sm",
+  sm: "px-1.5 py-0.5 ",
+  lg: "px-2 py-1 ",
 };
 
 const iconButtonSizes = {

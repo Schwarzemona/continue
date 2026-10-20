@@ -17,7 +17,7 @@ function renderMessageText(text: string) {
 export function renderMessageRole(role: ChatMessage["role"]) {
   return (
     <div>
-      <span className="bg-[color:var(--vscode-list-inactiveSelectionBackground)] text-xs">
+      <span className="bg-[color:var(--vscode-list-inactiveSelectionBackground)]">
         {role}
       </span>
     </div>

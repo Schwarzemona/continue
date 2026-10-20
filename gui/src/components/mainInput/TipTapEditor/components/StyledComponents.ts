@@ -8,7 +8,7 @@ import {
   vscInputBackground,
   vscInputBorderFocus,
 } from "../../..";
-import { getFontSize } from "../../../../util";
+import { useFontSize } from "../../../../util";
 
 export const InputBoxDiv = styled.div<{}>`
   resize: none;
@@ -27,7 +27,7 @@ export const InputBoxDiv = styled.div<{}>`
   }
 
   outline: none;
-  font-size: ${getFontSize()}px;
+  font-size: ${useFontSize()}px;
 
   &:focus {
     outline: none;

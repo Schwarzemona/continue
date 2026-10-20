@@ -187,11 +187,11 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
     <FormProvider {...formMethods}>
       <form onSubmit={formMethods.handleSubmit(onSubmit)}>
         <div className="mx-auto max-w-md p-6">
-          <h1 className="mb-0 text-center text-2xl">追加のチャットモデル</h1>
+          <h1 className="mb-0 text-center">追加のチャットモデル</h1>
 
           <div className="my-8 flex flex-col gap-6">
             <div>
-              <label className="block text-sm font-medium">プロバイダー</label>
+              <label className="block font-medium">プロバイダー</label>
               <ModelSelectionListbox
                 selectedProvider={selectedProvider}
                 setSelectedProvider={(val: DisplayInfo) => {
@@ -206,7 +206,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                 otherOptions={otherProviders}
                 searchPlaceholder="Search providers..."
               />
-              <span className="text-description-muted mt-1 block text-xs">
+              <span className="text-description-muted mt-1 block">
                 プロバイダーがありませんか？{" "}
                 <a
                   className="cursor-pointer text-inherit underline hover:text-inherit"
@@ -222,13 +222,11 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
 
             {selectedProvider.downloadUrl && (
               <div>
-                <label className="mb-1 block text-sm font-medium">
+                <label className="mb-1 block font-medium">
                   Install provider
                 </label>
                 <StyledActionButton onClick={onClickDownloadProvider}>
-                  <p className="text-sm underline">
-                    {selectedProvider.downloadUrl}
-                  </p>
+                  <p className="underline">{selectedProvider.downloadUrl}</p>
                   <ArrowTopRightOnSquareIcon width={24} height={24} />
                 </StyledActionButton>
               </div>
@@ -236,7 +234,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
 
             <div>
               <div className="flex items-center justify-between">
-                <label className="block text-sm font-medium">Model</label>
+                <label className="block font-medium">Model</label>
                 <button
                   type="button"
                   title="Use entered API key to fetch available models"
@@ -313,7 +311,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
             {selectedModel.params.model.startsWith("codestral") && (
               <div className="my-2">
                 <Alert>
-                  <p className="m-0 text-sm font-bold">Codestral API key</p>
+                  <p className="m-0 font-bold">Codestral API key</p>
                   <p className="m-0 mt-1">
                     Codestralは、他のMistralモデルとは異なるAPIキーを必要とすることにご注意ください。
                   </p>
@@ -324,9 +322,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
             {selectedProvider.apiKeyUrl && (
               <div>
                 <>
-                  <label className="mb-1 block text-sm font-medium">
-                    API key
-                  </label>
+                  <label className="mb-1 block font-medium">API key</label>
                   <Input
                     id="apiKey"
                     className={
@@ -337,11 +333,11 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                     {...formMethods.register("apiKey")}
                   />
                   {apiKeyWarning && (
-                    <span className="text-warning mt-1 block text-xs">
+                    <span className="text-warning mt-1 block">
                       {apiKeyWarning}
                     </span>
                   )}
-                  <span className="text-description-muted mt-1 block text-xs">
+                  <span className="text-description-muted mt-1 block">
                     <a
                       className="cursor-pointer text-inherit underline hover:text-inherit hover:brightness-125"
                       onClick={() => {
@@ -374,7 +370,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                 .map((field) => (
                   <div key={field.key}>
                     <>
-                      <label className="mb-1 block text-sm font-medium">
+                      <label className="mb-1 block font-medium">
                         {field.label}
                       </label>
                       <Input
@@ -394,7 +390,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
               接続
             </Button>
 
-            <span className="text-description-muted block w-full text-center text-xs">
+            <span className="text-description-muted block w-full text-center">
               これで更新:{" "}
               <span
                 className="cursor-pointer underline hover:brightness-125"

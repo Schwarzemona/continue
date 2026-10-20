@@ -399,11 +399,11 @@ ${html}
           }`}
         >
           <div className="max-w-[25rem] text-center">
-            <div className="mb-3 text-2xl">⚠️</div>
-            <p className="text-foreground mb-2 text-sm font-medium">
+            <div className="mb-3">⚠️</div>
+            <p className="text-foreground mb-2 font-medium">
               Limited Functionality
             </p>
-            <p className="text-description mb-4 text-xs leading-relaxed">
+            <p className="text-description mb-4 leading-relaxed">
               This app requires{" "}
               <strong className="text-foreground">
                 {restrictedPermissions.join(", ")}
@@ -413,7 +413,7 @@ ${html}
             </p>
             <button
               onClick={() => setPermissionWarningDismissed(true)}
-              className="bg-primary text-primary-foreground hover:bg-primary-hover cursor-pointer rounded border-none px-4 py-2 text-xs font-medium"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover cursor-pointer rounded border-none px-4 py-2 font-medium"
             >
               Continue Anyway
             </button>

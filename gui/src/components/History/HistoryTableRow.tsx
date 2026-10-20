@@ -111,7 +111,7 @@ export function HistoryTableRow({
           </div>
         ) : (
           <div className="flex items-center gap-2">
-            <span className="line-clamp-1 break-all text-sm font-semibold">
+            <span className="line-clamp-1 break-all font-semibold">
               {sessionMetadata.title}
             </span>
 
@@ -121,7 +121,7 @@ export function HistoryTableRow({
                   sessionMetadata.messageCount === 1 ? "が" : "が"
                 }このセッションに存在します。`}
               >
-                <span className="bg-vsc-background text-secondary-foreground ml-auto inline-flex items-center rounded-full px-2 py-1 text-xs font-medium">
+                <span className="bg-vsc-background text-secondary-foreground ml-auto inline-flex items-center rounded-full px-2 py-1 font-medium">
                   {sessionMetadata.messageCount}
                 </span>
               </ToolTip>
@@ -130,7 +130,7 @@ export function HistoryTableRow({
         )}
 
         <div className="text-description-muted flex">
-          <span className="line-clamp-1 break-all text-xs">
+          <span className="line-clamp-1 break-all">
             {getUriPathBasename(sessionMetadata.workspaceDirectory || "")}
           </span>
           {/* Uncomment to show the date */}

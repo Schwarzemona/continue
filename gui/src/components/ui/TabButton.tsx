@@ -16,7 +16,7 @@ export function TabButton({
   tabId,
 }: TabButtonProps) {
   return (
-    <ToolTip content={label} place="right" className="text-xs md:!hidden">
+    <ToolTip content={label} place="right" className="md:!hidden">
       <div
         className={`flex cursor-pointer items-center justify-center gap-1.5 rounded-md hover:brightness-125 md:justify-start ${
           isActive

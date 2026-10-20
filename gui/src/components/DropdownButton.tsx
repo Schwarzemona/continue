@@ -25,7 +25,7 @@ export function DropdownButton({
   variant = "default",
 }: DropdownButtonProps) {
   const isSmall = variant === "sm";
-  const titleSize = isSmall ? "text-sm font-semibold" : "text-xl font-semibold";
+  const titleSize = isSmall ? " font-semibold" : "font-semibold";
   const marginBottom = isSmall ? "mb-2" : "mb-4";
 
   return (
@@ -37,7 +37,7 @@ export function DropdownButton({
         <div className="relative">
           <ToolTip content={addButtonTooltip}>
             <ListboxButton
-              className={`ring-offset-background focus-visible:ring-ring border-description hover:enabled:bg-input hover:enabled:text-foreground text-description inline-flex h-7 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-solid bg-transparent px-1.5 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`}
+              className={`ring-offset-background focus-visible:ring-ring border-description hover:enabled:bg-input hover:enabled:text-foreground text-description inline-flex h-7 items-center justify-center gap-1 whitespace-nowrap rounded-md border border-solid bg-transparent px-1.5 py-1 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50`}
               aria-label={addButtonTooltip}
             >
               <PlusIcon className="h-3 w-3" />

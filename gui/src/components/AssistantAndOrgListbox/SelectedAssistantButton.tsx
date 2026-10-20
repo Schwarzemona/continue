@@ -21,7 +21,7 @@ export function SelectedAssistantButton({
   const isSidebar = variant === "sidebar";
   const iconSize = isSidebar ? "h-4 w-4" : "h-3 w-3";
   const buttonPadding = isSidebar ? "px-2 py-1.5" : "px-0 py-0.5";
-  const buttonStyle = isSidebar ? {} : { fontSize: fontSize(-3) };
+  const buttonStyle = isSidebar ? {} : { fontSize: fontSize(-1) };
 
   return (
     <ListboxButton
@@ -50,7 +50,7 @@ export function SelectedAssistantButton({
               {selectedProfile.iconUrl && (
                 <AssistantIcon assistant={selectedProfile} size={iconSize} />
               )}
-              <span className={`xs:line-clamp-1 hidden select-none text-xs`}>
+              <span className={`xs:line-clamp-1 hidden select-none`}>
                 {selectedProfile.title}
               </span>
             </>

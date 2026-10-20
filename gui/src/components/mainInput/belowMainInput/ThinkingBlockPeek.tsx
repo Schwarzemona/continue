@@ -61,7 +61,7 @@ function ThinkingBlockPeek({
         <div>
           <Button
             variant="outline"
-            className="text-description flex-0 border-border m-0 mb-2 flex min-w-0 cursor-pointer flex-row items-center gap-1.5 rounded-full border-[0.5px] border-solid px-3 text-xs transition-colors duration-200 ease-in-out hover:brightness-125"
+            className="text-description flex-0 border-border m-0 mb-2 flex min-w-0 cursor-pointer flex-row items-center gap-1.5 rounded-full border-[0.5px] border-solid px-3 transition-colors duration-200 ease-in-out hover:brightness-125"
             data-testid="thinking-block-peek"
             aria-expanded={open}
             aria-controls={`thinking-block-content-${index}`}
@@ -93,7 +93,7 @@ function ThinkingBlockPeek({
           }`}
         >
           {redactedThinking ? (
-            <div className="text-description pl-5 text-xs italic">
+            <div className="text-description pl-5 italic">
               安全上の理由により、思考内容は検閲されています。
             </div>
           ) : (

@@ -33,10 +33,10 @@ export function ModelRoleRow({
     <div className="py-6 first:pt-0 last:pb-0">
       <div className="mb-2">
         <div className="flex items-center gap-2">
-          <span className="text-base font-medium">{displayName}</span>
+          <span className="font-medium">{displayName}</span>
           {shortcut && shortcut}
         </div>
-        <p className="text-description mt-1 text-xs">{description}</p>
+        <p className="text-description mt-1">{description}</p>
       </div>
       <div className="flex items-center gap-2">
         <div className="flex-1">

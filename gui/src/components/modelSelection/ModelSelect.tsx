@@ -128,7 +128,7 @@ function ModelSelect() {
   const [options, setOptions] = useState<Option[]>([]);
   const [sortedOptions, setSortedOptions] = useState<Option[]>([]);
   const { selectedProfile } = useAuth();
-  const tinyFont = useFontSize(-4);
+  const tinyFont = useFontSize(-2);
 
   let selectedModel = null;
   let allModels = null;
@@ -261,7 +261,7 @@ function ModelSelect() {
         </ListboxButton>
         <ListboxOptions className="min-w-[160px]">
           <div className="flex items-center justify-between px-1.5 py-1">
-            <span className="text-description text-xs font-medium">Models</span>
+            <span className="text-description font-medium">Models</span>
             <div className="flex items-center gap-0.5">
               <Button
                 onClick={(e) => {
@@ -279,12 +279,12 @@ function ModelSelect() {
 
           <div className="no-scrollbar max-h-[300px] overflow-y-auto">
             {isConfigLoading ? (
-              <div className="text-description flex items-center gap-2 px-2 pb-2 pt-1 text-xs">
+              <div className="text-description flex items-center gap-2 px-2 pb-2 pt-1">
                 <ArrowPathIcon className="animate-spin-slow h-3 w-3" />
                 <span>Loading config</span>
               </div>
             ) : hasNoModels ? (
-              <div className="text-description-muted px-2 py-4 text-center text-sm">
+              <div className="text-description-muted px-2 py-4 text-center">
                 No models configured
               </div>
             ) : (
@@ -310,7 +310,7 @@ function ModelSelect() {
                 fontSizeModifier={-2}
                 className="px-2 py-2"
               >
-                <span className="text-description text-2xs flex flex-row items-center">
+                <span className="text-description flex flex-row items-center">
                   <PlusIcon className="mr-1.5 h-3.5 w-3.5" />
                   追加のチャットモデル
                 </span>

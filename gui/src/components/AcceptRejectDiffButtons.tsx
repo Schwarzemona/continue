@@ -60,14 +60,14 @@ export default function AcceptRejectAllButtons({
     >
       <ToolTip content={`全て却下(${rejectShortcut})`}>
         <button
-          className="text-foreground flex cursor-pointer flex-row flex-wrap justify-center gap-1 border-none bg-transparent p-0 text-xs opacity-80 hover:opacity-100 hover:brightness-125"
+          className="text-foreground flex cursor-pointer flex-row flex-wrap justify-center gap-1 border-none bg-transparent p-0 opacity-80 hover:opacity-100 hover:brightness-125"
           onClick={() => handleAcceptOrReject("rejectDiff")}
           data-testid="edit-reject-button"
         >
           <div className="flex flex-row items-center gap-1">
             <XMarkIcon className="text-error h-4 w-4" />
             <span className="hidden sm:inline">却下</span>
-            <span className="text-lightgray -ml-1.5 hidden scale-75 text-xs md:inline">
+            <span className="text-lightgray -ml-1.5 hidden scale-75 md:inline">
               {rejectShortcut}
             </span>
           </div>
@@ -76,14 +76,14 @@ export default function AcceptRejectAllButtons({
 
       <ToolTip content={`全て承認(${acceptShortcut})`}>
         <button
-          className="text-foreground flex cursor-pointer flex-row flex-wrap justify-center gap-1 border-none bg-transparent p-0 text-xs opacity-80 hover:opacity-100 hover:brightness-125"
+          className="text-foreground flex cursor-pointer flex-row flex-wrap justify-center gap-1 border-none bg-transparent p-0 opacity-80 hover:opacity-100 hover:brightness-125"
           onClick={() => handleAcceptOrReject("acceptDiff")}
           data-testid="edit-accept-button"
         >
           <div className="flex flex-row items-center gap-1">
             <CheckIcon className="text-success h-4 w-4" />
             <span className="hidden sm:inline">承認</span>
-            <span className="text-lightgray -ml-1.5 hidden scale-75 text-xs md:inline">
+            <span className="text-lightgray -ml-1.5 hidden scale-75 md:inline">
               {acceptShortcut}
             </span>
           </div>

@@ -85,7 +85,7 @@ const ItemsDiv = styled.div`
   box-shadow:
     0 0 0 1px rgba(0, 0, 0, 0.05),
     0px 10px 20px rgba(0, 0, 0, 0.1);
-  font-size: ${fontSize(-2)};
+  font-size: ${fontSize(0)};
   overflow-x: hidden;
   overflow-y: auto;
   max-height: 330px;
@@ -106,7 +106,7 @@ const ItemDiv = styled.div`
   text-align: left;
   width: 100%;
   color: ${vscForeground};
-  font-size: ${fontSize(-2)};
+  font-size: ${fontSize(0)};
 
   &.is-selected {
     background-color: ${vscListActiveBackground};

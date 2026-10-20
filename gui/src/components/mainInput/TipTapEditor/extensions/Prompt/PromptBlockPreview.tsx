@@ -44,7 +44,7 @@ export const PromptBlockPreview = ({
       >
         {!item.content ? null : (
           <div
-            className="whitespace-pre-wrap px-3 py-1 text-xs"
+            className="whitespace-pre-wrap px-3 py-1"
             contentEditable={false}
           >
             {item.content}

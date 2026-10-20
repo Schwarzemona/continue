@@ -37,7 +37,7 @@ export const ArgsItems = ({ args, isShowing }: ArgsItemsProps) => {
   }
 
   return (
-    <div className="ml-5 mr-2 mt-1 flex flex-col text-xs">
+    <div className="ml-5 mr-2 mt-1 flex flex-col">
       {args.map(([key, value]) => (
         <div key={key} className="flex flex-row items-center gap-2 py-0.5">
           <span className="text-lightgray">{key}:</span>

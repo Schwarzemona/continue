@@ -71,8 +71,8 @@ function InputToolbar(props: InputToolbarProps) {
 
   const supportsReasoning = modelSupportsReasoning(defaultModel);
 
-  const smallFont = useFontSize(-2);
-  const tinyFont = useFontSize(-3);
+  const smallFont = useFontSize();
+  const tinyFont = useFontSize(-1);
 
   return (
     <>
@@ -119,7 +119,7 @@ function InputToolbar(props: InputToolbarProps) {
                   <ToolTip place="top" content="画像を添付">
                     <HoverItem className="">
                       <PhotoIcon
-                        className="h-3 w-3 hover:brightness-125"
+                        className="h-3 w-3 text-green-600 hover:brightness-125"
                         onClick={(e) => {
                           fileInputRef.current?.click();
                         }}
@@ -131,7 +131,7 @@ function InputToolbar(props: InputToolbarProps) {
             {props.toolbarOptions?.hideAddContext || (
               <ToolTip place="top" content="コンテキストを添付">
                 <HoverItem onClick={props.onAddContextItem}>
-                  <AtSymbolIcon className="h-3 w-3 hover:brightness-125" />
+                  <AtSymbolIcon className="h-3 w-3 text-blue-600 hover:brightness-125" />
                 </HoverItem>
               </ToolTip>
             )}
@@ -154,9 +154,9 @@ function InputToolbar(props: InputToolbarProps) {
                   content={hasReasoningEnabled ? "推論が有効" : "推論が無効"}
                 >
                   {hasReasoningEnabled ? (
-                    <LightBulbIconSolid className="h-3 w-3 brightness-200 hover:brightness-150" />
+                    <LightBulbIconOutline className="h-3 w-3 text-yellow-600" />
                   ) : (
-                    <LightBulbIconOutline className="h-3 w-3 hover:brightness-150" />
+                    <LightBulbIconSolid className="h-3 w-3 hover:brightness-150" />
                   )}
                 </ToolTip>
               </HoverItem>

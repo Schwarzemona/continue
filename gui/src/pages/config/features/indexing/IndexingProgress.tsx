@@ -109,7 +109,7 @@ function IndexingProgress() {
 
   return (
     <div className="flex flex-col">
-      <div className="mb-0 flex justify-between text-sm">
+      <div className="mb-0 flex justify-between">
         <IndexingProgressTitleText update={update} />
         {!["loading", "waiting"].includes(update.status) && (
           <IndexingProgressIndicator update={update} />

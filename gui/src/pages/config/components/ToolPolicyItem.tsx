@@ -50,7 +50,7 @@ export function ToolPolicyItem(props: ToolPolicyItemProps) {
     return undefined;
   }, [props.tool.function.parameters]);
 
-  const fontSize = useFontSize(-2);
+  const fontSize = useFontSize();
 
   const disabled =
     !props.isGroupEnabled ||
@@ -88,11 +88,11 @@ export function ToolPolicyItem(props: ToolPolicyItemProps) {
                     className="flex flex-wrap items-center"
                     content={
                       <p className="m-0 p-0">
-                        <span>Duplicate tool name</span>{" "}
+                        <span>ツール名が重複</span>{" "}
                         <code>{props.tool.function.name}</code>{" "}
                         <span>
-                          detected. Permissions will conflict and usage may be
-                          unpredictable
+                          重複しているツール名を検出しました。
+                          権限が競合し、動作が予測不能になる可能性があります。
                         </span>
                       </p>
                     }
@@ -107,11 +107,11 @@ export function ToolPolicyItem(props: ToolPolicyItemProps) {
                     className="h-3 w-3 flex-shrink-0"
                   />
                 )}
-                <span className="line-clamp-1 break-all text-sm">
+                <span className="line-clamp-1 break-all">
                   {props.tool.originalFunctionName ?? props.tool.function.name}
                 </span>
               </div>
-              <div className="text-description line-clamp-3 text-sm">
+              <div className="text-description line-clamp-3">
                 {props.tool.function.description}
               </div>
             </div>
@@ -138,24 +138,24 @@ export function ToolPolicyItem(props: ToolPolicyItemProps) {
                   data-testid={`tool-policy-item-${props.tool.function.name}`}
                   data-tooltip-id={disabled ? disabledTooltipId : undefined}
                 >
-                  <span className="text-xs">
+                  <span className="">
                     {disabled || policy === "disabled"
-                      ? "Excluded"
+                      ? "無効"
                       : policy === "allowedWithoutPermission"
-                        ? "Automatic"
-                        : "Ask First"}
+                        ? "自動"
+                        : "承認制"}
                   </span>
                   <ChevronDownIcon className="h-3 w-3" />
                 </ListboxButton>
                 {!disabled && (
                   <ListboxOptions className="min-w-0">
                     <ListboxOption value="allowedWithoutPermission">
-                      Automatic
+                      自動
                     </ListboxOption>
                     <ListboxOption value="allowedWithPermission">
-                      Ask First
+                      承認制
                     </ListboxOption>
-                    <ListboxOption value="disabled">Excluded</ListboxOption>
+                    <ListboxOption value="disabled">無効</ListboxOption>
                   </ListboxOptions>
                 )}
               </div>
@@ -173,15 +173,13 @@ export function ToolPolicyItem(props: ToolPolicyItemProps) {
       <div
         className={`flex flex-col overflow-hidden ${isExpanded ? "h-min" : "h-0 opacity-0"} gap-x-1 gap-y-2 pl-2 transition-all`}
       >
-        <span className="text-2xs mt-1.5 font-bold">Description:</span>
-        <span className="text-2xs italic">
-          {props.tool.function.description}
-        </span>
+        <span className="mt-1.5 font-bold">Description:</span>
+        <span className="italic">{props.tool.function.description}</span>
         {parameters ? (
           <>
-            <span className="text-2xs font-bold">Arguments:</span>
+            <span className="font-bold">引数:</span>
             {parameters.map((param, idx) => (
-              <div key={idx} className="text-2xs block">
+              <div key={idx} className="block">
                 <code className="">{param[0]}</code>
                 <span className="ml-1">{`(${param[1].type ?? "unknown"}):`}</span>
                 <span className="ml-1 italic">

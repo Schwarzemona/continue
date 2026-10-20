@@ -30,7 +30,7 @@ function KeyboardShortcut(props: KeyboardShortcutProps) {
       className={`flex flex-col items-start p-3 sm:flex-row sm:items-center ${props.isEven ? "" : "bg-vsc-editor-background/50"}`}
     >
       <div className="w-full flex-grow pb-2 pr-4 sm:w-auto sm:pb-0">
-        <span className="block break-words text-sm">{props.description}:</span>
+        <span className="block break-words">{props.description}:</span>
       </div>
       <div className="flex-shrink-0 whitespace-nowrap">
         <Shortcut>{props.shortcut}</Shortcut>
@@ -176,7 +176,7 @@ export function HelpSection() {
       <div className="space-y-6">
         {/* Resources */}
         <div>
-          <h3 className="mb-3 text-base font-medium">参考</h3>
+          <h3 className="mb-3 font-medium">参考</h3>
           <Card className="!p-0">
             <div className="flex flex-col">
               <ConfigRow
@@ -193,7 +193,7 @@ export function HelpSection() {
 
         {/* Tools */}
         <div>
-          <h3 className="mb-3 text-base font-medium">ツール</h3>
+          <h3 className="mb-3 font-medium">ツール</h3>
           <Card className="!p-0">
             <div className="flex flex-col">
               <ConfigRow
@@ -252,7 +252,7 @@ export function HelpSection() {
 
         {/* Keyboard Shortcuts */}
         <div>
-          <h3 className="mb-3 text-base font-medium">ショートカット</h3>
+          <h3 className="mb-3 font-medium">ショートカット</h3>
           <Card className="!p-0">
             <div className="overflow-hidden rounded-md border border-gray-600">
               {shortcuts.map((shortcut, i) => {

@@ -52,7 +52,7 @@ const ContextStatus = () => {
         }}
         clickable
         content={
-          <div className="flex flex-col gap-0 text-left text-xs">
+          <div className="flex flex-col gap-0 text-left">
             <span className="inline-block">
               {`${percent}%コンテキストが埋まりました。`}
             </span>

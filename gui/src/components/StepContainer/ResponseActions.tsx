@@ -44,7 +44,7 @@ export default function ResponseActions({
   const compactConversation = useCompactConversation();
 
   return (
-    <div className="text-description-muted mx-2 flex cursor-default items-center justify-end space-x-1 bg-transparent pb-0 text-xs">
+    <div className="text-description-muted mx-2 flex cursor-default items-center justify-end space-x-1 bg-transparent pb-0">
       <HeaderButtonWithToolTip
         testId={`compact-button-${index}`}
         text={showLabel ? "会話を要約してコンテキスト量を削減" : "会話を圧縮"}
@@ -57,7 +57,7 @@ export default function ResponseActions({
           />
           {showLabel && (
             <span
-              className={`text-xs ${buttonColorClass || "text-description-muted"}`}
+              className={` ${buttonColorClass || "text-description-muted"}`}
             >
               会話を圧縮
             </span>

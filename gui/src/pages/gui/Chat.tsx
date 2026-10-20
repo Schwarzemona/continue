@@ -435,7 +435,7 @@ export function Chat() {
                   className="flex items-center gap-2"
                 >
                   <ArrowLeftIcon className="h-3 w-3" />
-                  <span className="text-xs">最後のセッション</span>
+                  <span className="">最後のセッション</span>
                 </NewSessionButton>
               )}
             </div>

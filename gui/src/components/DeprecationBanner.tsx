@@ -50,7 +50,7 @@ export function DeprecationBanner({
             <XMarkIcon className="h-3.5 w-3.5" />
           </button>
         )}
-        <div className="flex flex-col gap-1.5 text-xs">
+        <div className="flex flex-col gap-1.5">
           <p className={dismissable ? "pr-5" : ""}>
             Extension configuration is local only as of v2.0.0
           </p>

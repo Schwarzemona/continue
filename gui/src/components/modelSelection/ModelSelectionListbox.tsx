@@ -111,7 +111,7 @@ function ModelSelectionListbox({
                 className="mr-3 h-4 w-4 object-contain object-center"
               />
             )}
-            <span className="text-xs">{selectedProvider.title}</span>
+            <span className="">{selectedProvider.title}</span>
           </span>
           <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
             <ChevronUpDownIcon
@@ -146,14 +146,14 @@ function ModelSelectionListbox({
             {/* Results */}
             <div className="flex-1 overflow-y-auto">
               {!hasResults ? (
-                <div className="text-description-muted px-3 py-4 text-center text-xs">
+                <div className="text-description-muted px-3 py-4 text-center">
                   No models found matching "{searchQuery}"
                 </div>
               ) : (
                 <>
                   {filteredTopOptions.length > 0 && (
                     <div className="py-1">
-                      <div className="text-description-muted px-3 py-1 text-xs font-medium uppercase tracking-wider">
+                      <div className="text-description-muted px-3 py-1 font-medium uppercase tracking-wider">
                         Popular
                       </div>
                       {filteredTopOptions.map((option, index) => (
@@ -178,7 +178,7 @@ function ModelSelectionListbox({
                                     />
                                   )
                                 )}
-                                <span className="text-xs">{option.title}</span>
+                                <span className="">{option.title}</span>
                               </div>
                               {selected && (
                                 <CheckIcon
@@ -198,7 +198,7 @@ function ModelSelectionListbox({
                     )}
                   {filteredOtherOptions.length > 0 && (
                     <div className="py-1">
-                      <div className="text-description-muted px-3 py-1 text-xs font-medium uppercase tracking-wider">
+                      <div className="text-description-muted px-3 py-1 font-medium uppercase tracking-wider">
                         {otherOptionsLabel}
                       </div>
                       {filteredOtherOptions.map((option, index) => (
@@ -223,7 +223,7 @@ function ModelSelectionListbox({
                                     />
                                   )
                                 )}
-                                <span className="text-xs">{option.title}</span>
+                                <span className="">{option.title}</span>
                               </div>
 
                               {selected && (

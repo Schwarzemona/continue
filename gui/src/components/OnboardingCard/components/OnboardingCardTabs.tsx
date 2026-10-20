@@ -66,7 +66,7 @@ export function OnboardingCardTabs({
 
       <div className="block sm:hidden">
         <select
-          className="text-foreground border-border mt-4 w-full cursor-pointer rounded-none border-x-0 border-b border-t-0 bg-transparent p-2 text-base focus:outline-none"
+          className="text-foreground border-border mt-4 w-full cursor-pointer rounded-none border-x-0 border-b border-t-0 bg-transparent p-2 focus:outline-none"
           value={activeTab}
           onChange={(e) => onTabClick(e.target.value as OnboardingModes)}
         >

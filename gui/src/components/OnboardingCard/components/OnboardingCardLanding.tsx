@@ -14,7 +14,7 @@ export function OnboardingCardLanding({
         <ContinueLogo height={75} />
       </div>
 
-      <p className="mb-5 mt-0 w-full text-sm">
+      <p className="mb-5 mt-0 w-full">
         Get started with AI-powered coding by configuring your models
       </p>
 

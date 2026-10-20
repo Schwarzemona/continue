@@ -19,7 +19,7 @@ function CodebaseSubSection() {
   return (
     <div>
       <div className="mb-4 flex items-center justify-between">
-        <h3 className="mb-0 text-sm font-semibold">@codebaseインデックス</h3>
+        <h3 className="mb-0 font-semibold">@codebaseインデックス</h3>
       </div>
 
       <Card>
@@ -84,10 +84,8 @@ export function IndexingSettingsSection() {
       <Alert type="warning" className="mb-6">
         <div className="space-y-4">
           <div>
-            <div className="-mt-0.5 text-sm font-medium">
-              インデックスは非推奨です
-            </div>
-            <div className="mt-1 text-xs">
+            <div className="-mt-0.5 font-medium">インデックスは非推奨です</div>
+            <div className="mt-1">
               次を参照する:{" "}
               <a
                 href="https://docs.continue.dev/guides/codebase-documentation-awareness"

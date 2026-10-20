@@ -16,7 +16,7 @@ import useUpdatingRef from "../../hooks/useUpdatingRef";
 import { useAppSelector } from "../../redux/hooks";
 import { selectUIConfig } from "../../redux/slices/configSlice";
 import { getContextItemsFromHistory } from "../../redux/thunks/updateFileSymbols";
-import { getFontSize } from "../../util";
+import { useFontSize } from "../../util";
 import { ToolTip } from "../gui/Tooltip";
 import FilenameLink from "./FilenameLink";
 import "./katex.css";
@@ -80,7 +80,7 @@ const StyledMarkdown = styled.div<{
     word-wrap: break-word;
     border-radius: 0.3125rem;
     background-color: ${vscEditorBackground};
-    font-size: ${getFontSize() - 2}px;
+    font-size: ${useFontSize()}px;
     font-family: var(--vscode-editor-font-family);
   }
 
@@ -122,7 +122,7 @@ const StyledMarkdown = styled.div<{
     "Open Sans",
     "Helvetica Neue",
     sans-serif;
-  font-size: ${(props) => props.fontSize || getFontSize()}px;
+  font-size: ${(props) => props.fontSize || useFontSize()}px;
   padding-left: 8px;
   padding-right: 8px;
   color: ${vscForeground};
@@ -383,7 +383,7 @@ const StyledMarkdownPreview = memo(function StyledMarkdownPreview(
 
   return (
     <StyledMarkdown
-      fontSize={getFontSize()}
+      fontSize={useFontSize()}
       whiteSpace={codeWrapState}
       bgColor={props.useParentBackgroundColor ? "" : vscBackground}
     >

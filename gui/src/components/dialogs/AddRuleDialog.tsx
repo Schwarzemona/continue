@@ -77,7 +77,7 @@ function AddRuleDialog({ mode }: { mode: "workspace" | "global" }) {
               onChange={(e) => setName(e.target.value)}
             />
           </label>
-          {error && <p className="text-xs text-red-500">{error}</p>}
+          {error && <p className="text-red-500">{error}</p>}
           <div className="mt-2 flex flex-row justify-end gap-2">
             <SecondaryButton
               className="min-w-16"

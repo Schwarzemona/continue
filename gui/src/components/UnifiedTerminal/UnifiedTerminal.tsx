@@ -6,7 +6,7 @@ import { useMemo, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { useAppDispatch } from "../../redux/hooks";
 import { moveTerminalProcessToBackground } from "../../redux/thunks/moveTerminalProcessToBackground";
-import { getFontSize } from "../../util";
+import { useFontSize } from "../../util";
 import { CopyButton } from "../StyledMarkdownPreview/StepContainerPreToolbar/CopyButton";
 import { RunInTerminalButton } from "../StyledMarkdownPreview/StepContainerPreToolbar/RunInTerminalButton";
 import { ButtonContent, SpoilerButton } from "../ui/SpoilerButton";
@@ -76,7 +76,7 @@ const StyledTerminalContainer = styled.div<{
     Arial,
     "Noto Sans",
     sans-serif;
-  font-size: ${(props) => props.fontSize || getFontSize()}px;
+  font-size: ${(props) => props.fontSize || useFontSize()}px;
   color: var(--foreground);
   line-height: 1.5;
 
@@ -102,7 +102,7 @@ const TerminalContent = styled.div`
     word-wrap: break-word;
     border-radius: 0.5rem;
     background-color: var(--editor-background);
-    font-size: ${getFontSize() - 2}px;
+    font-size: ${useFontSize()}px;
     font-family:
       ui-monospace, SFMono-Regular, "SF Mono", Consolas, "Liberation Mono",
       Menlo, monospace;
@@ -416,7 +416,7 @@ export function UnifiedTerminalCommand({
 
   return (
     <StyledTerminalContainer
-      fontSize={getFontSize()}
+      fontSize={useFontSize()}
       className="mx-2 mb-4"
       data-testid="terminal-container"
     >
@@ -428,7 +428,7 @@ export function UnifiedTerminalCommand({
               ? "rounded-t-default border-command-border border-b"
               : "rounded-default"
           }`}
-          style={{ fontSize: `${getFontSize() - 2}px` }}
+          style={{ fontSize: `${useFontSize()}px` }}
         >
           <div className="flex max-w-[50%] flex-row items-center">
             <ChevronDownIcon
@@ -507,7 +507,7 @@ export function UnifiedTerminalCommand({
         {/* Status information */}
         {(statusMessage || isRunning) && (
           <div
-            className="text-description flex items-center px-2 pb-2 pt-2 text-xs"
+            className="text-description flex items-center px-2 pb-2 pt-2"
             style={{
               borderTop:
                 "1px solid var(--vscode-commandCenter-inactiveBorder, #555555)",
@@ -522,7 +522,7 @@ export function UnifiedTerminalCommand({
                   e.preventDefault();
                   handleMoveToBackground();
                 }}
-                className="text-link ml-3 cursor-pointer text-xs no-underline hover:underline"
+                className="text-link ml-3 cursor-pointer no-underline hover:underline"
               >
                 Move to background
               </a>

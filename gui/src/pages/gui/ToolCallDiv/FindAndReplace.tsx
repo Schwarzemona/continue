@@ -76,7 +76,7 @@ function DiffStats({ added, removed }: { added: number; removed: number }) {
   }
 
   return (
-    <div className="flex items-center gap-1 font-mono text-xs">
+    <div className="flex items-center gap-1 font-mono">
       {added > 0 && <span className="text-success">+{added}</span>}
       {removed > 0 && <span className="text-error">-{removed}</span>}
     </div>
@@ -213,7 +213,7 @@ export function FindAndReplaceDisplay({
           setIsExpanded(!showContent);
         }}
       >
-        <div className="flex min-w-0 flex-1 flex-row items-center gap-2 text-xs">
+        <div className="flex min-w-0 flex-1 flex-row items-center gap-2">
           <div className="flex min-w-0 flex-row items-center">
             {statusIcon}
             <ChevronDownIcon
@@ -283,7 +283,7 @@ export function FindAndReplaceDisplay({
       className={`${config?.ui?.showChatScrollbar ? "thin-scrollbar" : "no-scrollbar"} max-h-72 overflow-auto`}
     >
       <pre
-        className={`bg-editor m-0 w-fit min-w-full text-xs leading-tight ${config?.ui?.codeWrap ? "whitespace-pre-wrap" : "whitespace-pre"}`}
+        className={`bg-editor m-0 w-fit min-w-full leading-tight ${config?.ui?.codeWrap ? "whitespace-pre-wrap" : "whitespace-pre"}`}
       >
         {diffResult.diff?.map((part, index) => {
           if (part.removed) {

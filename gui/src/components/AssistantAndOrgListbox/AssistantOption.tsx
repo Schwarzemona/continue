@@ -24,7 +24,7 @@ export function AssistantOption({
   selected,
   onClick,
 }: AssistantOptionProps) {
-  const tinyFont = useFontSize(-4);
+  const tinyFont = useFontSize(-2);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const ideMessenger = useContext(IdeMessengerContext);

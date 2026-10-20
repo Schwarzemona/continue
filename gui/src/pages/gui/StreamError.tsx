@@ -249,9 +249,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
   return (
     <div className="flex flex-col gap-4 px-3 pb-3 pt-3">
       {/* Concise error title */}
-      <h3 className="text-error m-0 p-0 text-lg font-medium">
-        モデルの応答エラー処理
-      </h3>
+      <h3 className="text-error m-0 p-0 font-medium">モデルの応答エラー処理</h3>
 
       {errorContent}
 
@@ -264,7 +262,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
             defaultOpen
           >
             <div className="flex flex-col gap-0 rounded-sm">
-              <code className="text-editor-foreground block max-h-48 overflow-y-auto p-3 font-mono text-xs">
+              <code className="text-editor-foreground block max-h-48 overflow-y-auto p-3 font-mono">
                 {parsedError}
               </code>
 
@@ -284,7 +282,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
                   className="flex items-center"
                 >
                   <ArrowTopRightOnSquareIcon className="mr-1.5 h-4 w-4" />
-                  <span className="text-xs">ログを表示</span>
+                  <span className="">ログを表示</span>
                 </GhostButton>
               </div>
             </div>

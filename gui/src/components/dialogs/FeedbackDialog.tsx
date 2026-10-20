@@ -7,12 +7,12 @@ export default function FeedbackDialog() {
 
   return (
     <div className="mx-auto flex max-w-md flex-col p-6 pt-8">
-      <div className="flex items-center gap-2 text-lg font-medium">
+      <div className="flex items-center gap-2 font-medium">
         <span>👋</span>
         <span>Help us improve Continue</span>
       </div>
 
-      <p className="text-foreground text-sm leading-relaxed">
+      <p className="text-foreground leading-relaxed">
         We're always working to make Continue better and would love to hear from
         you. If you're interested in sharing your experience, please enter your
         details below.
@@ -24,10 +24,8 @@ export default function FeedbackDialog() {
           dispatch(
             setDialogMessage(
               <div className="p-6 text-center">
-                <div className="mb-2 text-lg">✓ Thank you!</div>
-                <p className="text-foreground text-sm">
-                  We'll be in touch soon.
-                </p>
+                <div className="mb-2">✓ Thank you!</div>
+                <p className="text-foreground">We'll be in touch soon.</p>
               </div>,
             ),
           );
@@ -59,7 +57,7 @@ export default function FeedbackDialog() {
         </div>
       </form>
 
-      <p className="text-description-muted text-xs">
+      <p className="text-description-muted">
         We'll only use this information to reach out for feedback.
       </p>
     </div>

@@ -13,10 +13,10 @@ const StatCard: React.FC<{ label: string; value: number; color?: string }> = ({
   color = "var(--vscode-foreground)",
 }) => (
   <div className="flex flex-col items-center rounded-lg border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-3">
-    <div className="text-sm text-[color:var(--vscode-descriptionForeground)]">
+    <div className="text-[color:var(--vscode-descriptionForeground)]">
       {label}
     </div>
-    <div className="text-lg font-semibold" style={{ color }}>
+    <div className="font-semibold" style={{ color }}>
       {value.toLocaleString()}
     </div>
   </div>
@@ -78,7 +78,7 @@ const CostChart: React.FC<{ llmLog: LLMLog }> = ({ llmLog }) => {
 
   return (
     <div className="mb-4 rounded-lg border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-4">
-      <h3 className="mb-3 text-sm font-semibold text-[color:var(--vscode-foreground)]">
+      <h3 className="mb-3 font-semibold text-[color:var(--vscode-foreground)]">
         Cumulative Cost Over Interactions
       </h3>
       <div className="flex justify-center">
@@ -226,19 +226,19 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
   return (
     <div className="border-b border-[color:var(--vscode-panel-border)] p-4">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-[color:var(--vscode-foreground)]">
+        <h2 className="font-semibold text-[color:var(--vscode-foreground)]">
           Total Usage Summary
         </h2>
         <div className="flex items-center gap-4">
           {totalUsage.totalCost > 0 && (
             <button
               onClick={() => setShowCostBreakdown(!showCostBreakdown)}
-              className="cursor-pointer text-lg font-semibold text-[color:var(--vscode-charts-green)] hover:text-[color:var(--vscode-charts-blue)]"
+              className="cursor-pointer font-semibold text-[color:var(--vscode-charts-green)] hover:text-[color:var(--vscode-charts-blue)]"
             >
               ${totalUsage.totalCost.toFixed(6)}
             </button>
           )}
-          <div className="text-sm text-[color:var(--vscode-descriptionForeground)]">
+          <div className="text-[color:var(--vscode-descriptionForeground)]">
             {totalUsage.totalInteractions} interactions
           </div>
         </div>
@@ -246,10 +246,10 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
 
       {showCostBreakdown && totalUsage.costBreakdowns.length > 0 && (
         <div className="mb-4 max-h-32 overflow-y-auto rounded border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-3">
-          <h3 className="mb-2 text-sm font-semibold text-[color:var(--vscode-foreground)]">
+          <h3 className="mb-2 font-semibold text-[color:var(--vscode-foreground)]">
             Cost Breakdown
           </h3>
-          <div className="space-y-2 text-xs">
+          <div className="space-y-2">
             {totalUsage.costBreakdowns.map((breakdown, index) => (
               <div
                 key={index}
@@ -292,13 +292,13 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
           <CostChart llmLog={llmLog} />
           <div className="mb-4">
             <div className="flex flex-col items-center rounded-lg border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-3">
-              <div className="text-sm text-[color:var(--vscode-descriptionForeground)]">
+              <div className="text-[color:var(--vscode-descriptionForeground)]">
                 Total Cost
               </div>
-              <div className="text-2xl font-bold text-[color:var(--vscode-charts-green)]">
+              <div className="font-bold text-[color:var(--vscode-charts-green)]">
                 ${totalUsage.totalCost.toFixed(6)}
               </div>
-              <div className="text-xs text-[color:var(--vscode-descriptionForeground)]">
+              <div className="text-[color:var(--vscode-descriptionForeground)]">
                 {totalUsage.costBreakdowns.length} cost calculations
               </div>
             </div>
@@ -314,7 +314,7 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
             color="var(--vscode-charts-red)"
           />
           <div className="flex items-center justify-center rounded-lg border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-3">
-            <div className="text-sm text-[color:var(--vscode-descriptionForeground)]">
+            <div className="text-[color:var(--vscode-descriptionForeground)]">
               Cache Hit Rate:{" "}
               {totalUsage.totalPromptTokens > 0
                 ? (
@@ -329,7 +329,7 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
         </div>
       )}
 
-      <div className="grid grid-cols-3 gap-3 text-sm">
+      <div className="grid grid-cols-3 gap-3">
         <div className="rounded border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-2 text-center">
           <div className="text-[color:var(--vscode-charts-green)]">
             {totalUsage.totalSuccessfulInteractions}

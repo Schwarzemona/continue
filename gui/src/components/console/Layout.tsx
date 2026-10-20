@@ -22,7 +22,7 @@ export default function Layout() {
         {/* <div className="flex-shrink-0 border-b border-[color:var(--vscode-panel-border)] p-3">
           <button
             onClick={() => setShowTotalUsage(true)}
-            className="float-right cursor-pointer border-none bg-transparent text-sm text-[color:var(--vscode-textLink-foreground)] underline hover:text-[color:var(--vscode-textLink-activeForeground)]"
+            className="float-right cursor-pointer border-none bg-transparent  text-[color:var(--vscode-textLink-foreground)] underline hover:text-[color:var(--vscode-textLink-activeForeground)]"
           >
             View Total Usage Summary
           </button>

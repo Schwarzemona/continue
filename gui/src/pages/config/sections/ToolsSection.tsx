@@ -173,8 +173,8 @@ function MCPServerPreview({
             />
             <div className="flex items-center gap-2">
               {icon}
-              <span className="text-sm">{title}</span>
-              <div className="flex h-5 w-5 items-center justify-center rounded-md bg-gray-600 px-0.5 text-xs font-medium text-white">
+              <span className="">{title}</span>
+              <div className="flex h-5 w-5 items-center justify-center rounded-md bg-gray-600 px-0.5 font-medium text-white">
                 {items.length}
               </div>
             </div>
@@ -189,11 +189,11 @@ function MCPServerPreview({
                   return (
                     <div
                       key={idx}
-                      className="text-description rounded bg-gray-50 bg-opacity-5 px-2 py-1 text-xs"
+                      className="text-description rounded bg-gray-50 bg-opacity-5 px-2 py-1"
                     >
                       <code>{item.name}</code>
                       {item.description && (
-                        <div className="mt-1 text-xs text-gray-500">
+                        <div className="mt-1 text-gray-500">
                           {item.description}
                         </div>
                       )}
@@ -202,7 +202,7 @@ function MCPServerPreview({
                 })}
               </div>
             ) : (
-              <div className="text-xs italic text-gray-500">
+              <div className="italic text-gray-500">
                 No {title.toLowerCase()} available
               </div>
             )}
@@ -218,7 +218,7 @@ function MCPServerPreview({
         <div className="flex items-center gap-3">
           <div className="flex-1">
             <div className="flex items-center gap-3">
-              <h3 className="my-0 text-sm font-medium">{server.name}</h3>
+              <h3 className="my-0 font-medium">{server.name}</h3>
               <ToolTip content={ServerStatusTooltip[server.status] ?? "Error"}>
                 <div
                   className={`h-2 w-2 flex-shrink-0 rounded-full ${ServerStatusColor[server.status] ?? "bg-error"}`}
@@ -318,7 +318,7 @@ function MCPServerPreview({
                   ) : (
                     <ArrowPathIcon className="h-4 w-4 flex-shrink-0" />
                   )}
-                  実行
+                  接続
                 </ListboxOption>
               )}
             </ListboxOptions>
@@ -371,7 +371,7 @@ function MCPServerPreview({
                 void ideMessenger.ide.showVirtualFile(server.name, error)
               }
             >
-              <span className="text-xs">
+              <span className="">
                 {error.length > 150 ? error.substring(0, 150) + "..." : error}
               </span>
             </Alert>
@@ -391,10 +391,7 @@ function MCPServerPreview({
                 void ideMessenger.ide.showVirtualFile(server.name, info)
               }
             >
-              <span
-                className="text-xs"
-                dangerouslySetInnerHTML={{ __html: info }}
-              />
+              <span className="" dangerouslySetInnerHTML={{ __html: info }} />
             </Alert>
           ))}
         </div>
@@ -476,7 +473,7 @@ export function ToolsSection() {
       {!!availableToolsMessage && (
         <div className="mb-4">
           <Alert type="info" size="sm">
-            <span className="text-2xs italic">{availableToolsMessage}</span>
+            <span className="italic">{availableToolsMessage}</span>
           </Alert>
         </div>
       )}
@@ -504,7 +501,7 @@ export function ToolsSection() {
           <>
             {mode === "chat" && (
               <Alert type="info" size="sm">
-                <span className="text-2xs italic">
+                <span className="italic">
                   チャットモードではすべてのMCPが無効になっています。MCPを使用するには、プランモードまたはエージェントモードに切り替えてください。
                 </span>
               </Alert>

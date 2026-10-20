@@ -11,13 +11,13 @@ export default function Expander({ label, children }: ExpanderProps) {
 
   return (
     <div>
-      <div className="text-base" onClick={() => setExpanded(!expanded)}>
+      <div className="" onClick={() => setExpanded(!expanded)}>
         {expanded ? (
           <ChevronDownIcon className="h-[16px] w-[16px]" />
         ) : (
           <ChevronRightIcon className="h-[16px] w-[16px]" />
         )}{" "}
-        <span className="align-top text-sm font-bold">{label}</span>
+        <span className="align-top font-bold">{label}</span>
       </div>
       {expanded && <div>{children}</div>}
     </div>

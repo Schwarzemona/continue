@@ -224,7 +224,7 @@ const Layout = () => {
               {!isHome && <FatalErrorIndicator />}
             </GridDiv>
           </div>
-          <div style={{ fontSize: fontSize(-4) }} id="tooltip-portal-div" />
+          <div style={{ fontSize: fontSize(-2) }} id="tooltip-portal-div" />
         </LayoutTopDiv>
       </AuthProvider>
     </LocalStorageProvider>

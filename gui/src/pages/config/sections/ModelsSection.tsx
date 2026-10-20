@@ -82,7 +82,7 @@ export function ModelsSection() {
           role="chat"
           displayName="チャット"
           shortcut={
-            <span className="text-2xs text-description-muted">
+            <span className="text-description-muted">
               (<Shortcut>{`cmd ${jetbrains ? "J" : "L"}`}</Shortcut>)
             </span>
           }
@@ -141,7 +141,7 @@ export function ModelsSection() {
               role="edit"
               displayName="編集"
               shortcut={
-                <span className="text-2xs text-description-muted">
+                <span className="text-description-muted">
                   (<Shortcut>cmd I</Shortcut>)
                 </span>
               }
@@ -213,8 +213,12 @@ export function ModelsSection() {
               onConfigure={handleConfigureModel}
               setupURL="https://docs.continue.dev/customize/model-roles/reranking"
             />
+
+            <Divider />
           </div>
         </Toggle>
+
+        <Divider />
       </Card>
     </div>
   );

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { defaultBorderRadius, lightGray, vscForeground } from "../..";
-import { getFontSize } from "../../../util";
+import { useFontSize } from "../../../util";
 
 export const NewSessionButton = styled.div`
   width: fit-content;
@@ -8,7 +8,7 @@ export const NewSessionButton = styled.div`
   margin-left: 6px;
   margin-top: 2px;
   margin-bottom: 8px;
-  font-size: ${getFontSize() - 2}px;
+  font-size: ${useFontSize()}px;
 
   border-radius: ${defaultBorderRadius};
   padding: 2px 6px;

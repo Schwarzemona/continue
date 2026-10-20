@@ -94,7 +94,7 @@ function PromptRow({
       className="hover:bg-list-active hover:text-list-active-foreground flex items-center justify-between gap-3 rounded-md px-2 py-1 hover:cursor-pointer"
       onClick={handlePromptClick}
       style={{
-        fontSize: fontSize(-3),
+        fontSize: fontSize(-1),
       }}
     >
       <div className="flex min-w-0 flex-col">
@@ -173,9 +173,9 @@ const RuleCard: React.FC<RuleCardProps> = ({ rule }) => {
     dispatch(
       setDialogMessage(
         <ConfirmationDialog
-          title="Delete Rule"
-          text="Are you sure you want to delete this rule file?"
-          confirmText="Delete"
+          title="ルール削除"
+          text="このルールファイルを削除しますか？"
+          confirmText="削除"
           onConfirm={async () => {
             try {
               await ideMessenger.request("config/deleteRule", {
@@ -195,8 +195,8 @@ const RuleCard: React.FC<RuleCardProps> = ({ rule }) => {
     rule.sourceFile &&
     !["default-chat", "default-agent", "default-plan"].includes(rule.source);
 
-  const smallFont = fontSize(-2);
-  const tinyFont = fontSize(-3);
+  const smallFont = fontSize(0);
+  const tinyFont = fontSize(-1);
   return (
     <div
       className={`border-border flex flex-col rounded-sm px-2 py-1.5 transition-colors ${isDisabled ? "opacity-50" : ""}`}
@@ -500,7 +500,7 @@ function RulesSubSection() {
               <RuleCard key={index} rule={rule} />
             ))}
             {configLoading && (
-              <div className="px-2 py-1.5 text-xs opacity-65">
+              <div className="px-2 py-1.5 opacity-65">
                 Reloading rules from your config...
               </div>
             )}

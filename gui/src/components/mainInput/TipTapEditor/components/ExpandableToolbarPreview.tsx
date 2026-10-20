@@ -14,7 +14,7 @@ import {
   vscEditorBackground,
 } from "../../..";
 import { useAppSelector } from "../../../../redux/hooks";
-import { getFontSize } from "../../../../util";
+import { useFontSize } from "../../../../util";
 import HeaderButtonWithToolTip from "../../../gui/HeaderButtonWithToolTip";
 
 const MAX_PREVIEW_HEIGHT = 100;
@@ -163,7 +163,7 @@ export function ExpandableToolbarPreview(props: ExpandableToolbarPreviewProps) {
       <div
         className="border-b-command-border m-0 flex cursor-pointer items-center justify-between break-all border-0 border-b-[1px] border-solid px-[5px] py-1.5 hover:opacity-90"
         style={{
-          fontSize: getFontSize() - 3,
+          fontSize: useFontSize() - 1,
         }}
         onClick={() => {
           setHidden(!hidden);

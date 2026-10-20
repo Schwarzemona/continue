@@ -7,7 +7,7 @@ import { fontSize } from "../../util";
 
 // Needed to override styles in react-tooltip
 const TooltipStyles: CSSProperties = {
-  fontSize: fontSize(-4),
+  fontSize: fontSize(-2),
   backgroundColor: vscBackground,
   outline: `0.5px solid ${varWithFallback("description")}`,
   color: vscForeground,

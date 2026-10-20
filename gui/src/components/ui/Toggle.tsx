@@ -18,7 +18,7 @@ export function Toggle({
   return (
     <div>
       <div
-        className="flex cursor-pointer items-start gap-2 text-left text-sm font-semibold"
+        className="flex cursor-pointer items-start gap-2 text-left font-semibold"
         onClick={onToggle}
       >
         <ChevronRightIcon
@@ -29,9 +29,7 @@ export function Toggle({
         <div>
           <span>{title}</span>
           {subtitle && (
-            <p className="text-description my-1 text-xs font-normal">
-              {subtitle}
-            </p>
+            <p className="text-description my-1 font-normal">{subtitle}</p>
           )}
         </div>
       </div>

@@ -179,7 +179,7 @@ function ModelCard(props: ModelCardProps) {
                       id={dimension.name}
                       msg={dimension.description}
                     />
-                    <p className="mx-2 my-0 py-0 text-sm">{dimension.name}</p>
+                    <p className="mx-2 my-0 py-0">{dimension.name}</p>
                   </div>
                   <div className="flex items-center">
                     {Object.keys(dimension.options).map((key) => {

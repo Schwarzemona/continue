@@ -12,7 +12,7 @@ export interface DetailsProps {
 
 function renderCell(children: React.ReactNode) {
   return (
-    <div className="border-0 border-r-2 border-solid border-[color:var(--vscode-panel-border)] pl-2 pr-2 text-sm">
+    <div className="border-0 border-r-2 border-solid border-[color:var(--vscode-panel-border)] pl-2 pr-2">
       {children}
     </div>
   );
@@ -87,7 +87,7 @@ export default function Details({ interaction }: DetailsProps) {
 
   return (
     <div className="m-0 flex min-w-0 flex-1 shrink grow flex-col">
-      <div className="shrink-0 text-base">
+      <div className="shrink-0">
         <div className="columns-3 gap-0 border-0 border-b-2 border-solid border-[color:var(--vscode-panel-border)] p-0">
           <Cell label="タイプ" value={summary.type}></Cell>
           <CustomCell>
@@ -121,7 +121,7 @@ export default function Details({ interaction }: DetailsProps) {
           ></Cell>
         </div>
         {/* {summary.costBreakdown && (
-          <pre className="whitespace-pre-wrap px-2 text-sm">
+          <pre className="whitespace-pre-wrap px-2 ">
             {summary.costBreakdown.breakdown}
           </pre>
         )} */}

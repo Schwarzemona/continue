@@ -20,7 +20,7 @@ export function RulesPeekItem({ rule }: RulesPeekItemProps) {
 
   return (
     <div
-      className={`group mr-2 flex flex-col overflow-hidden rounded px-1.5 py-1 text-xs hover:bg-white/10`}
+      className={`group mr-2 flex flex-col overflow-hidden rounded px-1.5 py-1 hover:bg-white/10`}
       data-testid="rules-peek-item"
       onClick={() => openRule(rule)}
     >
@@ -31,19 +31,19 @@ export function RulesPeekItem({ rule }: RulesPeekItemProps) {
           <DocumentTextIcon className="text-description-muted mr-2 h-4 w-4 flex-shrink-0" />
         )}
 
-        <div className="flex min-w-0 flex-1 gap-2 text-xs">
+        <div className="flex min-w-0 flex-1 gap-2">
           <div className="max-w-[50%] flex-shrink-0 truncate font-medium">
             {rule.name || "エージェントルール"}
           </div>
 
-          <div className="min-w-0 flex-1 overflow-hidden truncate whitespace-nowrap text-xs text-gray-500">
+          <div className="min-w-0 flex-1 overflow-hidden truncate whitespace-nowrap text-gray-500">
             {isGlobal
               ? "常に適用"
               : `パターン: ${typeof rule.globs === "string" ? rule.globs : Array.isArray(rule.globs) ? rule.globs.join(", ") : ""}`}
           </div>
         </div>
       </div>
-      <div className="mt-1 pl-6 pr-2 text-xs text-gray-500">
+      <div className="mt-1 pl-6 pr-2 text-gray-500">
         ソース: {getRuleSourceDisplayName(rule)}
       </div>
     </div>

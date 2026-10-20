@@ -14,43 +14,43 @@ import { ToolTip } from "../gui/Tooltip";
 const MINIMUM_ZOOM_STEP = 0.05;
 
 const MERMAID_THEME_COLORS = {
-  background: "#1e1e1e",
-  primaryColor: "#4d8bf0",
-  primaryTextColor: "#ffffff",
-  primaryBorderColor: "#4d8bf0",
-  secondaryColor: "#3a6db3",
-  secondaryTextColor: "#ffffff",
-  secondaryBorderColor: "#3a6db3",
-  tertiaryColor: "#59bc89",
-  tertiaryTextColor: "#ffffff",
-  tertiaryBorderColor: "#59bc89",
-  noteBkgColor: "#2d2d2d",
-  noteTextColor: "#e6e6e6",
-  noteBorderColor: "#555555",
-  lineColor: "#8c8c8c",
-  textColor: "#e6e6e6",
-  mainBkg: "#252525",
-  errorBkgColor: "#f44336",
-  errorTextColor: "#ffffff",
-  nodeBorder: "#555555",
-  clusterBkg: "#2a2a2a",
-  clusterBorder: "#555555",
-  defaultLinkColor: "#8c8c8c",
-  titleColor: "#e6e6e6",
-  edgeLabelBackground: "#252525",
-  activeTaskBkgColor: "#4caf50",
-  activeTaskBorderColor: "#388e3c",
-  doneTaskBkgColor: "#388e3c",
-  doneTaskBorderColor: "#2e7d32",
-  critBkgColor: "#f44336",
-  critBorderColor: "#d32f2f",
-  taskTextColor: "#e6e6e6",
-  taskTextOutsideColor: "#e6e6e6",
-  taskTextLightColor: "#b3b3b3",
-  sectionBkgColor: "#2a2a2a",
-  altSectionBkgColor: "#303030",
-  sectionBkgColor2: "#252525",
-  excludeBkgColor: "#2d2d2d",
+  background: "#bfbfbf",
+  primaryColor: "#efefef",
+  primaryTextColor: "#7f7f7f",
+  primaryBorderColor: "#7f7f7f",
+  secondaryColor: "#efefef",
+  secondaryTextColor: "#7f7f7f",
+  secondaryBorderColor: "#7f7f7f",
+  tertiaryColor: "#efefef",
+  tertiaryTextColor: "#7f7f7f",
+  tertiaryBorderColor: "#7f7f7f",
+  noteBkgColor: "#bfbfbf",
+  noteTextColor: "#7f7f7f",
+  noteBorderColor: "#7f7f7f",
+  lineColor: "#7f7f7f",
+  textColor: "#7f7f7f",
+  mainBkg: "#bfbfbf",
+  errorBkgColor: "#ffffff",
+  errorTextColor: "#7f7f7f",
+  nodeBorder: "#7f7f7f",
+  clusterBkg: "#bfbfbf",
+  clusterBorder: "#7f7f7f",
+  defaultLinkColor: "#7f7f7f",
+  titleColor: "#7f7f7f",
+  edgeLabelBackground: "#bfbfbf",
+  activeTaskBkgColor: "#bfbfbf",
+  activeTaskBorderColor: "#7f7f7f",
+  doneTaskBkgColor: "#0f0f0f",
+  doneTaskBorderColor: "#7f7f7f",
+  critBkgColor: "#ffffff",
+  critBorderColor: "#7f7f7f",
+  taskTextColor: "#7f7f7f",
+  taskTextOutsideColor: "#7f7f7f",
+  taskTextLightColor: "#7f7f7f",
+  sectionBkgColor: "#bfbfbf",
+  altSectionBkgColor: "#dfdfdf",
+  sectionBkgColor2: "#bfbfbf",
+  excludeBkgColor: "#3f3f3f",
   fillType0: "#264f78",
   fillType1: "#3a6db3",
   fillType2: "#59bc89",
@@ -64,7 +64,7 @@ const MERMAID_THEME_COLORS = {
 mermaid.initialize({
   startOnLoad: false,
   securityLevel: "loose",
-  theme: "dark",
+  theme: "base",
   themeVariables: {
     ...MERMAID_THEME_COLORS,
     fontSize: "14px",
@@ -136,10 +136,10 @@ export default function MermaidDiagram({ code }: { code: string }) {
   return (
     <>
       {isLoading && (
-        <div className="text-vsc-foreground text-xs">Generating diagram...</div>
+        <div className="text-vsc-foreground">Generating diagram...</div>
       )}
       {!!error ? (
-        <div className="text-error whitespace-pre text-sm">{error}</div>
+        <div className="text-error whitespace-pre">{error}</div>
       ) : (
         <div className="mermaid relative">
           <div className="absolute right-0 z-10 m-2 flex items-center gap-x-1">

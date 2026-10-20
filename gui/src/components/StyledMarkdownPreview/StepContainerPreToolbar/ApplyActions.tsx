@@ -23,7 +23,7 @@ export function ApplyActions(props: ApplyActionsProps) {
     case "streaming":
       return (
         <div className="bg-badge flex select-none items-center rounded pl-2 pr-1">
-          <span className="text-lightgray inline-flex items-center gap-2 text-center text-xs">
+          <span className="text-lightgray inline-flex items-center gap-2 text-center">
             Applying
             <Spinner />
           </span>
@@ -32,7 +32,7 @@ export function ApplyActions(props: ApplyActionsProps) {
     case "done":
       return (
         <div className="bg-badge flex select-none items-center rounded sm:gap-1 md:px-1.5">
-          <span className="text-lightgray flex items-center text-center text-xs max-md:hidden">
+          <span className="text-lightgray flex items-center text-center max-md:hidden">
             {`${props.applyState?.numDiffs === 1 ? "1 diff" : `${props.applyState?.numDiffs} diffs`}`}
           </span>
 
@@ -69,7 +69,7 @@ export function ApplyActions(props: ApplyActionsProps) {
           >
             <button
               data-testid="codeblock-toolbar-apply"
-              className="text-lightgray flex cursor-pointer items-center border-none bg-transparent pl-0 text-xs outline-none hover:brightness-125"
+              className="text-lightgray flex cursor-pointer items-center border-none bg-transparent pl-0 outline-none hover:brightness-125"
               onClick={props.onClickApply}
             >
               <div className="text-lightgray flex items-center gap-1">

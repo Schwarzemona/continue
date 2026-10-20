@@ -35,7 +35,7 @@ export function AssistantAndOrgListbox({
   const ideMessenger = useContext(IdeMessengerContext);
   const { profiles, selectedProfile, refreshProfiles } = useAuth();
   const configLoading = useAppSelector((store) => store.config.loading);
-  const tinyFont = useFontSize(-4);
+  const tinyFont = useFontSize(-2);
 
   function close() {
     // Close the listbox by clicking outside or programmatically
@@ -107,9 +107,7 @@ export function AssistantAndOrgListbox({
             style={{ zIndex: 200 }}
           >
             <div className="flex items-center justify-between px-1.5 py-1">
-              <span className="text-description text-2xs font-medium">
-                設定ファイル
-              </span>
+              <span className="text-description font-medium">設定ファイル</span>
               <div className="flex items-center gap-0.5">
                 <Button
                   onClick={(e) => {
@@ -160,7 +158,7 @@ export function AssistantAndOrgListbox({
                         configLoading && "animate-spin-slow",
                       )}
                     />
-                    <span className="text-2xs">リロード</span>
+                    <span className="">リロード</span>
                   </div>
                 </Button>
               </div>

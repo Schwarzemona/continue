@@ -20,7 +20,7 @@ import {
 } from "../../redux/slices/sessionSlice";
 import { setDialogMessage, setShowDialog } from "../../redux/slices/uiSlice";
 import { refreshSessionMetadata } from "../../redux/thunks/session";
-import { getFontSize, getPlatform } from "../../util";
+import { useFontSize, getPlatform } from "../../util";
 import { ROUTES } from "../../util/navigation";
 import ConfirmationDialog from "../dialogs/ConfirmationDialog";
 import { Button } from "../ui";
@@ -123,8 +123,8 @@ export function History() {
     dispatch(
       setDialogMessage(
         <ConfirmationDialog
-          title={`Clear sessions`}
-          text={`Are you sure you want to permanently delete all chat sessions, including the current chat session?`}
+          title={`履歴の消去`}
+          text={`現在のチャットを含む全ての履歴を、完全に削除してもよろしいですか？`}
           onConfirm={async () => {
             // optimistic update
             dispatch(setAllSessionMetadata([]));
@@ -145,12 +145,12 @@ export function History() {
 
   return (
     <div
-      style={{ fontSize: getFontSize() }}
+      style={{ fontSize: useFontSize() }}
       className="flex flex-1 flex-col overflow-auto overflow-x-hidden px-1"
     >
       <div className="relative my-2 mt-4 flex justify-center space-x-2">
         <input
-          className="bg-vsc-input-background text-vsc-foreground flex-1 rounded-md border border-none py-1 pl-2 pr-8 text-sm outline-none focus:outline-none"
+          className="bg-vsc-input-background text-vsc-foreground flex-1 rounded-md border border-none py-1 pl-2 pr-8 outline-none focus:outline-none"
           ref={searchInputRef}
           placeholder="履歴を検索"
           type="text"
@@ -177,9 +177,9 @@ export function History() {
               "履歴読み込み中..."
             ) : (
               <>
-                No past sessions found. To start a new session, either click the
-                "+" button or use the keyboard shortcut:{" "}
+                履歴はありません。新しいセッションを開始するには、+をクリックするか、ショートカット{" "}
                 <Shortcut>meta L</Shortcut>
+                を使用します。
               </>
             )}
           </div>
@@ -190,7 +190,7 @@ export function History() {
             {sessionGroups.map((group, groupIndex) => (
               <Fragment key={group.label}>
                 <tr
-                  className={`user-select-none sticky mb-3 ml-2 flex h-6 justify-start text-left text-base font-bold opacity-75 ${
+                  className={`user-select-none sticky mb-3 ml-2 flex h-6 justify-start text-left font-bold opacity-75 ${
                     groupIndex === 0 ? "mt-2" : "mt-8"
                   }`}
                 >
@@ -209,15 +209,12 @@ export function History() {
         </table>
       </div>
 
-      <div className="border-border flex flex-col items-end justify-center border-0 border-t border-solid px-2 py-3 text-xs">
+      <div className="border-border flex flex-col items-end justify-center border-0 border-t border-solid px-2 py-3">
         <Button variant="secondary" size="sm" onClick={showClearSessionsDialog}>
           履歴の消去
         </Button>
-        <span
-          className="text-description text-2xs"
-          data-testid="history-sessions-note"
-        >
-          履歴保存パス:{" "}
+        <span className="text-description" data-testid="history-sessions-note">
+          保存先:{" "}
           <span className="italic">
             {platform === "windows"
               ? "%USERPROFILE%/.continue"

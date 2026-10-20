@@ -29,7 +29,7 @@ export default function ConversationSummary(props: ConversationSummaryProps) {
     return (
       <div className="mx-1.5 mb-4 mt-2">
         <div className="bg-vsc-input-background rounded-md shadow-sm">
-          <div className="text-description flex items-center justify-start px-3 py-2 text-xs">
+          <div className="text-description flex items-center justify-start px-3 py-2">
             <span>会話の要約を生成中</span>
             <AnimatedEllipsis />
           </div>
@@ -43,7 +43,7 @@ export default function ConversationSummary(props: ConversationSummaryProps) {
     <div className="mx-1.5 mb-4 mt-2">
       <div className="bg-vsc-input-background rounded-md shadow-sm">
         <div
-          className="text-description flex cursor-pointer items-center gap-2 px-3 py-2 text-xs transition-colors duration-200 hover:brightness-105"
+          className="text-description flex cursor-pointer items-center gap-2 px-3 py-2 transition-colors duration-200 hover:brightness-105"
           onClick={() => setOpen(!open)}
         >
           {open ? (

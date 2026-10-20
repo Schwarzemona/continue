@@ -21,7 +21,7 @@ export default function InlineErrorMessage() {
         </p>
         <div className="text-description flex flex-row items-center justify-center gap-1.5 px-3">
           <div
-            className="cursor-pointer text-xs hover:underline"
+            className="cursor-pointer hover:underline"
             onClick={() => {
               ideMessenger.post("config/openProfile", {
                 profileId: undefined,
@@ -33,7 +33,7 @@ export default function InlineErrorMessage() {
           </div>
           |
           <span
-            className="cursor-pointer text-xs hover:underline"
+            className="cursor-pointer hover:underline"
             onClick={() => {
               dispatch(setInlineErrorMessage(undefined));
             }}

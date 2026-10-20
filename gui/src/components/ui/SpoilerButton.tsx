@@ -1,12 +1,12 @@
 import styled from "styled-components";
 import { defaultBorderRadius, lightGray, vscBackground } from "../index";
-import { getFontSize } from "../../util";
+import { useFontSize } from "../../util";
 
 export const SpoilerButton = styled.div`
   background-color: ${vscBackground};
   width: fit-content;
   margin: 8px 6px 0px 2px;
-  font-size: ${getFontSize() - 2}px;
+  font-size: ${useFontSize()}px;
   border: 0.5px solid ${lightGray};
   border-radius: ${defaultBorderRadius};
   padding: 4px 8px;

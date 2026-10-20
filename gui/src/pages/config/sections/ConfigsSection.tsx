@@ -46,7 +46,7 @@ export function ConfigsSection() {
                     </div>
                     <div className="flex flex-1 flex-col gap-2">
                       <h3
-                        className={`my-2 text-sm font-medium ${
+                        className={`my-2 font-medium ${
                           hasFatalErrors
                             ? "text-error"
                             : hasErrors
@@ -73,7 +73,7 @@ export function ConfigsSection() {
                                 error.fatal
                                   ? "text-error bg-error/10"
                                   : "bg-yellow-500/10 text-yellow-500"
-                              } break-all rounded border border-solid border-transparent px-2 py-1 text-xs ${error.uri ? "cursor-pointer " + (error.fatal ? "hover:border-error" : "hover:border-yellow-500") : ""}`}
+                              } break-all rounded border border-solid border-transparent px-2 py-1 ${error.uri ? "cursor-pointer " + (error.fatal ? "hover:border-error" : "hover:border-yellow-500") : ""}`}
                             >
                               {error.message.split("\n")[0]}
                             </div>

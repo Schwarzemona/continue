@@ -40,9 +40,7 @@ function DocsIndexingPeek({ status }: DocsIndexingPeekProps) {
         />
       </div>
       <div className="xs:flex text-lightgray hidden flex-row items-center gap-1">
-        <span className="text-xs no-underline">
-          {progressPercentage.toFixed(0)}%
-        </span>
+        <span className="no-underline">{progressPercentage.toFixed(0)}%</span>
         {/* <ArrowPathIcon
           className={`animate-spin-slow inline-block h-4 w-4 text-lightgray`}
         ></ArrowPathIcon> */}
