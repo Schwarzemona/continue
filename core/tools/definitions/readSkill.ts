@@ -16,7 +16,7 @@ export const readSkillTool: GetTool = async (params) => {
     function: {
       name: BuiltInToolNames.ReadSkill,
       description: `
-スキル名でスキルの内容を読み取ります。descriptionに当てはまるタイミングには、そのスキルを必ず読み取ります。利用可能なスキル: 
+スキルの内容を返します。descriptionに当てはまるタイミングには、そのスキルを必ず読みます。利用可能なスキル: 
 ${skills.map((skill) => `\nname: ${skill.name}\ndescription: ${skill.description}\n`)}`,
       parameters: {
         type: "object",
@@ -25,7 +25,7 @@ ${skills.map((skill) => `\nname: ${skill.name}\ndescription: ${skill.description
           skillName: {
             type: "string",
             description:
-              "読み取るスキルの名前。利用可能なスキルの名前と一致する必要があります。",
+              "読むスキルの名前。利用可能なスキルの名前と一致する必要があります。",
           },
         },
       },

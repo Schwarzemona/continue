@@ -15,7 +15,7 @@ export const readFileTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ReadFile,
-    description: "既存のファイルを読みます。",
+    description: "既存のファイルの内容を返します。",
     parameters: {
       type: "object",
       required: ["filepath"],

@@ -13,7 +13,7 @@ export const viewDiffTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ViewDiff,
-    description: "作業中の変更の現在の差分を表示します。",
+    description: "作業中の変更の現在の差分を返します。",
     parameters: {
       type: "object",
       properties: {},

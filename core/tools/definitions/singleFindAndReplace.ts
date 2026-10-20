@@ -23,7 +23,7 @@ export const singleFindAndReplaceTool: Tool = {
   isInstant: false,
   function: {
     name: BuiltInToolNames.SingleFindAndReplace,
-    description: `ファイル内で正確な文字列置換を実行します。\`replace_all\`を使用しない場合、\`old_string\`がファイル内で一意でないと編集は失敗します。一意にするために周囲のコンテキストを含めたより長い文字列を指定するか、\`replace_all\`を使用して\`old_string\`のすべてのインスタンスを変更します。ユーザーが作業中にファイルを編集することもあります。編集を行う直前に、常に\`${BuiltInToolNames.ReadFile}\`ツールを使用して、ファイルの最新のコンテンツとコンテキストを理解します。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
+    description: `ファイル内で正確な文字列置換します。\`replace_all\`を使用しない場合、\`old_string\`がファイル内で一意でないと編集は失敗します。一意にするために周囲のコンテキストを含めたより長い文字列を指定するか、\`replace_all\`を使用して\`old_string\`のすべてのインスタンスを変更します。ユーザーが作業中にファイルを編集することもあります。編集を行う直前に、常に\`${BuiltInToolNames.ReadFile}\`ツールを使用して、ファイルの最新のコンテンツとコンテキストを理解します。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
     parameters: {
       type: "object",
       required: ["filepath", "old_string", "new_string"],
@@ -41,7 +41,7 @@ export const singleFindAndReplaceTool: Tool = {
         new_string: {
           type: "string",
           description:
-            "置換後のテキスト(old_string とは異なる必要があります)。",
+            "置換後のテキスト。old_string とは異なる必要があります。",
         },
         replace_all: {
           type: "boolean",

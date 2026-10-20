@@ -52,7 +52,7 @@ export const runTerminalCommandTool: Tool = {
         waitForCompletion: {
           type: "boolean",
           description:
-            "コマンドの完了を待ってから戻るかどうか。デフォルトはtrueです。falseに設定するとコマンドをバックグラウンドで実行します。",
+            "コマンドの完了を待ってから戻るかどうか(デフォルトはtrue)。falseに設定するとコマンドをバックグラウンドで実行します。",
         },
       },
     },

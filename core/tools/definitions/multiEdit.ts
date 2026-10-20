@@ -47,7 +47,7 @@ export const multiEditTool: Tool = {
               old_string: {
                 type: "string",
                 description:
-                  "置換するテキスト(すべての空白/インデントを含め、元のファイルの内容と正確に一致させる)。",
+                  "置換するテキスト。すべての空白/インデントを含め、元のファイルの内容と正確に一致させる必要があります。",
               },
               new_string: {
                 type: "string",
@@ -57,7 +57,7 @@ export const multiEditTool: Tool = {
               replace_all: {
                 type: "boolean",
                 description:
-                  "ファイル内のold_stringのすべての出現箇所を置換します(デフォルトはfalse)。",
+                  "ファイル内のold_stringのすべての出現箇所を置換するかどうか(デフォルトはfalse)。",
               },
             },
           },

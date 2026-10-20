@@ -13,7 +13,7 @@ export const codebaseTool: Tool = {
   function: {
     name: BuiltInToolNames.CodebaseTool,
     description:
-      "自然言語のクエリに基づいて関連するコードスニペットを取得します。",
+      "自然言語のクエリに基づいて関連するコードスニペットを返します。",
     parameters: {
       type: "object",
       required: ["query"],
@@ -21,7 +21,7 @@ export const codebaseTool: Tool = {
         query: {
           type: "string",
           description:
-            "コードベース内で探しているものの自然言語による説明(例: 「認証ロジック」、「データベース接続の設定」、「エラーハンドリング」)。",
+            "コードベース内で検索する自然言語(例: 「認証ロジック」、「データベース接続の設定」、「エラーハンドリング」)。",
         },
       },
     },

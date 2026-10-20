@@ -17,7 +17,7 @@ export const lsTool: Tool = {
   function: {
     name: BuiltInToolNames.LSTool,
     description:
-      "指定されたディレクトリ内のファイルとフォルダを一覧表示します。",
+      "指定されたディレクトリ内のファイルとフォルダの一覧を返します。",
     parameters: {
       type: "object",
       properties: {

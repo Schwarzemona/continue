@@ -12,7 +12,7 @@ export const fetchUrlContentTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.FetchUrlContent,
-    description: "URLを使用してウェブサイトの内容を表示します。",
+    description: "URLを使用してウェブサイトの内容を返します。",
     parameters: {
       type: "object",
       required: ["url"],

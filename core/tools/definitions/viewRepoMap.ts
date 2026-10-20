@@ -13,7 +13,7 @@ export const viewRepoMapTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.ViewRepoMap,
-    description: "リポジトリマップを表示します。",
+    description: "リポジトリマップを返します。",
     parameters: {
       type: "object",
       properties: {},

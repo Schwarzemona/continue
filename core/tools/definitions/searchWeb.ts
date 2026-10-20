@@ -12,7 +12,7 @@ export const searchWebTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.SearchWeb,
-    description: "ウェブ検索を実行します。",
+    description: "ウェブ検索結果を返します。",
     parameters: {
       type: "object",
       required: ["query"],

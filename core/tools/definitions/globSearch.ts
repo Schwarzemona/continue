@@ -13,7 +13,7 @@ export const globSearchTool: Tool = {
   function: {
     name: BuiltInToolNames.FileGlobSearch,
     description:
-      "Globパターンを使用してプロジェクト内のファイル名を再帰的に検索します。出力が切り詰められることがあるため、対象を絞ったパターンを使用します。",
+      "Globパターンを使用してプロジェクト内のファイル名を再帰的に検索した結果を返します。出力が切り詰められることがあるため、対象を絞ったパターンを使用します。",
     parameters: {
       type: "object",
       required: ["pattern"],

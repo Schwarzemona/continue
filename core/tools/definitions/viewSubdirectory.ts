@@ -15,7 +15,7 @@ export const viewSubdirectoryTool: Tool = {
   isInstant: true,
   function: {
     name: BuiltInToolNames.ViewSubdirectory,
-    description: "サブディレクトリの内容を表示します。",
+    description: "サブディレクトリの内容を返します。",
     parameters: {
       type: "object",
       required: ["directory_path"],
