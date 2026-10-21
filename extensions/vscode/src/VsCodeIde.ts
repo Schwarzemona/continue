@@ -445,7 +445,7 @@ class VsCodeIde implements IDE {
     const relativeDir = vscode.Uri.parse(dirUri).fsPath;
     const ripGrepUri = vscode.Uri.joinPath(
       getExtensionUri(),
-      "out/node_modules/@vscode/ripgrep/bin/rg",
+      "out/node_modules/@vscode/ripgrep-win32-x64/bin/rg",
     );
     const p = child_process.spawn(ripGrepUri.fsPath, args, {
       cwd: relativeDir,

@@ -184,7 +184,11 @@ async function copyNodeModules() {
   // Copy node_modules for pre-built binaries
   process.chdir(path.join(continueDir, "extensions", "vscode"));
 
-  const NODE_MODULES_TO_COPY = ["@lancedb", "@vscode/ripgrep", "workerpool"];
+  const NODE_MODULES_TO_COPY = [
+    "@lancedb",
+    "@vscode/ripgrep-win32-x64",
+    "workerpool",
+  ];
   fs.mkdirSync("out/node_modules", { recursive: true });
 
   await Promise.all(
@@ -259,8 +263,10 @@ async function copySqliteBinary() {
 
 async function downloadRipgrepBinary(target) {
   console.log("[info] Downloading pre-built ripgrep binary");
-  rimrafSync("node_modules/@vscode/ripgrep/bin");
-  fs.mkdirSync("node_modules/@vscode/ripgrep/bin", { recursive: true });
+  rimrafSync("node_modules/@vscode/ripgrep-win32-x64/bin");
+  fs.mkdirSync("node_modules/@vscode/ripgrep-win32-x64/bin", {
+    recursive: true,
+  });
 
   const downloadUrl = {
     "darwin-arm64":
@@ -279,18 +285,20 @@ async function downloadRipgrepBinary(target) {
 
   if (target.startsWith("win")) {
     execCmdSync(
-      `curl -L -o node_modules/@vscode/ripgrep/bin/build.zip ${downloadUrl}`,
+      `curl -L -o node_modules/@vscode/ripgrep-win32-x64/bin/build.zip ${downloadUrl}`,
     );
-    execCmdSync("cd node_modules/@vscode/ripgrep/bin && unzip build.zip");
-    fs.unlinkSync("node_modules/@vscode/ripgrep/bin/build.zip");
+    execCmdSync(
+      "cd node_modules/@vscode/ripgrep-win32-x64/bin && unzip build.zip",
+    );
+    fs.unlinkSync("node_modules/@vscode/ripgrep-win32-x64/bin/build.zip");
   } else {
     execCmdSync(
-      `curl -L -o node_modules/@vscode/ripgrep/bin/build.tar.gz ${downloadUrl}`,
+      `curl -L -o node_modules/@vscode/ripgrep-win32-x64/bin/build.tar.gz ${downloadUrl}`,
     );
     execCmdSync(
-      "cd node_modules/@vscode/ripgrep/bin && tar -xvzf build.tar.gz",
+      "cd node_modules/@vscode/ripgrep-win32-x64/bin && tar -xvzf build.tar.gz",
     );
-    fs.unlinkSync("node_modules/@vscode/ripgrep/bin/build.tar.gz");
+    fs.unlinkSync("node_modules/@vscode/ripgrep-win32-x64/bin/build.tar.gz");
   }
 }
 
