@@ -15,7 +15,7 @@
     "isolatedModules": false,
     "noEmitOnError": false,
     "types": ["node", "jest"],
-    "rootDir": ".",
+    "rootDir": "src/",
     "outDir": "dist",
     "declaration": true,
     "sourceMap": true
