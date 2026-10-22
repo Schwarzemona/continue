@@ -39,28 +39,28 @@ async function copyConfigSchema() {
   fs.writeFileSync("continue_rc_schema.json", JSON.stringify(schema, null, 2));
 
   // Copy config schemas to intellij
-  fs.copyFileSync(
-    "config_schema.json",
-    path.join(
-      "..",
-      "intellij",
-      "src",
-      "main",
-      "resources",
-      "config_schema.json",
-    ),
-  );
-  fs.copyFileSync(
-    "continue_rc_schema.json",
-    path.join(
-      "..",
-      "intellij",
-      "src",
-      "main",
-      "resources",
-      "continue_rc_schema.json",
-    ),
-  );
+  //fs.copyFileSync(
+  //  "config_schema.json",
+  //  path.join(
+  //    "..",
+  //    "intellij",
+  //    "src",
+  //    "main",
+  //    "resources",
+  //    "config_schema.json",
+  //  ),
+  //);
+  //fs.copyFileSync(
+  //  "continue_rc_schema.json",
+  //  path.join(
+  //    "..",
+  //    "intellij",
+  //    "src",
+  //    "main",
+  //    "resources",
+  //    "continue_rc_schema.json",
+  //  ),
+  //);
 }
 
 process.on("message", (msg) => {
