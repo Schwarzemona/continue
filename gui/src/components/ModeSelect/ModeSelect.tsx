@@ -16,6 +16,8 @@ import { useMainEditor } from "../mainInput/TipTapEditor";
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from "../ui";
 import { ModeIcon } from "./ModeIcon";
 
+const tinyFont = getFontSize() - 2;
+
 export function ModeSelect() {
   const dispatch = useAppDispatch();
   const mode = useAppSelector((store) => store.session.mode);
@@ -81,7 +83,7 @@ export function ModeSelect() {
         className="flex items-center gap-1"
         content={`${mode} might not work well with this model.`}
       >
-        <ExclamationTriangleIcon className="text-warning h-2.5 w-2.5" />
+        <ExclamationTriangleIcon className="h-2.5 w-2.5 text-warning" />
       </ToolTip>
     </>
   );
@@ -91,10 +93,10 @@ export function ModeSelect() {
       <div className="relative">
         <ListboxButton
           data-testid="mode-select-button"
-          className="xs:px-3 text-description bg-lightgray/20 gap-1 rounded-full border-none px-1.5 py-0.5 transition-colors duration-200 hover:brightness-110"
+          className="gap-1 rounded-full border-none bg-lightgray/20 px-1.5 py-0.5 text-description transition-colors duration-200 hover:brightness-110 xs:px-3"
         >
           <ModeIcon mode={mode} />
-          <span className="hidden sm:block">
+          <span className="hidden sm:block" style={{ fontSize: tinyFont }}>
             {mode === "chat" ? "会話" : mode === "agent" ? "自律" : "計画"}
           </span>
           <ChevronDownIcon
@@ -104,7 +106,10 @@ export function ModeSelect() {
         </ListboxButton>
         <ListboxOptions className="min-w-32 max-w-48">
           <ListboxOption value="chat">
-            <div className="flex flex-row items-center gap-1.5">
+            <div
+              className="flex flex-row items-center gap-1.5"
+              style={{ fontSize: tinyFont }}
+            >
               <ModeIcon mode="chat" />
               <span className="">会話</span>
               <ToolTip
@@ -118,16 +123,17 @@ export function ModeSelect() {
                   className="h-3 w-3 flex-shrink-0"
                 />
               </ToolTip>
-              <span
-                className={`text-description-muted text-[${getFontSize() - 3}px] mr-auto`}
-              >
+              <span className={`mr-auto text-description-muted`}>
                 {getMetaKeyLabel()}L
               </span>
             </div>
             {mode === "chat" && <CheckIcon className="ml-auto h-3 w-3" />}
           </ListboxOption>
           <ListboxOption value="plan" className={"gap-1"}>
-            <div className="flex flex-row items-center gap-1.5">
+            <div
+              className="flex flex-row items-center gap-1.5"
+              style={{ fontSize: tinyFont }}
+            >
               <ModeIcon mode="plan" />
               <span className="">計画</span>
               <ToolTip
@@ -146,7 +152,10 @@ export function ModeSelect() {
           </ListboxOption>
 
           <ListboxOption value="agent" className={"gap-1"}>
-            <div className="flex flex-row items-center gap-1.5">
+            <div
+              className="flex flex-row items-center gap-1.5"
+              style={{ fontSize: tinyFont }}
+            >
               <ModeIcon mode="agent" />
               <span className="">自律</span>
               <ToolTip
@@ -164,7 +173,10 @@ export function ModeSelect() {
             />
           </ListboxOption>
 
-          <div className="text-description-muted px-2 py-1">
+          <div
+            className="px-2 py-1 text-description-muted"
+            style={{ fontSize: tinyFont }}
+          >
             {`${metaKeyLabel} .で次のモード`}
           </div>
         </ListboxOptions>

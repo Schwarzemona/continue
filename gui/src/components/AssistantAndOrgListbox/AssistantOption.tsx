@@ -50,10 +50,13 @@ export function AssistantOption({
       value={profile.id}
       disabled={hasFatalErrors}
       onClick={!hasFatalErrors ? handleOptionClick : undefined}
-      fontSizeModifier={-4}
+      fontSizeModifier={-2}
       className={`group ${selected ? "bg-list-active text-list-active-foreground" : ""}`}
     >
-      <div className="flex w-full items-center justify-between gap-10 py-0.5">
+      <div
+        className="flex w-full items-center justify-between gap-10 py-0.5"
+        style={{ fontSize: tinyFont }}
+      >
         <div className="flex w-full items-center gap-3">
           <div className="flex h-3 w-3 flex-shrink-0 items-center justify-center">
             <AssistantIcon assistant={profile} />
@@ -68,7 +71,7 @@ export function AssistantOption({
           <Button
             variant="ghost"
             size="sm"
-            className="text-description-muted hover:enabled:text-foreground my-0 h-4 w-4 p-0 opacity-0 transition-opacity group-hover:opacity-100"
+            className="my-0 h-4 w-4 p-0 text-description-muted opacity-0 transition-opacity hover:enabled:text-foreground group-hover:opacity-100"
             onClick={(e) => {
               e.stopPropagation();
               ideMessenger.post("config/openProfile", {
@@ -84,7 +87,7 @@ export function AssistantOption({
               <Button
                 variant="ghost"
                 size="sm"
-                className="text-error hover:enabled:text-error my-0 h-4 w-4 p-0"
+                className="my-0 h-4 w-4 p-0 text-error hover:enabled:text-error"
                 onClick={(e) => {
                   e.stopPropagation();
                   navigate(CONFIG_ROUTES.CONFIGS);

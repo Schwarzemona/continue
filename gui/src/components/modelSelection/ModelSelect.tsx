@@ -78,6 +78,7 @@ function ModelOption({
     e.stopPropagation();
     navigate(CONFIG_ROUTES.MODELS);
   }
+  const tinyFont = useFontSize(-2);
 
   return (
     <ListboxOption
@@ -90,10 +91,10 @@ function ModelOption({
       <div className="flex w-full items-center justify-between gap-5">
         <div className="flex items-center gap-2 py-0.5">
           <CubeIcon className="h-3 w-3 flex-shrink-0" />
-          <span className="line-clamp-1">
+          <span className="line-clamp-1" style={{ fontSize: tinyFont }}>
             {option.title}
             {option.isAutoDetected && (
-              <span className="text-description-muted ml-1.5 text-[10px] italic">
+              <span className="ml-1.5 text-[10px] italic text-description-muted">
                 (autodetected)
               </span>
             )}
@@ -107,7 +108,7 @@ function ModelOption({
         <Button
           variant="ghost"
           size="sm"
-          className="text-description-muted hover:enabled:text-foreground my-0 h-4 w-4 p-0 opacity-0 transition-opacity group-hover:opacity-100"
+          className="my-0 h-4 w-4 p-0 text-description-muted opacity-0 transition-opacity hover:enabled:text-foreground group-hover:opacity-100"
           onClick={handleConfigureClick}
         >
           <Cog6ToothIcon className="h-3.5 w-3.5" />
@@ -128,7 +129,7 @@ function ModelSelect() {
   const [options, setOptions] = useState<Option[]>([]);
   const [sortedOptions, setSortedOptions] = useState<Option[]>([]);
   const { selectedProfile } = useAuth();
-  const tinyFont = useFontSize(-4);
+  const tinyFont = useFontSize(-2);
 
   let selectedModel = null;
   let allModels = null;
@@ -249,19 +250,27 @@ function ModelSelect() {
         <ListboxButton
           data-testid="model-select-button"
           ref={buttonRef}
-          className="text-description h-[18px] gap-1 border-none"
+          className="h-[18px] gap-1 border-none text-description"
         >
-          <span className="line-clamp-1 break-all hover:brightness-110">
-            {modelSelectTitle(selectedModel) || "Select model"}
+          <span
+            className="line-clamp-1 break-all hover:brightness-110"
+            style={{ fontSize: tinyFont }}
+          >
+            {modelSelectTitle(selectedModel) || "モデルを選択"}
           </span>
           <ChevronDownIcon
-            className="hidden h-2 w-2 flex-shrink-0 hover:brightness-110 min-[200px]:flex"
+            className="hidden h-3 w-3 flex-shrink-0 hover:brightness-110 min-[200px]:flex"
             aria-hidden="true"
           />
         </ListboxButton>
         <ListboxOptions className="min-w-[160px]">
           <div className="flex items-center justify-between px-1.5 py-1">
-            <span className="text-description font-medium">Models</span>
+            <span
+              className="font-medium text-description"
+              style={{ fontSize: tinyFont }}
+            >
+              モデル
+            </span>
             <div className="flex items-center gap-0.5">
               <Button
                 onClick={(e) => {
@@ -272,20 +281,23 @@ function ModelSelect() {
                 size="sm"
                 className="my-0 h-5 w-5 p-0"
               >
-                <Cog6ToothIcon className="text-description h-3.5 w-3.5" />
+                <Cog6ToothIcon className="h-3.5 w-3.5 text-description" />
               </Button>
             </div>
           </div>
 
-          <div className="no-scrollbar max-h-[300px] overflow-y-auto">
+          <div
+            className="no-scrollbar max-h-[300px] overflow-y-auto"
+            style={{ fontSize: tinyFont }}
+          >
             {isConfigLoading ? (
-              <div className="text-description flex items-center gap-2 px-2 pb-2 pt-1">
-                <ArrowPathIcon className="animate-spin-slow h-3 w-3" />
-                <span>Loading config</span>
+              <div className="flex items-center gap-2 px-2 pb-2 pt-1 text-description">
+                <ArrowPathIcon className="h-3 w-3 animate-spin-slow" />
+                <span>設定を読み込み中</span>
               </div>
             ) : hasNoModels ? (
-              <div className="text-description-muted px-2 py-4 text-center">
-                No models configured
+              <div className="px-2 py-4 text-center text-description-muted">
+                モデルの設定がありません
               </div>
             ) : (
               sortedOptions.map((option, idx) => (
@@ -307,18 +319,23 @@ function ModelSelect() {
                 key={options.length}
                 onClick={onClickAddModel}
                 value={"addModel" as any}
-                fontSizeModifier={-2}
                 className="px-2 py-2"
               >
-                <span className="text-description flex flex-row items-center">
+                <span
+                  className="flex flex-row items-center text-description"
+                  style={{ fontSize: tinyFont }}
+                >
                   <PlusIcon className="mr-1.5 h-3.5 w-3.5" />
                   追加のチャットモデル
                 </span>
               </ListboxOption>
 
               <Divider className="!my-0" />
-              <div className="text-description flex items-center justify-start p-2">
-                <span className="block" style={{ fontSize: tinyFont }}>
+              <div
+                className="flex items-center justify-start p-2 text-description"
+                style={{ fontSize: tinyFont }}
+              >
+                <span className="block">
                   <code>{getMetaKeyLabel()} + '</code>でモデルを切り替え
                 </span>
               </div>

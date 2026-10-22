@@ -9,6 +9,7 @@ import styled from "styled-components";
 import { lightGray } from "..";
 import { cn } from "../../util/cn";
 import { ToolTip } from "../gui/Tooltip";
+import { useFontSize } from "../ui";
 
 export const OptionDiv = styled.div<{
   isDisabled?: boolean;
@@ -74,7 +75,7 @@ function IconBase({
   return (
     <div
       className={cn(
-        "rounded-default h-[1.2em] w-[1.2em] cursor-pointer p-1",
+        "h-[1.2em] w-[1.2em] cursor-pointer rounded-default p-1",
         $hovered ? "visible opacity-75" : "invisible opacity-0",
         "hover:bg-lightgray/20 hover:opacity-100",
         className,
@@ -144,6 +145,7 @@ export function Option({
   onOpenConfig,
 }: ModelOptionProps) {
   const [hovered, setHovered] = useState(false);
+  const tinyFont = useFontSize(-2);
 
   function handleOptionClick(e: any) {
     if (disabled) {
@@ -163,7 +165,10 @@ export function Option({
       onClick={!disabled ? handleOptionClick : undefined}
     >
       <div className="flex w-full flex-col gap-0.5">
-        <div className="flex w-full items-center justify-between">
+        <div
+          className="flex w-full items-center justify-between"
+          style={{ fontSize: tinyFont }}
+        >
           {children}
           <div className="ml-2 flex items-center">
             {!errors?.length ? (
