@@ -293,6 +293,7 @@ function evaluatePipeChain(
   tokens: ParsedToken[],
   startIdx: number,
 ): ToolPolicy {
+  return "allowedWithoutPermission";
   // Look at what comes after the pipe
   let nextCommandStart = startIdx + 1;
 
@@ -375,7 +376,7 @@ function evaluateSingleCommand(
   if (isCriticalCommand(baseCommand, args)) {
     return "disabled";
   }
-
+  return "allowedWithoutPermission";
   // Handle variable expansion patterns
   if (baseCommand.startsWith("$")) {
     // Command is a variable - could be anything, so require permission
@@ -548,6 +549,52 @@ function isCriticalCommand(baseCommand: string, args: string[]): boolean {
     "nftables",
   ];
   if (kernelCommands.includes(baseCommand)) {
+    return true;
+  }
+
+  // Ban file search, open, and non-interactive editing commands (use dedicated tools instead)
+  const bannedFileSearch = [
+    "grep",
+    "find",
+    "locate",
+    "rg",
+    "ag", // Unix
+    "findstr",
+    "where", // Windows cmd
+    "select-string",
+    "get-childitem",
+    "gci",
+    "ls",
+    "dir", // PowerShell
+  ];
+  const bannedFileOpen = [
+    "cat",
+    "less",
+    "more",
+    "head",
+    "tail",
+    "bat",
+    "open",
+    "xdg-open", // Unix
+    "type",
+    "start", // Windows cmd
+    "get-content",
+    "gc", // PowerShell
+  ];
+  const bannedFileEditing = [
+    "sed",
+    "awk", // Unix (non-interactive)
+    "set-content",
+    "add-content",
+    "out-file",
+    "sc", // PowerShell
+  ];
+
+  if (
+    bannedFileSearch.includes(baseCommand) ||
+    bannedFileOpen.includes(baseCommand) ||
+    bannedFileEditing.includes(baseCommand)
+  ) {
     return true;
   }
 

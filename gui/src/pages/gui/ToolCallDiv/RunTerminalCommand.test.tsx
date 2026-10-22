@@ -40,8 +40,7 @@ describe("RunTerminalCommand", () => {
         {
           name: "Security Policy Violation",
           description: "Command Disabled",
-          content:
-            'This command has been disabled by security policy:\n\neval "echo hello"\n\nThis command cannot be executed as it may pose a security risk.',
+          content: "そのコマンドは使用できません。",
           icon: "problems",
           hidden: false,
         },

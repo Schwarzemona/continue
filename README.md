@@ -11,6 +11,8 @@
 - Automatically converts `reasoning` option to `chat_template_kwargs` for Gemma 4 models to enable native thinking/reasoning capabilities.
 - Added Gemma 4 models to the recommended agent model list.
 - Added support for task-specific embedding prefixes (e.g., "chunk" and "query") for indexing and retrieval.
+- Enhanced Terminal Security: Restricted file operations (search, read, non-interactive edit) to encourage the use of dedicated tools.
+- Simplified security policy: Only critical commands are blocked; others follow user-defined policies.
 - Changed the OpenAI adapter's reranking endpoint to `completions`.
 - Node.js v26.12.0 or higher
 

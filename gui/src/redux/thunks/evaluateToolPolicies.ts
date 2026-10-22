@@ -109,7 +109,7 @@ export async function evaluateToolPolicies(
             icon: "problems",
             name: "Security Policy Violation",
             description: "Command Disabled",
-            content: `This command has been disabled by security policy:\n\n${command}\n\nThis command cannot be executed as it may pose a security risk.`,
+            content: `そのコマンドは使用できません。`,
             hidden: false,
           },
         ],
