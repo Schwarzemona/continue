@@ -484,19 +484,7 @@ class OpenAI extends BaseLLM {
     }
 
     if (body.tools?.length) {
-      if (this.isFireworksAiModel(body.model)) {
-        // fireworks.ai does not support parallel tool calls, but their api expects this to be true anyway otherwise they return an error.
-        // tooling works with them as a inference provider once this is set to true.
-        // https://docs.fireworks.ai/guides/function-calling#openai-compatibility
-        body.parallel_tool_calls = true;
-      }
-      // To ensure schema adherence: https://platform.openai.com/docs/guides/function-calling#parallel-function-calling-and-structured-outputs
-      // In practice, setting this to true and asking for multiple tool calls
-      // leads to "arguments" being something like '{"file": "test.ts"}{"file": "test.js"}'
-      // o3 does not support this
-      if (!body.model.startsWith("o3")) {
-        body.parallel_tool_calls = false;
-      }
+      body.parallel_tool_calls = true;
     }
 
     return body;

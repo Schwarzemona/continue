@@ -10,7 +10,7 @@ import {
   ToolCallDelta,
 } from "../../index.js";
 import { safeParseToolCallArgs } from "../../tools/parseArgs.js";
-import { renderChatMessage, stripImages } from "../../util/messageContent.js";
+import { renderChatMessage } from "../../util/messageContent.js";
 import { extractBase64FromDataUrl } from "../../util/url.js";
 import { BaseLLM } from "../index.js";
 import { LlmApiRequestType } from "../openaiTypeConverters.js";
@@ -74,6 +74,13 @@ class Gemini extends BaseLLM {
       finalOptions.stopSequences = options.stop
         .filter((x) => x.trim() !== "")
         .slice(0, this.maxStopWords ?? Gemini.defaultOptions.maxStopWords);
+    }
+
+    if (options.reasoning) {
+      finalOptions.thinkingConfig = {
+        includeThoughts: true,
+        thinkingBudget: options.reasoningBudgetTokens,
+      };
     }
 
     return finalOptions;
@@ -145,8 +152,7 @@ class Gemini extends BaseLLM {
         const contentArray: Array<MessagePart> =
           userMessage.content as Array<MessagePart>;
         const textPart = contentArray.find((part) => part.type === "text") as
-          | TextMessagePart
-          | undefined;
+          TextMessagePart | undefined;
 
         if (textPart) {
           textPart.text = prefix + textPart.text;
@@ -178,11 +184,7 @@ class Gemini extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<ChatMessage> {
-    const isV1API = this.apiBase?.includes("/v1/");
-
-    const convertedMsgs = isV1API
-      ? this.removeSystemMessage(messages)
-      : messages;
+    const convertedMsgs = messages;
 
     if (options.model.includes("bison")) {
       for await (const message of this.streamChatBison(
@@ -247,13 +249,35 @@ class Gemini extends BaseLLM {
         });
       }
     });
-    const systemMessage = messages.find(
-      (msg) => msg.role === "system",
-    )?.content;
+
+    // Extract system message for systemInstruction
+    let systemInstruction: any = undefined;
+    const systemMsg = messages.find((msg) => msg.role === "system");
+    if (systemMsg) {
+      let systemText = "";
+      if (typeof systemMsg.content === "string") {
+        systemText = systemMsg.content;
+      } else if (Array.isArray(systemMsg.content)) {
+        const contentArray = systemMsg.content as MessagePart[];
+        systemText = contentArray
+          .filter((part): part is TextMessagePart => part.type === "text")
+          .map((part) => part.text)
+          .join("\n");
+      } else if (systemMsg.content && typeof systemMsg.content === "object") {
+        const typedContent = systemMsg.content as TextMessagePart;
+        systemText = typedContent?.text || "";
+      }
+
+      if (systemText) {
+        systemInstruction = {
+          parts: [{ text: systemText }],
+        };
+      }
+    }
 
     const body: GeminiChatRequestBody = {
       contents: messages
-        .filter((msg) => !(msg.role === "system" && isV1API))
+        .filter((msg) => msg.role !== "system") // Exclude system role from contents
         .map((msg) => {
           if (msg.role === "tool") {
             let functionName = toolCallIdToNameMap.get(msg.toolCallId);
@@ -335,10 +359,8 @@ class Gemini extends BaseLLM {
 
     // https://ai.google.dev/gemini-api/docs/api-versions
     if (!isV1API) {
-      if (systemMessage) {
-        body.systemInstruction = {
-          parts: [{ text: stripImages(systemMessage) }],
-        };
+      if (systemInstruction) {
+        body.systemInstruction = systemInstruction;
       }
       // Convert and add tools if present
       if (options.tools?.length) {
