@@ -9,11 +9,11 @@ export async function throwIfFileExceedsHalfOfContext(
 ) {
   if (model) {
     const tokens = await countTokensAsync(content, model.title);
-    const tokenLimit = 1000;
+    const tokenLimit = model.contextLength / 64;
     if (tokens > tokenLimit) {
       throw new ContinueError(
         ContinueErrorReason.FileTooLarge,
-        `File ${filepath} is too large (${tokens} tokens vs ${tokenLimit} token limit). Try another approach`,
+        `読み込む予定の範囲が${tokens}トークンと制限の${tokenLimit}トークンより大きいです。範囲を狭めてください。`,
       );
     }
   }

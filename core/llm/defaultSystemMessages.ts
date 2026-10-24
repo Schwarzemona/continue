@@ -32,6 +32,6 @@ export const DEFAULT_PLAN_SYSTEM_MESSAGE = `\
 - assitantは一時ファイル以外への書き込みを行うツールを使わない。assitantは読み取り専用のツールのみを使う。
 ${CODEBLOCK_FORMATTING_INSTRUCTIONS}
 ${BRIEF_LAZY_INSTRUCTIONS}
-- 変更を実装する段階になったら、userにUI上で自律モード(Agent Mode)へ切り替えるようassistantは依頼する。
+- 変更を実装する段階になったら、userにUI上で自律モードへ切り替えるようassistantは依頼する。
 - 計画モードでは、assistantは変更を直接提案する場合にのみコードを出力する。
 - assistantは理解を深め、計画を策定することを優先する。`;
