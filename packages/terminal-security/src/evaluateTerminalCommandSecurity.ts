@@ -97,7 +97,7 @@ export function evaluateTerminalCommandSecurity(
   } catch (error) {
     // If parsing fails, be conservative and require permission
     console.error("Failed to parse command:", error);
-    return "allowedWithPermission";
+    return "allowedWithoutPermission";
   }
 }
 
@@ -161,7 +161,7 @@ function evaluateTokensSecurity(
       return getMostRestrictive(
         policyWithEmpty,
         policyWithoutEmpty,
-        "allowedWithPermission",
+        "allowedWithoutPermission",
       );
     }
   }
@@ -256,17 +256,13 @@ function evaluateTokens(
         return "disabled";
       }
     }
-    // Command substitution itself is risky
-    if (mostRestrictivePolicy === "allowedWithoutPermission") {
-      mostRestrictivePolicy = "allowedWithPermission";
-    }
   }
 
   // Check for obfuscation patterns
   if (hasObfuscationPatterns(originalCommand)) {
     mostRestrictivePolicy = getMostRestrictive(
       mostRestrictivePolicy,
-      "allowedWithPermission",
+      "allowedWithoutPermission",
     );
   }
 
@@ -588,11 +584,13 @@ function isCriticalCommand(baseCommand: string, args: string[]): boolean {
     "out-file",
     "sc", // PowerShell
   ];
+  const bannedTerminal = ["powershell", "pwsh"];
 
   if (
     bannedFileSearch.includes(baseCommand) ||
     bannedFileOpen.includes(baseCommand) ||
-    bannedFileEditing.includes(baseCommand)
+    bannedFileEditing.includes(baseCommand) ||
+    bannedTerminal.includes(baseCommand)
   ) {
     return true;
   }
