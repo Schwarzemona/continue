@@ -9,8 +9,8 @@
     "tsc:check": "tsc -p ./ --noEmit",
     "build": "tsc -p ./tsconfig.npm.json",
     "build:npm": "npm run build",
-    "lint": "eslint . --ext ts",
-    "lint:fix": "eslint . --ext ts --fix"
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "type": "module",
   "author": "Continue Dev, Inc",
@@ -52,6 +52,7 @@
     "shiki": "^3.6.0",
     "ts-jest": "^29.4.15",
     "typescript": "^6.0.3",
+    "typescript-eslint": "^8.72.0",
     "vitest": "^5.0.5"
   },
   "dependencies": {
