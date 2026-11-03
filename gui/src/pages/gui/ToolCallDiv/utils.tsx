@@ -14,47 +14,30 @@ export function getStatusIntro(
   status: ToolCallState["status"],
   isInstant?: boolean,
 ): string {
-  if (status === "done" || (isInstant && status === "calling")) {
-    return "は";
-  }
-
-  switch (status) {
-    case "generating":
-      return "は";
-    case "generated":
-      return "は";
-    case "calling":
-      return "は";
-    case "canceled":
-      return "は";
-    case "errored":
-      return "は";
-    default:
-      return "は";
-  }
+  return "";
 }
 
 // Helper function to get the appropriate verb for group actions
 export function getGroupActionVerb(toolCallStates: ToolCallState[]): string {
-  if (toolCallStates.length === 0) return "実施中";
+  if (toolCallStates.length === 0) return "完了";
 
   // Get the most "active" status from all tool calls
   const statuses = toolCallStates.map((state) => state.status);
 
   // Priority order: calling > generating > generated > done > errored/canceled
   if (statuses.includes("calling")) {
-    return "実施中";
+    return "実行中";
   } else if (statuses.includes("generating")) {
     return "生成中";
   } else if (statuses.includes("generated")) {
-    return "保留中";
+    return "完了";
   } else if (statuses.some((s) => s === "done")) {
-    return "実施";
+    return "完了";
   } else if (statuses.some((s) => s === "errored" || s === "canceled")) {
-    return "試行";
+    return "エラー";
   }
 
-  return "Performing";
+  return "実行中";
 }
 
 type IconName = keyof typeof Icons;

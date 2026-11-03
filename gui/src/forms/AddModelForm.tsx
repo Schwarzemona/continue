@@ -139,7 +139,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
     apiKeyValue &&
     apiKeyValue.length > 0 &&
     !apiKeyValue.startsWith("sk-")
-      ? "API key usually starts with sk-"
+      ? "APIキーは通常 sk- で始まります"
       : undefined;
 
   function onSubmit() {
@@ -204,7 +204,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                 }}
                 topOptions={popularProviders}
                 otherOptions={otherProviders}
-                searchPlaceholder="Search providers..."
+                searchPlaceholder="プロバイダーを検索……"
               />
               <span className="text-description-muted mt-1 block">
                 プロバイダーがありませんか？{" "}
@@ -223,7 +223,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
             {selectedProvider.downloadUrl && (
               <div>
                 <label className="mb-1 block font-medium">
-                  Install provider
+                  プロバイダーをインストール
                 </label>
                 <StyledActionButton onClick={onClickDownloadProvider}>
                   <p className="underline">{selectedProvider.downloadUrl}</p>
@@ -234,10 +234,10 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
 
             <div>
               <div className="flex items-center justify-between">
-                <label className="block font-medium">Model</label>
+                <label className="block font-medium">モデル</label>
                 <button
                   type="button"
-                  title="Use entered API key to fetch available models"
+                  title="入力したAPIキーを使用して利用可能なモデルを取得します"
                   className={`cursor-pointer border-none bg-transparent p-0 ${
                     apiKeyValue &&
                     apiKeyValue.length > 0 &&
@@ -311,7 +311,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
             {selectedModel.params.model.startsWith("codestral") && (
               <div className="my-2">
                 <Alert>
-                  <p className="m-0 font-bold">Codestral API key</p>
+                  <p className="m-0 font-bold">Codestral API キー</p>
                   <p className="m-0 mt-1">
                     Codestralは、他のMistralモデルとは異なるAPIキーを必要とすることにご注意ください。
                   </p>
@@ -322,14 +322,14 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
             {selectedProvider.apiKeyUrl && (
               <div>
                 <>
-                  <label className="mb-1 block font-medium">API key</label>
+                  <label className="mb-1 block font-medium">API キー</label>
                   <Input
                     id="apiKey"
                     className={
                       apiKeyWarning ? "border-warning w-full" : "w-full"
                     }
                     type="password"
-                    placeholder={`Enter your ${selectedProvider.title} API key`}
+                    placeholder={`${selectedProvider.title}のAPIキーを入力してください`}
                     {...formMethods.register("apiKey")}
                   />
                   {apiKeyWarning && (

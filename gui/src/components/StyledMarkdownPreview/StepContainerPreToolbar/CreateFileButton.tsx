@@ -19,7 +19,7 @@ export function CreateFileButton({ onClick }: CreateFileButtonProps) {
           <div className="flex items-center gap-1">
             <DocumentPlusIcon className="h-3.5 w-3.5 shrink-0" />
             <span className="line-clamp-1 select-none break-all">
-              Create file
+              ファイルを作成
             </span>
           </div>
         </button>

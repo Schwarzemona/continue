@@ -20,7 +20,7 @@ export const viewDiffTool: Tool = {
     },
   },
   systemMessageDescription: {
-    prefix: `To view the current git diff, use the ${BuiltInToolNames.ViewDiff} tool. This will show you the changes made in the working directory compared to the last commit.`,
+    prefix: `現在のgit diffを表示するには、${BuiltInToolNames.ViewDiff} ツールを使用してください。これにより、前回のコミットと比較して作業ディレクトリで行われた変更が表示されます。`,
   },
   defaultToolPolicy: "allowedWithoutPermission",
   toolCallIcon: "CodeBracketIcon",

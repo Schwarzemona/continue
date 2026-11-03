@@ -57,7 +57,7 @@ export function ConversationStarterCards() {
           className="text-lightgray mt-1 cursor-pointer hover:underline"
           onClick={() => setShowAll(!showAll)}
         >
-          {showAll ? "Show less" : `Show ${remainingCount} more...`}
+          {showAll ? "表示を減らす" : `あと${remainingCount}件を表示……`}
         </span>
       )}
     </div>

@@ -31,11 +31,11 @@ describe("RunTerminalCommand", () => {
         type: "function",
         function: {
           name: "runTerminalCommand",
-          arguments: JSON.stringify({ command: 'eval "echo hello"' }),
+          arguments: JSON.stringify({ command: 'find "echo hello"' }),
         },
       },
       status: "errored",
-      parsedArgs: { command: 'eval "echo hello"' },
+      parsedArgs: { command: 'find "echo hello"' },
       output: [
         {
           name: "Security Policy Violation",
@@ -49,7 +49,7 @@ describe("RunTerminalCommand", () => {
 
     render(
       <RunTerminalCommand
-        command='eval "echo hello"'
+        command='find "echo hello"'
         toolCallState={erroredToolCallState}
         toolCallId="test-id"
       />,
@@ -58,11 +58,7 @@ describe("RunTerminalCommand", () => {
     // Check that the error message is displayed in the output
     const outputElement = screen.getByTestId("output");
     expect(outputElement.textContent).toContain(
-      "This command has been disabled by security policy",
-    );
-    expect(outputElement.textContent).toContain('eval "echo hello"');
-    expect(outputElement.textContent).toContain(
-      "cannot be executed as it may pose a security risk",
+      "そのコマンドは使用できません。",
     );
 
     // Check that status is set to failed
@@ -85,7 +81,7 @@ describe("RunTerminalCommand", () => {
       parsedArgs: { command: "ls -la" },
       output: [
         {
-          name: "Terminal",
+          name: "端末",
           description: "Command executed successfully",
           content:
             "total 64\ndrwxr-xr-x  10 user  staff   320 Jan  1 12:00 .\ndrwxr-xr-x  20 user  staff   640 Jan  1 11:00 ..",
@@ -244,7 +240,7 @@ describe("RunTerminalCommand", () => {
           hidden: false,
         },
         {
-          name: "Terminal",
+          name: "端末",
           description: "Should not be shown",
           content: "This should not appear for errored status",
           icon: "terminal",

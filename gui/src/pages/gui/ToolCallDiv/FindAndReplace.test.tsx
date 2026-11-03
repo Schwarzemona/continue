@@ -239,7 +239,7 @@ describe("FindAndReplaceDisplay", () => {
       // When diff generation errors, component shows a friendly message
       // without rendering the expand/collapse container
       expect(
-        screen.getByText("検索した文字列はファイル内に見つかりませんでした。"),
+        screen.getByText("文字列はファイル内に見つかりません"),
       ).toBeInTheDocument();
     });
 
@@ -254,7 +254,7 @@ describe("FindAndReplaceDisplay", () => {
       const toggleButton = screen.getByTestId("toggle-find-and-replace-diff");
       fireEvent.click(toggleButton);
 
-      expect(screen.getByText("No changes to display")).toBeInTheDocument();
+      expect(screen.getByText("表示する変更点はありません")).toBeInTheDocument();
     });
   });
 

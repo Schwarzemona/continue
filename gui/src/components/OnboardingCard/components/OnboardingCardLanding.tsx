@@ -15,11 +15,11 @@ export function OnboardingCardLanding({
       </div>
 
       <p className="mb-5 mt-0 w-full">
-        Get started with AI-powered coding by configuring your models
+        モデルを設定して、AIを活用したコーディングを始めましょう
       </p>
 
       <SecondaryButton onClick={onSelectConfigure} className="w-full">
-        Configure your models
+        モデルを設定する
       </SecondaryButton>
     </div>
   );

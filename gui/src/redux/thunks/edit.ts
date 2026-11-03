@@ -132,7 +132,7 @@ export const enterEdit = createAsyncThunk<
     if (!state.editModeState.codeToEdit[0]) {
       extra.ideMessenger.post("showToast", [
         "info",
-        "Please open a file to use Edit mode",
+        "Editモードを使用するにはファイルを開いてください",
       ]);
       return;
     }

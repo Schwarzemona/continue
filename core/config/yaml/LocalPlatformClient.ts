@@ -19,9 +19,9 @@ export class LocalPlatformClient implements PlatformClient {
     fqsn: FQSN,
   ): Promise<SecretResult | undefined> {
     const secretValue =
-      this.findSecretInLocalEnvFile(fqsn) ??
+      (await this.findSecretInWorkspaceEnvFiles(fqsn, false)) ??
       (await this.findSecretInWorkspaceEnvFiles(fqsn, true)) ??
-      (await this.findSecretInWorkspaceEnvFiles(fqsn, false));
+      this.findSecretInLocalEnvFile(fqsn);
 
     if (secretValue) {
       return {

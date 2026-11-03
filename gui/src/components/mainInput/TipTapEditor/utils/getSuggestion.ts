@@ -100,7 +100,7 @@ function getSubActionsForSubmenuItem(
   if (item.providerTitle === "docs") {
     return [
       {
-        label: "Open in new tab",
+        label: "ドキュメントを削除",
         icon: "trash",
         action: () => {
           ideMessenger.post("context/removeDocs", { startUrl: item.id });
@@ -164,7 +164,7 @@ export function getContextProviderDropdownOptions(
 
     if (contextProviderMatches.length) {
       contextProviderMatches.push({
-        title: "Add more context providers",
+        title: "さらに多くのコンテキストプロバイダーを追加",
         type: "action",
         action: () => {
           ideMessenger.post(
@@ -226,7 +226,7 @@ export function getSlashCommandDropdownOptions(
 
     if (query.length === 0 && commandItems.length === 0) {
       commandItems.push({
-        title: "Create a prompt",
+        title: "プロンプトを作成",
         type: "action",
         action: () =>
           ideMessenger.request("config/addLocalWorkspaceBlock", {

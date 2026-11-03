@@ -1,81 +1,19 @@
 > [!IMPORTANT]
-> This repository is a fork of the original [Continue](https://github.com/continuedev/continue) project,
-> customized for enhanced reasoning and retrieval capabilities.
+> このリポジトリは、推論および検索機能の強化のためにカスタマイズされた、オリジナルの[Continue](https://github.com/continuedev/continue)プロジェクトのフォークです。
 
-## Key Features in this Fork
+## このフォークの主な機能
 
-- Localization into Japanese.
-- Enabled support for reasoning fields and details by default in the LLM core.
-- Fixed Markdown rendering for inline math symbols ($\to$) and GFM tables in the VS Code extension.
-- Improve session title generation
-- Automatically converts `reasoning` option to `chat_template_kwargs` for Gemma 4 models to enable native thinking/reasoning capabilities.
-- Added Gemma 4 models to the recommended agent model list.
-- Added support for task-specific embedding prefixes (e.g., "chunk" and "query") for indexing and retrieval.
-- Enhanced Terminal Security: Restricted file operations (search, read, non-interactive edit) to encourage the use of dedicated tools.
-- Simplified security policy: Only critical commands are blocked; others follow user-defined policies.
-- Changed the OpenAI adapter's reranking endpoint to `completions`.
-- Node.js v26.12.0 or higher
+- 日本語へのローカライズ。
+- LLMコアにおいて、推論フィールドと詳細のサポートをデフォルトで有効化。
+- VS Code拡張機能におけるインライン数式記号（$\to$）およびGFMテーブルのMarkdownレンダリングを修正。
+- セッションタイトルの生成を改善。
+- Gemma 4モデルにおいて、ネイティブな思考/推論機能を有効にするため、`reasoning`オプションを`chat_template_kwargs`に自動変換。
+- 推奨エージェントモデルリストにGemma 4モデルを追加。
+- インデックス作成および検索のための、タスク固有の埋め込みプレフィックス（例：「chunk」および「query」）のサポートを追加。
+- run_terminal_commandの承認の簡素化：専用ツールの使用を促進するため、ファイル操作（検索、読み取り、編集）と、重要なコマンドをブロックし、その他はユーザー定義のポリシーに従う。
+- OpenAIアダプターのリランキングエンドポイントを`completions`に変更。
+- Node.js v26.12.0以上
 
-<h1 align="center">Continue</h1>
-
-<p align="center">Pioneering open-source coding agent</p>
-
-<div align="center">
-
-<a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache_2.0-blue.svg" /></a>
-<a href="https://docs.continue.dev"><img src="https://img.shields.io/badge/Docs-docs.continue.dev-blue" /></a>
-<a href="https://github.com/continuedev/continue/releases"><img src="https://img.shields.io/badge/Changelog-GitHub_Releases-blue" /></a>
-
-</div>
-
-<p align="center">
-  <img src="media/github-readme.png" alt="Banner" />
-</p>
-
-## What is Continue?
-
-> _Note: The `continuedev/continue` repository is no longer actively maintained and is read-only for all users._
-
-Continue is a coding agent available as a [CLI](#cli), [VS Code extension](#vs-code), and [JetBrains plugin](#jetbrains).
-
-## Documentation
-
-To learn how to configure Continue, how it works, and how to customize it, check out the [Continue Docs](https://docs.continue.dev).
-
-## Final 2.0.0 Release
-
-We polished Continue and did a final 2.0.0 release of the VS Code extension, CLI, and JetBrains plugin.
-
-This included removing anonymous telemetry, pulling out authentication, squashing bugs, and more.
-
-### VS Code
-
-[![VS Code Marketplace](https://img.shields.io/badge/VS_Code_Marketplace-007ACC?logo=visualstudiocode&logoColor=white)](https://marketplace.visualstudio.com/items?itemName=Continue.continue) [![OpenVSX Registry](https://img.shields.io/badge/OpenVSX_Registry-C160EF?logo=eclipseide&logoColor=white)](https://open-vsx.org/extension/Continue/continue) [![View source](https://img.shields.io/badge/View_source-181717?logo=github&logoColor=white)](extensions/vscode)
-
-### CLI
-
-[![npm](https://img.shields.io/badge/npm-CB3837?logo=npm&logoColor=white)](https://www.npmjs.com/package/@continuedev/cli) [![View source](https://img.shields.io/badge/View_source-181717?logo=github&logoColor=white)](extensions/cli)
-
-### JetBrains
-
-> _Note: We recommend using the Continue CLI instead of the JetBrains plugin._
-
-[![GitHub Releases](https://img.shields.io/badge/GitHub_Releases-181717?logo=github&logoColor=white)](https://github.com/continuedev/continue/releases) [![View source](https://img.shields.io/badge/View_source-181717?logo=github&logoColor=white)](extensions/intellij)
-
-## Contributors
-
-Thank you to the entire Continue community for helping us create a pioneering coding agent.
-
-What we built together pushed the boundaries of what AI developer tooling could be.
-
-We hope this codebase continues to serve as a foundation for others.
-
-## Code friends
-
-<a href="https://github.com/continuedev/continue/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=continuedev/continue&max=500" />
-</a>
-
-## License
+## ライセンス
 
 Apache 2.0 © 2023-2026 Continue Dev, Inc.

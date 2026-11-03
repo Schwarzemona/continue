@@ -1,43 +1,43 @@
 # @continuedev/sdk
 
-> **⚠️ EXPERIMENTAL: This package is in early development and subject to frequent breaking changes without notice.**
+> **⚠️ 実験的: このパッケージは開発初期段階にあり、予告なしに頻繁に破壊的な変更が行われる可能性があります。**
 
-This SDK provides programmatic access to Continue's Hub APIs and functionality.
+このSDKは、ContinueのHub APIおよび機能へのプログラムによるアクセスを提供します。
 
-## Overview
+## 概要
 
-The Continue SDK is structured into separate language-specific packages, currently with implementations for TypeScript and Python, with more languages planned for the future:
+Continue SDKは、言語ごとに分かれたパッケージで構成されています。現在はTypeScriptとPythonの実装があり、将来的にはさらに多くの言語が計画されています：
 
-- **TypeScript SDK**: Located in the `/typescript` directory, providing a drop-in replacement for OpenAI's TypeScript client libraries
-- **Python SDK**: Located in the `/python` directory, providing a drop-in replacement for OpenAI's Python client libraries
-- **Additional languages**: More language implementations are planned to be added in the future
+- **TypeScript SDK**: `/typescript` ディレクトリにあり、OpenAIのTypeScriptクライアントライブラリの代わりとしてそのまま利用できます。
+- **Python SDK**: `/python` ディレクトリにあり、OpenAIのPythonクライアントライブラリの代わりとしてそのまま利用できます。
+- **その他の言語**: 将来的にさらに多くの言語の実装が追加される予定です。
 
-Each package includes:
+各パッケージには以下が含まれます：
 
-1. OpenAPI-generated clients for the Continue Hub API
-2. A wrapper layer that exposes a `Continue.from()` method to easily initialize and use Continue assistants with an OpenAI-compatible interface
+1. Continue Hub API用のOpenAPI生成クライアント
+2. OpenAI互換のインターフェースを使用してContinueアシスタントを簡単に初期化して使用するための `Continue.from()` メソッドを公開するラッパー層
 
-## For End Users
+## エンドユーザー向け
 
-End users should install the published packages directly:
+エンドユーザーは、公開されているパッケージを直接インストールする必要があります：
 
-- For TypeScript/JavaScript: `npm install @continuedev/sdk`
-- For Python: `pip install continuedev`
-- For other languages: Check back for new language support
+- TypeScript/JavaScriptの場合: `npm install @continuedev/sdk`
+- Pythonの場合: `pip install continuedev`
+- その他の言語の場合: 新しい言語のサポートをお待ちください
 
-Each published package includes its own documentation.
+各公開パッケージには独自のドキュメントが含まれています。
 
-## For Developers
+## 開発者向け
 
-### Development
+### 開発
 
 ```bash
-# Install dependencies
+# 依存関係のインストール
 npm install
 
-# Generate API clients
+# APIクライアントの生成
 npm run generate-client:ALL
 
-# Start Swagger UI for API exploration
+# API探索用のSwagger UIの起動
 npm run swagger-ui
 ```

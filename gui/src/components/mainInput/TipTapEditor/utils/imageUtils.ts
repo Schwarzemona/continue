@@ -67,7 +67,7 @@ export async function handleImageFile(
   } else {
     ideMessenger.post("showToast", [
       "error",
-      "Images need to be in jpg or png format and less than 10MB in size.",
+      "画像はJPGまたはPNG形式で、ファイルサイズは10MBまでです。",
     ]);
   }
 }

@@ -9,8 +9,8 @@ import { getUriDescription } from "../../util/uri";
 class CurrentFileContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "currentFile",
-    displayTitle: "Current File",
-    description: "Reference the currently open file",
+    displayTitle: "現在のファイル",
+    description: "現在開いているファイルを参照する",
     type: "normal",
     renderInlineAs: "",
   };
@@ -29,14 +29,14 @@ class CurrentFileContextProvider extends BaseContextProvider {
       await extras.ide.getWorkspaceDirs(),
     );
 
-    let prefix = "This is the currently open file:";
+    let prefix = "これは現在開いているファイルです:";
     let name = baseName;
 
     // This allows frontend to retrieve when using alt + enter or default context with slightly different copy
     if (query === "non-mention-usage") {
       prefix =
-        "The following file is currently open. Don't reference it if it's not relevant to the user's message:";
-      name = "Active file: " + baseName;
+        "以下のファイルが現在開いています。ユーザーのメッセージに関連していない場合は参照しないでください:";
+      name = "アクティブなファイル: " + baseName;
     }
 
     return [

@@ -28,8 +28,8 @@ function splitGrepResultsByFile(content: string): ContextItem[] {
 
     if (fileContent) {
       contextItems.push({
-        name: `Search results in ${filepath}`,
-        description: `Grep search results from ${filepath}`,
+        name: `検索結果 (${filepath})`,
+        description: `Grep検索結果: ${filepath}`,
         content: fileContent,
         uri: { type: "file", value: filepath },
       });
@@ -57,9 +57,9 @@ export const grepSearchImpl: ToolImpl = async (args, extras) => {
     if (errorMessage.includes("Process exited with code 2")) {
       return [
         {
-          name: "Search error",
-          description: "The search query could not be processed",
-          content: `The search failed due to an invalid regex pattern.\n\nOriginal query: ${rawQuery}\nProcessed query: ${query}\n\nError: ${errorMessage}\n\nTip: If you're searching for literal text with special characters, the query was automatically escaped. If you need regex patterns, ensure they use proper regex syntax.`,
+          name: "検索エラー",
+          description: "検索クエリを処理できませんでした",
+          content: `無効な正規表現パターンのため検索に失敗しました`,
         },
       ];
     }
@@ -78,9 +78,9 @@ export const grepSearchImpl: ToolImpl = async (args, extras) => {
   if (numResults === 0) {
     return [
       {
-        name: "Search results",
-        description: "Results from grep search",
-        content: "The search returned no results.",
+        name: "検索結果",
+        description: "Grep検索の結果",
+        content: "検索の結果、一致する項目が見つかりませんでした",
       },
     ];
   }
@@ -88,12 +88,12 @@ export const grepSearchImpl: ToolImpl = async (args, extras) => {
   const truncationReasons: string[] = [];
   if (numResults === DEFAULT_GREP_SEARCH_RESULTS_LIMIT) {
     truncationReasons.push(
-      `the number of results exceeded ${DEFAULT_GREP_SEARCH_RESULTS_LIMIT}`,
+      `結果が${DEFAULT_GREP_SEARCH_RESULTS_LIMIT}を超えました`,
     );
   }
   if (truncated) {
     truncationReasons.push(
-      `the number of characters exceeded ${DEFAULT_GREP_SEARCH_CHAR_LIMIT}`,
+      `${DEFAULT_GREP_SEARCH_CHAR_LIMIT}文字を超えました`,
     );
   }
 
@@ -105,8 +105,8 @@ export const grepSearchImpl: ToolImpl = async (args, extras) => {
   } else {
     contextItems = [
       {
-        name: "Search results",
-        description: "Results from grep search",
+        name: "検索結果",
+        description: "Grep検索の結果",
         content: formatted,
       },
     ];
@@ -119,15 +119,15 @@ export const grepSearchImpl: ToolImpl = async (args, extras) => {
   }
   if (truncationReasons.length > 0) {
     warnings.push(
-      `Results were truncated because ${truncationReasons.join(" and ")}`,
+      `結果は${truncationReasons.join("および")}のため切り詰められました`,
     );
   }
 
   if (truncationReasons.length > 0) {
     contextItems.push({
-      name: "Truncation warning",
+      name: "切り詰め警告",
       description: "",
-      content: `The above search results were truncated because ${truncationReasons.join(" and ")}. If the results are not satisfactory, try refining your search query.`,
+      content: `上記の検索結果は${truncationReasons.join("および")}のため切り詰められました`,
     });
   }
   return contextItems;

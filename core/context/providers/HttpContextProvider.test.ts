@@ -164,7 +164,7 @@ describe("HttpContextProvider", () => {
 
       expect(result).toHaveLength(1);
       expect(result[0]).toEqual({
-        description: "HTTP Context Item", // default value
+        description: "HTTP コンテキスト項目", // default value
         content: "", // default value
         name: "Test HTTP Provider", // from provider options
         uri: {

@@ -11,12 +11,12 @@ class GitHubIssuesContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "issue",
     displayTitle: "GitHub Issues",
-    description: "Reference GitHub issues",
+    description: "GitHub Issue を参照",
     type: "submenu",
   };
 
   get deprecationMessage() {
-    return "The GitHub issues context provider is now deprecated and will be removed in a later version. Please consider using the GitHub MCP server (https://continue.dev/anthropic/github-mcp) instead.";
+    return "GitHub Issues コンテキストプロバイダーは非推奨になりました。代わりに GitHub MCP サーバー (https://continue.dev/anthropic/github-mcp) の使用を検討してください。";
   }
 
   async getContextItems(
@@ -44,7 +44,7 @@ class GitHubIssuesContextProvider extends BaseContextProvider {
       issue_number,
     });
 
-    let content = `# GitHub Issue #${issue.data.number.toString()} in ${owner}/${repo}`;
+    let content = `# ${owner}/${repo} の GitHub Issue #${issue.data.number.toString()}`;
 
     const comments = await octokit.issues.listComments({
       owner,
@@ -53,7 +53,7 @@ class GitHubIssuesContextProvider extends BaseContextProvider {
     });
 
     const parts = [
-      issue.data.body || "No description",
+      issue.data.body || "説明なし",
       ...comments.data.map((comment) => comment.body),
     ];
     content += `\n\n${parts.join("\n\n---\n\n")}`;

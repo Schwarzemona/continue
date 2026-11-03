@@ -39,13 +39,13 @@ const runGitCommand = (args: string[], cwd: string): Promise<string> => {
 class GitCommitContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "commit",
-    displayTitle: "Commits",
-    description: "Type to search",
+    displayTitle: "コミット",
+    description: "入力して検索",
     type: "submenu",
   };
 
   get deprecationMessage() {
-    return "The git commits context provider is now deprecated and may be removed in a later version. Please consider using the Git MCP (https://continue.dev/docker/mcp-git) instead.";
+    return "Git コミットのコンテキストプロバイダーは非推奨になりました。代わりに Git MCP (https://continue.dev/docker/mcp-git) の使用を検討してください。";
   }
 
   async getContextItems(
@@ -129,8 +129,8 @@ class GitCommitContextProvider extends BaseContextProvider {
       const recentCommits = [
         {
           id: `last ${lastXCommitsDepth} commits`,
-          title: `last ${lastXCommitsDepth} commits`,
-          description: "recent commits",
+          title: `最近の ${lastXCommitsDepth} 件のコミット`,
+          description: "最近のコミット",
         },
       ];
       const allCommits = gitResult

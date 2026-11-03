@@ -16,8 +16,8 @@ import { retrieveContextItemsFromEmbeddings } from "../retrieval/retrieval.js";
 class FolderContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "folder",
-    displayTitle: "Folder",
-    description: "Type to search",
+    displayTitle: "フォルダ",
+    description: "入力して検索",
     type: "submenu",
     dependsOnIndexing: ["embeddings", "fullTextSearch", "chunk"],
   };

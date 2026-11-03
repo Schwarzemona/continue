@@ -10,8 +10,8 @@ const DEFAULT_MAX_SEARCH_CONTEXT_RESULTS = 200;
 class SearchContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "search",
-    displayTitle: "Search",
-    description: "Use ripgrep to exact search the workspace",
+    displayTitle: "検索",
+    description: "ripgrepを使用してワークスペースを検索",
     type: "query",
     renderInlineAs: "",
   };
@@ -28,9 +28,9 @@ class SearchContextProvider extends BaseContextProvider {
     const { formatted } = formatGrepSearchResults(results);
     return [
       {
-        description: "Search results",
-        content: `Results of searching codebase for "${query}":\n\n${formatted}`,
-        name: "Search results",
+        description: "検索結果",
+        content: `"${query}" のコードベース検索結果:\n\n${formatted}`,
+        name: "検索結果",
       },
     ];
   }

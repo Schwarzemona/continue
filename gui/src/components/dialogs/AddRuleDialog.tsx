@@ -31,7 +31,7 @@ function AddRuleDialog({ mode }: { mode: "workspace" | "global" }) {
     e.preventDefault();
     const trimmed = name.trim();
     if (!trimmed) {
-      setError("Rule name is required");
+      setError("ルール名を入力してください");
       return;
     }
     setError(undefined);
@@ -50,7 +50,7 @@ function AddRuleDialog({ mode }: { mode: "workspace" | "global" }) {
       closeDialog();
     } catch (err) {
       setIsSubmitting(false);
-      setError("Failed to create rule file");
+      setError("ルールファイルの作成に失敗しました");
     }
   };
 

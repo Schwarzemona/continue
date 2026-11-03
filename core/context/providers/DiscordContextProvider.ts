@@ -32,7 +32,7 @@ class DiscordContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "discord",
     displayTitle: "Discord",
-    description: "Select a channel",
+    description: "チャンネルを選択",
     type: "submenu",
   };
 
@@ -44,7 +44,7 @@ class DiscordContextProvider extends BaseContextProvider {
   }
 
   get deprecationMessage() {
-    return "The Discord context provider is now deprecated and may be removed in a later version. Please consider using the Discord MCP (hub.docker.com/r/mcp/mcp-discord) instead.";
+    return "Discord コンテキストプロバイダーは非推奨になりました。代わりに Discord MCP (hub.docker.com/r/mcp/mcp-discord) の使用を検討してください。";
   }
 
   async fetchMessages(
@@ -99,30 +99,30 @@ class DiscordContextProvider extends BaseContextProvider {
 
     channelId = selectedChannel ? selectedChannel.id : channels[0].id;
 
-    const parts = ["# Discord Channel Messages", `Channel ID: ${channelId}`];
+    const parts = ["# Discord チャンネルのメッセージ", `Channel ID: ${channelId}`];
     const messages = await this.fetchMessages(channelId, extras.fetch);
 
     if (messages.length > 0) {
-      parts.push("## Messages");
+      parts.push("## メッセージ");
       // Format each message into a markdown string
       messages.forEach((message) => {
         parts.push(
-          `### ${message.author?.username ?? "Unknown User"} on ${
+          `### ${message.author?.username ?? "不明なユーザー"} on ${
             message.timestamp
           }\n\n${message.content}`,
         );
       });
     } else {
-      parts.push("No messages found.");
+      parts.push("メッセージは見つかりませんでした。");
     }
 
     const content = parts.join("\n\n");
 
     return [
       {
-        name: `Messages from Channel ${channelId}`,
+        name: `チャンネル ${channelId} からのメッセージ`,
         content,
-        description: "Latest messages from the channel",
+        description: "チャンネルからの最新メッセージ",
       },
     ];
   }

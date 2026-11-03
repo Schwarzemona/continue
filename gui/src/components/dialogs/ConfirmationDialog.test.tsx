@@ -27,10 +27,10 @@ describe("ConfirmationDialog", () => {
     const onConfirm = vi.fn();
     renderDialog({ text: "Are you sure?", onConfirm });
 
-    expect(screen.getByText("Confirmation")).toBeInTheDocument();
+    expect(screen.getByText("確認")).toBeInTheDocument();
     expect(screen.getByText("Are you sure?")).toBeInTheDocument();
-    expect(screen.getByText("Cancel")).toBeInTheDocument();
-    expect(screen.getByText("Confirm")).toBeInTheDocument();
+    expect(screen.getByText("キャンセル")).toBeInTheDocument();
+    expect(screen.getByText("確定")).toBeInTheDocument();
   });
 
   it("renders with custom title and confirm text", () => {
@@ -62,7 +62,7 @@ describe("ConfirmationDialog", () => {
     const onConfirm = vi.fn();
     renderDialog({ text: "Confirm action?", onConfirm });
 
-    fireEvent.click(screen.getByText("Confirm"));
+    fireEvent.click(screen.getByText("確定"));
 
     expect(onConfirm).toHaveBeenCalledTimes(1);
   });
@@ -72,7 +72,7 @@ describe("ConfirmationDialog", () => {
     const onCancel = vi.fn();
     renderDialog({ text: "Cancel action?", onConfirm, onCancel });
 
-    fireEvent.click(screen.getByText("Cancel"));
+    fireEvent.click(screen.getByText("キャンセル"));
 
     expect(onCancel).toHaveBeenCalledTimes(1);
   });

@@ -9,14 +9,14 @@ export async function validateSearchAndReplaceFilepath(
   if (!filepath || typeof filepath !== "string") {
     throw new ContinueError(
       ContinueErrorReason.FindAndReplaceMissingFilepath,
-      "filepath (string) is required",
+      "filepathが必要です",
     );
   }
   const resolvedFilepath = await resolveRelativePathInDir(filepath, ide);
   if (!resolvedFilepath) {
     throw new ContinueError(
       ContinueErrorReason.FileNotFound,
-      `File ${filepath} does not exist`,
+      `ファイル「${filepath}」は存在しません`,
     );
   }
   return resolvedFilepath;

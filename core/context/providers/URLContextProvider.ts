@@ -15,7 +15,7 @@ class URLContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "url",
     displayTitle: "URL",
-    description: "Reference a webpage at a given URL",
+    description: "指定されたURLのウェブページを参照",
     type: "query",
   };
 

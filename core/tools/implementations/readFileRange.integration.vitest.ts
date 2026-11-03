@@ -105,7 +105,7 @@ test("readFileRangeImpl validates line number constraints", async () => {
       },
       mockExtras,
     ),
-  ).rejects.toThrow("startLine must be 1 or greater");
+  ).rejects.toThrow("startLineは1以上である必要があります");
 
   // Test negative startLine (no longer supported)
   await expect(
@@ -117,7 +117,7 @@ test("readFileRangeImpl validates line number constraints", async () => {
       },
       mockExtras,
     ),
-  ).rejects.toThrow("Negative line numbers are not supported");
+  ).rejects.toThrow("startLineは1以上である必要があります");
 
   // Test endLine < 1 (invalid)
   await expect(
@@ -129,7 +129,7 @@ test("readFileRangeImpl validates line number constraints", async () => {
       },
       mockExtras,
     ),
-  ).rejects.toThrow("endLine must be 1 or greater");
+  ).rejects.toThrow("endLineは1以上である必要があります");
 
   // Test negative endLine (no longer supported)
   await expect(
@@ -141,7 +141,7 @@ test("readFileRangeImpl validates line number constraints", async () => {
       },
       mockExtras,
     ),
-  ).rejects.toThrow("Negative line numbers are not supported");
+  ).rejects.toThrow("endLineは1以上である必要があります");
 
   // Test endLine < startLine
   await expect(
@@ -154,7 +154,7 @@ test("readFileRangeImpl validates line number constraints", async () => {
       mockExtras,
     ),
   ).rejects.toThrow(
-    "endLine (5) must be greater than or equal to startLine (10)",
+    "endLine(5)はstartLine(10)以上である必要があります",
   );
 });
 

@@ -54,11 +54,11 @@ export async function requestFilesFromRepoMap(
 
     const prompt = `${repoMap}
 
-Given the above repo map, your task is to decide which files are most likely to be relevant in answering a question. Before giving your answer, you should write your reasoning about which files/folders are most important. This thinking should start with a <reasoning> tag, followed by a paragraph explaining your reasoning, and then a closing </reasoning> tag on the last line.
+上記のレポジトリマップに基づき、質問に回答する際に最も関連性が高いと考えられるファイルを選択してください。回答を出す前に、どのファイルやフォルダが重要であるかについての推論を記述してください。この思考プロセスは<reasoning>タグで開始し、推論を説明する段落を記述した後、最終行に閉じタグ</reasoning>を記述してください。
 
-After this, your response should begin with a <results> tag, followed by a list of each file, one per line, and then a closing </results> tag on the last line. You should select between 5 and 10 files. The names that you list should be the exact relative path that you saw in the repo map, not just the basename of the file.
+その後、回答は<results>タグで開始し、各ファイルを1行ずつリストアップした後、最終行に閉じタグ</results>を記述してください。選択するファイル数は5個から10個の間としてください。リストアップする名前は、レポジトリマップに記載されている正確な相対パスを使用し、ファイル名のみにしないでください。
 
-This is the question that you should select relevant files for: "${input}"`;
+関連するファイルを選択すべき質問は以下の通りです: "${input}"`;
 
     const response = await llm.chat(
       [

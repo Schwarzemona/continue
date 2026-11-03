@@ -1,27 +1,27 @@
 ---
-name: 🐛 Bug report
-description: Create a report to help us fix your bug
+name: バグレポート
+description: バグの修正に役立つレポートを作成します
 labels: [bug]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report this bug! This will help us find the cause of the problem quickly with less back-and-forth required.
+        このバグを報告するために時間を割いていただき、ありがとうございます！これにより、やり取りを最小限に抑え、問題の原因を迅速に見つけることができます。
   - type: checkboxes
     attributes:
-      label: Before submitting your bug report
+      label: バグレポートを送信する前に
       options:
-        - label: I've tried finding an answer on the [Continue docs site](https://docs.continue.dev/)
+        - label: '[Continueのドキュメントサイト](https://docs.continue.dev/)で回答を探してみました'
           required: false
-        - label: I'm not able to find an [open issue](https://github.com/continuedev/continue/issues?q=is%3Aopen+is%3Aissue) that reports the same bug
+        - label: '同じバグを報告している[オープンなIssue](https://github.com/Schwarzemona/continue/issues?q=is%3Aopen+is%3Aissue)を見つけられませんでした'
           required: false
-        - label: I've seen the [troubleshooting guide](https://docs.continue.dev/troubleshooting) on the Continue Docs
+        - label: 'Continueドキュメントの[トラブルシューティングガイド](https://docs.continue.dev/troubleshooting)を確認しました'
           required: false
   - type: textarea
     attributes:
-      label: Relevant environment info
+      label: 関連する環境情報
       description: |
-        Feel free to omit any info that is not relevant to your issue.
+        問題に関連しない情報は省略していただいて構いません。
 
         - **OS**: macOS
         - **Continue version**: v0.9.4
@@ -37,34 +37,33 @@ body:
           ```yaml
 
           ```
-          OR link to agent in Continue hub:
       render: Markdown
     validations:
       required: false
   - type: textarea
     attributes:
-      label: Description
+      label: 説明
       description: |
-        Please provide a clear and concise description of the bug
+        バグについて、明確かつ簡潔な説明を提供してください
       placeholder: |
-        Short description
+        短い説明
     validations:
       required: false
   - type: textarea
     attributes:
-      label: To reproduce
-      description: Steps to reproduce the problem. If possible, include a gif, screenshot, or video to better illustrate.
+      label: 再現手順
+      description: 問題を再現するための手順。可能であれば、より分かりやすくするためにgif、スクリーンショット、または動画を含めてください。
       placeholder: |
-        1. Go to …
-        2. Click on …
-        3. Scroll down to …
-        4. See error
+        1. …に移動する
+        2. …をクリックする
+        3. …までスクロールする
+        4. エラーを確認する
     validations:
       required: false
   - type: textarea
     id: logs
     attributes:
-      label: Log output
+      label: ログ出力
       description: |
-        Please refer to the [troubleshooting guide](https://docs.continue.dev/troubleshooting) in the Continue Docs for instructions on obtaining the logs. Copy either the relevant lines or the last 100 lines or so.
+        ログの取得方法については、Continueドキュメントの[トラブルシューティングガイド](https://docs.continue.dev/troubleshooting)を参照してください。関連する行、または最後の100行程度をコピーしてください。
       render: Shell

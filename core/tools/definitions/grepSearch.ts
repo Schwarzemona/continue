@@ -13,21 +13,21 @@ export const grepSearchTool: Tool = {
   function: {
     name: BuiltInToolNames.GrepSearch,
     description:
-      "ripgrepを使用してリポジトリ全体のファイル内容に対して正規表現で検索し、ファイル名を返します。",
+      "プロジェクト内のファイル内容に対して正規表現で検索し、ファイル名を返します。出力が切り詰められることがあるため、対象を絞ったパターンを使用します。",
     parameters: {
       type: "object",
       required: ["query"],
       properties: {
         query: {
           type: "string",
-          description: "ファイル内容で検索する正規表現パターン。",
+          description: "検索する正規表現パターン。",
         },
       },
     },
   },
   defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
-    prefix: `To perform a grep search within the project, call the ${BuiltInToolNames.GrepSearch} tool with the query pattern to match. For example:`,
+    prefix: `プロジェクト内で grep 検索を実行するには、一致するクエリパターンを指定して ${BuiltInToolNames.GrepSearch} ツールを呼び出してください。例:`,
     exampleArgs: [["query", ".*main_services.*"]],
   },
   toolCallIcon: "MagnifyingGlassIcon",

@@ -11,7 +11,7 @@ class PostgresContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "postgres",
     displayTitle: "PostgreSQL",
-    description: "Retrieve PostgreSQL table schema and sample rows",
+    description: "PostgreSQLのテーブルスキーマとサンプル行を取得します",
     type: "submenu",
     renderInlineAs: "",
   };
@@ -66,7 +66,7 @@ FROM information_schema.tables`;
         // Get the table schema
         if (!tableName.includes(".")) {
           throw new Error(
-            `Table name must be in format schema.table_name, got ${tableName}`,
+            `テーブル名は schema.table_name の形式である必要があります。取得した値: ${tableName}`,
           );
         }
         const schemaQuery = `
@@ -93,14 +93,14 @@ LIMIT ${sampleRows}`);
 
         contextItems.push({
           name: `${this.options.database}-${tableName}-schema-and-sample-rows`,
-          description: `Schema and sample rows for table ${tableName}`,
+          description: `テーブル ${tableName} のスキーマとサンプル行`,
           content: prompt,
         });
       }
 
       return contextItems;
     } catch (error) {
-      throw new Error(`Failed to query PostgreSQL database: ${error}`);
+      throw new Error(`PostgreSQLデータベースのクエリに失敗しました: ${error}`);
     } finally {
     }
   }
@@ -118,23 +118,23 @@ LIMIT ${sampleRows}`);
         contextItems.push({
           id: tableName,
           title: tableName,
-          description: `Schema from ${tableName} and ${this.options.sampleRows} sample rows.`,
+          description: `${tableName} のスキーマと ${this.options.sampleRows} 件のサンプル行。`,
         });
       }
       contextItems.push({
         id: PostgresContextProvider.ALL_TABLES,
-        title: "All tables",
-        description: `Schema from all tables and ${this.options.sampleRows} sample rows each.`,
+        title: "すべてのテーブル",
+        description: `すべてのテーブルのスキーマと、それぞれの ${this.options.sampleRows} 件のサンプル行。`,
       });
 
       return contextItems;
     } catch (error) {
-      throw new Error(`Failed to query PostgreSQL database: ${error}`);
+      throw new Error(`PostgreSQLデータベースのクエリに失敗しました: ${error}`);
     }
   }
 
   get deprecationMessage() {
-    return "The Postgres context provider is deprecated. Please consider using the Postgres MCP (such as github.com/crystaldba/postgres-mcp) instead.";
+    return "Postgres コンテキストプロバイダーは非推奨となりました。代わりに Postgres MCP (例: github.com/crystaldba/postgres-mcp) の使用を検討してください。";
   }
 }
 

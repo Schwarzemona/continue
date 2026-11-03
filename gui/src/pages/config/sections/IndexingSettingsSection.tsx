@@ -26,7 +26,7 @@ function CodebaseSubSection() {
         <div className="py-2">
           {config.disableIndexing ? (
             <div className="p-1">
-              <p className="text-center font-semibold">Indexing is disabled</p>
+              <p className="text-center font-semibold">インデックス作成は無効になっています</p>
             </div>
           ) : (
             <IndexingProgress />
@@ -93,7 +93,7 @@ export function IndexingSettingsSection() {
                 rel="noopener noreferrer"
                 className="text-inherit underline hover:brightness-125"
               >
-                How to Make Agent mode Aware of Codebases and Documentation
+                エージェントモードにコードベースとドキュメントを認識させる方法
               </a>
             </div>
           </div>

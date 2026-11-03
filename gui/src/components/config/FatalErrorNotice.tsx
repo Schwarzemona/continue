@@ -36,10 +36,10 @@ export const FatalErrorIndicator = () => {
 
   return (
     <Alert type="error" className="mx-2 my-1 px-2">
-      <span>{`Error loading`}</span>{" "}
+      <span>{`読み込みエラー`}</span>{" "}
       <span className="italic">{displayName}</span>
       {". "}
-      <span>{`Chat is disabled until a model is available.`}</span>
+      <span>{`モデルが利用可能になるまでチャットは無効になります。`}</span>
       <div className="mt-2 flex flex-row flex-wrap items-center gap-x-3 gap-y-1.5">
         <div
           onClick={() => {
@@ -50,10 +50,10 @@ export const FatalErrorIndicator = () => {
           }}
           className="cursor-pointer underline"
         >
-          Help
+          ヘルプ
         </div>
         {configLoading ? (
-          <div>Reloading...</div>
+          <div>再読み込み中……</div>
         ) : (
           <div
             className={`cursor-pointer underline`}
@@ -61,12 +61,12 @@ export const FatalErrorIndicator = () => {
               refreshProfiles("Clicked reload in fatal indicator");
             }}
           >
-            Reload
+            再読み込み
           </div>
         )}
         {currentPath !== CONFIG_ROUTES.CONFIGS && (
           <div onClick={showConfigPage} className="cursor-pointer underline">
-            View
+            表示
           </div>
         )}
       </div>

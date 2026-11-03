@@ -1,29 +1,29 @@
-# OpenAI Adapters
+# OpenAI アダプター
 
-OpenAI adapters convert an OpenAI-compatible request to a request for another API and back.
+OpenAI アダプターは、OpenAI 互換のリクエストを別の API 用のリクエストに変換し、その逆も行います。
 
-They are purely a translation layer, and are not concerned with:
+これらは純粋な変換レイヤーであり、以下については関与しません：
 
-- Templates
-- Whether a model supports tools, images, etc.
-- Dynamically changing API base for model
-- Keeping track of system message (it will always be the first message with a systemMesage)
-- Keeping a private variable with anything that is already passed through the OpenAI request body
-- Appending "/" to the apiBase (but this is TODO)
-- Batching embeddings (yes, it requires some knowledge of max batch size, but it's more important to maintain 1 req = 1 req)
-- Using streamChat for streamComplete and vice-versa if one isn't defined
+- テンプレート
+- モデルがツールや画像などをサポートしているかどうか
+- モデルに応じた API ベースの動的な変更
+- システムメッセージの追跡（`systemMessage` を持つ最初のメッセージになります）
+- OpenAI リクエストボディを通じて既に渡されているものに関するプライベート変数の保持
+- `apiBase` への "/" の追加（これは TODO です）
+- エンベディングのバッチ処理（はい、最大バッチサイズに関する知識が必要ですが、1リクエスト = 1リクエストを維持することの方が重要です）
+- 片方が定義されていない場合に、`streamComplete` に対して `streamChat` を使用すること、またはその逆
 
-The goal is for this to change as infrequently as possible. It should only require updating when the actual API format changes.
+目標は、この変更を可能な限り少なくすることです。実際の API フォーマットが変更されたときにのみ更新が必要になるようにします。
 
-They are concerned with:
+これらは以下に関与します：
 
-- Converting model aliases
-- Cache behavior
-- max stop words
-- use legacy completions endpoint?
-- anything else that couldn't possibly be guess by the client since it won't know the endpoint behind the proxy
+- モデルエイリアスの変換
+- キャッシュの動作
+- 最大停止単語（max stop words）
+- レガシーな completions エンドポイントを使用するかどうか？
+- プロキシの背後にあるエンドポイントをクライアントが知ることができないため、推測不可能なその他の事項
 
-## Supported APIs
+## サポートされている API
 
 - [x] Anthropic
 - [ ] AskSage

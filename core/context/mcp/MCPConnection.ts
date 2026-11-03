@@ -180,9 +180,9 @@ class MCPConnection {
 
     if (unrendered.length > 0) {
       this.errors.push(
-        `${this.options.name} MCP Server has unresolved secrets: ${unrendered.join(", ")}.
-For personal use you can set the secret in the hub at https://continue.dev/settings/secrets.
-Org-level secrets can only be used for MCP by Background Agents (https://docs.continue.dev/hub/agents/overview) when \"Include in Env\" is enabled.`,
+        `${this.options.name} MCP サーバーに解決されていないシークレットがあります: ${unrendered.join(", ")}.
+個人利用の場合は、hub (https://continue.dev/settings/secrets) でシークレットを設定できます。
+組織レベルのシークレットは、「Include in Env」が有効な場合にのみ、Background Agents (https://docs.continue.dev/hub/agents/overview) によって MCP で使用できます。`,
       );
     }
 
@@ -254,7 +254,7 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
                   this.transport = transport;
                 } else if (this.options.type) {
                   throw new Error(
-                    `Unsupported transport type: ${this.options.type}`,
+                    `サポートされていないトランスポートタイプです: ${this.options.type}`,
                   );
                 } else {
                   try {
@@ -274,7 +274,7 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
                       this.transport = transport;
                     } catch (e) {
                       throw new Error(
-                        `MCP config with URL and no type specified failed both SSE and HTTP connection: ${e instanceof Error ? e.message : String(e)}`,
+                        `URLは指定されていますがタイプが指定されていないMCP設定は、SSEとHTTPの両方の接続に失敗しました: ${e instanceof Error ? e.message : String(e)}`,
                       );
                     }
                   }
@@ -297,7 +297,7 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
                   );
                   this.resources = resources;
                 } catch (e) {
-                  let errorMessage = `Error loading resources for MCP Server ${this.options.name}`;
+                  let errorMessage = `MCPサーバー ${this.options.name} のリソースの読み込み中にエラーが発生しました`;
                   if (e instanceof Error) {
                     errorMessage += `: ${e.message}`;
                   }
@@ -314,7 +314,7 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
 
                   this.resourceTemplates = resourceTemplates;
                 } catch (e) {
-                  let errorMessage = `Error loading resource templates for MCP Server ${this.options.name}`;
+                  let errorMessage = `MCPサーバー ${this.options.name} のリソーステンプレートの読み込み中にエラーが発生しました`;
                   if (e instanceof Error) {
                     errorMessage += `: ${e.message}`;
                   }
@@ -331,7 +331,7 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
                   );
                   this.tools = tools;
                 } catch (e) {
-                  let errorMessage = `Error loading tools for MCP Server ${this.options.name}`;
+                  let errorMessage = `MCPサーバー ${this.options.name} のツールの読み込み中にエラーが発生しました`;
                   if (e instanceof Error) {
                     errorMessage += `: ${e.message}`;
                   }
@@ -348,7 +348,7 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
                   );
                   this.prompts = prompts;
                 } catch (e) {
-                  let errorMessage = `Error loading prompts for MCP Server ${this.options.name}`;
+                  let errorMessage = `MCPサーバー ${this.options.name} のプロンプトの読み込み中にエラーが発生しました`;
                   if (e instanceof Error) {
                     errorMessage += `: ${e.message}`;
                   }
@@ -361,24 +361,24 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
           ]);
         } catch (error) {
           // Otherwise it's a connection error
-          let errorMessage = `Failed to connect to "${this.options.name}"\n`;
+          let errorMessage = `"${this.options.name}" への接続に失敗しました\n`;
           if (error instanceof Error) {
             const msg = error.message.toLowerCase();
             if (msg.includes("spawn") && msg.includes("enoent")) {
               const command = msg.split(" ")[1];
-              errorMessage += `Error: command "${command}" not found. To use this MCP server, install the ${command} CLI.`;
+              errorMessage += `エラー: コマンド "${command}" が見つかりません。このMCPサーバーを使用するには、${command} CLIをインストールしてください。`;
               if (["uv", "uvx"].includes(command)) {
                 this.infos.push(
-                  'Please install uv by following the installation guide: <a href="https://docs.astral.sh/uv/getting-started/installation/">https://docs.astral.sh/uv/getting-started/installation/</a>',
+                  'インストールガイドに従って uv をインストールしてください: <a href="https://docs.astral.sh/uv/getting-started/installation/">https://docs.astral.sh/uv/getting-started/installation/</a>',
                 );
               }
               if (["node", "npx"].includes(command)) {
                 this.infos.push(
-                  'Please install npx by following the installation guide: <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>',
+                  'インストールガイドに従って npx をインストールしてください: <a href="https://docs.npmjs.com/downloading-and-installing-node-js-and-npm">https://docs.npmjs.com/downloading-and-installing-node-js-and-npm</a>',
                 );
               }
             } else {
-              errorMessage += "Error: " + error.message;
+              errorMessage += "エラー: " + error.message;
             }
           }
 
@@ -391,12 +391,12 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
             this.options.type === "stdio" &&
             (this.stdioOutput.stdout || this.stdioOutput.stderr)
           ) {
-            errorMessage += "\n\nProcess output:";
+            errorMessage += "\n\nプロセス出力:";
             if (this.stdioOutput.stdout) {
-              errorMessage += `\nSTDOUT:\n${this.stdioOutput.stdout}`;
+              errorMessage += `\n標準出力:\n${this.stdioOutput.stdout}`;
             }
             if (this.stdioOutput.stderr) {
-              errorMessage += `\nSTDERR:\n${this.stdioOutput.stderr}`;
+              errorMessage += `\n標準エラー出力:\n${this.stdioOutput.stderr}`;
             }
           }
 

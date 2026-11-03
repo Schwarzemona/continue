@@ -7,6 +7,8 @@ import {
 } from "../..";
 import * as ideUtils from "../../util/ideUtils";
 import MCPConnection from "./MCPConnection";
+import path from "path";
+import { pathToFileURL } from "url";
 
 // Mock the shell path utility
 vi.mock("../../util/shellPath", () => ({
@@ -115,7 +117,7 @@ describe("MCPConnection", () => {
       await conn.connectClient(false, abortController.signal);
 
       expect(conn.status).toBe("error");
-      expect(conn.errors[0]).toContain("Unsupported transport type: invalid");
+      expect(conn.errors[0]).toContain("サポートされていないトランスポートタイプです: invalid");
     });
   });
 
@@ -165,13 +167,15 @@ describe("MCPConnection", () => {
 
     it("should resolve relative cwd using IDE workspace", async () => {
       const ide = {} as any;
+      const mockPath = path.resolve("/workspace/src");
+      const mockUri = pathToFileURL(mockPath).href;
       const mockResolve = vi
         .spyOn(ideUtils, "resolveRelativePathInDir")
-        .mockResolvedValue("file:///workspace/src");
+        .mockResolvedValue(mockUri);
       const conn = new MCPConnection(baseOptions, { ide });
 
       await expect((conn as any).resolveCwd("src")).resolves.toBe(
-        "/workspace/src",
+        mockPath,
       );
       expect(mockResolve).toHaveBeenCalledWith("src", ide);
     });
@@ -277,7 +281,7 @@ describe("MCPConnection", () => {
       await conn.connectClient(false, abortController.signal);
 
       expect(conn.status).toBe("error");
-      expect(conn.errors[0]).toContain("Failed to connect");
+      expect(conn.errors[0]).toContain('"test-mcp" への接続に失敗しました');
       // The connection should timeout before connect is called due to transport construction
       // Since transport construction happens first, and we're not mocking that,
       // the timeout will happen during transport construction or connect attempt
@@ -306,7 +310,7 @@ describe("MCPConnection", () => {
       await conn.connectClient(false, abortController.signal);
 
       expect(conn.status).toBe("error");
-      expect(conn.errors[0]).toContain('command "test-cmd" not found');
+      expect(conn.errors[0]).toContain('コマンド "test-cmd" が見つかりません');
       expect(mockConnect).toHaveBeenCalled();
     });
 

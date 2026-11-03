@@ -43,7 +43,7 @@ export function SelectedAssistantButton({
                   configLoading && "animate-spin-slow",
                 )}
               />
-              Loading
+              読み込み中
             </span>
           ) : (
             <>

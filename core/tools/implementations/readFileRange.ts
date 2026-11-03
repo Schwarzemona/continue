@@ -20,19 +20,19 @@ export const readFileRangeImpl: ToolImpl = async (args, extras) => {
   if (startLine < 1) {
     throw new ContinueError(
       ContinueErrorReason.InvalidLineNumber,
-      "startLine must be 1 or greater. Negative line numbers are not supported - use the terminal tool with 'tail' command for reading from file end.",
+      "startLineは1以上である必要があります",
     );
   }
   if (endLine < 1) {
     throw new ContinueError(
       ContinueErrorReason.InvalidLineNumber,
-      "endLine must be 1 or greater. Negative line numbers are not supported - use the terminal tool with 'tail' command for reading from file end.",
+      "endLineは1以上である必要があります",
     );
   }
   if (endLine < startLine) {
     throw new ContinueError(
       ContinueErrorReason.InvalidLineNumber,
-      `endLine (${endLine}) must be greater than or equal to startLine (${startLine})`,
+      `endLine(${endLine})はstartLine(${startLine})以上である必要があります`,
     );
   }
 
@@ -41,7 +41,7 @@ export const readFileRangeImpl: ToolImpl = async (args, extras) => {
   if (!resolvedPath) {
     throw new ContinueError(
       ContinueErrorReason.FileNotFound,
-      `File "${filepath}" does not exist or is not accessible. You might want to check the path and try again.`,
+      `ファイル「${filepath}」は存在しないか、アクセスできません`,
     );
   }
 

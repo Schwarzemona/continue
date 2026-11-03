@@ -34,7 +34,7 @@ export const DragOverlay: React.FC<DragOverlayProps> = ({ show, setShow }) => {
   return (
     <>
       <HoverDiv />
-      <HoverTextDiv>Hold ⇧ to drop image</HoverTextDiv>
+      <HoverTextDiv>⇧を押して画像をドロップ</HoverTextDiv>
     </>
   );
 };

@@ -267,9 +267,9 @@ export const streamNormalInput = createAsyncThunk<
               toolCallId: tc.toolCallId,
               output: [
                 {
-                  name: "Tool Call Error",
-                  description: "Premature Close",
-                  content: `"Premature Close" error: this tool call was aborted mid-stream because the arguments took too long to stream or there were network issues. Please re-attempt by breaking the operation into smaller chunks or trying something else`,
+                  name: "ツール呼び出しエラー",
+                  description: "早期終了",
+                  content: `"Premature Close"エラー: このツール呼び出しは、引数のストリーミングに時間がかかりすぎたか、ネットワークの問題によりストリームの途中で中断されました。操作をより小さなチャンクに分割するか、別の方法を試して再試行してください`,
                   icon: "problems",
                 },
               ],

@@ -10,8 +10,8 @@ import { BaseContextProvider } from "../index.js";
 class DebugLocalsProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "debugger",
-    displayTitle: "Debugger",
-    description: "Local variables",
+    displayTitle: "デバッガー",
+    description: "ローカル変数",
     type: "submenu",
     renderInlineAs: "",
   };
@@ -37,12 +37,12 @@ class DebugLocalsProvider extends BaseContextProvider {
     );
     return [
       {
-        description: "The value, name and possibly type of the local variables",
+        description: "ローカル変数の値、名前、および型の情報",
         content:
-          `This is a paused thread: ${thread?.name}\n` +
-          `Current local variable contents: \n${localVariables}.\n` +
-          `Current top level call stacks: ${callStackContents}`,
-        name: "Debugger",
+          `これは一時停止中のスレッドです: ${thread?.name}\n` +
+          `現在のローカル変数の内容: \n${localVariables}.\n` +
+          `現在のトップレベルのコールスタック: ${callStackContents}`,
+        name: "デバッガー",
       },
     ];
   }

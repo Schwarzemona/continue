@@ -79,7 +79,7 @@ export function OnboardingProvidersTab({
                   <Input
                     id={`${config?.provider}_apiKey`}
                     type="password"
-                    placeholder={`Enter your ${config?.title} API key`}
+                    placeholder={`あなたの ${config?.title} API キーを入力してください`}
                     className="w-full"
                     {...formMethods.register(`${config?.provider}_apiKey`)}
                   />
@@ -90,9 +90,9 @@ export function OnboardingProvidersTab({
                       rel="noopener noreferrer"
                       className="cursor-pointer text-inherit underline hover:text-inherit hover:brightness-125"
                     >
-                      Click here
+                      こちらをクリック
                     </a>{" "}
-                    to create a {config?.title} API key
+                    して {config?.title} API キーを作成してください
                   </span>
                 </div>
               ))}
@@ -105,7 +105,7 @@ export function OnboardingProvidersTab({
                 disabled={!hasAnyApiKey}
                 className="w-full cursor-pointer hover:opacity-90"
               >
-                Connect
+                接続
               </Button>
 
               <div className="w-full text-center">
@@ -114,11 +114,11 @@ export function OnboardingProvidersTab({
                     className="cursor-pointer underline hover:brightness-125"
                     onClick={handleClickMoreProviders}
                   >
-                    Click here
-                  </span>{" "}
-                  to view more providers
-                </span>
-              </div>
+                    こちらをクリック
+                  </span >{" "}
+                  して他のプロバイダーを表示する
+                </span >
+              </div >
             </div>
           </div>
         </FormProvider>

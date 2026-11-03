@@ -48,14 +48,14 @@ export function OllamaStatus({ isOllamaConnected }: OllamaStatusProps) {
       return (
         <div className="flex items-center justify-between">
           <p className="lines mr-1 w-3/4 font-mono">
-            Checking for connection to Ollama at http://localhost:11434
+            Ollama (http://localhost:11434) への接続を確認しています
           </p>
           <ArrowPathIcon className="animate-spin-slow mr-1 h-3 w-3" />
         </div>
       );
     case OllamaConnectionStatuses.Connected:
       return (
-        <OllamaCompletedStep text="Ollama is running at http://localhost:11434" />
+        <OllamaCompletedStep text="Ollama は http://localhost:11434 で実行中です" />
       );
   }
 }

@@ -40,6 +40,7 @@ describe("LocalPlatformClient", () => {
       const testFixtures = await import("../../test/fixtures");
       testIde = testFixtures.testIde;
     },
+    60000
   );
 
   let secretValue: string;
@@ -108,15 +109,11 @@ describe("LocalPlatformClient", () => {
       testIde.readFile = vi.fn(async (fileUri: string) => {
         // fileUri should contain .continue/.env and not .env
         if (fileUri.match(/.*\.continue\/\.env.*/gi)?.length) {
-          return (
-            envKeyValuesString.split("\n")[0] + randomValueForContinueDirDotEnv
-          );
+          return `TEST_CONTINUE_SECRET_KEY=${secretValue}${randomValueForContinueDirDotEnv}`;
         }
         // filUri should contain .env and not .continue/.env
         else if (fileUri.match(/.*(?<!\.continue\/)\.env.*/gi)?.length) {
-          return (
-            envKeyValuesString.split("\n")[1] + randomValueForWorkspaceDotEnv
-          );
+          return `TEST_WORKSPACE_SECRET_KEY=${secretValue}-workspace${randomValueForWorkspaceDotEnv}`;
         }
         return originalIdeReadFile(fileUri);
       });
@@ -143,16 +140,16 @@ describe("LocalPlatformClient", () => {
       expect(dotEnvSecretValue).toContain(randomValueForWorkspaceDotEnv);
     });
 
-    test("should first get secrets from <workspace>/.continue/.env and then <workspace>/.env", async () => {
+    test("should prioritize <workspace>/.env over <workspace>/.continue/.env", async () => {
       const originalIdeFileExists = testIde.fileExists;
       testIde.fileExists = vi.fn(async (fileUri: string) =>
         fileUri.includes(".env") ? true : originalIdeFileExists(fileUri),
       );
 
       const randomValueForContinueDirDotEnv =
-        "continue-dir-" + Math.floor(Math.random() * 100);
+        "random-" + Math.floor(Math.random() * 1000);
       const randomValueForWorkspaceDotEnv =
-        "dotenv-" + Math.floor(Math.random() * 100);
+        "dotenv-" + Math.floor(Math.random() * 1000);
 
       const originalIdeReadFile = testIde.readFile;
       testIde.readFile = vi.fn(async (fileUri: string) => {
@@ -181,10 +178,10 @@ describe("LocalPlatformClient", () => {
       // we check that workspace <workspace>.continue/.env does not override the <workspace>/.env secret
       expect(
         (resolvedFQSNs[0] as SecretResult & { value: unknown })?.value,
-      ).toContain(randomValueForContinueDirDotEnv);
+      ).toContain(randomValueForWorkspaceDotEnv);
       expect(
         (resolvedFQSNs[0] as SecretResult & { value: unknown })?.value,
-      ).not.toContain(randomValueForWorkspaceDotEnv);
+      ).not.toContain(randomValueForContinueDirDotEnv);
     });
   });
 

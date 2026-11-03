@@ -107,14 +107,15 @@ export async function evaluateToolPolicies(
         contextItems: [
           {
             icon: "problems",
-            name: "Security Policy Violation",
-            description: "Command Disabled",
-            content: `そのコマンドは使用できません。`,
+            name: "セキュリティポリシー違反",
+            description: "コマンドが無効化されています",
+            content: `そのコマンドは使用できません`,
             hidden: false,
           },
         ],
       }),
     );
+
   }
 
   return policyResults;

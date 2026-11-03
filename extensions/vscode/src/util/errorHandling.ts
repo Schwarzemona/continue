@@ -21,16 +21,16 @@ export async function handleLLMError(error: unknown): Promise<boolean> {
       process.platform === "win32" &&
       message.includes("Lemonade server may not be running")
     ) {
-      options = ["Start Lemonade", "Setup Instructions"];
+      options = ["Lemonadeを開始", "セットアップ手順"];
     } else {
       // For all other cases (Linux, not installed, etc.), direct to setup instructions
-      options = ["Setup Instructions"];
+      options = ["セットアップ手順"];
     }
 
     vscode.window.showErrorMessage(message, ...options).then((val) => {
-      if (val === "Setup Instructions") {
+      if (val === "セットアップ手順") {
         vscode.env.openExternal(vscode.Uri.parse("https://lemonade-server.ai"));
-      } else if (val === "Start Lemonade") {
+      } else if (val === "Lemonadeを開始") {
         vscode.commands.executeCommand("continue.startLocalLemonade");
       }
     });
@@ -45,9 +45,9 @@ export async function handleLLMError(error: unknown): Promise<boolean> {
   let options: string[] | undefined;
   let modelName = undefined;
   if (message.includes("Ollama may not be installed")) {
-    options = ["Download Ollama"];
+    options = ["Ollamaをダウンロード"];
   } else if (message.includes("Ollama may not be running")) {
-    options = ["Start Ollama"]; // We want "Start" to be the only choice
+    options = ["Ollamaを開始"]; // We want "Start" to be the only choice
   } else if (message.includes("ollama run") && "llm" in error) {
     //extract model name from error message matching the pattern "ollama run <model-name>"
     modelName = message.match(/`ollama run (.*)`/)?.[1];
@@ -56,8 +56,8 @@ export async function handleLLMError(error: unknown): Promise<boolean> {
       console.log(`${llm.providerName} already installing ${modelName}`);
       return false;
     }
-    message = `Model "${modelName}" is not found in Ollama. You need to install it.`;
-    options = [`Install Model`];
+    message = `Ollamaにモデル"${modelName}"が見つかりません。インストールが必要です。`;
+    options = [`モデルをインストール`];
   }
   if (options === undefined) {
     console.log("Found an unhandled Ollama error: ", message);
@@ -65,11 +65,11 @@ export async function handleLLMError(error: unknown): Promise<boolean> {
   }
 
   vscode.window.showErrorMessage(message, ...options).then((val) => {
-    if (val === "Download Ollama") {
+    if (val === "Ollamaをダウンロード") {
       vscode.env.openExternal(vscode.Uri.parse("https://ollama.ai/download"));
-    } else if (val === "Start Ollama") {
+    } else if (val === "Ollamaを開始") {
       vscode.commands.executeCommand("continue.startLocalOllama");
-    } else if (val === "Install Model" && "llm" in error) {
+    } else if (val === "モデルをインストール" && "llm" in error) {
       //Eventually, we might be able to support installing models for other LLM providers than Ollama
       vscode.commands.executeCommand(
         "continue.installModel",

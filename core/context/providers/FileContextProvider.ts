@@ -19,8 +19,8 @@ const MAX_SUBMENU_ITEMS = 10_000;
 class FileContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "file",
-    displayTitle: "Files",
-    description: "Type to search",
+    displayTitle: "ファイル",
+    description: "入力して検索",
     type: "submenu",
   };
 

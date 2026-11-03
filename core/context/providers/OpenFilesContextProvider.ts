@@ -10,8 +10,8 @@ import { BaseContextProvider } from "../index.js";
 class OpenFilesContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "open",
-    displayTitle: "Open Files",
-    description: "Reference the current open files",
+    displayTitle: "開いているファイル",
+    description: "現在開いているファイルを参照",
     type: "normal",
     renderInlineAs: "",
   };
@@ -35,7 +35,7 @@ class OpenFilesContextProvider extends BaseContextProvider {
           return {
             description: last2Parts,
             content:
-              "Content redacted, this file cannot be viewed for security reasons",
+              "セキュリティ上の理由により、このファイルの内容は閲覧できません。",
             name: baseName,
             uri: {
               type: "file",

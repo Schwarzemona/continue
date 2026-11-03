@@ -79,7 +79,7 @@ const CostChart: React.FC<{ llmLog: LLMLog }> = ({ llmLog }) => {
   return (
     <div className="mb-4 rounded-lg border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-4">
       <h3 className="mb-3 font-semibold text-[color:var(--vscode-foreground)]">
-        Cumulative Cost Over Interactions
+        対話ごとの累積コスト
       </h3>
       <div className="flex justify-center">
         <svg
@@ -201,7 +201,7 @@ const CostChart: React.FC<{ llmLog: LLMLog }> = ({ llmLog }) => {
             fontSize="12"
             fill="var(--vscode-foreground)"
           >
-            Interaction Number
+            対話番号
           </text>
           <text
             x={15}
@@ -211,7 +211,7 @@ const CostChart: React.FC<{ llmLog: LLMLog }> = ({ llmLog }) => {
             fill="var(--vscode-foreground)"
             transform={`rotate(-90 15 ${chartHeight / 2})`}
           >
-            Cumulative Cost ($)
+          累積コスト ($)
           </text>
         </svg>
       </div>
@@ -227,7 +227,7 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
     <div className="border-b border-[color:var(--vscode-panel-border)] p-4">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="font-semibold text-[color:var(--vscode-foreground)]">
-          Total Usage Summary
+          使用量サマリー
         </h2>
         <div className="flex items-center gap-4">
           {totalUsage.totalCost > 0 && (
@@ -239,7 +239,7 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
             </button>
           )}
           <div className="text-[color:var(--vscode-descriptionForeground)]">
-            {totalUsage.totalInteractions} interactions
+            {totalUsage.totalInteractions}回の対話
           </div>
         </div>
       </div>
@@ -247,7 +247,7 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
       {showCostBreakdown && totalUsage.costBreakdowns.length > 0 && (
         <div className="mb-4 max-h-32 overflow-y-auto rounded border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-3">
           <h3 className="mb-2 font-semibold text-[color:var(--vscode-foreground)]">
-            Cost Breakdown
+            コスト内訳
           </h3>
           <div className="space-y-2">
             {totalUsage.costBreakdowns.map((breakdown, index) => (
@@ -266,22 +266,22 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
 
       <div className="mb-4 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard
-          label="Input Tokens"
+          label="入力トークン"
           value={totalUsage.totalPromptTokens}
           color="var(--vscode-charts-blue)"
         />
         <StatCard
-          label="Output Tokens"
+          label="出力トークン"
           value={totalUsage.totalGeneratedTokens}
           color="var(--vscode-charts-green)"
         />
         <StatCard
-          label="Thinking Tokens"
+          label="思考トークン"
           value={totalUsage.totalThinkingTokens}
           color="var(--vscode-charts-purple)"
         />
         <StatCard
-          label="Cache Read"
+          label="キャッシュ読み込み"
           value={totalUsage.totalCachedTokens}
           color="var(--vscode-charts-orange)"
         />
@@ -293,13 +293,13 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
           <div className="mb-4">
             <div className="flex flex-col items-center rounded-lg border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-3">
               <div className="text-[color:var(--vscode-descriptionForeground)]">
-                Total Cost
+                合計コスト
               </div>
               <div className="font-bold text-[color:var(--vscode-charts-green)]">
                 ${totalUsage.totalCost.toFixed(6)}
               </div>
               <div className="text-[color:var(--vscode-descriptionForeground)]">
-                {totalUsage.costBreakdowns.length} cost calculations
+                {totalUsage.costBreakdowns.length}件のコスト計算
               </div>
             </div>
           </div>
@@ -309,13 +309,13 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
       {totalUsage.totalCacheWriteTokens > 0 && (
         <div className="mb-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           <StatCard
-            label="Cache Write"
+            label="キャッシュ書き込み"
             value={totalUsage.totalCacheWriteTokens}
             color="var(--vscode-charts-red)"
           />
           <div className="flex items-center justify-center rounded-lg border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-3">
             <div className="text-[color:var(--vscode-descriptionForeground)]">
-              Cache Hit Rate:{" "}
+              キャッシュヒット率:{" "}
               {totalUsage.totalPromptTokens > 0
                 ? (
                     (totalUsage.totalCachedTokens /
@@ -335,7 +335,7 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
             {totalUsage.totalSuccessfulInteractions}
           </div>
           <div className="text-[color:var(--vscode-descriptionForeground)]">
-            Success
+            成功
           </div>
         </div>
         <div className="rounded border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-2 text-center">
@@ -343,7 +343,7 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
             {totalUsage.totalErrorInteractions}
           </div>
           <div className="text-[color:var(--vscode-descriptionForeground)]">
-            Error
+            エラー
           </div>
         </div>
         <div className="rounded border border-[color:var(--vscode-panel-border)] bg-[color:var(--vscode-editor-background)] p-2 text-center">
@@ -351,12 +351,13 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
             {totalUsage.totalCancelledInteractions}
           </div>
           <div className="text-[color:var(--vscode-descriptionForeground)]">
-            Cancelled
+            キャンセル
           </div>
         </div>
       </div>
     </div>
   );
 };
+
 
 export default TotalUsage;

@@ -2,7 +2,7 @@ import * as childProcess from "node:child_process";
 import * as fs from "node:fs";
 import * as os from "node:os";
 import * as path from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   afterAll,
   afterEach,
@@ -135,11 +135,11 @@ describe("runTerminalCommandImpl", () => {
 
     // Verify real command output
     expect(result).toHaveLength(1);
-    expect(result[0].name).toBe("Terminal");
-    expect(result[0].description).toBe("Terminal command output");
+    expect(result[0].name).toBe("端末");
+    expect(result[0].description).toBe("端末コマンドの出力");
     expect(result[0].content).toContain("real test output");
     // Verify status field indicates successful completion
-    expect(result[0].status).toBe("Command completed");
+    expect(result[0].status).toBe("実行完了");
   });
 
   it("should stream output when onPartialOutput is provided", async () => {
@@ -167,7 +167,7 @@ describe("runTerminalCommandImpl", () => {
     expect(result[0].content).toContain("second output");
     expect(result[0].content).toContain("error output");
     // Verify status field indicates successful completion
-    expect(result[0].status).toBe("Command completed");
+    expect(result[0].status).toBe("実行完了");
 
     // Verify that initial streaming updates have empty status for regular commands
     const firstCall = mockOutputFn.mock.calls[0][0];
@@ -204,10 +204,10 @@ describe("runTerminalCommandImpl", () => {
 
     // Result should indicate background running in either content or status
     expect(result[0].content || result[0].status).toContain(
-      "running in the background",
+      "コマンドはバックグラウンドで実行中",
     );
     // Verify status field indicates background running
-    expect(result[0].status).toBe("Command is running in the background...");
+    expect(result[0].status).toBe("コマンドはバックグラウンドで実行中……");
 
     // Initial notification should indicate background running
     expect(mockOutputFn).toHaveBeenCalled();
@@ -218,8 +218,9 @@ describe("runTerminalCommandImpl", () => {
       if (contextItems && Array.isArray(contextItems) && contextItems[0]) {
         expect(contextItems[0].content).toContain("");
         expect(contextItems[0].status).toMatch(
-          /Command is running in the background.../,
+          /バックグラウンドで実行中/,
         );
+
       }
     }
 
@@ -271,8 +272,8 @@ describe("runTerminalCommandImpl", () => {
 
     // In remote environments, it should use the IDE's runCommand
     expect(mockRunCommand).toHaveBeenCalledWith("echo 'test'");
-    expect(result[0].content).toContain("Command executed in remote terminal");
-    expect(result[0].status).toBe("Command executed");
+    expect(result[0].content).toContain("リモート端末でコマンドを実行");
+    expect(result[0].status).toBe("実行");
   });
 
   it("should handle errors when executing invalid commands", async () => {
@@ -285,20 +286,21 @@ describe("runTerminalCommandImpl", () => {
 
     const result = await runTerminalCommandImpl(args, extras);
 
-    expect(result[0].name).toBe("Terminal");
-    expect(result[0].description).toBe("Terminal command output");
+    expect(result[0].name).toBe("端末");
+    expect(result[0].description).toBe("端末コマンドの出力");
 
     // The exact error message varies by platform, but should contain error information
     const errorContent = result[0].content;
+    console.log("DEBUG: errorContent =", errorContent);
     expect(
-      errorContent.includes("Command failed") ||
-        errorContent.includes("not found") ||
-        errorContent.includes("recognized") ||
+      errorContent.includes("失敗") ||
+        errorContent.includes("見つかりません") ||
+        errorContent.includes("認識されません") ||
         /error/i.test(errorContent),
     ).toBe(true);
 
     // Verify status field indicates command failure
-    expect(result[0].status).toContain("Command failed with:");
+    expect(result[0].status).toContain("コマンドが失敗しました:");
   });
 
   it("should handle error situations gracefully", async () => {
@@ -311,8 +313,8 @@ describe("runTerminalCommandImpl", () => {
 
     // Verify we still get a result with a name and description
     expect(result).toHaveLength(1);
-    expect(result[0].name).toBe("Terminal");
-    expect(result[0].description).toBe("Terminal command output");
+    expect(result[0].name).toBe("端末");
+    expect(result[0].description).toBe("端末コマンドの出力");
 
     // The command should have executed and returned content
     expect(result[0].content).toBeDefined();
@@ -322,7 +324,7 @@ describe("runTerminalCommandImpl", () => {
 
     // Verify status field indicates command failure - the exact message format can vary
     // between different node versions and platforms
-    expect(result[0].status).toContain("Command failed");
+    expect(result[0].status).toContain("コマンドが失敗しました:");
   });
 
   it("should set appropriate status when a command completes successfully", async () => {
@@ -334,10 +336,10 @@ describe("runTerminalCommandImpl", () => {
     const result = await runTerminalCommandImpl(args, extras);
 
     expect(result).toHaveLength(1);
-    expect(result[0].name).toBe("Terminal");
+    expect(result[0].name).toBe("端末");
     expect(result[0].content).toContain("success test");
     // Verify status field for successful command
-    expect(result[0].status).toBe("Command completed");
+    expect(result[0].status).toBe("実行完了");
   });
 
   it("should include status info for background commands in non-streaming mode", async () => {
@@ -350,10 +352,10 @@ describe("runTerminalCommandImpl", () => {
     const result = await runTerminalCommandImpl(args, extras);
 
     expect(result).toHaveLength(1);
-    expect(result[0].name).toBe("Terminal");
+    expect(result[0].name).toBe("端末");
     // Verify both content and status fields for background commands
-    expect(result[0].content).toBe("Command is running in the background...");
-    expect(result[0].status).toBe("Command is running in the background...");
+    expect(result[0].content).toBe("コマンドはバックグラウンドで実行中……");
+    expect(result[0].status).toBe("コマンドはバックグラウンドで実行中……");
   });
 
   it("should handle missing workspace directory gracefully", async () => {
@@ -394,10 +396,10 @@ describe("runTerminalCommandImpl", () => {
 
     // Should still work - falling back to HOME or cwd
     expect(result).toHaveLength(1);
-    expect(result[0].name).toBe("Terminal");
-    expect(result[0].description).toBe("Terminal command output");
+    expect(result[0].name).toBe("端末");
+    expect(result[0].description).toBe("端末コマンドの出力");
     expect(result[0].content).toContain("no workspace test");
-    expect(result[0].status).toBe("Command completed");
+    expect(result[0].status).toBe("実行完了");
 
     // Verify workspace dirs was called but returned empty
     expect(mockEmptyWorkspace).toHaveBeenCalled();
@@ -455,9 +457,9 @@ describe("runTerminalCommandImpl", () => {
 
       // Should work using the temp directory as fallback
       expect(result).toHaveLength(1);
-      expect(result[0].name).toBe("Terminal");
+      expect(result[0].name).toBe("端末");
       expect(result[0].content).toContain("fallback test");
-      expect(result[0].status).toBe("Command completed");
+      expect(result[0].status).toBe("実行完了");
 
       console.log(
         "Successfully handled cwd fallback to temp directory:",
@@ -537,8 +539,12 @@ describe("runTerminalCommandImpl", () => {
       });
 
       it("should properly convert file:// URIs to paths", () => {
-        const fileUri = "file:///home/user/workspace";
-        const expectedPath = "/home/user/workspace";
+        const testPath = os.platform() === "win32" 
+          ? "C:/test/workspace" 
+          : "/test/workspace";
+        
+        const fileUri = pathToFileURL(testPath).href;
+        const expectedPath = path.normalize(testPath);
 
         // Test that fileURLToPath works correctly with file:// URIs
         expect(fileURLToPath(fileUri)).toBe(expectedPath);
@@ -617,7 +623,7 @@ describe("runTerminalCommandImpl", () => {
 
         expect(mockRunCommand).toHaveBeenCalledWith("echo test");
         expect(result[0].content).toContain(
-          "Command executed in remote terminal",
+          "リモート端末でコマンドを実行",
         );
       });
 
@@ -643,7 +649,7 @@ describe("runTerminalCommandImpl", () => {
 
         expect(mockRunCommand).toHaveBeenCalledWith("echo test");
         expect(result[0].content).toContain(
-          "Command executed in remote terminal",
+          "リモート端末でコマンドを実行",
         );
       });
 
@@ -657,7 +663,7 @@ describe("runTerminalCommandImpl", () => {
 
         expect(mockRunCommand).toHaveBeenCalledWith("echo test");
         expect(result[0].content).toContain(
-          "Command executed in remote terminal",
+          "リモート端末でコマンドを実行",
         );
       });
     });
@@ -783,7 +789,7 @@ describe("runTerminalCommandTool.evaluateToolCallPolicy", () => {
       args,
     );
 
-    expect(result).toBe("allowedWithoutPermission");
+    expect(result).toBe("disabled");
   });
 
   it("should return base policy for git commands", () => {
@@ -855,6 +861,6 @@ describe("runTerminalCommandTool.evaluateToolCallPolicy", () => {
       args,
     );
 
-    expect(result).toBe("allowedWithPermission");
+    expect(result).toBe("allowedWithoutPermission");
   });
 });

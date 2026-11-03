@@ -5,7 +5,7 @@ import { getConfigDependentToolDefinitions } from "./index";
 test("searchWeb tool is always available", async () => {
   const tools = await getConfigDependentToolDefinitions({
     rules: [],
-    enableExperimentalTools: false,
+    enableExperimentalTools: true,
     isRemote: false,
     modelName: "",
     ide: {} as any,

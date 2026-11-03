@@ -20,7 +20,7 @@ export const lsToolImpl: ToolImpl = async (args, extras) => {
   if (!resolvedPath) {
     throw new ContinueError(
       ContinueErrorReason.DirectoryNotFound,
-      `Directory ${args.dirPath} not found or is not accessible. You can use absolute paths, relative paths, or paths starting with ~`,
+      `ディレクトリ「${args.dirPath}」が見つからないか、アクセスできません。絶対パス、相対パス、または~で始まるパスを使用できます。`,
     );
   }
 
@@ -36,23 +36,23 @@ export const lsToolImpl: ToolImpl = async (args, extras) => {
   let content =
     lines.length > 0
       ? lines.join("\n")
-      : `No files/folders found in ${resolvedPath.displayPath}`;
+      : `「${resolvedPath.displayPath}」にファイルやフォルダは見つかりませんでした`;
 
   const contextItems = [
     {
-      name: "File/folder list",
-      description: `Files/folders in ${resolvedPath.displayPath}`,
+      name: "ファイル/フォルダリスト",
+      description: `「${resolvedPath.displayPath}」内のファイル/フォルダ`,
       content,
     },
   ];
 
   if (entries.length > MAX_LS_TOOL_LINES) {
-    let warningContent = `${entries.length - MAX_LS_TOOL_LINES} ls entries were truncated`;
+    let warningContent = `${entries.length - MAX_LS_TOOL_LINES}個のlsエントリが切り詰められました`;
     if (args?.recursive) {
-      warningContent += ". Try using a non-recursive search";
+      warningContent += "。非再帰的な検索を試してください";
     }
     contextItems.push({
-      name: "Truncation warning",
+      name: "切り詰め警告",
       description: "",
       content: warningContent,
     });

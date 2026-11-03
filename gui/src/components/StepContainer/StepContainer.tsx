@@ -67,7 +67,7 @@ export default function StepContainer(props: StepContainerProps) {
       {
         messageType: "userInput",
         data: {
-          input: "中断したところから再開して。",
+          input: "続き",
         },
       },
       "*",

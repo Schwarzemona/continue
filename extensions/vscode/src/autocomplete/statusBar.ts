@@ -19,11 +19,11 @@ export const quickPickStatusText = (status: StatusBarStatus | undefined) => {
   switch (status) {
     case undefined:
     case StatusBarStatus.Disabled:
-      return "$(circle-slash) Disable autocomplete";
+      return "$(circle-slash)オートコンプリートを無効にする";
     case StatusBarStatus.Enabled:
-      return "$(check) Enable autocomplete";
+      return "$(check)オートコンプリートを有効にする";
     case StatusBarStatus.Paused:
-      return "$(debug-pause) Pause autocomplete";
+      return "$(debug-pause)オートコンプリートを一時停止する";
   }
 };
 
@@ -31,11 +31,11 @@ export const getStatusBarStatusFromQuickPickItemLabel = (
   label: string,
 ): StatusBarStatus | undefined => {
   switch (label) {
-    case "$(circle-slash) Disable autocomplete":
+    case "$(circle-slash)オートコンプリートを無効にする":
       return StatusBarStatus.Disabled;
-    case "$(check) Enable autocomplete":
+    case "$(check)オートコンプリートを有効にする":
       return StatusBarStatus.Enabled;
-    case "$(debug-pause) Pause autocomplete":
+    case "$(debug-pause)オートコンプリートを一時停止する":
       return StatusBarStatus.Paused;
     default:
       return undefined;
@@ -48,26 +48,26 @@ const statusBarItemText = (
   error?: boolean,
 ) => {
   if (error) {
-    return "$(alert) Continue (config error)";
+    return "$(alert)Continue(設定エラー)";
   }
 
   let text: string;
   switch (status) {
     case undefined:
       if (loading) {
-        text = "$(loading~spin) Continue";
+        text = "$(loading~spin)Continue";
       } else {
         text = "Continue";
       }
       break;
     case StatusBarStatus.Disabled:
-      text = "$(circle-slash) Continue";
+      text = "$(circle-slash)Continue";
       break;
     case StatusBarStatus.Enabled:
-      text = "$(check) Continue";
+      text = "$(check)Continue";
       break;
     case StatusBarStatus.Paused:
-      text = "$(debug-pause) Continue";
+      text = "$(debug-pause)Continue";
       break;
     default:
       text = "Continue";
@@ -87,15 +87,15 @@ const statusBarItemTooltip = (status: StatusBarStatus | undefined) => {
   switch (status) {
     case undefined:
     case StatusBarStatus.Disabled:
-      return "Click to enable tab autocomplete";
+      return "クリックしてタブのオートコンプリートを有効にする";
     case StatusBarStatus.Enabled:
       const config = vscode.workspace.getConfiguration(EXTENSION_NAME);
       const nextEditEnabled = config.get<boolean>("enableNextEdit") ?? false;
       return nextEditEnabled
-        ? "Next Edit is enabled"
-        : "Tab autocomplete is enabled";
+        ? "次の編集候補が有効です"
+        : "タブのオートコンプリートが有効です";
     case StatusBarStatus.Paused:
-      return "Tab autocomplete is paused";
+      return "タブのオートコンプリートは一時停止しています";
   }
 };
 
@@ -203,12 +203,12 @@ export function getAutocompleteStatusBarDescription(
     return undefined;
   }
 
-  let description = "Current autocomplete model";
+  let description = "現在のオートコンプリートモデル";
 
   // Only set for Mistral since our default config includes Codestral without
   // an API key
   if ((apiKey === undefined || apiKey === "") && providerName === "mistral") {
-    description += " (Missing API key)";
+    description += "(APIキーが不足しています)";
   }
 
   return description;
@@ -219,19 +219,19 @@ export function getAutocompleteStatusBarTitle(
   { title }: ILLM,
 ): string {
   if (!title) {
-    return "Unnamed Model";
+    return "名前のないモデル";
   }
 
   if (title === selected) {
-    return `$(check) ${title}`;
+    return `$(check)${title}`;
   }
 
   return title;
 }
 
-const USE_FIM_MENU_ITEM_LABEL = "$(export) Use FIM autocomplete over Next Edit";
+const USE_FIM_MENU_ITEM_LABEL = "$(export)Next Editの代わりにFIMオートコンプリートを使用する";
 const USE_NEXT_EDIT_MENU_ITEM_LABEL =
-  "$(sparkle) Use Next Edit over FIM autocomplete";
+  "$(sparkle)FIMオートコンプリートの代わりにNext Editを使用する";
 
 // Shows what items get rendered in the autocomplete menu.
 export function getNextEditMenuItems(

@@ -147,29 +147,26 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
   if (statusCode === 404) {
     errorContent = (
       <div className="flex flex-col gap-2">
-        <span>Likely causes:</span>
+        <span className="font-medium">考えられる原因:</span>
         <ul className="m-0">
           <li>
-            <span>無効</span>
-            <code>apiBase</code>
+            <span className="text-gray-400">無効な</span>
+            <code className="ml-1">apiBase</code>
             {selectedModel && (
               <>
-                <span>{`: `}</span>
-                <code>{selectedModel.apiBase}</code>
+                <span className="ml-1">: </span>
+                <code className="ml-1">{selectedModel.apiBase}</code>
               </>
             )}
           </li>
           <li>
-            <span>モデル/デプロイメントが見つかりません</span>
+            <span className="text-gray-400">モデル/デプロイメントが見つかりません: </span>
             {selectedModel && (
-              <>
-                <span>{` for: `}</span>
-                <code>{selectedModel.model}</code>
-              </>
+              <code className="ml-1">{selectedModel.model}</code>
             )}
           </li>
         </ul>
-        <div>{configButton}</div>
+        <div className="mt-2">{configButton}</div>
       </div>
     );
   }
@@ -249,7 +246,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
   return (
     <div className="flex flex-col gap-4 px-3 pb-3 pt-3">
       {/* Concise error title */}
-      <h3 className="text-error m-0 p-0 font-medium">モデルの応答エラー処理</h3>
+      <h3 className="text-error m-0 p-0 font-medium">モデルの応答エラー</h3>
 
       {errorContent}
 

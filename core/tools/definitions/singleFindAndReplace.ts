@@ -23,7 +23,7 @@ export const singleFindAndReplaceTool: Tool = {
   isInstant: false,
   function: {
     name: BuiltInToolNames.SingleFindAndReplace,
-    description: `ファイル内で正確な文字列置換します。\`replace_all\`を使用しない場合、\`old_string\`がファイル内で一意でないと編集は失敗します。一意にするために周囲のコンテキストを含めたより長い文字列を指定するか、\`replace_all\`を使用して\`old_string\`のすべてのインスタンスを変更します。ユーザーが作業中にファイルを編集することもあります。編集を行う直前に、常に\`${BuiltInToolNames.ReadFile}\`ツールを使用して、ファイルの最新のコンテンツとコンテキストを理解します。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
+    description: `ファイル内で正確な文字列置換します。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
     parameters: {
       type: "object",
       required: ["filepath", "old_string", "new_string"],
@@ -36,25 +36,23 @@ export const singleFindAndReplaceTool: Tool = {
         old_string: {
           type: "string",
           description:
-            "置換するテキスト。空白やインデントを含め、正確に一致する必要があります",
+            "置換するテキスト。",
         },
         new_string: {
           type: "string",
           description:
-            "置換後のテキスト。old_string とは異なる必要があります。",
+            "置換後のテキスト。",
         },
         replace_all: {
           type: "boolean",
           description:
-            "ファイル内のold_stringのすべての出現箇所を置換します(デフォルトはfalse)。",
+            "ファイル内のold_stringのすべての出現箇所を置換するかどうか(デフォルトはfalse)。",
         },
       },
     },
   },
   systemMessageDescription: {
-    prefix: `To perform exact string replacements in files, use the ${BuiltInToolNames.SingleFindAndReplace} tool with a filepath (relative to the root of the workspace) and the strings to find and replace.
-
-  For example, you could respond with:`,
+    prefix: `ファイル内で正確な文字列置換を行うには、filepath（ワークスペースのルートからの相対パス）と置換対象の文字列を指定して ${BuiltInToolNames.SingleFindAndReplace} ツールを使用してください。\n\n  例えば、次のように応答できます:`,
     exampleArgs: [
       ["filepath", "path/to/file.ts"],
       ["old_string", "const oldVariable = 'value'"],

@@ -10,8 +10,8 @@ import { BaseContextProvider } from "../index.js";
 class ProblemsContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "problems",
-    displayTitle: "Problems",
-    description: "Reference problems in the current file",
+    displayTitle: "問題",
+    description: "現在のファイル内の問題を参照",
     type: "normal",
   };
 
@@ -39,9 +39,9 @@ class ProblemsContextProvider extends BaseContextProvider {
           .join("\n");
 
         return {
-          description: "Problems in current file",
+          description: "現在のファイル内の問題",
           content: `\`\`\`${relativePathOrBasename}\n${rangeContent}\n\`\`\`\n${problem.message}\n\n`,
-          name: `Warnings in ${baseName}`,
+          name: `${baseName} 内の警告`,
         };
       }),
     );
@@ -49,9 +49,9 @@ class ProblemsContextProvider extends BaseContextProvider {
     return items.length === 0
       ? [
           {
-            description: "Problems in current file",
-            content: "There are no problems found in the open file.",
-            name: "No problems found",
+            description: "現在のファイル内の問題",
+            content: "開いているファイルに問題は見つかりませんでした。",
+            name: "問題は見つかりませんでした",
           },
         ]
       : items;

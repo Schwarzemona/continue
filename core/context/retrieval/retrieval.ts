@@ -81,7 +81,7 @@ export async function retrieveContextItemsFromEmbeddings(
     if (extras.config.disableIndexing) {
       void extras.ide.showToast(
         "warning",
-        "No results found (Indexing disabled).",
+        "インデックス作成が無効です",
       );
       return [];
     }
@@ -89,7 +89,7 @@ export async function retrieveContextItemsFromEmbeddings(
       return [
         {
           ...INSTRUCTIONS_BASE_ITEM,
-          content: "No results were found. Try using other tools.",
+          content: "結果が見つかりませんでした",
         },
       ];
     }
@@ -100,7 +100,7 @@ export async function retrieveContextItemsFromEmbeddings(
     {
       ...INSTRUCTIONS_BASE_ITEM,
       content:
-        "Use the above code to answer the following question. You should not reference any files outside of what is shown, unless they are commonly known files, like a .gitignore or package.json. Reference the filenames whenever possible. If there isn't enough information to answer the question, suggest where the user might look to learn more.",
+        "以下の質問に関連があるファイルは上記です。",
     },
     ...results
       .sort((a, b) => a.filepath.localeCompare(b.filepath))
@@ -119,7 +119,7 @@ export async function retrieveContextItemsFromEmbeddings(
               ? baseName
               : `${baseName} (${r.startLine + 1}-${r.endLine + 1})`,
           description: last2Parts,
-          content: `\`\`\`${relativePathOrBasename}\n${r.content}\n\`\`\``,
+          content: `${relativePathOrBasename}`,
           uri: {
             type: "file" as const,
             value: r.filepath,

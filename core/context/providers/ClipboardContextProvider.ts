@@ -13,13 +13,13 @@ const MAX_CLIPBOARD_ITEMS = 10;
 class ClipboardContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "clipboard",
-    displayTitle: "Clipboard",
-    description: "Recent copies",
+    displayTitle: "クリップボード",
+    description: "最近のコピー",
     type: "submenu",
   };
 
   get deprecationMessage() {
-    return "The clipboard context provider is deprecated as it is not used. It will be removed in a future version.";
+    return "クリップボードのコンテキストプロバイダーは使用されていないため非推奨です。将来のバージョンで削除されます。";
   }
 
   async getContextItems(
@@ -34,7 +34,7 @@ class ClipboardContextProvider extends BaseContextProvider {
       clipboardCache.select(id);
       return [
         {
-          name: "Clipboard item",
+          name: "クリップボード項目",
           description: content.slice(0, 20),
           content,
         },

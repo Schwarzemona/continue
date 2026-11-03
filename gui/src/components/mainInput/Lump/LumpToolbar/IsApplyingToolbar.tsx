@@ -26,7 +26,7 @@ export const IsApplyingToolbar = () => {
         }}
       >
         {/* JetBrains overrides cmd+backspace, so we have to use another shortcut */}
-        {jetbrains ? getAltKeyLabel() : getMetaKeyLabel()} ⌫ Cancel
+        {jetbrains ? getAltKeyLabel() : getMetaKeyLabel()} + ⌫キャンセル
       </div>
     </div>
   );

@@ -23,11 +23,11 @@ function getPreferredShell(): string {
   }
 }
 
-const PLATFORM_INFO = `${os.platform()}、${os.arch()}、およびシェル${getPreferredShell()}に最適化されたターミナルコマンドとスクリプトを選択してください。`;
+const PLATFORM_INFO = `${os.platform()}、${os.arch()}、およびシェル${getPreferredShell()}に最適化された端末コマンドとスクリプトを選択してください。`;
 
 const RUN_COMMAND_NOTES = `シェルはステートフルではなく、以前のコマンドを記憶しません。\
 特別な権限や管理者権限を必要とするコマンドは実行できません。\
-重要: ファイルを編集するには、コマンド（sed, awkなど）の代わりに必ずEdit/MultiEditツールを使用します。\
+重要: ファイルの捜索や編集のコマンドは実行できません。\
 ${PLATFORM_INFO}`;
 
 export const runTerminalCommandTool: Tool = {
@@ -40,7 +40,7 @@ export const runTerminalCommandTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.RunTerminalCommand,
-    description: `現在のディレクトリでターミナルコマンドを実行します。\n${RUN_COMMAND_NOTES}`,
+    description: `現在のディレクトリで端末コマンドを実行します。\n${RUN_COMMAND_NOTES}`,
     parameters: {
       type: "object",
       required: ["command"],
@@ -68,10 +68,7 @@ export const runTerminalCommandTool: Tool = {
     );
   },
   systemMessageDescription: {
-    prefix: `To run a terminal command, use the ${BuiltInToolNames.RunTerminalCommand} tool
-${RUN_COMMAND_NOTES}
-You can also optionally include the waitForCompletion argument set to false to run the command in the background.      
-For example, to see the git log, you could respond with:`,
+    prefix: `端末コマンドを実行するには、${BuiltInToolNames.RunTerminalCommand} ツールを使用してください。\n${RUN_COMMAND_NOTES}\nまた、waitForCompletion 引数を false に設定して、コマンドをバックグラウンドで実行することもできます。\n例えば、git log を表示するには、次のように応答できます:`,
     exampleArgs: [["command", "git log"]],
   },
 };

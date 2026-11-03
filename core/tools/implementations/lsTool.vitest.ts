@@ -65,8 +65,8 @@ test("lsToolImpl truncates output when entries exceed MAX_LS_TOOL_LINES", async 
   expect(result.length).toBe(2);
   expect(result[0].content).toContain("file1.txt");
   expect(result[0].content).toContain("file199.txt");
-  expect(result[1].content).toContain("Try using a non-recursive search");
-  expect(result[1].content).toContain("50 ls entries were truncated");
+  expect(result[1].content).toContain("非再帰的な検索を試してください");
+  expect(result[1].content).toContain("50個のlsエントリが切り詰められました");
 
   // Check that only MAX_LS_TOOL_LINES entries are included
   const contentLines = result[0].content.split("\n");
@@ -74,7 +74,7 @@ test("lsToolImpl truncates output when entries exceed MAX_LS_TOOL_LINES", async 
   expect(contentLines.length).toBe(200);
 
   // Check the suggestion to use non-recursive search is included
-  expect(result[1].content).toContain("Try using a non-recursive search");
+  expect(result[1].content).toContain("非再帰的な検索を試してください");
 });
 
 test("lsToolImpl shows truncation message without suggestion for non-recursive search", async () => {
@@ -91,10 +91,10 @@ test("lsToolImpl shows truncation message without suggestion for non-recursive s
 
   // Check that the result contains the truncation message
   expect(result.length).toBe(2);
-  expect(result[1].content).toContain("50 ls entries were truncated");
+  expect(result[1].content).toContain("50個のlsエントリが切り詰められました");
 
   // Check that the suggestion to use non-recursive search is NOT included
-  expect(result[1].content).not.toContain("Try using a non-recursive search");
+  expect(result[1].content).not.toContain("非再帰的な検索を試してください");
 });
 
 test("lsToolImpl shows message when no files are found", async () => {
@@ -105,5 +105,5 @@ test("lsToolImpl shows message when no files are found", async () => {
 
   // Check that the result contains the "no files found" message
   expect(result.length).toBe(1);
-  expect(result[0].content).toBe("No files/folders found in emptyDir");
+  expect(result[0].content).toBe("「emptyDir」にファイルやフォルダは見つかりませんでした");
 });

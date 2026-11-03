@@ -9,13 +9,12 @@ export default function FeedbackDialog() {
     <div className="mx-auto flex max-w-md flex-col p-6 pt-8">
       <div className="flex items-center gap-2 font-medium">
         <span>👋</span>
-        <span>Help us improve Continue</span>
-      </div>
+        <span>Continueの改善にご協力ください</span>
+      </div >
 
       <p className="text-foreground leading-relaxed">
-        We're always working to make Continue better and would love to hear from
-        you. If you're interested in sharing your experience, please enter your
-        details below.
+        Continueをより良くするために常に努力しており、ぜひ皆様の声をお聞かせください。
+        もしよろしければ、以下の項目にご記入をお願いいたします。
       </p>
 
       <form
@@ -24,9 +23,10 @@ export default function FeedbackDialog() {
           dispatch(
             setDialogMessage(
               <div className="p-6 text-center">
-                <div className="mb-2">✓ Thank you!</div>
-                <p className="text-foreground">We'll be in touch soon.</p>
-              </div>,
+                <div className="mb-2">✓ ありがとうございます！</div >
+                <p className="text-foreground">後ほどご連絡いたします。</p>
+              </div >
+,
             ),
           );
 
@@ -38,8 +38,8 @@ export default function FeedbackDialog() {
         }}
         className="flex flex-col gap-3"
       >
-        <Input type="text" name="name" placeholder="Name" required />
-        <Input type="email" name="email" placeholder="Email" required />
+        <Input type="text" name="name" placeholder="お名前" required />
+        <Input type="email" name="email" placeholder="メールアドレス" required />
         <div className="mt-2 flex justify-between gap-2">
           <SecondaryButton
             className="flex-1"
@@ -49,16 +49,16 @@ export default function FeedbackDialog() {
               dispatch(setDialogMessage(undefined));
             }}
           >
-            Not now
+            今はしない
           </SecondaryButton>
           <Button className="flex-1" type="submit">
-            Submit
+            送信
           </Button>
         </div>
       </form>
 
       <p className="text-description-muted">
-        We'll only use this information to reach out for feedback.
+        この情報はフィードバックのための連絡のみに使用されます。
       </p>
     </div>
   );

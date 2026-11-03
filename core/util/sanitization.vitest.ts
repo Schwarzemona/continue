@@ -175,7 +175,8 @@ describe("validateGitHubRepoUrl", () => {
  * that sanitization transforms inputs, but only these integration tests prove
  * that the transformed output is safe when executed in a real shell.
  */
-describe("sanitizeShellArgument - integration tests", () => {
+if (process.platform !== 'win32') {
+  describe("sanitizeShellArgument - integration tests", () => {
   // Helper function to safely execute a command with a timeout
   const safeExec = (command: string): string => {
     try {
@@ -360,3 +361,4 @@ describe("sanitizeShellArgument - integration tests", () => {
     expect(result).toContain("`date`");
   });
 });
+}

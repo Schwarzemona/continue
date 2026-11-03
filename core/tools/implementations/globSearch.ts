@@ -14,16 +14,16 @@ export const fileGlobSearchImpl: ToolImpl = async (args, extras) => {
   if (results.length === 0) {
     return [
       {
-        name: "File results",
-        description: "glob search",
-        content: "The glob search returned no results.",
+        name: "ファイル検索結果",
+        description: "glob検索",
+        content: "ファイルが見つかりませんでした",
       },
     ];
   }
   const contextItems: ContextItem[] = [
     {
-      name: "File results",
-      description: "glob search",
+      name: "ファイル検索結果",
+      description: "glob検索",
       content: results.join("\n"),
     },
   ];
@@ -31,9 +31,9 @@ export const fileGlobSearchImpl: ToolImpl = async (args, extras) => {
   // In case of truncation, add a warning
   if (results.length === MAX_AGENT_GLOB_RESULTS) {
     contextItems.push({
-      name: "Truncation warning",
+      name: "切り詰め警告",
       description: "",
-      content: `Warning: the results above were truncated to the first ${MAX_AGENT_GLOB_RESULTS} files. If the results are not satisfactory, refine your search pattern`,
+      content: `警告: 上記の結果は${MAX_AGENT_GLOB_RESULTS}個のファイルに切り詰められました`,
     });
   }
 

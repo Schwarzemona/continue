@@ -41,12 +41,12 @@ interface MCPServerStatusProps {
 }
 
 const ServerStatusTooltip: Record<MCPConnectionStatus, string> = {
-  connected: "Active",
-  connecting: "Connecting",
-  "not-connected": "Inactive",
-  disabled: "Off",
-  authenticating: "Authenticating",
-  error: "Error",
+  connected: "アクティブ",
+  connecting: "接続中",
+  "not-connected": "非アクティブ",
+  disabled: "オフ",
+  authenticating: "認証中",
+  error: "エラー",
 };
 
 const ServerStatusColor: Record<MCPConnectionStatus, string> = {
@@ -203,7 +203,7 @@ function MCPServerPreview({
               </div>
             ) : (
               <div className="italic text-gray-500">
-                No {title.toLowerCase()} available
+                {title}は利用できません
               </div>
             )}
           </div>
@@ -273,7 +273,8 @@ function MCPServerPreview({
                   onClick={onRemoveAuth}
                   className="justify-start gap-x-1.5"
                 >
-                  <UserCircleIcon className="h-4 w-4 flex-shrink-0" /> Logout
+                <UserCircleIcon className="h-4 w-4 flex-shrink-0" />
+                  ログアウト
                 </ListboxOption>
               )}
 
@@ -303,22 +304,29 @@ function MCPServerPreview({
                   onClick={onDisconnect}
                   className="justify-start gap-x-1.5"
                 >
-                  <StopCircleIcon className="h-4 w-4 flex-shrink-0" /> 切断
+                <StopCircleIcon className="h-4 w-4 flex-shrink-0" />
+                切断
                 </ListboxOption>
               )}
 
-              {server.status !== "connecting" && (
+              {server.status !== "connecting" && server.status !== "disabled" && (
                 <ListboxOption
                   value="reconnect"
                   onClick={onRefresh}
                   className="justify-start gap-x-1.5"
                 >
-                  {server.status === "disabled" ? (
-                    <PlayCircleIcon className="h-4 w-4 flex-shrink-0" />
-                  ) : (
-                    <ArrowPathIcon className="h-4 w-4 flex-shrink-0" />
-                  )}
-                  接続
+                <PlayCircleIcon className="h-4 w-4 flex-shrink-0" />
+                再接続
+                </ListboxOption>
+              )}
+              {server.status !== "connecting" && server.status === "disabled" && (
+                <ListboxOption
+                  value="connect"
+                  onClick={onRefresh}
+                  className="justify-start gap-x-1.5"
+                >
+                <ArrowPathIcon className="h-4 w-4 flex-shrink-0" />
+                接続
                 </ListboxOption>
               )}
             </ListboxOptions>
@@ -337,7 +345,7 @@ function MCPServerPreview({
         />
         {server.prompts.length > 0 && (
           <ResourceRow
-            title="Prompts"
+            title="プロンプト"
             items={server.prompts}
             icon={
               <CommandLineIcon className="text-description h-4 w-4 flex-shrink-0" />
@@ -348,7 +356,7 @@ function MCPServerPreview({
         {(server.resources.length > 0 ||
           server.resourceTemplates.length > 0) && (
           <ResourceRow
-            title="Resources"
+            title="リソース"
             items={[...server.resources, ...server.resourceTemplates]}
             icon={
               <CircleStackIcon className="text-description h-4 w-4 flex-shrink-0" />

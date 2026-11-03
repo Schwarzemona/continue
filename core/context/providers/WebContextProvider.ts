@@ -27,7 +27,7 @@ export const fetchSearchResults = async (
 
   if (!resp.ok) {
     const text = await resp.text();
-    throw new Error(`Failed to fetch web context: ${text}`);
+    throw new Error(`ウェブのコンテキスト取得に失敗しました: ${text}`);
   }
   return await resp.json();
 };
@@ -38,8 +38,8 @@ export default class WebContextProvider extends BaseContextProvider {
 
   static description: ContextProviderDescription = {
     title: "web",
-    displayTitle: "Web",
-    description: "Search the web",
+    displayTitle: "ウェブ",
+    description: "ウェブを検索",
     type: "normal",
     renderInlineAs: "",
   };

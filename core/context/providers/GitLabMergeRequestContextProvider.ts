@@ -71,13 +71,13 @@ const getSubprocess = async (extras: ContextProviderExtras) => {
 class GitLabMergeRequestContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "gitlab-mr",
-    displayTitle: "GitLab Merge Request",
-    description: "Reference comments in a GitLab Merge Request",
+    displayTitle: "GitLab マージリクエスト",
+    description: "GitLab マージリクエスト内のコメントを参照",
     type: "normal",
   };
 
   get deprecationMessage() {
-    return "The Gitlab Merge Request context provider is now deprecated and will be removed in a later version. Please consider using the GitLab MCP (https://continue.dev/docker/mcp-gitlab) instead.";
+    return "GitLab マージリクエスト コンテキストプロバイダーは非推奨になりました。代わりに GitLab MCP (https://continue.dev/docker/mcp-gitlab) の使用を検討してください。";
   }
 
   private async getApi(): Promise<AxiosInstance> {
@@ -87,7 +87,7 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
     const token = this.options.token;
 
     if (!token) {
-      throw new Error("GitLab Private Token is required!");
+      throw new Error("GitLab プライベートトークンが必要です！");
     }
 
     return Axios.create({
@@ -169,10 +169,10 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
 
       for (const mergeRequest of mergeRequests) {
         const parts = [
-          `# GitLab Merge Request\ntitle: "${
+          `# GitLab マージリクエスト\ntitle: "${
             mergeRequest.title
-          }"\ndescription: "${mergeRequest.description ?? "None"}"`,
-          "## Comments",
+          }"\ndescription: "${mergeRequest.description ?? "なし"}"`,
+          "## コメント",
         ];
 
         const comments = await api.get<Array<GitLabComment>>(
@@ -215,12 +215,12 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
 
         const commentFormatter = async (comment: GitLabComment) => {
           const commentLabel = comment.body.includes("```suggestion")
-            ? "Code Suggestion"
-            : "Comment";
+            ? "コードの提案"
+            : "コメント";
           let result = `#### ${commentLabel}\nauthor: "${
             comment.author.name
           }"\ndate: "${comment.created_at}"\nresolved: ${
-            comment.resolved ? "Yes" : "No"
+            comment.resolved ? "はい" : "いいえ"
           }`;
 
           if (comment.position?.new_line) {
@@ -271,29 +271,29 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
         result.push({
           name: mergeRequest.title,
           content,
-          description: "Comments from the Merge Request for this branch.",
+          description: "このブランチのマージリクエストからのコメント",
         });
       }
     } catch (ex) {
-      let content = "# GitLab Merge Request\n\nError getting merge request. ";
+      let content = "# GitLab マージリクエスト\n\nマージリクエストの取得中にエラーが発生しました。 ";
       if (ex instanceof AxiosError) {
         if (ex.response) {
           const errorMessage = ex.response?.data
             ? (ex.response.data.message ?? JSON.stringify(ex.response?.data))
             : `${ex.response.status}: ${ex.response.statusText}`;
-          content += `GitLab Error: ${errorMessage}`;
+          content += `GitLab エラー: ${errorMessage}`;
         } else {
-          content += `GitLab Request Error ${ex.request}`;
+          content += `GitLab リクエストエラー ${ex.request}`;
         }
       } else {
         // @ts-ignore
-        content += `Unknown error: ${ex.message ?? JSON.stringify(ex)}`;
+        content += `不明なエラー: ${ex.message ?? JSON.stringify(ex)}`;
       }
 
       result.push({
-        name: "GitLab Merge Request",
+        name: "GitLab マージリクエスト",
         content,
-        description: "Error getting the Merge Request for this branch.",
+        description: "このブランチのマージリクエストの取得中にエラーが発生しました。",
       });
     }
 

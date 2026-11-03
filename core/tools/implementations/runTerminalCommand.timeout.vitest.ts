@@ -133,7 +133,7 @@ describe("runTerminalCommand timeout functionality", () => {
       (call: any[]) => call[1] === 120_000,
     );
     expect(timeoutCalls.length).toBe(0);
-    expect(result[0].status).toContain("background");
+    expect(result[0].status).toContain("バックグラウンドで実行中");
   });
 
   it("should kill process when timeout fires (streaming)", async () => {
@@ -147,7 +147,7 @@ describe("runTerminalCommand timeout functionality", () => {
     await vi.runAllTimersAsync();
     const result = await resultPromise;
     expect(result[0].content).toContain(
-      "[Timeout: process killed after 2 minutes]",
+      "[タイムアウト: 2分経過しました]",
     );
   });
 

@@ -68,10 +68,9 @@ function ConfigPage() {
         <div className="block px-4 py-4 sm:hidden">
           <Alert type="warning" className="max-w-md">
             <div className="flex flex-col">
-              <div className="font-medium">Screen width too small</div>
+              <div className="font-medium">画面幅が狭すぎます</div>
               <div className="text-description mt-1">
-                To view settings, please expand the sidebar by dragging the
-                left/right border
+                設定を表示するには、左右の境界線をドラッグしてサイドバーを広げてください
               </div>
             </div>
           </Alert>

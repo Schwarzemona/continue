@@ -203,7 +203,7 @@ const getCommandsMap: (
       range: vscode.Range,
       diagnosticMessage: string,
     ) => {
-      const prompt = `Please explain the cause of this error and how to solve it: ${diagnosticMessage}`;
+      const prompt = `このエラーの原因と解決方法を説明してください: ${diagnosticMessage}`;
 
       addCodeToContextFromRange(range, sidebar.webviewProtocol, prompt);
 
@@ -326,28 +326,28 @@ const getCommandsMap: (
     "continue.writeCommentsForCode": async () => {
       streamInlineEdit(
         "comment",
-        "Write comments for this code. Do not change anything about the code itself.",
+        "このコードにコメントを書いてください。コード自体は変更しないでください。",
       );
     },
     "continue.writeDocstringForCode": async () => {
       void streamInlineEdit(
         "docstring",
-        "Write a docstring for this code. Do not change anything about the code itself.",
+        "このコードにdocstringを書いてください。コード自体は変更しないでください。",
       );
     },
     "continue.fixCode": async () => {
       streamInlineEdit(
         "fix",
-        "Fix this code. If it is already 100% correct, simply rewrite the code.",
+        "このコードを修正してください。もし既に100%正しい場合は、単にコードを書き直してください。",
       );
     },
     "continue.optimizeCode": async () => {
-      streamInlineEdit("optimize", "Optimize this code");
+      streamInlineEdit("optimize", "このコードを最適化してください");
     },
     "continue.fixGrammar": async () => {
       streamInlineEdit(
         "fixGrammar",
-        "If there are any grammar or spelling mistakes in this writing, fix them. Do not make other large changes to the writing.",
+        "この文章に文法や綴りの間違いがあれば修正してください。それ以外の大きな変更はしないでください。",
       );
     },
     "continue.clearConsole": async () => {
@@ -362,7 +362,7 @@ const getCommandsMap: (
       vscode.commands.executeCommand("continue.continueGUIView.focus");
 
       sidebar.webviewProtocol?.request("userInput", {
-        input: `I got the following error, can you please help explain how to fix it?\n\n${terminalContents.trim()}`,
+        input: `以下のエラーが発生しました。解決方法を説明してください。\n\n${terminalContents.trim()}`,
       });
     },
     "continue.hideInlineTip": () => {
@@ -389,7 +389,7 @@ const getCommandsMap: (
       }
       if (!sessionId) {
         void vscode.window.showErrorMessage(
-          "No session ID found. Please start a new session first.",
+          "セッションIDが見つかりません。先に新しいセッションを開始してください。",
         );
         return;
       }
@@ -398,7 +398,7 @@ const getCommandsMap: (
         canSelectFolders: true,
         canSelectFiles: false,
         canSelectMany: false,
-        openLabel: "Select Destination Folder",
+        openLabel: "保存先フォルダを選択",
       });
       if (!destinationFolder || destinationFolder.length === 0) {
         return;

@@ -35,17 +35,17 @@ export const moveTerminalProcessToBackground = createAsyncThunk<
 
     // Find existing terminal output to preserve it
     const existingOutput = toolCall.output?.find(
-      (item) => item.name === "Terminal",
+      (item) => item.name === "端末",
     );
     const existingContent = existingOutput?.content || "";
 
     const status =
-      "Command moved to background. Further output will be ignored.";
+      "コマンドをバックグラウンドに移動しました。以降の出力は無視されます。";
 
     const contextItems: ContextItem[] = [
       {
-        name: "Terminal",
-        description: "Terminal command output",
+        name: "端末",
+        description: "端末コマンド出力",
         content: existingContent,
         status: status,
       },

@@ -13,12 +13,12 @@ class JiraIssuesContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "jira",
     displayTitle: "Jira Issues",
-    description: "Reference Jira issues",
+    description: "Jira Issue を参照",
     type: "submenu",
   };
 
   get deprecationMessage() {
-    return "The Jira issues context provider is now deprecated and will be removed in a later version. Please consider using the official Atlassian MCP server atlassian.com/platform/remote-mcp-server.";
+    return "Jira Issues コンテキストプロバイダーは非推奨になりました。代わりに公式の Atlassian MCP サーバー atlassian.com/platform/remote-mcp-server の使用を検討してください。";
   }
 
   private getApi() {
@@ -42,12 +42,12 @@ class JiraIssuesContextProvider extends BaseContextProvider {
 
     const parts = [
       `# Jira Issue ${issue.key}: ${issue.summary}`,
-      "## Description",
-      issue.description ?? "No description",
+      "## 説明",
+      issue.description ?? "説明なし",
     ];
 
     if (issue.comments.length > 0) {
-      parts.push("## Comments");
+      parts.push("## コメント");
 
       parts.push(
         ...issue.comments.map((comment) => {

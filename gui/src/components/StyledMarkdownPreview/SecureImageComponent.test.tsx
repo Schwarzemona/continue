@@ -13,7 +13,7 @@ describe("SecureImageComponent", () => {
 
       expect(
         screen.getByText(
-          /Image blocked for security.*External images can leak data/,
+          /セキュリティ上の理由により、画像はブロックされています。*外部画像は、/,
         ),
       ).toBeInTheDocument();
       expect(screen.getByText("Load Image")).toBeInTheDocument();
@@ -44,7 +44,7 @@ describe("SecureImageComponent", () => {
       );
 
       expect(
-        screen.getByText(/Warning: URL contains query parameters/),
+        screen.getByText(/警告: URLにクエリパラメータが含まれています/),
       ).toBeInTheDocument();
       expect(screen.getByText(/"user": "123"/)).toBeInTheDocument();
       expect(screen.getByText(/"token": "abc"/)).toBeInTheDocument();
@@ -54,7 +54,7 @@ describe("SecureImageComponent", () => {
       render(<SecureImageComponent src="https://example.com/image.jpg" />);
 
       expect(
-        screen.queryByText(/Warning: URL contains query parameters/),
+        screen.queryByText(/警告: URLにクエリパラメータが含まれています/),
       ).not.toBeInTheDocument();
     });
 
@@ -64,7 +64,7 @@ describe("SecureImageComponent", () => {
       );
 
       expect(
-        screen.getByText(/Warning: URL contains query parameters/),
+        screen.getByText(/警告: URLにクエリパラメータが含まれています/),
       ).toBeInTheDocument();
       expect(screen.getByText(/"id": "456"/)).toBeInTheDocument();
       expect(screen.getByText(/"session": "xyz"/)).toBeInTheDocument();
@@ -100,7 +100,7 @@ describe("SecureImageComponent", () => {
       // Warning message should be gone
       expect(
         screen.queryByText(
-          /Image blocked for security.*External images can leak data/,
+          /セキュリティ上の理由により、画像はブロックされています。*外部画像は、/,
         ),
       ).not.toBeInTheDocument();
     });
@@ -119,7 +119,7 @@ describe("SecureImageComponent", () => {
 
       // Should show error message and hide image
       await waitFor(() => {
-        expect(screen.getByText(/Failed to load image/)).toBeInTheDocument();
+        expect(screen.getByText(/画像の読み込みに失敗しました。/)).toBeInTheDocument();
         expect(screen.queryByAltText("broken image")).not.toBeInTheDocument();
       });
 
@@ -158,7 +158,7 @@ describe("SecureImageComponent", () => {
 
       // Should show all parameters clearly
       expect(
-        screen.getByText(/Warning: URL contains query parameters/),
+        screen.getByText(/警告: URLにクエリパラメータが含まれています/),
       ).toBeInTheDocument();
 
       // Check JSON is properly formatted
@@ -175,7 +175,7 @@ describe("SecureImageComponent", () => {
 
       // Should decode and display the parameter
       expect(
-        screen.getByText(/Warning: URL contains query parameters/),
+        screen.getByText(/警告: URLにクエリパラメータが含まれています/),
       ).toBeInTheDocument();
       // The decoded value should be shown in the pre element
       const preElement = document.querySelector("pre");

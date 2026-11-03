@@ -94,7 +94,7 @@ export function executeFindAndReplace(
   if (matches.length === 0) {
     throw new ContinueError(
       ContinueErrorReason.FindAndReplaceOldStringNotFound,
-      `Edit at index ${editIndex}: string not found in file: "${oldString}"`,
+      `ファイル内に文字列が見つかりません。`,
     );
   }
 
@@ -120,7 +120,7 @@ export function executeFindAndReplace(
     if (matches.length > 1) {
       throw new ContinueError(
         ContinueErrorReason.FindAndReplaceMultipleOccurrences,
-        `Edit at index ${editIndex}: String "${oldString}" appears ${matches.length} times in the file. Either provide a more specific string with surrounding context to make it unique, or use replace_all=true to replace all occurrences.`,
+        `文字列がファイル内で一意ではありません。`,
       );
     }
 

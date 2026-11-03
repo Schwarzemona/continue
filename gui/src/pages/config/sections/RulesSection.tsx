@@ -272,7 +272,7 @@ const RuleCard: React.FC<RuleCardProps> = ({ rule }) => {
             }}
             className="mt-1.5 flex flex-col gap-1"
           >
-            <span className="italic">Applies to files</span>
+            <span className="italic">適用対象ファイル</span>
             <code
               className={`line-clamp-1 px-1 py-0.5 ${isDisabled ? "text-gray-500" : "text-gray-400"}`}
             >
@@ -507,12 +507,12 @@ function RulesSubSection() {
             ))}
             {configLoading && (
               <div className="px-2 py-1.5 opacity-65">
-                Reloading rules from your config...
+                設定からルールを再読み込み中……
               </div>
             )}
           </div>
         ) : (
-          <EmptyState message="No rules configured. Click the + button to add your first rule." />
+          <EmptyState message="ルールが設定されていません。「+」ボタンをクリックして最初のルールを追加してください。" />
         )}
       </Card>
     </div>

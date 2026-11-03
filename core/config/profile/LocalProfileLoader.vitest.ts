@@ -5,10 +5,14 @@ import { testIde } from "../../test/fixtures.js";
 import LocalProfileLoader from "./LocalProfileLoader.js";
 
 // Mock doLoadConfig to capture the arguments it receives
-const mockDoLoadConfig = vi.fn().mockResolvedValue({
-  config: undefined,
-  errors: [],
-  configLoadInterrupted: false,
+const { mockDoLoadConfig } = vi.hoisted(() => {
+  return {
+    mockDoLoadConfig: vi.fn().mockResolvedValue({
+      config: undefined,
+      errors: [],
+      configLoadInterrupted: false,
+    }),
+  };
 });
 
 vi.mock("./doLoadConfig.js", () => ({

@@ -32,7 +32,7 @@ test("viewDiff should not truncate diffs under line limit", async () => {
   const result = await viewDiffImpl({}, mockExtras);
 
   expect(result).toHaveLength(1); // Just the diff, no warning
-  expect(result[0].name).toBe("Diff");
+  expect(result[0].name).toBe("差分");
   expect(result[0].content).toBe(smallDiff.join("\n"));
 });
 
@@ -58,9 +58,9 @@ test("viewDiff should truncate diffs exceeding line limit", async () => {
   expect(resultLines.length).toBe(DEFAULT_GIT_DIFF_LINE_LIMIT);
 
   // Check the warning
-  expect(result[1].name).toBe("Truncation warning");
-  expect(result[1].content).toContain("truncated");
-  expect(result[1].content).toContain(`${DEFAULT_GIT_DIFF_LINE_LIMIT} lines`);
+  expect(result[1].name).toBe("切り詰め警告");
+  expect(result[1].content).toContain("切り詰められました");
+  expect(result[1].content).toContain(`${DEFAULT_GIT_DIFF_LINE_LIMIT}行`);
 });
 
 test("viewDiff should handle multiple diffs correctly", async () => {
@@ -83,5 +83,5 @@ test("viewDiff should handle multiple diffs correctly", async () => {
   expect(resultLines.length).toBe(DEFAULT_GIT_DIFF_LINE_LIMIT);
 
   // Check the warning
-  expect(result[1].name).toBe("Truncation warning");
+  expect(result[1].name).toBe("切り詰め警告");
 });

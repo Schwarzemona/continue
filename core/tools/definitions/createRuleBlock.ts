@@ -1,16 +1,15 @@
 import { Tool } from "../..";
 import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 
-const NAME_ARG_DESC = "名前。小文字、数字、ハイフンのみ使用します。";
+const NAME_ARG_DESC = "ルール名。";
 const RULE_ARG_DESC =
-  "将来のコード生成のための、明確で命令的な指示を記述します。";
+  "明確で命令的な指示。";
 const DESC_ARG_DESC =
-  "具体的に記述し、重要な用語を含めます。ルールが何を行うのかと、使用すべき特定のトリガー/コンテキストの両方を含めます。";
+  "具体的で重要な用語を含む説明。使用すべきトリガー/コンテキストを含めます。";
 const GLOB_ARG_DESC =
   "このルールが適用されるファイル名の正規表現パターン(例: ['**/*.{ts,tsx}'] または ['src/**/*.ts', 'tests/**/*.ts'])。";
 const REGEX_ARG_DESC =
   "このルールが適用されるファイル内容の正規表現パターン(例: Reactフック用の'useEffect'やクラス定義用の'\\bclass\\b')。";
-
 const ALWAYS_APPLY_DESC =
   "このルールを常に適用すべきかどうか。基本的にfalseに設定します。";
 
@@ -60,15 +59,15 @@ export const createRuleBlock: Tool = {
   },
   defaultToolPolicy: "disabled",
   systemMessageDescription: {
-    prefix: `Sometimes the user will provide feedback or guidance on your output. If you were not aware of these "rules", consider using the ${BuiltInToolNames.CreateRuleBlock} tool to persist the rule for future interactions.
-This tool cannot be used to edit existing rules, but you can search in the ".continue/rules" folder and use the edit tool to manage rules.
-To create a rule, respond with a ${BuiltInToolNames.CreateRuleBlock} tool call and the following arguments:
+    prefix: `ユーザーがあなたの出力に対してフィードバックやガイダンスを提供することがあります。これらの「ルール」を認識していなかった場合は、${BuiltInToolNames.CreateRuleBlock} ツールを使用して、将来のやり取りのためにルールを保存することを検討してください。
+このツールは既存のルールを編集するために使用することはできませんが、".continue/rules" フォルダ内を検索し、編集ツールを使用してルールを管理できます。
+ルールを作成するには、${BuiltInToolNames.CreateRuleBlock} ツール呼び出しと以下の引数を使用して応答してください:
 - name: ${NAME_ARG_DESC}
 - rule: ${RULE_ARG_DESC}
 - description: ${DESC_ARG_DESC}
 - globs: ${GLOB_ARG_DESC}
 - alwaysApply: ${ALWAYS_APPLY_DESC}
-For example:`,
+例:`,
     exampleArgs: [
       ["name", "Use PropTypes"],
       [

@@ -80,7 +80,7 @@ export function SimpleToolCallUI({
             ))
           ) : (
             <div className="text-description pl-5 italic">
-              No tool call output
+              ツール呼び出しの出力はありません
             </div>
           )}
         </div>

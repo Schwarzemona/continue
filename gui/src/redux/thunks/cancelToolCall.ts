@@ -8,10 +8,7 @@ import { ThunkApiType } from "../store";
 
 import { streamResponseAfterToolCall } from "./streamResponseAfterToolCall";
 
-const DEFAULT_USER_REJECTION_MESSAGE = `The user skipped the tool call.
-If the tool call is optional or non-critical to the main goal, skip it and continue with the next step.
-If the tool call is essential, try an alternative approach.
-If no alternatives exist, offer to pause here.`;
+const DEFAULT_USER_REJECTION_MESSAGE = `ユーザーがツール呼び出しをスキップしました。`;
 
 export const cancelToolCallThunk = createAsyncThunk<
   void,
@@ -30,8 +27,8 @@ export const cancelToolCallThunk = createAsyncThunk<
         contextItems: [
           {
             icon: "problems",
-            name: "Tool Call Rejected",
-            description: "User skipped the tool call",
+            name: "ツール呼び出し拒否",
+            description: "ユーザーがツール呼び出しをスキップしました",
             content: DEFAULT_USER_REJECTION_MESSAGE,
             hidden: true,
           },

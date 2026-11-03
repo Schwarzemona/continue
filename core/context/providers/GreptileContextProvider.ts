@@ -13,12 +13,12 @@ class GreptileContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "greptile",
     displayTitle: "Greptile",
-    description: "Insert query to Greptile",
+    description: "Greptile にクエリを送信します",
     type: "query",
   };
 
   get deprecationMessage() {
-    return "The Greptile context provider is now deprecated and will be removed in a later version. Please consider viewing their docs at greptile.com/docs/code-review-bot/auto-resolve-with-mcp for resolving greptile queries.";
+    return "Greptile コンテキストプロバイダーは非推奨となりました。将来のバージョンで削除される予定です。Greptile のクエリを解決するには、greptile.com/docs/code-review-bot/auto-resolve-with-mcp のドキュメントを参照してください。";
   }
 
   async getContextItems(
@@ -27,27 +27,26 @@ class GreptileContextProvider extends BaseContextProvider {
   ): Promise<ContextItem[]> {
     const greptileToken = this.getGreptileToken();
     if (!greptileToken) {
-      throw new Error("Greptile token not found.");
+      throw new Error("Greptile トークンが見つかりません。");
     }
 
     const githubToken = this.getGithubToken();
     if (!githubToken) {
-      throw new Error("GitHub token not found.");
+      throw new Error("GitHub トークンが見つかりません。");
     }
 
     let absPath = await this.getWorkspaceDir(extras);
     if (!absPath) {
-      throw new Error("Failed to determine the workspace directory.");
+      throw new Error("ワークスペースディレクトリの特定に失敗しました。");
     }
 
-    var remoteUrl = getRemoteUrl(absPath);
-    remoteUrl = getRemoteUrl(absPath);
+    const remoteUrl = getRemoteUrl(absPath);
     const repoName = extractRepoName(remoteUrl);
     const branch = getCurrentBranch(absPath);
     const remoteType = getRemoteType(remoteUrl);
 
     if (!remoteType) {
-      throw new Error("Unable to determine remote type.");
+      throw new Error("リモートタイプの特定に失敗しました。");
     }
 
     const options = {
@@ -89,16 +88,16 @@ class GreptileContextProvider extends BaseContextProvider {
         const json = JSON.parse(rawText);
         return json.sources.map((source: any) => ({
           description: source.filepath,
-          content: `File: ${source.filepath}\nLines: ${source.linestart}-${source.lineend}\n\n${source.summary}`,
+          content: `ファイル: ${source.filepath}\n行: ${source.linestart}-${source.lineend}\n\n${source.summary}`,
           name:
             (source.filepath.split("/").pop() ?? "").split("\\").pop() ?? "",
         }));
       } catch (jsonError) {
-        throw new Error(`Failed to parse Greptile response:\n${rawText}`);
+        throw new Error(`Greptile のレスポンスの解析に失敗しました:\n${rawText}`);
       }
     } catch (error) {
       console.error("Error getting context items from Greptile:", error);
-      throw new Error("Error getting context items from Greptile");
+      throw new Error("Greptile からコンテキスト項目を取得する際にエラーが発生しました");
     }
   }
 

@@ -26,7 +26,7 @@ export const searchWebTool: Tool = {
   },
   defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
-    prefix: `To search the web, use the ${BuiltInToolNames.SearchWeb} tool with a natural language query. For example, to search for the current weather, you would respond with:`,
+    prefix: `ウェブを検索するには、自然言語のクエリを使用して ${BuiltInToolNames.SearchWeb} ツールを使用してください。例えば、現在の天気を検索するには、次のように応答します:`,
     exampleArgs: [["query", "What is the current weather in San Francisco?"]],
   },
   toolCallIcon: "GlobeAltIcon",

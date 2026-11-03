@@ -10,8 +10,8 @@ import { BaseContextProvider } from "../index.js";
 class OSContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "os",
-    displayTitle: "Operating System",
-    description: "Operating system and CPU Information.",
+    displayTitle: "OS",
+    description: "OSとCPUの情報",
     type: "normal",
   };
 
@@ -23,11 +23,11 @@ class OSContextProvider extends BaseContextProvider {
     const platform = os.platform();
     return [
       {
-        description: "Your operating system and CPU",
-        content: `I am running ${
+        description: "OSとCPU",
+        content: `${
           platform === "win32" ? "Windows" : platform
-        } on ${cpu}.`,
-        name: "Operating System",
+        } 上で ${cpu}を使用して動作しています。`,
+        name: "OS",
       },
     ];
   }

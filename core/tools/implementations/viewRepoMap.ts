@@ -9,8 +9,8 @@ export const viewRepoMapImpl: ToolImpl = async (args, extras) => {
   });
   return [
     {
-      name: "Repo map",
-      description: "Overview of the repository structure",
+      name: "リポジトリマップ",
+      description: "リポジトリ構造の概要",
       content: repoMap,
     },
   ];

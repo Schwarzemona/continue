@@ -56,8 +56,8 @@ function ModelSelectionListbox({
   setSelectedProvider,
   topOptions = [],
   otherOptions = [],
-  otherOptionsLabel = "Additional providers",
-  searchPlaceholder = "Search models...",
+  otherOptionsLabel = "追加のプロバイダー",
+  searchPlaceholder = "モデルを検索……",
 }: ModelSelectionListboxProps) {
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -147,7 +147,7 @@ function ModelSelectionListbox({
             <div className="flex-1 overflow-y-auto">
               {!hasResults ? (
                 <div className="text-description-muted px-3 py-4 text-center">
-                  No models found matching "{searchQuery}"
+                  "{searchQuery}" に一致するモデルが見つかりません
                 </div>
               ) : (
                 <>

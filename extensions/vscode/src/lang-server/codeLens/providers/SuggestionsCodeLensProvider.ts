@@ -21,12 +21,12 @@ export class SuggestionsCodeLensProvider implements vscode.CodeLensProvider {
       );
       codeLenses.push(
         new vscode.CodeLens(range, {
-          title: "Accept",
+          title: "承認",
           command: "continue.acceptSuggestion",
           arguments: [suggestion],
         }),
         new vscode.CodeLens(range, {
-          title: "Reject",
+          title: "却下",
           command: "continue.rejectSuggestion",
           arguments: [suggestion],
         }),

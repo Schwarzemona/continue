@@ -1,32 +1,32 @@
 # @continuedev/llm-info
 
-A lightweight package providing information about various Large Language Models (LLMs), including embedding, reranking, and other models.
+埋め込み、リランキング、およびその他のモデルを含む、さまざまな大規模言語モデル（LLM）に関する情報を提供する軽量なパッケージです。
 
-Whereas @continuedev/openai-adapters is responsible for translation between API types, @continuedev/llm-info is concerned with
+@continuedev/openai-adapters が API タイプ間の変換を担当するのに対し、@continuedev/llm-info は以下に関わります：
 
-- Templates
-- Capabilities (e.g. tools, images, streaming, predicted outputs, etc.)
-- Model aliases
+- テンプレート
+- 機能（例：ツール、画像、ストリーミング、予測出力など）
+- モデルのエイリアス
 
-and openai-adapters might depend on llm-info for some of these things.
+openai-adapters は、これらの一部について llm-info に依存する場合があります。
 
-### Goal
+### 目標
 
-We know we are done when the steps required to add support for a new model in Continue are exactly
+Continue で新しいモデルのサポートを追加するために必要な手順が、正確に以下の通りになったとき、私たちは完了したと判断します：
 
-1. editing a single LlmInfo object, and
-2. adding it to the supporting ModelProviders.
+1. 単一の LlmInfo オブジェクトを編集すること
+2. それをサポートする ModelProviders に追加すること
 
-### Code structure
+### コード構造
 
-The two primary types are LlmInfo and ModelProvider
+主要な2つの型は LlmInfo と ModelProvider です。
 
-Models are defined on their own in the `models` directory. They can be grouped however makes sense.
+モデルは `models` ディレクトリ内で個別に定義されます。これらは、意味のある方法でグループ化できます。
 
-Providers are defined in the `providers` directory, with all models that they support in their `models` attribute. It's important that models are tied to providers, because the model might have slightly different attributes (e.g. context length) per provider. Define as much as possible in the base object, and then spread to update for the specific providers as needed.
+プロバイダーは `providers` ディレクトリで定義され、それらがサポートするすべてのモデルはその `models` 属性に含まれます。モデルをプロバイダーに紐付けることは重要です。なぜなら、プロバイダーごとにモデルの属性（例：コンテキスト長）がわずかに異なる可能性があるからです。可能な限りベースオブジェクトで定義し、必要に応じて特定のプロバイダー向けにスプレッド演算子を使用して更新してください。
 
-### Where to use llm-info
+### llm-info の使用場所
 
-- Replace autodetect.ts
-- See usage in `BaseLLM` constructor, and finish the job of using llm-info everywhere relevant.
-- Replace `gui/pages/AddNewModel/configs/[providers/models].ts`
+- autodetect.ts を置き換える
+- `BaseLLM` コンストラクタでの使用例を確認し、関連するすべての場所で llm-info を使用する作業を完了させる。
+- `gui/pages/AddNewModel/configs/[providers/models].ts` を置き換える

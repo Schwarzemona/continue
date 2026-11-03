@@ -105,11 +105,11 @@ export class VsCodeWebviewProtocol
 
           if (e.cause) {
             if (e.cause.name === "ConnectTimeoutError") {
-              message = `Connection timed out. If you expect it to take a long time to connect, you can increase the timeout in your config by setting "requestOptions": { "timeout": 10000 }. You can find the full config reference here: https://docs.continue.dev/reference/config`;
+              message = `接続がタイムアウトしました。接続に時間がかかる場合は、configで"requestOptions": { "timeout": 10000 }を設定してタイムアウト時間を延長できます。詳細な設定リファレンスはこちらです:https://docs.continue.dev/reference/config`;
             } else if (e.cause.code === "ECONNREFUSED") {
-              message = `Connection was refused. This likely means that there is no server running at the specified URL. If you are running your own server you may need to set the "apiBase" parameter in config.json. For example, you can set up an OpenAI-compatible server like here: https://docs.continue.dev/reference/Model%20Providers/openai#openai-compatible-servers--apis`;
+              message = `接続が拒否されました。指定されたURLでサーバーが実行されていない可能性があります。独自のサーバーを使用している場合は、config.jsonで"apiBase"パラメータを設定する必要があるかもしれません。例えば、こちらのようにOpenAI互換サーバーをセットアップできます:https://docs.continue.dev/reference/Model%20Providers/openai#openai-compatible-servers--apis`;
             } else {
-              message = `The request failed with "${e.cause.name}": ${e.cause.message}. If you're having trouble setting up Continue, please see the troubleshooting guide for help.`;
+              message = `リクエストが"${e.cause.name}":"${e.cause.message}"で失敗しました。Continueの設定で問題が発生している場合は、トラブルシューティングガイドを参照してください。`;
             }
           }
         }

@@ -104,8 +104,8 @@ export function UserSettingsSection() {
                 />
                 <UserSetting
                   type="toggle"
-                  title="コードブロックの冒頭表示"
-                  description="コードブロック内で長い行を横スクロールせずに折り返し表示します。"
+                  title="コードブロックの折り返し表示"
+                  description="コードブロック内で長い行を横スクロールではなく折り返し表示します。"
                   value={codeWrap}
                   onChange={(value) => handleUpdate({ codeWrap: value })}
                 />
@@ -187,9 +187,9 @@ export function UserSettingsSection() {
                     })
                   }
                   options={[
-                    { label: "Auto", value: "auto" },
-                    { label: "Always", value: "always" },
-                    { label: "Never", value: "never" },
+                    { label: "自動", value: "auto" },
+                    { label: "常時", value: "always" },
+                    { label: "しない", value: "never" },
                   ]}
                 />
                 <UserSetting

@@ -174,7 +174,7 @@ export function History() {
         {filteredAndSortedSessions.length === 0 && (
           <div className="m-3 text-center">
             {isSessionMetadataLoading ? (
-              "履歴読み込み中..."
+              "履歴読み込み中……"
             ) : (
               <>
                 履歴はありません。新しいセッションを開始するには、+をクリックするか、ショートカット{" "}

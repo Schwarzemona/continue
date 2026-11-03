@@ -8,8 +8,8 @@ import { BaseContextProvider } from "../index.js";
 class TerminalContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "terminal",
-    displayTitle: "Terminal",
-    description: "Reference the last terminal command",
+    displayTitle: "端末",
+    description: "直前の端末コマンドを参照",
     type: "normal",
   };
 
@@ -20,11 +20,11 @@ class TerminalContextProvider extends BaseContextProvider {
     const content = await extras.ide.getTerminalContents();
     return [
       {
-        description: "The contents of the terminal",
-        content: `Current terminal contents:\n\n${
-          content || "The terminal is empty."
+        description: "端末の内容",
+        content: `現在の端末の内容:\n\n${
+          content || "端末は空です"
         }`,
-        name: "Terminal",
+        name: "端末",
       },
     ];
   }

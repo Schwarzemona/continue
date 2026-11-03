@@ -248,14 +248,14 @@ const AtMentionDropdown = forwardRef((props: AtMentionDropdownProps, ref) => {
       void ideMessenger.ide.showToast(
         "warning",
         fileSize > 0
-          ? "File exceeds model's context length"
-          : "Error loading file",
+          ? "ファイルがモデルのコンテキスト長を超えています"
+          : "ファイルの読み込み中にエラーが発生しました",
         {
           modal: true,
           detail:
             fileSize > 0
-              ? `'${item.title}' cannot be added because it exceeds the model's allowed context length. File size: ${formatFileSize(fileSize)}`
-              : `'${item.title}' could not be loaded. Please check if the file exists and has the correct permissions.`,
+              ? `'${item.title}'はモデルの許容コンテキスト長を超えているため追加できません。ファイルサイズ: ${formatFileSize(fileSize)}`
+              : `'${item.title}'を読み込めませんでした。ファイルが存在し、正しい権限があるか確認してください。`,
         },
       );
     } else {
@@ -285,7 +285,7 @@ const AtMentionDropdown = forwardRef((props: AtMentionDropdownProps, ref) => {
       });
     } else if (subMenuTitle === ".prompt files") {
       items.push({
-        title: "New .prompt file",
+        title: "新しい.promptファイル",
         type: "action",
         action: () => {
           ideMessenger.post("config/newPromptFile", undefined);
@@ -299,7 +299,7 @@ const AtMentionDropdown = forwardRef((props: AtMentionDropdownProps, ref) => {
           }
           props.onClose(); // Escape the mention list after creating a new prompt file
         },
-        description: "Create a new .prompt file",
+        description: "新しい.promptファイルを作成",
       });
     } else if (subMenuTitle === "Mention rules files") {
       items.push({
@@ -612,7 +612,7 @@ const AtMentionDropdown = forwardRef((props: AtMentionDropdownProps, ref) => {
               );
             })
           ) : (
-            <ItemDiv className="item whitespace-nowrap">No results</ItemDiv>
+            <ItemDiv className="item whitespace-nowrap">結果なし</ItemDiv>
           )}
         </>
       )}

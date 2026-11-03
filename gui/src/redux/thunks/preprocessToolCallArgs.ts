@@ -44,9 +44,9 @@ export async function preprocessToolCalls(
             contextItems: [
               {
                 icon: "problems",
-                name: "Invalid Tool Call",
+                name: "無効なツール呼び出し",
                 description: "",
-                content: `${tcState.toolCall.function.name} failed because the arguments were invalid, with the following message: ${errorMessage}\n\nPlease try something else or request further instructions.`,
+                content: `引数が無効のため${tcState.toolCall.function.name}は失敗しました: ${errorMessage}`,
                 hidden: false,
               },
             ],

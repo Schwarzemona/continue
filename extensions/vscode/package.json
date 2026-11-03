@@ -18,12 +18,12 @@
   "homepage": "https://continue.dev",
   "qna": "https://github.com/continuedev/continue/issues/new/choose",
   "license": "Apache-2.0",
-  "displayName": "Continue - open-source AI code agent",
+  "displayName": "Continue - オープンソースAIコードエージェント",
   "pricing": "Free",
-  "description": "The leading open-source AI code agent",
+  "description": "オープンソースのAIコードエージェント",
   "publisher": "Continue",
   "engines": {
-    "vscode": ">=1.140.0",
+    "vscode": ">=1.100.0",
     "node": ">=26.12.0"
   },
   "engine-strict": true,
@@ -89,64 +89,64 @@
         "continue.telemetryEnabled": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Continue collects anonymous usage data, cleaned of PII, to help us improve the product for our users. Read more  at [continue.dev › Telemetry](https://docs.continue.dev/telemetry).",
-          "markdownDeprecationMessage": "This setting is deprecated and will be removed in a later version. Please use the _Telemetry > Allow Anonymous Telemetry_ setting in the extension's User Settings page.",
-          "deprecationMessage": "Please use the _Telemetry > Allow Anonymous Telemetry_ setting in the extension's User Settings page."
+          "markdownDescription": "Continueは、ユーザーの皆様のために製品を改善するため、個人を特定できる情報(PII)を削除した匿名の使用データを収集しています。詳細については [continue.dev › Telemetry](https://docs.continue.dev/telemetry) をご覧ください。",
+          "markdownDeprecationMessage": "この設定は非推奨となっており、後のバージョンで削除される予定です。拡張機能のユーザー設定ページにある「Telemetry > Allow Anonymous Telemetry」設定を使用してください。",
+          "deprecationMessage": "拡張機能のユーザー設定ページにある「Telemetry > Allow Anonymous Telemetry」設定を使用してください。"
         },
         "continue.showInlineTip": {
           "type": "boolean",
           "default": true,
-          "description": "Show inline suggestion to use the Continue keyboard shortcuts (e.g. \"Cmd/Ctrl L to select code, Cmd/Ctrl I to edit\")."
+          "description": "Continueのキーボードショートカット（例：「Cmd/Ctrl L でコードを選択、Cmd/Ctrl I で編集」）を使用するためのインライン提案を表示します。"
         },
         "continue.disableQuickFix": {
           "type": "boolean",
           "default": false,
-          "description": "Disable the quick fix feature."
+          "description": "クイックフィックス機能を無効にします。"
         },
         "continue.enableQuickActions": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Enable the experimental Quick Actions feature. Read our walkthrough to learn about configuration and how to share feedback: [continue.dev › Walkthrough: Quick Actions (experimental)](https://docs.continue.dev/customize/deep-dives/vscode-actions#quick-actions)"
+          "markdownDescription": "実験的なクイックアクション機能を有効にします。設定方法やフィードバックの共有方法については、こちらのウォークスルーをご覧ください: [continue.dev › Walkthrough: Quick Actions (experimental)](https://docs.continue.dev/customize/deep-dives/vscode-actions#quick-actions)"
         },
         "continue.enableTabAutocomplete": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Enable Continue's tab autocomplete feature. Read our walkthrough to learn about configuration and how to share feedback: [continue.dev › Walkthrough: Tab Autocomplete (beta)](https://docs.continue.dev/features/tab-autocomplete)"
+          "markdownDescription": "Continueのタブ補完機能を有効にします。設定方法やフィードバックの共有方法については、こちらのウォークスルーをご覧ください: [continue.dev › Walkthrough: Tab Autocomplete (beta)](https://docs.continue.dev/features/tab-autocomplete)"
         },
         "continue.enableNextEdit": {
           "type": "boolean",
           "default": true,
-          "markdownDescription": "Enable Continue's next edit feature. Read our docs to learn about configuration and how to share feedback: [continue.dev › Features › Autocomplete › Next Edit (experimental)](https://docs.continue.dev/features/autocomplete/next-edit)"
+          "markdownDescription": "Continueの次の編集候補機能を有効にします。設定方法やフィードバックの共有方法については、ドキュメントをご覧ください: [continue.dev › Features › Autocomplete › Next Edit (experimental)](https://docs.continue.dev/features/autocomplete/next-edit)"
         },
         "continue.pauseTabAutocompleteOnBattery": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Pause Continue's tab autocomplete feature when your battery is low."
+          "markdownDescription": "バッテリー残量が少なくなったときに、Continueのタブ補完機能を一時停止します。"
         },
         "continue.pauseCodebaseIndexOnStart": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Pause Continue's codebase index on start."
+          "markdownDescription": "起動時にContinueのコードベースのインデックス作成を一時停止します。"
         },
         "continue.enableConsole": {
           "type": "boolean",
           "default": false,
-          "markdownDescription": "Enable a console to log and explore model inputs and outputs. It can be found in the bottom panel."
+          "markdownDescription": "モデルの入出力内容をログに記録し、調査するためのコンソールを有効にします。下部パネルに表示されます。"
         },
         "continue.remoteConfigServerUrl": {
           "type": "string",
           "default": null,
-          "markdownDescription": "If your team is set up to use shared configuration, enter the server URL here and your user token below to enable automatic syncing."
+          "markdownDescription": "チームで共有設定を使用するように設定されている場合は、ここにサーバーのURLを入力し、その下にユーザーのトークンを入力して自動同期を有効にします。"
         },
         "continue.userToken": {
           "type": "string",
           "default": null,
-          "markdownDescription": "If your team is set up to use shared configuration, enter your user token here and your server URL above to enable automatic syncing."
+          "markdownDescription": "チームで共有設定を使用するように設定されている場合は、ここにユーザーのトークンを入力し、その上にサーバーのURLを入力して自動同期を有効にします。"
         },
         "continue.remoteConfigSyncPeriod": {
           "type": "number",
           "default": 60,
-          "description": "The period of time in minutes between automatic syncs."
+          "description": "自動同期の間隔（分単位）です。"
         }
       }
     },
@@ -154,62 +154,62 @@
       {
         "command": "continue.applyCodeFromChat",
         "category": "Continue",
-        "title": "Apply code from chat",
+        "title": "チャットからコードを適用",
         "group": "Continue"
       },
       {
         "command": "continue.acceptDiff",
         "category": "Continue",
-        "title": "Accept Diff",
+        "title": "差分を承認",
         "group": "Continue"
       },
       {
         "command": "continue.rejectDiff",
         "category": "Continue",
-        "title": "Reject Diff",
+        "title": "差分を却下",
         "group": "Continue",
         "icon": "$(stop)"
       },
       {
         "command": "continue.acceptVerticalDiffBlock",
         "category": "Continue",
-        "title": "Accept Vertical Diff Block",
+        "title": "垂直差分ブロックを承認",
         "group": "Continue"
       },
       {
         "command": "continue.rejectVerticalDiffBlock",
         "category": "Continue",
-        "title": "Reject Vertical Diff Block",
+        "title": "垂直差分ブロックを却下",
         "group": "Continue"
       },
       {
         "command": "continue.focusEdit",
         "category": "Continue",
-        "title": "Add to Edit",
+        "title": "編集に追加",
         "group": "Continue"
       },
       {
         "command": "continue.focusContinueInput",
         "category": "Continue",
-        "title": "Add Highlighted Code to Context and Clear Chat",
+        "title": "ハイライトしたコードをコンテキストに追加してチャットをクリア",
         "group": "Continue"
       },
       {
         "command": "continue.focusContinueInputWithoutClear",
         "category": "Continue",
-        "title": "Add to Chat",
+        "title": "チャットに追加",
         "group": "Continue"
       },
       {
         "command": "continue.debugTerminal",
         "category": "Continue",
-        "title": "Debug Terminal",
+        "title": "ターミナルをデバッグ",
         "group": "Continue"
       },
       {
         "command": "continue.exitEditMode",
         "category": "Continue",
-        "title": "Exit Edit Mode",
+        "title": "編集モードを終了",
         "group": "Continue"
       },
       {
@@ -222,18 +222,18 @@
       {
         "command": "continue.toggleTabAutocompleteEnabled",
         "category": "Continue",
-        "title": "Toggle Autocomplete Enabled",
+        "title": "補完の有効/無効を切り替え",
         "group": "Continue"
       },
       {
         "command": "continue.forceAutocomplete",
-        "title": "Continue: Force Autocomplete",
+        "title": "Continue: 強制補完",
         "category": "Continue"
       },
       {
         "command": "continue.selectFilesAsContext",
         "category": "Continue",
-        "title": "Select Files as Context",
+        "title": "ファイルを選択してコンテキストにする",
         "group": "Continue"
       },
       {
@@ -246,7 +246,7 @@
       {
         "command": "continue.shareSession",
         "category": "Continue",
-        "title": "Share Current Chat Session as Markdown",
+        "title": "現在のチャットセッションをMarkdownとして共有",
         "group": "Continue"
       },
       {
@@ -259,115 +259,115 @@
       {
         "command": "continue.viewLogs",
         "category": "Continue",
-        "title": "View Logs",
+        "title": "ログを表示",
         "group": "Continue"
       },
       {
         "command": "continue.clearConsole",
         "category": "Continue",
-        "title": "Clear Console",
+        "title": "コンソールをクリア",
         "icon": "$(clear-all)",
         "group": "Continue"
       },
       {
         "command": "continue.navigateTo",
         "category": "Continue",
-        "title": "Navigate to a path",
+        "title": "パスへ移動",
         "group": "Continue"
       },
       {
         "command": "continue.writeCommentsForCode",
         "category": "Continue",
-        "title": "Write Comments for this Code",
+        "title": "このコードにコメントを記述",
         "group": "Continue"
       },
       {
         "command": "continue.writeDocstringForCode",
         "category": "Continue",
-        "title": "Write a Docstring for this Code",
+        "title": "このコードにDocstringを記述",
         "group": "Continue"
       },
       {
         "command": "continue.fixCode",
         "category": "Continue",
-        "title": "Fix this Code",
+        "title": "このコードを修正",
         "group": "Continue"
       },
       {
         "command": "continue.optimizeCode",
         "category": "Continue",
-        "title": "Optimize this Code",
+        "title": "このコードを最適化",
         "group": "Continue"
       },
       {
         "command": "continue.fixGrammar",
         "category": "Continue",
-        "title": "Fix Grammar / Spelling",
+        "title": "文法 / スペルを修正",
         "group": "Continue"
       },
       {
         "command": "continue.codebaseForceReIndex",
         "category": "Continue",
-        "title": "Codebase Force Re-Index",
+        "title": "コードベースの強制再インデックス",
         "group": "Continue"
       },
       {
         "command": "continue.rebuildCodebaseIndex",
         "category": "Continue",
-        "title": "Rebuild codebase index",
+        "title": "コードベースのインデックスを再構築",
         "group": "Continue"
       },
       {
         "command": "continue.docsIndex",
         "category": "Continue",
-        "title": "Docs Index",
+        "title": "ドキュメントのインデックス作成",
         "group": "Continue"
       },
       {
         "command": "continue.docsReIndex",
         "category": "Continue",
-        "title": "Docs Force Re-Index",
+        "title": "ドキュメントの強制再インデックス",
         "group": "Continue"
       },
       {
         "command": "continue.enterEnterpriseLicenseKey",
         "category": "Continue",
-        "title": "Enter Enterprise License Key",
+        "title": "エンタープライズライセンスキーを入力",
         "group": "Continue"
       },
       {
         "command": "continue.toggleNextEditEnabled",
-        "title": "Continue: Toggle Next Edit"
+        "title": "Continue: 次の編集を切り替え"
       },
       {
         "command": "continue.nextEditWindow.hideNextEditSuggestion",
         "category": "Continue",
-        "title": "Hide Next Edit Suggestion"
+        "title": "次の編集の提案を隠す"
       },
       {
         "command": "continue.nextEditWindow.acceptNextEditSuggestion",
         "category": "Continue",
-        "title": "Accept Next Edit Suggestion"
+        "title": "次の編集の提案を適用"
       },
       {
         "command": "continue.forceNextEdit",
         "category": "Continue",
-        "title": "Continue: Force Next Edit"
+        "title": "Continue: 次の編集を強制"
       },
       {
         "command": "continue.acceptJump",
         "category": "Continue",
-        "title": "Continue: Accept Jump Suggestion"
+        "title": "Continue: ジャンプ提案を適用"
       },
       {
         "command": "continue.rejectJump",
         "category": "Continue",
-        "title": "Continue: Reject Jump Suggestion"
+        "title": "Continue: ジャンプ提案を拒否"
       },
       {
         "command": "continue.openInNewWindow",
         "category": "Continue",
-        "title": "Open in new window",
+        "title": "新しいウィンドウで開く",
         "group": "Continue"
       }
     ],
@@ -424,7 +424,7 @@
       },
       {
         "command": "continue.focusEdit",
-        "title": "Edit code with natural language",
+        "title": "自然言語でコードを編集",
         "mac": "cmd+i",
         "key": "ctrl+i"
       },
@@ -696,7 +696,7 @@
     "@types/react-dom": "^18.3.1",
     "@types/request": "^2.48.13",
     "@types/uuid": "^11.0.0",
-    "@types/vscode": "1.140",
+    "@types/vscode": "1.100",
     "@types/ws": "^8.18.2",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@vscode/vsce": "^4.0.0",
@@ -776,7 +776,8 @@
     "basic-ftp": "^6.2.3",
     "brace-expansion": "^2.1.6",
     "postcss-selector-parser": "^7.1.6",
-    "uuid": "^14.0.3"
+    "uuid": "^14.0.3",
+    "dompurify": "^3.4.17"
   },
   "allowScripts": {
     "esbuild": true,

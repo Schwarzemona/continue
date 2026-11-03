@@ -16,8 +16,8 @@ export default function InlineErrorMessage() {
       <div
         className={`border-border relative m-2 flex flex-col rounded-md border border-solid bg-transparent p-4`}
       >
-        <p className={`thread-message text-error text-center`}>
-          {`Message exceeds context limit.`}
+                <p className={`thread-message text-error text-center`}>
+          {`メッセージがコンテキスト制限を超えています。`}
         </p>
         <div className="text-description flex flex-row items-center justify-center gap-1.5 px-3">
           <div
@@ -28,9 +28,9 @@ export default function InlineErrorMessage() {
               });
             }}
           >
-            <span className="xs:flex hidden">Open config</span>
-            <span className="xs:hidden">Config</span>
-          </div>
+            <span className="xs:flex hidden">設定を開く</span>
+            <span className="xs:hidden">設定</span>
+          </div >
           |
           <span
             className="cursor-pointer hover:underline"
@@ -38,10 +38,10 @@ export default function InlineErrorMessage() {
               dispatch(setInlineErrorMessage(undefined));
             }}
           >
-            Hide
-          </span>
-        </div>
-      </div>
+            隠す
+          </span >
+        </div >
+      </div >
     );
   }
   return null;

@@ -62,8 +62,8 @@ test("searchWeb should truncate results exceeding character limit", async () => 
   expect(result).toHaveLength(3); // Two results + warning
   expect(result[0].content.length).toBe(DEFAULT_WEB_SEARCH_CHAR_LIMIT);
   expect(result[1].content).toBe(shortContent);
-  expect(result[2].name).toBe("Truncation warning");
-  expect(result[2].content).toContain("truncated");
+  expect(result[2].name).toBe("切り詰め警告");
+  expect(result[2].content).toContain("切り詰められました");
   expect(result[2].content).toContain("Result 1");
   expect(result[2].content).not.toContain("Result 2");
 });
@@ -100,7 +100,7 @@ test("searchWeb should include all truncated results in the warning", async () =
   expect(result[0].content.length).toBe(DEFAULT_WEB_SEARCH_CHAR_LIMIT);
   expect(result[1].content.length).toBe(DEFAULT_WEB_SEARCH_CHAR_LIMIT);
   expect(result[2].content).toBe(shortContent);
-  expect(result[3].name).toBe("Truncation warning");
+  expect(result[3].name).toBe("切り詰め警告");
   expect(result[3].content).toContain("Result 1");
   expect(result[3].content).toContain("Result 2");
   expect(result[3].content).not.toContain("Result 3");

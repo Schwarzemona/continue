@@ -81,7 +81,7 @@ function ThinkingBlockPeek({
             ) : (
               "推論" +
               (elapsedTime ? `${elapsedTime}` : "") +
-              (tokens ? ` (${tokens} tokens)` : "")
+              (tokens ? `(${tokens}トークン)` : "")
             )}
             {open ? (
               <ChevronUpIcon className="h-3 w-3" />

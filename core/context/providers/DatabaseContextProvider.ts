@@ -12,14 +12,14 @@ import { BaseContextProvider } from "../index.js";
 class DatabaseContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "database",
-    displayTitle: "Database",
-    description: "Table schemas",
+    displayTitle: "データベース",
+    description: "テーブルスキーマ",
     type: "submenu",
     renderInlineAs: "",
   };
 
   get deprecationMessage() {
-    return "The database context provider is deprecated and may be removed in a later version. Please consider using a database MCP server like postgres-mcp (https://continue.dev/anthropic/postgres-mcp) instead.";
+    return "データベースのコンテキストプロバイダーは非推奨であり、後のバージョンで削除される可能性があります。代わりに postgres-mcp (https://continue.dev/anthropic/postgres-mcp) のようなデータベース MCP サーバーの使用を検討してください。";
   }
 
   async getContextItems(
@@ -48,12 +48,12 @@ class DatabaseContextProvider extends BaseContextProvider {
         );
 
         if (table === "all") {
-          let prompt = `Schema for all tables on ${connection.connection_type} is `;
+          let prompt = `${connection.connection_type} の全テーブルのスキーマは `;
           prompt += JSON.stringify(tablesAndSchemas);
 
           const contextItem = {
             name: `${connectionName}-all-tables-schemas`,
-            description: "Schema for all tables.",
+            description: "全テーブルのスキーマ",
             content: prompt,
           };
 
@@ -63,12 +63,12 @@ class DatabaseContextProvider extends BaseContextProvider {
 
           tables.forEach((tableName) => {
             if (table === tableName) {
-              let prompt = `Schema for ${tableName} on ${connection.connection_type} is `;
+              let prompt = `${connection.connection_type} の ${tableName} のスキーマは `;
               prompt += JSON.stringify(tablesAndSchemas[tableName]);
 
               const contextItem = {
                 name: `${connectionName}-${tableName}-schema`,
-                description: `${tableName} Schema`,
+                description: `${tableName} のスキーマ`,
                 content: prompt,
               };
 
@@ -105,7 +105,7 @@ class DatabaseContextProvider extends BaseContextProvider {
 
       const contextItem = {
         id: `${connection.name}.all`,
-        title: `${connection.name} all table schemas`,
+        title: `${connection.name} の全テーブルスキーマ`,
         description: "",
       };
 
@@ -114,7 +114,7 @@ class DatabaseContextProvider extends BaseContextProvider {
       tables.forEach((tableName) => {
         const contextItem = {
           id: `${connection.name}.${tableName}`,
-          title: `${connection.name}.${tableName} schema`,
+          title: `${connection.name}.${tableName} のスキーマ`,
           description: "",
         };
 

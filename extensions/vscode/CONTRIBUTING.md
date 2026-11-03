@@ -1,14 +1,14 @@
-# Continue VS Code Extension
+# Continue VS Code 拡張機能
 
-This is the Continue VS Code Extension. Its primary jobs are
+これは Continue VS Code 拡張機能です。主な役割は以下の通りです：
 
-1. Implement the IDE side of the Continue IDE protocol, allowing a Continue server to interact natively in an IDE. This happens in `src/continueIdeClient.ts`.
-2. Open the Continue React app in a side panel. The React app's source code lives in the `gui` directory. The panel is opened by the `continue.openContinueGUI` command, as defined in `src/commands.ts`.
+1. Continue IDE プロトコルの IDE 側の実装。これにより、Continue サーバーが IDE 内でネイティブに相互作用できるようになります。これは `src/continueIdeClient.ts` で行われます。
+2. サイドパネルで Continue React アプリを開く。React アプリのソースコードは `gui` ディレクトリにあります。パネルは `src/commands.ts` で定義されている `continue.openContinueGUI` コマンドによって開かれます。
 
-# How to run the extension
+# 拡張機能の実行方法
 
-See [Environment Setup](../../CONTRIBUTING.md#environment-setup)
+[環境構築](../../CONTRIBUTING.md#環境構築) を参照してください。
 
-# How to run and debug tests
+# テストの実行とデバッグ方法
 
-After following the setup in [Environment Setup](../../CONTRIBUTING.md#environment-setup) you can run the `Extension (VSCode)` launch configuration in VS Code.
+[環境構築](../../CONTRIBUTING.md#環境構築) のセットアップを行った後、VS Code で `Extension (VSCode)` の起動構成を実行できます。

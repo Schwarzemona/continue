@@ -42,7 +42,7 @@ export const readFileRangeTool: Tool = {
     },
   },
   systemMessageDescription: {
-    prefix: `To read a specific range of lines from a file, use the ${BuiltInToolNames.ReadFileRange} tool. Only supports positive line numbers (1-based from start). For reading from the end of files, use the terminal tool with 'tail' command instead:`,
+    prefix: `ファイルから特定の行範囲を読み込むには、${BuiltInToolNames.ReadFileRange} ツールを使用してください。正の行番号（開始からの1始まり）のみをサポートしています。ファイルの末尾から読み取る場合は、代わりに 'tail' コマンドを使用してターミナルツールを使用してください:`,
     exampleArgs: [
       ["filepath", "path/to/the_file.txt"],
       ["startLine", 10],

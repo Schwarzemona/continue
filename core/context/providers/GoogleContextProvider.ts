@@ -9,7 +9,7 @@ class GoogleContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "google",
     displayTitle: "Google",
-    description: "Attach the results of a Google search",
+    description: "Google 検索結果を追加",
     type: "query",
   };
 
@@ -21,7 +21,7 @@ class GoogleContextProvider extends BaseContextProvider {
   }
 
   get deprecationMessage() {
-    return "The Google context provider is now deprecated and will be removed in a later version. Please consider using github.com/jae-jae/g-search-mcp instead.";
+    return "Google コンテキストプロバイダーは非推奨になりました。代わりに github.com/jae-jae/g-search-mcp の使用を検討してください。";
   }
 
   async getContextItems(
@@ -44,13 +44,13 @@ class GoogleContextProvider extends BaseContextProvider {
 
     if (!response.ok) {
       throw new Error(
-        `Failed to fetch Google search results: ${response.statusText}`,
+        `Google 検索結果の取得に失敗しました: ${response.statusText}`,
       );
     }
     const results = await response.text();
     try {
       const parsed = JSON.parse(results);
-      let content = `Google Search: ${query}\n\n`;
+      let content = `Google 検索: ${query}\n\n`;
       const answerBox = parsed.answerBox;
 
       if (answerBox) {
@@ -64,12 +64,12 @@ class GoogleContextProvider extends BaseContextProvider {
       return [
         {
           content,
-          name: "Google Search",
-          description: "Google Search",
+          name: "Google 検索",
+          description: "Google 検索",
         },
       ];
     } catch (e) {
-      throw new Error(`Failed to parse Google search results: ${results}`);
+      throw new Error(`Google 検索結果の解析に失敗しました: ${results}`);
     }
   }
 }

@@ -11,7 +11,7 @@ class HttpContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "http",
     displayTitle: "HTTP",
-    description: "Retrieve a context item from a custom server",
+    description: "カスタムサーバーからコンテキスト項目を取得",
     type: "normal",
     renderInlineAs: "",
   };
@@ -69,7 +69,7 @@ class HttpContextProvider extends BaseContextProvider {
 
     try {
       const createContextItem = (item: any) => ({
-        description: item.description ?? "HTTP Context Item",
+        description: item.description ?? "HTTP コンテキスト項目",
         content: item.content ?? "",
         name: item.name ?? this.options.title ?? "HTTP",
         uri: item.uri && {

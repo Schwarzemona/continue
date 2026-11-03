@@ -13,9 +13,9 @@ export const viewDiffImpl: ToolImpl = async (args, extras) => {
   if (!combinedDiff.trim()) {
     return [
       {
-        name: "Diff",
-        description: "current Git diff",
-        content: "The current diff is empty",
+        name: "差分",
+        description: "現在のGit差分",
+        content: "現在の差分は空です",
       },
     ];
   }
@@ -32,17 +32,17 @@ export const viewDiffImpl: ToolImpl = async (args, extras) => {
 
   const contextItems: ContextItem[] = [
     {
-      name: "Diff",
-      description: "The current git diff",
+      name: "差分",
+      description: "現在のGit差分",
       content: processedDiff,
     },
   ];
 
   if (truncated) {
     contextItems.push({
-      name: "Truncation warning",
+      name: "切り詰め警告",
       description: "",
-      content: `The git diff was truncated because it exceeded ${DEFAULT_GIT_DIFF_LINE_LIMIT} lines. Consider viewing specific files or focusing on smaller changes.`,
+      content: `${DEFAULT_GIT_DIFF_LINE_LIMIT}行を超えたため切り詰められました`,
     });
   }
 

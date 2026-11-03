@@ -13,7 +13,7 @@ export function RunTerminalCommand(props: RunTerminalCommandToolCallProps) {
   const isErrored = props.toolCallState.status === "errored";
   const outputItem = isErrored
     ? props.toolCallState.output?.[0] // Get first output item for errors
-    : props.toolCallState.output?.find((item) => item.name === "Terminal");
+    : props.toolCallState.output?.find((item) => item.name === "端末");
 
   const terminalContent = outputItem?.content || "";
   const statusMessage = outputItem?.status || "";

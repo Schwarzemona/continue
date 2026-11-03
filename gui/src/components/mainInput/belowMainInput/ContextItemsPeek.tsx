@@ -183,11 +183,11 @@ export function ContextItemsPeek({
         title ??
         (isGatheringContext ? (
           <>
-            Gathering context
+            コンテキストを収集中
             <AnimatedEllipsis />
           </>
         ) : (
-          `${ctxItems.length} context ${ctxItems.length > 1 ? "items" : "item"}`
+          `${ctxItems.length}つのコンテキスト`
         ))
       }
     >
@@ -196,8 +196,9 @@ export function ContextItemsPeek({
           <ContextItemsPeekItem key={idx} contextItem={contextItem} />
         ))
       ) : (
-        <div className="text-description-muted pl-2 italic">No results</div>
+        <div className="text-description-muted pl-2 italic">結果なし</div>
       )}
     </ToggleDiv>
+
   );
 }

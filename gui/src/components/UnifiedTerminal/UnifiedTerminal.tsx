@@ -389,9 +389,9 @@ export function UnifiedTerminalCommand({
   let statusType: "running" | "completed" | "failed" | "background" = status;
   if (isRunning) {
     statusType = "running";
-  } else if (statusMessage?.includes("failed")) {
+  } else if (statusMessage?.includes("失敗")) {
     statusType = "failed";
-  } else if (statusMessage?.includes("background")) {
+  } else if (statusMessage?.includes("バックグラウンド")) {
     statusType = "background";
   }
 
@@ -437,7 +437,7 @@ export function UnifiedTerminalCommand({
                 isExpanded ? "rotate-0" : "-rotate-90"
               }`}
             />
-            <span className="text-description ml-2 select-none">Terminal</span>
+            <span className="text-description ml-2 select-none">端末</span>
           </div>
 
           <div className="flex items-center gap-2.5">
@@ -514,7 +514,7 @@ export function UnifiedTerminalCommand({
             }}
           >
             <StatusIcon status={statusType} />
-            {isRunning ? "Running" : statusMessage}
+            {isRunning ? "実行中" : statusMessage}
             {isRunning && toolCallId && (
               <a
                 href="#"
@@ -524,7 +524,7 @@ export function UnifiedTerminalCommand({
                 }}
                 className="text-link ml-3 cursor-pointer no-underline hover:underline"
               >
-                Move to background
+                バックグラウンドへ移動
               </a>
             )}
           </div>

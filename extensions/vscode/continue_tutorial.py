@@ -4,24 +4,24 @@
                        / /___   / /_/ /_  / / // /_  _  /  _  / / // /_/ / /  __/
                        \____/   \____/ /_/ /_/ \__/  /_/   /_/ /_/ \__,_/  \___/
 
-                                 Autocomplete, Edit, Chat, and Agent tutorial
+                    オートコンプリート、編集、チャット、およびエージェントのチュートリアル
 """
 
 
-# —————————————————————————————————————————————     Autocomplete     —————————————————————————————————————————————— #
-#                            Autocomplete provides inline code suggestions as you type.
+# —————————————————————————————————————————————     オートコンプリート     —————————————————————————————————————————————— #
+#                            オートコンプリートは、入力中にインラインでコードの提案を行います。
 
-# 1. Place cursor after `sorting_algorithm:` below and press [Enter]
-# 2. Press [Tab] to accept the Autocomplete suggestion
+# 1. 下の `sorting_algorithm:` の後にカーソルを置き、[Enter] を押します
+# 2. [Tab] を押してオートコンプリートの提案を適用します
 
-# Basic assertion for sorting_algorithm:
+# sorting_algorithm の基本的なアサーション:
 
 # —————————————————————————————————————————————————     Edit      ————————————————————————————————————————————————— #
-#                   Edit is a convenient way to make quick changes to specific code and files.
+#                   Editは、特定のコードやファイルを素早く変更するための便利な方法です。
 
-# 1. Highlight the code below
-# 2. Press [Cmd/Ctrl + I] to Edit
-# 3. Try asking Continue to "make this more readable"
+# 1. 下のコードをハイライトします
+# 2. [Cmd/Ctrl + I] を押して Edit を起動します
+# 3. Continueに「これをより読みやすくして」と頼んでみてください
 def sorting_algorithm(x):
     for i in range(len(x)):
         for j in range(len(x) - 1):
@@ -30,11 +30,11 @@ def sorting_algorithm(x):
     return x
 
 # —————————————————————————————————————————————————     Chat      ————————————————————————————————————————————————— #
-#                    Chat makes it easy to ask for help from an LLM without needing to leave the IDE.
+#                    Chatは、IDEを離れることなくLLMに簡単に助けを求めることができます。
 
-# 1. Highlight the code below
-# 2. Press [Cmd/Ctrl + L] to add to Chat
-# 3. Try asking Continue "what sorting algorithm is this?"
+# 1. 下のコードをハイライトします
+# 2. [Cmd/Ctrl + L] を押して Chat に追加します
+# 3. Continueに「これは何のソートアルゴリズムですか？」と聞いてみてください
 def sorting_algorithm2(x):
     for i in range(len(x)):
         for j in range(len(x) - 1):
@@ -43,10 +43,10 @@ def sorting_algorithm2(x):
     return x
 
 # —————————————————————————————————————————————————     Agent      ————————————————————————————————————————————————— #
-#           Agent equips the Chat model with the tools needed to handle a wide range of coding tasks, allowing
-#           the model to make decisions and save you the work of manually finding context and performing actions.
+#           Agentは、Chatモデルに幅広いコーディングタスクを処理するために必要なツールを備えさせ、モデルが
+#           意思決定を行えるようにすることで、コンテキストを手動で見つけたりアクションを実行したりする手間を省きます。
 
-# 1. Switch from "Chat" to "Agent" mode using the dropdown in the bottom left of the input box
-# 2. Use the "/init" slash command to generate a CONTINUE.md file
+# 1. 入力ボックスの左下にあるドロップダウンを使用して、「Chat」から「Agent」モードに切り替えます
+# 2. "/init" スラッシュコマンドを使用して CONTINUE.md ファイルを生成します
 
   # ——————————————————      Learn more at https://docs.continue.dev      ——————————————————— #

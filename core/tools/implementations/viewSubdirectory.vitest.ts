@@ -44,7 +44,7 @@ describe("viewSubdirectoryImpl", () => {
         ContinueErrorReason.DirectoryNotFound,
       );
       expect((error as ContinueError).message).toContain(
-        "does not exist or is not accessible",
+        "は存在しないか、アクセスできません",
       );
     }
   });

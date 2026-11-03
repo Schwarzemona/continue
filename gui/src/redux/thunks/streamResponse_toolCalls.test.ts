@@ -2295,7 +2295,7 @@ describe("streamResponseThunk - tool calls", () => {
       // The tool call should have an error message explaining it's disabled
       // Errors are stored as ContextItems with the error in the content
       const errorOutput = evalToolCall?.output?.[0];
-      expect(errorOutput?.content).toContain("disabled");
+      expect(errorOutput?.content).toContain("できません");
 
       // Verify the command was NOT executed (no tool/call request)
       const toolCallRequests = requestSpy.mock.calls.filter(

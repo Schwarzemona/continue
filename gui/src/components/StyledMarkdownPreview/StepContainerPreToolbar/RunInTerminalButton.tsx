@@ -28,7 +28,7 @@ export function RunInTerminalButton({ command }: RunInTerminalButtonProps) {
       >
         <>
           <CommandLineIcon className="h-3 w-3 hover:brightness-125" />
-          <span className="text-lightgray max-sm:hidden">Run</span>
+          <span className="text-lightgray max-sm:hidden">実行</span>
         </>
       </div>
     </div>

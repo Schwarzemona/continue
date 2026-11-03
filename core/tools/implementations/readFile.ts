@@ -15,7 +15,7 @@ export const readFileImpl: ToolImpl = async (args, extras) => {
   if (!resolvedPath) {
     throw new ContinueError(
       ContinueErrorReason.FileNotFound,
-      `File "${filepath}" does not exist or is not accessible. You might want to check the path and try again.`,
+      `ファイル「${filepath}」が存在しないか、アクセスできません。`,
     );
   }
 

@@ -101,9 +101,9 @@ export const callToolById = createAsyncThunk<
         contextItems: [
           {
             icon: "problems",
-            name: "Tool Call Error",
-            description: "Tool Call Failed",
-            content: `${toolCallState.toolCall.function.name} failed with the message: ${error.message}\n\nPlease try something else or request further instructions.`,
+            name: "ツール呼び出しエラー",
+            description: "ツール呼び出しに失敗しました",
+            content: `${toolCallState.toolCall.function.name}の呼び出しに失敗: ${error.message}`,
             hidden: false,
           },
         ],

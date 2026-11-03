@@ -192,7 +192,7 @@ export function FindAndReplaceDisplay({
             if (toolCallState.output) {
               e.stopPropagation();
               ideMessenger.post("showVirtualFile", {
-                name: "Edit output",
+                name: "編集出力",
                 content: renderContextItems(toolCallState.output),
               });
             }
@@ -262,7 +262,7 @@ export function FindAndReplaceDisplay({
   if (diffResult?.error) {
     return (
       <div className="text-description mt-2 px-3">
-        検索した文字列はファイル内に見つかりませんでした。
+        文字列はファイル内に見つかりません
       </div>
     );
   }
@@ -274,7 +274,7 @@ export function FindAndReplaceDisplay({
       !diffResult.diff[0].removed)
   ) {
     return renderContainer(
-      <div className="text-description-muted p-3">No changes to display</div>,
+      <div className="text-description-muted p-3">表示する変更点はありません</div>,
     );
   }
 

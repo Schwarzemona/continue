@@ -69,7 +69,7 @@ const vscodeShortcuts: Omit<KeyboardShortcutProps, "isEven">[] = [
   },
   {
     shortcut: "cmd shift R",
-    description: "デバッグターミナル",
+    description: "デバッグ端末",
   },
   {
     shortcut: "cmd shift backspace",
@@ -104,45 +104,45 @@ const vscodeShortcuts: Omit<KeyboardShortcutProps, "isEven">[] = [
 const jetbrainsShortcuts: Omit<KeyboardShortcutProps, "isEven">[] = [
   {
     shortcut: "cmd '",
-    description: "Toggle Selected Model",
+    description: "選択されたモデルの切り替え",
   },
   {
     shortcut: "cmd I",
-    description: "Edit highlighted code",
+    description: "ハイライトされたコードを編集",
   },
   {
     shortcut: "cmd J",
     description:
-      "New Chat / New Chat With Selected Code / Close Continue Sidebar If Chat Already In Focus",
+      "新しいチャット / 選択したコードで新しいチャット / チャットにフォーカスがある場合はContinueサイドバーを閉じる",
   },
   {
     shortcut: "cmd backspace",
-    description: "Cancel response",
+    description: "応答を停止",
   },
   {
     shortcut: "cmd shift I",
-    description: "Toggle inline edit focus",
+    description: "インライン編集のフォーカスの切り替え",
   },
   {
     shortcut: "cmd shift J",
     description:
-      "Focus Current Chat / Add Selected Code To Current Chat / Close Continue Sidebar If Chat Already In Focus",
+      "現在のチャットにフォーカス / 選択したコードを現在のチャットに追加 / チャットにフォーカスがある場合はContinueサイドバーを閉じる",
   },
   {
     shortcut: "cmd shift backspace",
-    description: "Reject Diff",
+    description: "差分を却下",
   },
   {
     shortcut: "cmd shift enter",
-    description: "Accept Diff",
+    description: "差分を承認",
   },
   {
     shortcut: "alt shift J",
-    description: "Quick Input",
+    description: "クイック入力",
   },
   {
     shortcut: "alt cmd J",
-    description: "Toggle Sidebar",
+    description: "サイドバーの表示/非表示",
   },
 ];
 

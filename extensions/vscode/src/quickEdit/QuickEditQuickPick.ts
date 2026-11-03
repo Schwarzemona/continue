@@ -19,15 +19,15 @@ import { appendToHistory, getHistoryQuickPickVal } from "./HistoryQuickPick";
  * with the initial Quick Pick
  */
 enum QuickEditInitialItemLabels {
-  History = "History",
-  ContextProviders = "Context providers",
-  Submit = "Submit",
+  History = "履歴",
+  ContextProviders = "コンテキストプロバイダー",
+  Submit = "送信",
 }
 
 enum UserPromptLabels {
-  AcceptAll = "Accept all (Shift + Cmd + Enter)",
-  RejectAll = "Reject all (Shift + Cmd + Backspace)",
-  CloseDialog = "Close dialog",
+  AcceptAll = "すべて受け入れる(Shift + Cmd + Enter)",
+  RejectAll = "すべて拒否する(Shift + Cmd + Backspace)",
+  CloseDialog = "ダイアログを閉じる",
 }
 
 export type QuickEditShowParams = {
@@ -47,11 +47,11 @@ const FILE_SEARCH_CHAR = "@";
  * type their prompt that is always displayed
  */
 const SUBMIT_ITEM: vscode.QuickPickItem = {
-  label: "Submit",
+  label: "送信",
   alwaysShow: true,
 };
 
-const NO_RESULTS_ITEM: vscode.QuickPickItem = { label: "No results found" };
+const NO_RESULTS_ITEM: vscode.QuickPickItem = { label: "結果が見つかりません" };
 
 const REVIEW_CHANGES_ITEMS: vscode.QuickPickItem[] = [
   {
@@ -174,13 +174,13 @@ export class QuickEdit {
 
   private openAcceptRejectMenu(prompt: string, path: string | undefined) {
     const quickPick = vscode.window.createQuickPick();
-    quickPick.placeholder = "Type your acceptance decision";
+    quickPick.placeholder = "承諾の決定を入力してください";
 
-    quickPick.title = "Accept changes";
+    quickPick.title = "変更を受け入れる";
     quickPick.value = prompt;
     quickPick.items = REVIEW_CHANGES_ITEMS;
     quickPick.placeholder =
-      "Accept or reject changes. Start typing to try again with a new prompt.";
+      "変更を承諾するか拒否するかを選択してください。新しいプロンプトでやり直すには入力を開始してください。";
     quickPick.show();
 
     quickPick.onDidChangeValue(() => {
@@ -232,7 +232,7 @@ export class QuickEdit {
   ) => {
     const modelTitle = await this.getCurModel();
     if (!modelTitle) {
-      throw new Error("No model selected");
+      throw new Error("モデルが選択されていません");
     }
 
     const { config } = await this.configHandler.loadConfig();
@@ -284,8 +284,8 @@ export class QuickEdit {
     const isSelectionEmpty = start.isEqual(end);
 
     return isSelectionEmpty
-      ? `Edit ${fileName}`
-      : `Edit ${fileName}:${start.line}${
+      ? `編集 ${fileName}`
+      : `編集 ${fileName}:${start.line}${
           end.line > start.line ? `-${end.line}` : ""
         }`;
   };
@@ -332,11 +332,11 @@ export class QuickEdit {
     return [
       {
         label: QuickEditInitialItemLabels.History,
-        detail: "$(history) Select previous prompts",
+        detail: "$(history)過去のプロンプトを選択",
       },
       {
         label: QuickEditInitialItemLabels.ContextProviders,
-        detail: "$(add) Add context to your prompt",
+        detail: "$(add)プロンプトにコンテキストを追加",
       },
     ];
   }
@@ -348,7 +348,7 @@ export class QuickEdit {
     const model = await this.getCurModel();
 
     if (!model) {
-      this.ide.showToast("error", "Please configure a model to use Quick Edit");
+      this.ide.showToast("error", "Quick Editを使用するにはモデルを設定してください");
       return { label: undefined, value: undefined };
     }
 
@@ -357,7 +357,7 @@ export class QuickEdit {
     const initialItems = this.getInitialItems();
     quickPick.items = initialItems;
     quickPick.placeholder =
-      "Enter a prompt to edit your code (@ to search files, ⏎ to submit)";
+      "コードを編集するためのプロンプトを入力してください(@でファイルを検索、⏎で送信)";
     quickPick.title = this.getQuickPickTitle();
     quickPick.ignoreFocusOut = true;
     quickPick.value = this.initialPrompt ?? "";
@@ -414,7 +414,7 @@ export class QuickEdit {
           quickPick.items = [
             {
               label: vscode.workspace.asRelativePath(uri),
-              description: "Current file",
+              description: "現在のファイル",
               alwaysShow: true,
             },
           ];
@@ -503,7 +503,7 @@ export class QuickEdit {
   }) {
     const { config } = await this.configHandler.loadConfig();
     if (!config) {
-      throw new Error("Config not loaded");
+      throw new Error("設定が読み込まれていません");
     }
 
     let prompt: string | undefined;

@@ -1,13 +1,13 @@
 import { ChatMessage, PromptTemplate } from "../../index.js";
 import { gptEditPrompt } from "./edit/gpt.js";
 
-const simplifiedEditPrompt = `Consider the following code:
+const simplifiedEditPrompt = `以下のコードを検討してください：
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`
-Edit the code to perfectly satisfy the following user request:
+以下のユーザーリクエストを完全に満たすようにコードを編集してください：
 {{{userInput}}}
-Output nothing except for the code. No code block, no English explanation, no start/end tags. Leave existing comments in place unless changes require modifying them.`;
+コード以外の出力は何もしないでください。コードブロック、英語の解説、開始/終了タグも不要です。変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。`;
 
 const START_TAG = "<START EDITING HERE>";
 const osModelsEditPrompt: PromptTemplate = (history, otherData) => {
@@ -22,7 +22,7 @@ const osModelsEditPrompt: PromptTemplate = (history, otherData) => {
     !firstCharOfFirstLine;
   const suffixTag = isSuffix ? "<STOP EDITING HERE>" : "";
   const suffixExplanation = isSuffix
-    ? ' When you get to "<STOP EDITING HERE>", end your response.'
+    ? ' "<STOP EDITING HERE>" に到達したら、回答を終了してください。'
     : "";
 
   // If neither prefilling nor /v1/completions are supported, we have to use a chat prompt without putting words in the model's mouth
@@ -43,13 +43,7 @@ ${otherData.codeToEdit}
 ${suffixTag}
 \`\`\`
 
-Please rewrite the entire code block above in order to satisfy the following request: "${otherData.userInput}". You should rewrite the entire code block without leaving placeholders, even if the code is the same as before. Leave existing comments in place unless changes require modifying them.${suffixExplanation}`,
-      },
-      {
-        role: "assistant",
-        content: `Sure! Here's the entire rewritten code block:
-\`\`\`${otherData.language}
-`,
+以下のリクエストを満たすために、上記のコードブロック全体を書き換えてください: "${otherData.userInput}"。たとえコードが以前と同じであっても、プレースホルダーを残さずにコードブロック全体を書き換える必要があります。変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。${suffixExplanation}`,
       },
     ];
   }
@@ -63,120 +57,87 @@ ${otherData.codeToEdit}
 ${suffixTag}
 \`\`\`
 
-Please rewrite the entire code block above, editing the portion below "${START_TAG}" in order to satisfy the following request: "${otherData.userInput}". You should rewrite the entire code block without leaving placeholders, even if the code is the same as before. Leave existing comments in place unless changes require modifying them.${suffixExplanation}
-`,
-    },
-    {
-      role: "assistant",
-      content: `Sure! Here's the entire code block, including the rewritten portion:
-\`\`\`${otherData.language}
-${otherData.prefix}${START_TAG}
+以下のリクエストを満たすために、"${START_TAG}" 以下の部分を編集して、上記のコードブロック全体を書き換えてください: "${otherData.userInput}"。たとえコードが以前と同じであっても、プレースホルダーを残さずにコードブロック全体を書き換える必要があります。変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。${suffixExplanation}
 `,
     },
   ];
 };
 
-const mistralEditPrompt = `[INST] You are a helpful code assistant. Your task is to rewrite the following code with these instructions: "{{{userInput}}}"
+const mistralEditPrompt = `[INST] あなたは役に立つコードアシスタントです。あなたのタスクは、以下の指示に従ってコードを書き換えることです: "{{{userInput}}}"
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`
 
-Leave existing comments in place unless changes require modifying them. Just rewrite the code without explanations: [/INST]
+変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。解説なしでコードを書き換えてください: [/INST]
 \`\`\`{{{language}}}`;
 
-const alpacaEditPrompt = `Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+const alpacaEditPrompt = `以下はタスクを説明する指示と、さらなる文脈を提供する入力のペアです。リクエストを適切に完了する回答を書いてください。
 
-### Instruction: Leave existing comments in place unless changes require modifying them. Rewrite the code to satisfy this request: "{{{userInput}}}"
+### 指示: 変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。このリクエストを満たすようにコードを書き換えてください: "{{{userInput}}}"
 
-### Input:
-
-\`\`\`{{{language}}}
-{{{codeToEdit}}}
-\`\`\`
-
-### Response:
-
-Sure! Here's the code you requested:
-\`\`\`{{{language}}}
-`;
-
-const phindEditPrompt = `### System Prompt
-You are an expert programmer and write code on the first attempt without any errors or fillers.
-
-### User Message:
-Leave existing comments in place unless changes require modifying them. Rewrite the code to satisfy this request: "{{{userInput}}}"
+### 入力:
 
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`
-
-### Assistant:
-Sure! Here's the code you requested:
-
-\`\`\`{{{language}}}
 `;
 
-const deepseekEditPrompt = `### System Prompt
-You are an AI programming assistant, utilizing the DeepSeek Coder model, developed by DeepSeek Company, and your  role is to assist with questions related to computer science. For politically sensitive questions, security and privacy issues, and other non-computer science questions, you will not answer.
-### Instruction:
-Leave existing comments in place unless changes require modifying them. Rewrite the code to satisfy this request: "{{{userInput}}}"
+const phindEditPrompt = `### システムプロンプト
+あなたはエキスパートプログラマーであり、エラーや不要な記述なしに一発でコードを書き上げます。
+
+### ユーザーメッセージ:
+変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。このリクエストを満たすようにコードを書き換えてください: "{{{userInput}}}"
+
+\`\`\`{{{language}}}
+{{{codeToEdit}}}
+\`\`\`
+`;
+
+const deepseekEditPrompt = `### システムプロンプト
+あなたはDeepSeek Companyによって開発されたDeepSeek Coderモデルを利用するAIプログラミングアシスタントであり、コンピュータサイエンスに関する質問を支援する役割を担っています。政治的に敏感な質問、セキュリティやプライバシーの問題、およびその他のコンピュータサイエンス以外の質問には回答しません。
+### 指示:
+変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。このリクエストを満たすようにコードを書き換えてください: "{{{userInput}}}"
 
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`<|EOT|>
-### Response:
-Sure! Here's the code you requested:
-
-\`\`\`{{{language}}}
 `;
 
 const zephyrEditPrompt = `<|system|>
-You are an expert programmer and write code on the first attempt without any errors or fillers.</s>
+あなたはエキスパートプログラマーであり、エラーや不要な記述なしに一発でコードを書き上げます。</s>
 <|user|>
-Leave existing comments in place unless changes require modifying them. Rewrite the code to satisfy this request: "{{{userInput}}}"
+変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。このリクエストを満たすようにコードを書き換えてください: "{{{userInput}}}"
 
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`</s>
-<|assistant|>
-Sure! Here's the code you requested:
-
-\`\`\`{{{language}}}
 `;
 
-const openchatEditPrompt = `GPT4 Correct User: You are an expert programmer and personal assistant. You are asked to rewrite the following code in order to {{{userInput}}}.
+const openchatEditPrompt = `GPT4 Correct User:あなたはエキスパートプログラマーであり、パーソナルアシスタントです。{{{userInput}}}のために、以下のコードを書き換えるよう求められています。
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`
-Please only respond with code and put it inside of a markdown code block. Do not give any explanation, but your code should perfectly satisfy the user request. Leave existing comments in place unless changes require modifying them.<|end_of_turn|>GPT4 Correct Assistant: Sure thing! Here is the rewritten code that you requested:
-\`\`\`{{{language}}}
-`;
+コードのみで回答し、それをMarkdownのコードブロックに入れてください。解説は一切不要ですが、コードはユーザーのリクエストを完全に満たす必要があります。変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。<|end_of_turn|>`;
 
-const xWinCoderEditPrompt = `<system>: You are an AI coding agent that helps people with programming. Write a response that appropriately completes the user's request.
-<user>: Please rewrite the following code (without changing existing code comments) with these instructions: "{{{userInput}}}"
+const xWinCoderEditPrompt = `<system>:あなたはプログラミングを行う人々を支援するAIコーディングエージェントです。ユーザーのリクエストを適切に完了する回答を書いてください。
+<user>:以下のコードを、以下の指示に従って（既存のコードコメントは変更せずに）書き換えてください: "{{{userInput}}}"
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`
 
-Just rewrite the code without explanations:
-<AI>:
-\`\`\`{{{language}}}`;
+解説なしでコードを書き換えてください:`;
 
 const neuralChatEditPrompt = `### System:
-You are an expert programmer and write code on the first attempt without any errors or fillers.
+あなたはエキスパートプログラマーであり、エラーや不要な記述なしに一発でコードを書き上げます。
 ### User:
-Rewrite the code (without changing existing code comments) to satisfy this request: "{{{userInput}}}"
+このリクエストを満たすように、コードを（既存のコードコメントは変更せずに）書き換えてください: "{{{userInput}}}"
 
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
 \`\`\`
-### Assistant:
-Sure! Here's the code you requested:
-
-\`\`\`{{{language}}}
 `;
 
-const codeLlama70bEditPrompt = `<s>Source: system\n\n You are an expert programmer and write code on the first attempt without any errors or fillers. <step> Source: user\n\n Rewrite the code (without changing existing code comments) to satisfy this request: "{{{userInput}}}"
+const codeLlama70bEditPrompt = `<s>Source: system\n\n あなたはエキスパートプログラマーであり、エラーや不要な記述なしに一発でコードを書き上げます。 <step> Source: user\n\n このリクエストを満たすように、コードを（既存のコードコメントは変更せずに）書き換えてください: "{{{userInput}}}"
 
 \`\`\`{{{language}}}
 {{{codeToEdit}}}
@@ -193,17 +154,11 @@ const claudeEditPrompt: PromptTemplate = (
 ${otherData.codeToEdit}
 \`\`\`
 
-You are an expert programmer. You will rewrite the above code to do the following:
+あなたはエキスパートプログラマーです。以下のことを行うために、上記のコードを書き換えてください：
 
 ${otherData.userInput}
 
-Leave existing comments in place unless changes require modifying them. Output only a code block with the rewritten code:
-`,
-  },
-  {
-    role: "assistant",
-    content: `Sure! Here is the rewritten code:
-\`\`\`${otherData.language}`,
+変更のために修正が必要な場合を除き、既存のコメントはそのまま残してください。書き換えたコードを含むコードブロックのみを出力してください：`,
   },
 ];
 
@@ -212,9 +167,7 @@ const llama3EditPrompt: PromptTemplate = `<|begin_of_text|><|start_header_id|>us
 {{{codeToEdit}}}
 \`\`\`
 
-Rewrite the above code to satisfy this request (without changing existing code comments): "{{{userInput}}}"<|eot_id|><|start_header_id|>assistant<|end_header_id|>
-Sure! Here's the code you requested:
-\`\`\`{{{language}}}`;
+このリクエストを満たすように、上記のコードを書き換えてください（既存のコードコメントは変更しないでください）: "{{{userInput}}}"<|eot_id|>`;
 
 const gemmaEditPrompt = `# タスク
 - やり直しがきかないため、assistantはエラーや不要な記述なしに一発でコードを書き上げます。

@@ -10,7 +10,7 @@ export const NO_PARALLEL_TOOL_CALLING_INSTRUCTION =
   "このツールは他のどのツールとも並行して呼び出すことはできません。";
 
 const CHANGES_DESCRIPTION =
-  "ファイルへの変更内容。必要な変更のみを示す必要があります。コードブロックで囲むことや、コードの変更以外の内容は記載できません。大きなファイルの場合は、変更のない大きなセクションに対して、言語に適した簡潔なプレースホルダーを使用します（例: 「// ... existing code ...」。";
+  "ファイルへの変更内容。";
 
 export const editFileTool: Tool = {
   type: "function",
@@ -42,11 +42,11 @@ export const editFileTool: Tool = {
   },
   defaultToolPolicy: "allowedWithPermission",
   systemMessageDescription: {
-    prefix: `To edit an EXISTING file, use the ${BuiltInToolNames.EditExistingFile} tool with
-- filepath: the relative filepath to the file.
+    prefix: `既存のファイルを編集するには、以下の引数を使用して ${BuiltInToolNames.EditExistingFile} ツールを使用してください:
+- filepath: ファイルへの相対パス。
 - changes: ${CHANGES_DESCRIPTION}
-Only use this tool if you already know the contents of the file. Otherwise, use the ${BuiltInToolNames.ReadFile} or ${BuiltInToolNames.ReadCurrentlyOpenFile} tool to read it first.
-For example:`,
+このツールは、すでにファイルの内容を知っている場合にのみ使用してください。そうでない場合は、まず ${BuiltInToolNames.ReadFile} または ${BuiltInToolNames.ReadCurrentlyOpenFile} ツールを使用してファイルを読み取ってください。
+例:`,
     exampleArgs: [
       ["filepath", "path/to/the_file.ts"],
       [

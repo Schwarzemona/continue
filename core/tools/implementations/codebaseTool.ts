@@ -30,14 +30,9 @@ export const codebaseToolImpl: ToolImpl = async (args, extras) => {
     if (results.length === 0) {
       return [
         {
-          name: "No Results",
-          description: "Codebase search",
-          content: `No relevant code found for query: "${query}". This could mean:
-- The codebase hasn't been indexed yet
-- No code matches the search criteria
-- Embeddings provider is not configured
-
-Try re-indexing the codebase or using a more specific query.`,
+          name: "結果なし",
+          description: "コードベース検索",
+          content: `クエリ「${query}」に関連ファイルが見つかりませんでした`,
         },
       ];
     }
@@ -46,9 +41,9 @@ Try re-indexing the codebase or using a more specific query.`,
   } catch (error) {
     return [
       {
-        name: "Error",
-        description: "Codebase search error",
-        content: `Failed to search codebase: ${error instanceof Error ? error.message : String(error)}`,
+        name: "エラー",
+        description: "コードベース検索エラー",
+        content: `コードベースの検索に失敗しました: ${error instanceof Error ? error.message : String(error)}`,
       },
     ];
   }

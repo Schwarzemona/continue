@@ -11,7 +11,7 @@ export const requestRuleImpl: ToolImpl = async (args, extras) => {
   if (!rule || !rule.sourceFile) {
     throw new ContinueError(
       ContinueErrorReason.RuleNotFound,
-      `Rule with name "${name}" not found or has no file path`,
+      `「${name}」が見つかりません`,
     );
   }
 

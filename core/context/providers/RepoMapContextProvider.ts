@@ -15,15 +15,15 @@ import {
 
 const ENTIRE_PROJECT_ITEM: ContextSubmenuItem = {
   id: "entire-codebase",
-  title: "Entire codebase",
-  description: "Search the entire codebase",
+  title: "コードベース全体",
+  description: "コードベース全体を検索",
 };
 
 class RepoMapContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "repo-map",
-    displayTitle: "Repository Map",
-    description: "Select a folder",
+    displayTitle: "リポジトリマップ",
+    description: "フォルダを選択",
     type: "submenu",
   };
 
@@ -33,8 +33,8 @@ class RepoMapContextProvider extends BaseContextProvider {
   ): Promise<ContextItem[]> {
     return [
       {
-        name: "Repository Map",
-        description: "Overview of the repository structure",
+        name: "リポジトリマップ",
+        description: "リポジトリ構造の概要",
         content: await generateRepoMap(extras.llm, extras.ide, {
           dirUris: query === ENTIRE_PROJECT_ITEM.id ? undefined : [query],
           outputRelativeUriPaths: true,

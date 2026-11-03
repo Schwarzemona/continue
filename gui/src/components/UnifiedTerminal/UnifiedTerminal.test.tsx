@@ -52,7 +52,7 @@ describe("UnifiedTerminalCommand", () => {
     expect(screen.getByText(MOCK_COMMAND)).toBeInTheDocument();
 
     // Should show terminal header
-    expect(screen.getByText("Terminal")).toBeInTheDocument();
+    expect(screen.getByText("端末")).toBeInTheDocument();
 
     // Should show completed status icon (green dot)
     const terminalContainer = screen.getByTestId("terminal-container");
@@ -101,10 +101,10 @@ describe("UnifiedTerminalCommand", () => {
     );
 
     // Should show running status
-    expect(screen.getByText("Running")).toBeInTheDocument();
+    expect(screen.getByText("実行中")).toBeInTheDocument();
 
     // Should show move to background link
-    expect(screen.getByText("Move to background")).toBeInTheDocument();
+    expect(screen.getByText("バックグラウンドへ移動")).toBeInTheDocument();
   });
 
   test("can expand and collapse terminal", async () => {
@@ -256,7 +256,7 @@ describe("UnifiedTerminalCommand", () => {
     );
 
     // Find and click move to background link
-    const moveToBackgroundLink = screen.getByText("Move to background");
+    const moveToBackgroundLink = screen.getByText("バックグラウンドへ移動");
     await user.click(moveToBackgroundLink);
 
     // Should dispatch the move to background action

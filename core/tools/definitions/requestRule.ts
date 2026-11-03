@@ -31,9 +31,9 @@ export function getRequestRuleDescription(
 function getRequestRuleSystemMessageDescription(
   rules: ConfigDependentToolParams["rules"],
 ): string {
-  const prefix = `To retrieve "rules" that contain more context/instructions based on their descriptions, use the ${BuiltInToolNames.RequestRule} tool with the name of the rule. The available rules are:\n`;
+  const prefix = `説明文に基づいて、より多くのコンテキストや指示を含む「ルール」を取得するには、${BuiltInToolNames.RequestRule} ツールをルール名とともに使用してください。利用可能なルールは以下の通りです:\n`;
   const availableRules = getAvailableRules(rules);
-  const suffix = "\n\nFor example, you might respond with:";
+  const suffix = "\n\n例えば、次のように応答します:";
   return prefix + availableRules + suffix;
 }
 

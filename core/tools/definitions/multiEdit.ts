@@ -27,7 +27,7 @@ export const multiEditTool: Tool = {
   isInstant: false,
   function: {
     name: BuiltInToolNames.MultiEdit,
-    description: `単一のファイルに対して複数の編集を行います。複数の編集を行うには、filepathとeditsの配列が必要です。ツール呼び出しの間に、ユーザーやリンターなどによってファイルが変更される可能性があるため、可能な限りすべての編集を1回のツール呼び出しで行います。編集成功率を上げるために、editsを細かく分割します。ユーザーが作業中にファイルを編集することもあります。編集を行う直前に、常に${BuiltInToolNames.ReadFile}ツールを使用して、ファイルの最新のコンテンツとコンテキストを理解します。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
+    description: `単一のファイルに対して複数の編集を行います。${NO_PARALLEL_TOOL_CALLING_INSTRUCTION}`,
     parameters: {
       type: "object",
       required: ["filepath", "edits"],
@@ -35,11 +35,11 @@ export const multiEditTool: Tool = {
         filepath: {
           type: "string",
           description:
-            "修正するファイルのパス。ワークスペースのルートからの相対パス。",
+            "編集するファイルのパス。ワークスペースのルートからの相対パス。",
         },
         edits: {
           type: "array",
-          description: "ファイルに対して順次実行する編集操作の配列。",
+          description: "ファイルに対して順次実行する編集操作の配列。成功率を上げるためには、編集操作を分割し、多くの配列で記述する必要があります。",
           items: {
             type: "object",
             required: ["old_string", "new_string"],
@@ -47,12 +47,12 @@ export const multiEditTool: Tool = {
               old_string: {
                 type: "string",
                 description:
-                  "置換するテキスト。すべての空白/インデントを含め、元のファイルの内容と正確に一致させる必要があります。",
+                  "置換するテキスト。成功率を上げるためには、可能な限り短くする必要があります。",
               },
               new_string: {
                 type: "string",
                 description:
-                  "置換後のテキスト。old_stringとは異なる必要があります。",
+                  "置換後のテキスト。",
               },
               replace_all: {
                 type: "boolean",
@@ -66,9 +66,7 @@ export const multiEditTool: Tool = {
     },
   },
   systemMessageDescription: {
-    prefix: `To make multiple edits to a single file, use the ${BuiltInToolNames.MultiEdit} tool with a filepath (relative to the root of the workspace) and an array of edit operations.
-
-  For example, you could respond with:`,
+    prefix: `単一のファイルに対して複数の編集を行うには、filepath（ワークスペースのルートからの相対パス）とeditsの配列を使用して ${BuiltInToolNames.MultiEdit} ツールを使用してください。\n\n  例えば、次のように応答できます:`,
     exampleArgs: [
       ["filepath", "path/to/file.ts"],
       [

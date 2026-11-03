@@ -128,14 +128,14 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
           let sigkillTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
           if (!waitForCompletion) {
-            const status = "Command is running in the background...";
+            const status = "コマンドはバックグラウンドで実行中……";
             if (extras.onPartialOutput) {
               extras.onPartialOutput({
                 toolCallId,
                 contextItems: [
                   {
-                    name: "Terminal",
-                    description: "Terminal command output",
+                    name: "端末",
+                    description: "端末コマンド出力",
                     content: "",
                     status: status,
                   },
@@ -172,7 +172,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
             timeoutId = setTimeout(() => {
               if (isRunning()) {
                 terminalOutput +=
-                  "\n[Timeout: process killed after 2 minutes]\n";
+                  "\n[タイムアウト: 2分経過しました]\n";
 
                 // Update UI with timeout message
                 if (extras.onPartialOutput) {
@@ -180,10 +180,10 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
                     toolCallId,
                     contextItems: [
                       {
-                        name: "Terminal",
-                        description: "Terminal command output",
+                        name: "端末",
+                        description: "端末コマンド出力",
                         content: terminalOutput,
-                        status: "Command timed out",
+                        status: "コマンドタイムアウト",
                       },
                     ],
                   });
@@ -218,13 +218,13 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
             if (extras.onPartialOutput) {
               const status = waitForCompletion
                 ? ""
-                : "Command is running in the background...";
+                : "コマンドはバックグラウンドで実行中……";
               extras.onPartialOutput({
                 toolCallId,
                 contextItems: [
                   {
-                    name: "Terminal",
-                    description: "Terminal command output",
+                    name: "端末",
+                    description: "端末コマンド出力",
                     content: terminalOutput,
                     status: status,
                   },
@@ -251,8 +251,8 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
                 toolCallId,
                 contextItems: [
                   {
-                    name: "Terminal",
-                    description: "Terminal command output",
+                    name: "端末",
+                    description: "端末コマンド出力",
                     content: terminalOutput,
                   },
                 ],
@@ -262,11 +262,11 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
 
           // If we don't need to wait for completion, resolve immediately
           if (!waitForCompletion) {
-            const status = "Command is running in the background...";
+            const status = "コマンドはバックグラウンドで実行中……";
             resolve([
               {
-                name: "Terminal",
-                description: "Terminal command output",
+                name: "端末",
+                description: "端末コマンド出力",
                 content: terminalOutput,
                 status: status,
               },
@@ -297,21 +297,21 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
             if (waitForCompletion) {
               // Normal completion, resolve now
               if (!code || code === 0) {
-                const status = "Command completed";
+                const status = "実行完了";
                 resolve([
                   {
-                    name: "Terminal",
-                    description: "Terminal command output",
+                    name: "端末",
+                    description: "端末コマンド出力",
                     content: terminalOutput,
                     status: status,
                   },
                 ]);
               } else {
-                const status = `Command failed with exit code ${code}`;
+                const status = `コマンドが終了コード${code}で失敗`;
                 resolve([
                   {
-                    name: "Terminal",
-                    description: "Terminal command output",
+                    name: "端末",
+                    description: "端末コマンド出力",
                     content: terminalOutput,
                     status: status,
                   },
@@ -322,14 +322,14 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
               if (extras.onPartialOutput) {
                 const status =
                   code === 0 || !code
-                    ? "\nBackground command completed"
-                    : `\nBackground command failed with exit code ${code}`;
+                    ? "\nバックグラウンド処理完了"
+                    : `\nバックグラウンド処理が終了コード${code}で失敗`;
                 extras.onPartialOutput({
                   toolCallId,
                   contextItems: [
                     {
-                      name: "Terminal",
-                      description: "Terminal command output",
+                      name: "端末",
+                      description: "端末コマンド出力",
                       content: terminalOutput,
                       status: status,
                     },
@@ -408,7 +408,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
               // Set up timeout
               timeoutId = setTimeout(() => {
                 if (isRunning()) {
-                  stderr += "\n[Timeout: process killed after 2 minutes]\n";
+                  stderr += "\n[タイムアウト: 2分経過しました]\n";
 
                   // Try graceful termination first
                   childProc.kill("SIGTERM");
@@ -478,21 +478,21 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
             },
           );
 
-          const status = "Command completed";
+          const status = "実行完了";
           return [
             {
-              name: "Terminal",
-              description: "Terminal command output",
+              name: "端末",
+              description: "端末コマンドの出力",
               content: output.stdout ?? "",
               status: status,
             },
           ];
         } catch (error: any) {
-          const status = `Command failed with: ${error.message || error.toString()}`;
+          const status = `コマンドが失敗しました: ${error.message || error.toString()}`;
           return [
             {
-              name: "Terminal",
-              description: "Terminal command output",
+              name: "端末",
+              description: "端末コマンドの出力",
               content: error.stderr ?? error.toString(),
               status: status,
             },
@@ -529,21 +529,21 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
 
           // Unref the child to allow the Node.js process to exit
           childProc.unref();
-          const status = "Command is running in the background...";
+          const status = "コマンドはバックグラウンドで実行中……";
           return [
             {
-              name: "Terminal",
-              description: "Terminal command output",
+              name: "端末",
+              description: "端末コマンドの出力",
               content: status,
               status: status,
             },
           ];
         } catch (error: any) {
-          const status = `Command failed with: ${error.message || error.toString()}`;
+          const status = `コマンドが失敗しました: ${error.message || error.toString()}`;
           return [
             {
-              name: "Terminal",
-              description: "Terminal command output",
+              name: "端末",
+              description: "端末コマンドの出力",
               content: status,
               status: status,
             },
@@ -559,11 +559,11 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
   await extras.ide.runCommand(command);
   return [
     {
-      name: "Terminal",
-      description: "Terminal command output",
+      name: "端末",
+      description: "端末コマンドの出力",
       content:
-        "Command executed in remote terminal. Output capture is not yet available for remote environments.",
-      status: "Command executed",
+        "リモート端末でコマンドを実行",
+      status: "実行",
     },
   ];
 };

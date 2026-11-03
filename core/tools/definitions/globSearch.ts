@@ -13,21 +13,21 @@ export const globSearchTool: Tool = {
   function: {
     name: BuiltInToolNames.FileGlobSearch,
     description:
-      "Globパターンを使用してプロジェクト内のファイル名を再帰的に検索した結果を返します。出力が切り詰められることがあるため、対象を絞ったパターンを使用します。",
+      "プロジェクト内のファイル名をGlobで検索し、ファイル名を返します。出力が切り詰められることがあるため、対象を絞ったパターンを使用します。",
     parameters: {
       type: "object",
       required: ["pattern"],
       properties: {
         pattern: {
           type: "string",
-          description: "Globパターンでファイルパスを照合します。",
+          description: "検索するGlobパターン。",
         },
       },
     },
   },
   defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
-    prefix: `To return a list of files based on a glob search pattern, use the ${BuiltInToolNames.FileGlobSearch} tool`,
+    prefix: `Glob検索パターンに基づいてファイルの一覧を返すには、${BuiltInToolNames.FileGlobSearch} ツールを使用してください`,
     exampleArgs: [["pattern", "*.py"]],
   },
   toolCallIcon: "MagnifyingGlassIcon",

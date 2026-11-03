@@ -31,8 +31,7 @@ function IndexingProgressErrorText({ update }: IndexingProgressErrorTextProps) {
       <div className="flex items-center gap-2 italic">
         <XCircleIcon className="h-4 w-4 min-w-[10%]" />
         <span className="leading-relaxed">
-          Add an Embeddings model to enable codebase indexing. See the docs for
-          examples:
+          コードベースのインデックス作成を有効にするには、組み込みモデルを追加してください。例についてはドキュメントを参照してください：
           <a
             href="https://docs.continue.dev/walkthroughs/codebase-embeddings#embeddings-providers"
             target="_blank"

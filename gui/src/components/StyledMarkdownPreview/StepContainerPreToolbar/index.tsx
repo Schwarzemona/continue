@@ -100,7 +100,7 @@ export function StepContainerPreToolbar({
         onClick={() => {
           if (toolCallState.output) {
             ideMessenger.post("showVirtualFile", {
-              name: "Edit output",
+              name: "編集出力",
               content: renderContextItems(toolCallState.output),
             });
           }
@@ -182,7 +182,7 @@ export function StepContainerPreToolbar({
     if (!fileUri) {
       void ideMessenger.ide.showToast(
         "error",
-        "Could not resolve filepath to apply changes",
+        "変更を適用するためのファイルパスを特定できませんでした",
       );
       return;
     }
@@ -207,7 +207,7 @@ export function StepContainerPreToolbar({
     if (!filepath) {
       void ideMessenger.ide.showToast(
         "error",
-        `Could not resolve filepath to ${action} changes`,
+        `変更の${action}に関するファイルパスを特定できませんでした`,
       );
       return;
     }

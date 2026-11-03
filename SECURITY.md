@@ -1,16 +1,11 @@
-# Security Policy
+# セキュリティポリシー
 
-## Reporting a Vulnerability
+## 脆弱性の報告
 
-If you discover a security vulnerability, please do not open a public issue. Instead, please report it by emailing security@continue.dev. We will be highly responsive to all security concerns and ask that you give us sufficient time to investigate and address the vulnerability before disclosing it publicly.
+報告には以下の詳細を含めてください：
 
-Please include the following details in your report:
+- 脆弱性の説明
+- 問題を再現するための手順
+- 潜在的な影響に関するあなたの評価
+- 可能な緩和策
 
-- A description of the vulnerability
-- Steps to reproduce the issue
-- Your assessment of the potential impact
-- Any possible mitigations
-
-## Contact
-
-For any other questions or concerns related to security, please contact us at security@continue.dev.

@@ -34,7 +34,7 @@ export const createNewFileTool: Tool = {
   },
   defaultToolPolicy: "allowedWithPermission",
   systemMessageDescription: {
-    prefix: `To create a NEW file, use the ${BuiltInToolNames.CreateNewFile} tool with the relative filepath and new contents. For example, to create a file located at 'path/to/file.txt', you would respond with:`,
+    prefix: `新しいファイルを作成するには、相対パスと新しい内容を指定して ${BuiltInToolNames.CreateNewFile} ツールを使用してください。例えば、'path/to/file.txt' にあるファイルを作成するには、次のように応答します:`,
     exampleArgs: [
       ["filepath", "path/to/the_file.txt"],
       ["contents", "Contents of the file"],

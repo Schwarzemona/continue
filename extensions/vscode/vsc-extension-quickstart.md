@@ -1,13 +1,13 @@
-# Welcome to the Continue Visual Studio Code Extension
+# Continue Visual Studio Code 拡張機能へようこそ
 
-## Get up and running straight away
+## すぐに使い始める
 
-- Open the root of the continue repository in visual studio code
-- Press `F5` to open a new window with your extension loaded.
-- The continue in the launched vs code instance uses `extensions/.continue-debug` as configuration folder
-- Find output from your extension in the debug console.
+- Visual Studio Code で continue リポジトリのルートを開きます
+- `F5` を押すと、拡張機能がロードされた新しいウィンドウが開きます。
+- 起動した VS Code インスタンス内の Continue は、設定フォルダとして `extensions/.continue-debug` を使用します
+- 拡張機能の出力はデバッグコンソールで確認できます。
 
-## Make changes
+## 変更を加える
 
-- You can relaunch the extension from the debug toolbar after changing code.
-- You can also reload (`Ctrl+R` or `Cmd+R` on Mac) the VS Code window with your extension to load your changes.
+- コードを変更した後、デバッグツールバーから拡張機能を再起動できます。
+- また、拡張機能が含まれる VS Code ウィンドウをリロード (`Ctrl+R` または Mac では `Cmd+R`) して、変更を反映させることもできます。

@@ -20,7 +20,7 @@ export const createNewFileImpl: ToolImpl = async (args, extras) => {
     if (exists) {
       throw new ContinueError(
         ContinueErrorReason.FileAlreadyExists,
-        `File ${filepath} already exists. Use the edit tool to edit this file`,
+        `ファイル「${filepath}」は既に存在します。`,
       );
     }
     await extras.ide.writeFile(resolvedFileUri, contents);
@@ -33,7 +33,7 @@ export const createNewFileImpl: ToolImpl = async (args, extras) => {
       {
         name: getUriPathBasename(resolvedFileUri),
         description: getCleanUriPath(resolvedFileUri),
-        content: "File created successfuly",
+        content: "ファイルの作成に成功しました",
         uri: {
           type: "file",
           value: resolvedFileUri,
@@ -43,7 +43,7 @@ export const createNewFileImpl: ToolImpl = async (args, extras) => {
   } else {
     throw new ContinueError(
       ContinueErrorReason.PathResolutionFailed,
-      "Failed to resolve path",
+      "パスの解決に失敗しました",
     );
   }
 };

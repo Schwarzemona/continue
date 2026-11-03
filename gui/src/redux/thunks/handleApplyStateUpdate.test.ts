@@ -493,9 +493,9 @@ describe("applyForEditTool", () => {
         contextItems: [
           {
             icon: "problems",
-            name: "Apply Error",
-            description: "Failed to apply changes",
-            content: `Error editing file: failed to apply changes to file.\n\nPlease try again with correct args or notify the user and request further instructions.`,
+            name: "適用エラー",
+            description: "変更の適用に失敗しました",
+            content: `変更の適用に失敗しました`,
             hidden: false,
           },
         ],
@@ -538,9 +538,9 @@ describe("applyForEditTool", () => {
         contextItems: [
           {
             icon: "problems",
-            name: "Apply Error",
-            description: "Failed to apply changes",
-            content: `Error editing file: failed to apply changes to file.\n\nPlease try again with correct args or notify the user and request further instructions.`,
+            name: "適用エラー",
+            description: "変更の適用に失敗しました",
+            content: `変更の適用に失敗しました`,
             hidden: false,
           },
         ],

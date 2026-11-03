@@ -22,7 +22,7 @@ export const readCurrentlyOpenFileImpl: ToolImpl = async (_, extras) => {
 
     return [
       {
-        name: `Current file: ${baseName}`,
+        name: `現在のファイル: ${baseName}`,
         description: last2Parts,
         content: `\`\`\`${relativePathOrBasename}\n${result.contents}\n\`\`\``,
         uri: {
@@ -34,9 +34,9 @@ export const readCurrentlyOpenFileImpl: ToolImpl = async (_, extras) => {
   } else {
     return [
       {
-        name: `No Current File`,
+        name: `開いているファイルなし`,
         description: "",
-        content: "There are no files currently open.",
+        content: "現在開いているファイルはありません。",
       },
     ];
   }

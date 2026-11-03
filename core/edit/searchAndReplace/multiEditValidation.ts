@@ -14,7 +14,7 @@ export function validateMultiEdit(args: unknown): {
   if (typeof args !== "object" || !args || !("edits" in args)) {
     throw new ContinueError(
       ContinueErrorReason.MultiEditEditsArrayRequired,
-      "invalid multi-edit args",
+      "引数が無効です",
     );
   }
 
@@ -22,7 +22,7 @@ export function validateMultiEdit(args: unknown): {
   if (!Array.isArray(args.edits)) {
     throw new ContinueError(
       ContinueErrorReason.MultiEditEditsArrayRequired,
-      "edits array is required",
+      "edits配列が必要です",
     );
   }
   const { edits } = args;
@@ -30,7 +30,7 @@ export function validateMultiEdit(args: unknown): {
   if (edits.length === 0) {
     throw new ContinueError(
       ContinueErrorReason.MultiEditEditsArrayEmpty,
-      "edits array must contain at least one edit",
+      "edits配列には1つ以上の編集が必要です",
     );
   }
 
@@ -45,7 +45,7 @@ export function validateMultiEdit(args: unknown): {
     if (i > 0 && edit.old_string === "") {
       throw new ContinueError(
         ContinueErrorReason.FindAndReplaceNonFirstEmptyOldString,
-        `Edit at index ${i}: old_string cannot be empty. Only the first edit can have an empty old_string for insertion at the beginning of the file.`,
+        `old_stringを空にすることはできません`,
       );
     }
   }

@@ -12,13 +12,12 @@ export function BackgroundModeView({
     <div className="flex flex-col gap-4 py-4">
       <div className="px-2">
         <div className="text-description">
-          Submit a task above to run a background agent. Your task will appear
-          below in ~30 seconds once the container starts.
+          バックグラウンドエージェントを実行するには、上のタスクを送信してください。コンテナが開始されると、約30秒後に下のリストにタスクが表示されます。
         </div>
         {isCreatingAgent && (
           <div className="text-description-muted mt-2 flex items-center gap-2">
             <ArrowPathIcon className="h-3 w-3 animate-spin" />
-            <span>Creating task...</span>
+            <span>タスクを作成中……</span>
           </div>
         )}
       </div>

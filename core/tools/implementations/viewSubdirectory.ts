@@ -13,7 +13,7 @@ export const viewSubdirectoryImpl: ToolImpl = async (args: any, extras) => {
   if (!resolvedPath) {
     throw new ContinueError(
       ContinueErrorReason.DirectoryNotFound,
-      `Directory path "${directory_path}" does not exist or is not accessible.`,
+      `ディレクトリパス「${directory_path}」は存在しないか、アクセスできません。`,
     );
   }
 
@@ -22,7 +22,7 @@ export const viewSubdirectoryImpl: ToolImpl = async (args: any, extras) => {
   if (!exists) {
     throw new ContinueError(
       ContinueErrorReason.DirectoryNotFound,
-      `Directory path "${directory_path}" does not exist or is not accessible.`,
+      `ディレクトリパス「${directory_path}」は存在しないか、アクセスできません。`,
     );
   }
 
@@ -34,8 +34,8 @@ export const viewSubdirectoryImpl: ToolImpl = async (args: any, extras) => {
 
   return [
     {
-      name: "Repo map",
-      description: `Map of ${resolvedPath.displayPath}`,
+      name: "リポジトリマップ",
+      description: `「${resolvedPath.displayPath}」のマップ`,
       content: repoMap,
     },
   ];

@@ -13,7 +13,7 @@ export async function throwIfFileExceedsHalfOfContext(
     if (tokens > tokenLimit) {
       throw new ContinueError(
         ContinueErrorReason.FileTooLarge,
-        `読み込む予定の範囲が${tokens}トークンと制限の${tokenLimit}トークンより大きいです。範囲を狭めてください。`,
+        `読み込む予定の範囲が${tokens}トークンと制限の${tokenLimit}トークンより大きいです`,
       );
     }
   }

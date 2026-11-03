@@ -141,25 +141,25 @@ export function OnboardingLocalTab({ isDialog }: OnboardingLocalTabProps) {
         <div className="mt-3 flex flex-col gap-1 px-2">
           <div className="flex flex-col">
             <p className="text-foreground mb-1 font-semibold leading-tight">
-              Install Ollama
+              Ollamaをインストール
             </p>
             <OllamaStatus isOllamaConnected={isOllamaConnected} />
           </div>
 
           <OllamaModelDownload
-            title="Download Chat model"
+            title="チャットモデルをダウンロード"
             modelName={LOCAL_ONBOARDING_CHAT_MODEL}
             hasDownloaded={hasDownloadedChatModel}
           />
 
           <OllamaModelDownload
-            title="Download Autocomplete model"
+            title="オートコンプリートモデルをダウンロード"
             modelName={LOCAL_ONBOARDING_FIM_MODEL}
             hasDownloaded={hasDownloadedAutocompleteModel}
           />
 
           <OllamaModelDownload
-            title="Download Embeddings model"
+            title="埋め込みモデルをダウンロード"
             modelName={LOCAL_ONBOARDING_EMBEDDINGS_MODEL}
             hasDownloaded={hasDownloadedEmbeddingsModel}
           />
@@ -170,14 +170,14 @@ export function OnboardingLocalTab({ isDialog }: OnboardingLocalTabProps) {
               className="w-full cursor-pointer hover:opacity-90"
               disabled={!allDownloaded}
             >
-              Connect
+              接続
             </Button>
             <div className="w-full text-center">
               <span
                 className="text-description-muted cursor-pointer underline"
                 onClick={onClickSkip}
               >
-                Skip and configure manually
+                スキップして手動で設定する
               </span>
             </div>
           </div>

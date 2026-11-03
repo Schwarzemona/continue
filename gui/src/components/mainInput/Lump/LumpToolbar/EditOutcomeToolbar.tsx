@@ -16,7 +16,7 @@ export function EditOutcomeToolbar() {
   return (
     <div className="text-description-muted flex items-center justify-between py-0.5">
       <div className="bg-badge rounded px-1.5">
-        <span>{`${editApplyState.numDiffs} diff${editApplyState.numDiffs !== 1 ? "s" : ""}`}</span>
+        <span>{`差分${editApplyState.numDiffs}つ${editApplyState.numDiffs !== 1 ? "" : ""}`}</span>
       </div>
       <AcceptRejectDiffButtons
         applyStates={[editApplyState]}

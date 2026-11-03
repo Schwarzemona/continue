@@ -15,7 +15,7 @@ export default function Layout() {
     : undefined;
 
   return llmLog.loading ? (
-    <div>Loading...</div>
+    <div>読み込み中……</div>
   ) : (
     <div className="flex h-full w-full">
       <div className="flex h-full w-full flex-col">

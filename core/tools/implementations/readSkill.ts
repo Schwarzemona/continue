@@ -14,7 +14,7 @@ export const readSkillImpl: ToolImpl = async (args, extras) => {
     const availableSkills = skills.map((s) => s.name).join(", ");
     throw new ContinueError(
       ContinueErrorReason.SkillNotFound,
-      `Skill "${skillName}" not found. Available skills: ${availableSkills || "none"}`,
+      `「${skillName}」が見つかりません。利用可能なスキル: ${availableSkills || "なし"}`,
     );
   }
 
@@ -22,16 +22,16 @@ export const readSkillImpl: ToolImpl = async (args, extras) => {
 
   if (skill.files.length > 0) {
     content += `\n
-## Supporting files
-Skill directory:
+## サポートファイル
+スキルディレクトリ:
 ${skill.files.join("\n")}
 
-Use the read file tool to access these files as needed.`;
+必要に応じてread_fileツールを使用してこれらのファイルにアクセスしてください。`;
   }
 
   return [
     {
-      name: `Skill: ${skill.name}`,
+      name: `スキル: ${skill.name}`,
       description: skill.description,
       content,
       uri: {

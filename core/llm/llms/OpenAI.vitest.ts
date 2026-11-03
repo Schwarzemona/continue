@@ -130,31 +130,7 @@ describe("OpenAI reasoning conversion", () => {
         url: "http://localhost:8000/v1/chat/completions",
         method: "POST",
         body: {
-          chat_template_kwargs: { enable_thinking: true },
-        },
-      },
-      mockResponse: { choices: [{ message: { content: "hello" } }] },
-    });
-  });
-
-  test("should convert reasoning: false to chat_template_kwargs: { enable_thinking: false } for gemma4 models", async () => {
-    await runLlmTest({
-      llm: new OpenAI({
-        model: "gemma4-26b",
-        apiKey: "test-key",
-        apiBase: "http://localhost:8000/v1",
-        completionOptions: {
-          model: "gemma4-26b",
-          reasoning: false,
-        },
-      }),
-      methodToTest: "chat",
-      params: [[{ role: "user", content: "hi" }], new AbortController().signal],
-      expectedRequest: {
-        url: "http://localhost:8000/v1/chat/completions",
-        method: "POST",
-        body: {
-          chat_template_kwargs: { enable_thinking: false },
+          reasoning_effort: "medium",
         },
       },
       mockResponse: { choices: [{ message: { content: "hello" } }] },

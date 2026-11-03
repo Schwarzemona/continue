@@ -122,7 +122,7 @@ export default function MermaidDiagram({ code }: { code: string }) {
             setError(err.message);
           } else {
             setError(
-              "Unknown error when parsing or rendering the Mermaid diagram.",
+              "Mermaid図の解析または描画中に、不明なエラーが発生しました。",
             );
           }
         }
@@ -136,7 +136,7 @@ export default function MermaidDiagram({ code }: { code: string }) {
   return (
     <>
       {isLoading && (
-        <div className="text-vsc-foreground">Generating diagram...</div>
+        <div className="text-vsc-foreground">図を作成中……</div>
       )}
       {!!error ? (
         <div className="text-error whitespace-pre">{error}</div>

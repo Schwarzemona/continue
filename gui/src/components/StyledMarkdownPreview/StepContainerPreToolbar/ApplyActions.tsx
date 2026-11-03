@@ -24,7 +24,7 @@ export function ApplyActions(props: ApplyActionsProps) {
       return (
         <div className="bg-badge flex select-none items-center rounded pl-2 pr-1">
           <span className="text-lightgray inline-flex items-center gap-2 text-center">
-            Applying
+            適用中
             <Spinner />
           </span>
         </div>
@@ -33,7 +33,7 @@ export function ApplyActions(props: ApplyActionsProps) {
       return (
         <div className="bg-badge flex select-none items-center rounded sm:gap-1 md:px-1.5">
           <span className="text-lightgray flex items-center text-center max-md:hidden">
-            {`${props.applyState?.numDiffs === 1 ? "1 diff" : `${props.applyState?.numDiffs} diffs`}`}
+            {`${props.applyState?.numDiffs === 1 ? "差分1つ" : `差分${props.applyState?.numDiffs}つ`}`}
           </span>
 
           <div className="flex items-center">

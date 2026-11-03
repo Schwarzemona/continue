@@ -18,7 +18,7 @@ class MCPContextProvider extends BaseContextProvider {
   static description: ContextProviderDescription = {
     title: "mcp",
     displayTitle: "MCP",
-    description: "MCP Resources",
+    description: "MCP リソース",
     type: "submenu",
     renderInlineAs: "",
   };
@@ -26,10 +26,10 @@ class MCPContextProvider extends BaseContextProvider {
     return {
       title: `${MCPContextProvider.description.title}-${this.options["mcpId"]}`,
       displayTitle: this.options["serverName"]
-        ? `${this.options["serverName"]} resources`
+        ? `${this.options["serverName"]} のリソース`
         : "MCP",
       renderInlineAs: "",
-      description: "MCP Resources",
+      description: "MCP リソース",
       type: "submenu",
     };
   }
@@ -71,7 +71,7 @@ class MCPContextProvider extends BaseContextProvider {
 
     const connection = MCPManagerSingleton.getInstance().getConnection(mcpId);
     if (!connection) {
-      throw new Error(`No MCP connection found for ${mcpId}`);
+      throw new Error(`MCP 接続 "${mcpId}" が見つかりません`);
     }
 
     const resourceuri = this.insertInputToUriTemplate(uri, extras.fullInput);
@@ -81,7 +81,7 @@ class MCPContextProvider extends BaseContextProvider {
       contents.map(async (resource) => {
         if (!("text" in resource) || typeof resource.text !== "string") {
           throw new Error(
-            "Continue currently only supports text resources from MCP",
+            "Continue は現在 MCP からのテキストリソースのみをサポートしています",
           );
         }
         return {

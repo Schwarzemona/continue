@@ -17,8 +17,8 @@ class DocsContextProvider extends BaseContextProvider {
   static nFinal = 15;
   static description: ContextProviderDescription = {
     title: "docs",
-    displayTitle: "Docs",
-    description: "Type to search docs",
+    displayTitle: "ドキュメント",
+    description: "入力して検索",
     type: "submenu",
     // Todo: consider a different renderInline so that when multiple docs are referenced in one message,
     // Or the doc has an odd name unrelated to the content
@@ -56,7 +56,7 @@ class DocsContextProvider extends BaseContextProvider {
         this.options?.nFinal ?? DocsContextProvider.nFinal,
       );
     } catch (e) {
-      void ide.showToast("warning", `Failed to rerank retrieval results\n${e}`);
+      void ide.showToast("warning", `検索結果の再ランク付けに失敗しました\n${e}`);
 
       chunksCopy = chunksCopy.splice(
         0,
@@ -86,7 +86,7 @@ class DocsContextProvider extends BaseContextProvider {
     // Get docs service
     const docsService = DocsService.getSingleton();
     if (!docsService) {
-      console.error(`${DocsService.name} has not been initialized`);
+      console.error(`${DocsService.name}が初期化されていません`);
       return [];
     }
     await docsService.isInitialized;
@@ -138,10 +138,10 @@ class DocsContextProvider extends BaseContextProvider {
       {
         ...INSTRUCTIONS_BASE_ITEM,
         content:
-          "Use the above documentation to answer the following question. You should not reference " +
-          "anything outside of what is shown, unless it is a commonly known concept. Reference URLs " +
-          "whenever possible using markdown formatting. If there isn't enough information to answer " +
-          "the question, suggest where the user might look to learn more.",
+          "上記のドキュメントを参照して、以下の質問に回答してください。" +
+          "一般的に知られている概念を除き、提示された情報以外の資料は参照しないでください。" +
+          "可能な限り、マークダウン形式を用いてURLを併記してください。" +
+          "質問に回答するために必要な情報が不足している場合は、詳細を確認できる場所やリソースを提示してください。",
       },
     ];
   }
@@ -157,7 +157,7 @@ class DocsContextProvider extends BaseContextProvider {
     // Get docs service
     const docsService = DocsService.getSingleton();
     if (!docsService) {
-      console.error(`${DocsService.name} has not been initialized`);
+      console.error(`${DocsService.name}が初期化されていません`);
       return [];
     }
     await docsService.isInitialized;

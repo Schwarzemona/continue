@@ -16,7 +16,7 @@ function ConfirmationDialog(props: ConfirmationDialogProps) {
 
   return (
     <div className="p-4 pt-0">
-      <h1 className="mb-1 text-center">{props.title ?? "Confirmation"}</h1>
+      <h1 className="mb-1 text-center">{props.title ?? "確認"}</h1>
       <p className="text-center" style={{ whiteSpace: "pre-wrap" }}>
         {props.text}
       </p>
@@ -31,7 +31,7 @@ function ConfirmationDialog(props: ConfirmationDialogProps) {
               props.onCancel?.();
             }}
           >
-            Cancel
+            キャンセル
           </Button>
         )}
         <Button
@@ -41,7 +41,7 @@ function ConfirmationDialog(props: ConfirmationDialogProps) {
             dispatch(setDialogMessage(undefined));
           }}
         >
-          {props.confirmText ?? "Confirm"}
+          {props.confirmText ?? "確定"}
         </Button>
       </div>
     </div>

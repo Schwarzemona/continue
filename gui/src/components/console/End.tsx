@@ -19,7 +19,7 @@ export default function Start({ item }: StartProps) {
       return (
         <div>
           <span className="text-[color:var(--vscode-statusBarItem-errorForeground) m-0.5 inline-block rounded-sm bg-[color:var(--vscode-statusBarItem-errorBackground)] p-0.5">
-            Error
+            エラー
           </span>
           {item.message}
         </div>
@@ -29,7 +29,7 @@ export default function Start({ item }: StartProps) {
       return (
         <div>
           <span className="text-[color:var(--vscode-statusBarItem-warningForeground) m-0.5 inline-block rounded-sm bg-[color:var(--vscode-statusBarItem-warningBackground)] p-0.5">
-            Cancelled
+            キャンセル
           </span>
         </div>
       );
