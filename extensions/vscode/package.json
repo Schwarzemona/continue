@@ -1,27 +1,25 @@
 {
   "name": "continue",
   "icon": "media/icon.png",
-  "author": "Continue Dev, Inc",
-  "version": "2.1.1",
+  "author": "Schwarzemona (forked from Continue Dev, Inc)",
+  "version": "3.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/continuedev/continue"
+    "url": "https://github.com/Schwarzemona/continue"
   },
   "extensionKind": [
     "ui",
     "workspace"
   ],
   "bugs": {
-    "url": "https://github.com/continuedev/continue/issues",
-    "email": "nate@continue.dev"
+    "url": "https://github.com/Schwarzemona/continue/issues"
   },
-  "homepage": "https://continue.dev",
-  "qna": "https://github.com/continuedev/continue/issues/new/choose",
+  "qna": "https://github.com/Schwarzemona/continue/issues/new/choose",
   "license": "Apache-2.0",
-  "displayName": "Continue - オープンソースAIコードエージェント",
+  "displayName": "Continue非公式日本語版",
   "pricing": "Free",
   "description": "オープンソースのAIコードエージェント",
-  "publisher": "Continue",
+  "publisher": "Schwarzemona",
   "engines": {
     "vscode": ">=1.100.0",
     "node": ">=26.12.0"
