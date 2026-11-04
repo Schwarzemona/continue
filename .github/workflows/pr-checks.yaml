@@ -4,11 +4,11 @@ name: PR Checks
 on:
   pull_request:
     branches:
-      - main
+      - Branch_main
 
   push:
     branches:
-      - main
+      - Branch_main
 
 jobs:
   track-rerun:
