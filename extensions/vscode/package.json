@@ -489,7 +489,7 @@
     ],
     "submenus": [
       {
-        "id": "continue.continueSubMenu",
+        "id": "schwarzemona.continueSubMenu",
         "label": "Continue"
       }
     ],
@@ -516,7 +516,7 @@
       ],
       "editor/context": [
         {
-          "submenu": "continue.continueSubMenu",
+          "submenu": "schwarzemona.continueSubMenu",
           "group": "0_acontinue"
         }
       ],
@@ -527,7 +527,7 @@
           "when": "continue.streamingDiff"
         }
       ],
-      "continue.continueSubMenu": [
+      "schwarzemona.continueSubMenu": [
         {
           "command": "continue.focusContinueInputWithoutClear",
           "group": "Continue"
@@ -548,34 +548,34 @@
         {
           "command": "continue.newSession",
           "group": "navigation@1",
-          "when": "view == continue.continueGUIView"
+          "when": "view == schwarzemona.continueGUIView"
         },
         {
           "command": "continue.viewHistory",
           "group": "navigation@2",
-          "when": "view == continue.continueGUIView"
+          "when": "view == schwarzemona.continueGUIView"
         },
         {
           "command": "continue.openConfigPage",
           "group": "navigation@4",
-          "when": "view == continue.continueGUIView"
+          "when": "view == schwarzemona.continueGUIView"
         },
         {
           "command": "continue.clearConsole",
           "group": "navigation@1",
-          "when": "view == continue.continueConsoleView"
+          "when": "view == schwarzemona.continueConsoleView"
         }
       ],
       "editor/title": [
         {
           "command": "continue.newSession",
           "group": "navigation@1",
-          "when": "activeWebviewPanelId == continue.continueGUIView"
+          "when": "activeWebviewPanelId == schwarzemona.continueGUIView"
         },
         {
           "command": "continue.viewHistory",
           "group": "navigation@2",
-          "when": "activeWebviewPanelId == continue.continueGUIView"
+          "when": "activeWebviewPanelId == schwarzemona.continueGUIView"
         }
       ],
       "terminal/context": [
@@ -605,7 +605,7 @@
       "continue": [
         {
           "type": "webview",
-          "id": "continue.continueGUIView",
+          "id": "schwarzemona.continueGUIView",
           "name": "Continue",
           "icon": "media/sidebar-icon.png",
           "visibility": "visible"
@@ -614,7 +614,7 @@
       "continueConsole": [
         {
           "type": "webview",
-          "id": "continue.continueConsoleView",
+          "id": "schwarzemona.continueConsoleView",
           "name": "Continueコンソール",
           "icon": "$(window)",
           "visibility": "visible",

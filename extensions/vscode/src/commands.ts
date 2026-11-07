@@ -54,7 +54,7 @@ let fullScreenPanel: vscode.WebviewPanel | undefined;
 function getFullScreenTab() {
   const tabs = vscode.window.tabGroups.all.flatMap((tabGroup) => tabGroup.tabs);
   return tabs.find((tab) =>
-    (tab.input as any)?.viewType?.endsWith("continue.continueGUIView"),
+    (tab.input as any)?.viewType?.endsWith("schwarzemona.continueGUIView"),
   );
 }
 
@@ -65,7 +65,7 @@ function focusGUI() {
     fullScreenPanel?.reveal();
   } else {
     // focus sidebar
-    vscode.commands.executeCommand("continue.continueGUIView.focus");
+    vscode.commands.executeCommand("schwarzemona.continueGUIView.focus");
     // vscode.commands.executeCommand("workbench.action.focusAuxiliaryBar");
   }
 }
@@ -207,7 +207,7 @@ const getCommandsMap: (
 
       addCodeToContextFromRange(range, sidebar.webviewProtocol, prompt);
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("schwarzemona.continueGUIView.focus");
     },
     "continue.defaultQuickAction": async (args: QuickEditShowParams) => {
       vscode.commands.executeCommand("continue.focusEdit", args);
@@ -218,7 +218,7 @@ const getCommandsMap: (
     ) => {
       addCodeToContextFromRange(range, sidebar.webviewProtocol, prompt);
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("schwarzemona.continueGUIView.focus");
     },
     "continue.customQuickActionStreamInlineEdit": async (
       prompt: string,
@@ -359,7 +359,7 @@ const getCommandsMap: (
     "continue.debugTerminal": async () => {
       const terminalContents = await ide.getTerminalContents();
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("schwarzemona.continueGUIView.focus");
 
       sidebar.webviewProtocol?.request("userInput", {
         input: `以下のエラーが発生しました。解決方法を説明してください。\n\n${terminalContents.trim()}`,
@@ -373,7 +373,7 @@ const getCommandsMap: (
 
     // Commands without keyboard shortcuts
     "continue.addModel": () => {
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("schwarzemona.continueGUIView.focus");
       sidebar.webviewProtocol?.request("addModel", undefined);
     },
     "continue.newSession": () => {
@@ -445,7 +445,7 @@ const getCommandsMap: (
         throw new Error("No files were selected");
       }
 
-      vscode.commands.executeCommand("continue.continueGUIView.focus");
+      vscode.commands.executeCommand("schwarzemona.continueGUIView.focus");
 
       for (const uri of uris) {
         // If it's a folder, add the entire folder contents recursively by using walkDir (to ignore ignored files)
@@ -770,7 +770,7 @@ const getCommandsMap: (
       // Full screen not open - open it
       // Create the full screen panel
       let panel = vscode.window.createWebviewPanel(
-        "continue.continueGUIView",
+        "schwarzemona.continueGUIView",
         "Continue",
         vscode.ViewColumn.One,
         {
