@@ -144,3 +144,8 @@ body {
   font-weight: 600;
   letter-spacing: 0.02em;
 }
+
+/* react-tooltip 5.30+ の内部 padding を無効化 */
+[class*="styles-module_content__"] {
+  padding: 0 !important;
+}
