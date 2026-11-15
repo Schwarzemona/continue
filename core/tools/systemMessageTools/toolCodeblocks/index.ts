@@ -2,9 +2,7 @@ import { Tool, ToolCallState } from "../../..";
 import { SystemMessageToolsFramework } from "../types";
 import { handleToolCallBuffer } from "./parseSystemToolCall";
 
-export class SystemMessageToolCodeblocksFramework
-  implements SystemMessageToolsFramework
-{
+export class SystemMessageToolCodeblocksFramework implements SystemMessageToolsFramework {
   // Poor models are really bad at following instructions, alternate starts allowed:
   acceptedToolCallStarts: [string, string][] = [
     ["```tool\n", "```tool\n"],
@@ -12,7 +10,7 @@ export class SystemMessageToolCodeblocksFramework
   ];
 
   toolCallStateToSystemToolCall(state: ToolCallState): string {
-    let parts = ["```tool"];
+    const parts = ["```tool"];
     parts.push(`TOOL_NAME: ${state.toolCall.function.name}`);
     try {
       for (const arg in state.parsedArgs) {

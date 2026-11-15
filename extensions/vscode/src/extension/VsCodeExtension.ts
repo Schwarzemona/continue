@@ -632,7 +632,6 @@ export class VsCodeExtension {
 
   static continueVirtualDocumentScheme = EXTENSION_NAME;
 
-  // eslint-disable-next-line @typescript-eslint/naming-convention
   private PREVIOUS_BRANCH_FOR_WORKSPACE_DIR: { [dir: string]: string } = {};
 
   registerCustomContextProvider(contextProvider: IContextProvider) {

@@ -140,7 +140,7 @@ export const selectChatModelForProfile = createAsyncThunk<
 export const loadLastSession = createAsyncThunk<void, void, ThunkApiType>(
   "session/loadLast",
   async (_, { extra, dispatch, getState }) => {
-    let lastSessionId = getState().session.lastSessionId;
+    const lastSessionId = getState().session.lastSessionId;
 
     // const lastSessionResult = await extra.ideMessenger.request("history/list", {
     //   limit: 1,

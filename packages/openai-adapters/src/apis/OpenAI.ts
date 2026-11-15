@@ -97,8 +97,7 @@ export class OpenAIApi implements BaseLlmApi {
 
   modifyCompletionBody<
     T extends
-      | CompletionCreateParamsNonStreaming
-      | CompletionCreateParamsStreaming,
+      CompletionCreateParamsNonStreaming | CompletionCreateParamsStreaming,
   >(body: T): T {
     return body;
   }
@@ -237,78 +236,15 @@ export class OpenAIApi implements BaseLlmApi {
   }
 
   async rerank(body: RerankCreateParams): Promise<CreateRerankResponse> {
-    const { query, documents, model, top_k } = body;
-
-    const systemPrompt = `You are a reranker. Given a query and a list of documents, rank the documents by relevance to the query. Each "index" must correspond to the index of the document in the provided list. The "relevance_score" should be between 0.0 and 1.0.`;
-
-    const userPrompt = `Query: ${query}\n\nDocuments:\n${documents.map((doc, i) => `[${i}] ${doc}`).join("\n")}`;
-
-    // Set up completion options for non-streaming
-    const completionOptions = {
-      model: model,
-      messages: [
-        { role: "system" as const, content: systemPrompt },
-        { role: "user" as const, content: userPrompt },
-      ],
-      response_format: {
-        type: "json_schema",
-        json_schema: {
-          name: "rerank_response",
-          strict: true,
-          schema: {
-            type: "object",
-            properties: {
-              data: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    relevance_score: { type: "number" },
-                    index: { type: "number" },
-                  },
-                  required: ["relevance_score", "index"],
-                  additionalProperties: false,
-                },
-              },
-            },
-            required: ["data"],
-            additionalProperties: false,
-          },
-        },
-      } as const,
-      max_tokens: 2048,
-      stream: false as const,
-    };
-
-    const response = await this.chatCompletionNonStream(
-      completionOptions,
-      new AbortController().signal,
-    );
-
-    const content = response.choices[0].message.content;
-    if (!content) {
-      throw new Error("Empty response from LLM in rerank");
-    }
-
-    const parsed = JSON.parse(content);
-    let data = parsed.data;
-
-    if (!Array.isArray(data)) {
-      throw new Error("Invalid JSON structure returned by LLM in rerank");
-    }
-
-    if (top_k !== undefined && Array.isArray(data)) {
-      data = data.slice(0, top_k);
-    }
-
-    return {
-      object: "list",
-      data: data,
-      model: model,
-      usage: {
-        total_tokens: response.usage?.total_tokens ?? 0,
-      },
-    };
+    const endpoint = new URL("rerank", this.apiBase);
+    const modifiedBody = this.modifyRerankBody(body);
+    const response = await customFetch(this.config.requestOptions)(endpoint, {
+      method: "POST",
+      body: JSON.stringify(modifiedBody),
+      headers: this.getHeaders(),
+    });
+    const data = await response.json();
+    return data as any;
   }
 
   async list(): Promise<Model[]> {

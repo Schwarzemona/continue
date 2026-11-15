@@ -45,8 +45,8 @@ export async function getUrlContextItems(
   const html = await resp.text();
 
   const dom = new JSDOM(html);
-  let reader = new Readability(dom.window.document);
-  let article = reader.parse();
+  const reader = new Readability(dom.window.document);
+  const article = reader.parse();
   const content = article?.content || "";
   const markdown = NodeHtmlMarkdown.translate(
     content,

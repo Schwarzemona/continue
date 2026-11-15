@@ -1098,9 +1098,9 @@ export class Core {
           preprocessedArgs,
         };
       } catch (e) {
-        let errorReason =
+        const errorReason =
           e instanceof ContinueError ? e.reason : ContinueErrorReason.Unknown;
-        let errorMessage =
+        const errorMessage =
           e instanceof Error
             ? e.message
             : `Error preprocessing tool call args for ${toolName}\n${JSON.stringify(args)}`;
@@ -1425,7 +1425,7 @@ export class Core {
         return { ...item, id };
       });
     } catch (e) {
-      let knownError = false;
+      const knownError = false;
 
       if (e instanceof Error) {
         // After removing transformers JS embeddings provider from jetbrains

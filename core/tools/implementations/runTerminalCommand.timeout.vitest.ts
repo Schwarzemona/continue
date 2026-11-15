@@ -16,16 +16,13 @@ vi.mock("node:child_process", () => ({
 }));
 
 describe("runTerminalCommand timeout functionality", () => {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let mockChildProc: any;
   let mockGetIdeInfo: ReturnType<typeof vi.fn>;
   let mockGetWorkspaceDirs: ReturnType<typeof vi.fn>;
   let mockOnPartialOutput: ReturnType<
     typeof vi.fn<(params: { toolCallId: string; contextItems: any[] }) => void>
   >;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let setTimeoutSpy: any;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let clearTimeoutSpy: any;
 
   beforeEach(() => {
@@ -118,7 +115,7 @@ describe("runTerminalCommand timeout functionality", () => {
     const args = { command: "echo test", waitForCompletion: true };
     const resultPromise = runTerminalCommandImpl(args, extras);
     await vi.runOnlyPendingTimersAsync();
-    expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 120_000);
+    expect(setTimeoutSpy).toHaveBeenCalledWith(expect.any(Function), 600_000);
     mockChildProc.exitCode = 0;
     mockChildProc.emit("close", 0);
     await resultPromise;
@@ -130,7 +127,7 @@ describe("runTerminalCommand timeout functionality", () => {
     const args = { command: "sleep 10", waitForCompletion: false };
     const result = await runTerminalCommandImpl(args, extras);
     const timeoutCalls = setTimeoutSpy.mock.calls.filter(
-      (call: any[]) => call[1] === 120_000,
+      (call: any[]) => call[1] === 600_000,
     );
     expect(timeoutCalls.length).toBe(0);
     expect(result[0].status).toContain("バックグラウンドで実行中");
@@ -141,14 +138,12 @@ describe("runTerminalCommand timeout functionality", () => {
     const args = { command: "sleep 300", waitForCompletion: true };
     const resultPromise = runTerminalCommandImpl(args, extras);
     await vi.runOnlyPendingTimersAsync();
-    await vi.advanceTimersByTimeAsync(120_000);
+    await vi.advanceTimersByTimeAsync(600_000);
     expect(mockChildProc.kill).toHaveBeenCalledWith("SIGTERM");
     await vi.advanceTimersByTimeAsync(5_000);
     await vi.runAllTimersAsync();
     const result = await resultPromise;
-    expect(result[0].content).toContain(
-      "[タイムアウト: 2分経過しました]",
-    );
+    expect(result[0].content).toContain("[タイムアウト: 10分経過しました]");
   });
 
   it("should clear timeout on normal process exit", async () => {

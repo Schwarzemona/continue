@@ -251,7 +251,7 @@ const StyledMarkdownPreview = memo(function StyledMarkdownPreview(
           node.data.hProperties["data-codeblockcontent"] = node.value;
 
           if (node.meta) {
-            let meta = node.meta.split(" ");
+            const meta = node.meta.split(" ");
             node.data.hProperties["data-relativefilepath"] = meta[0];
             node.data.hProperties.range = meta[1];
           }

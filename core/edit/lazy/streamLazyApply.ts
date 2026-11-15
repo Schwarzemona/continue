@@ -54,7 +54,7 @@ export async function* streamLazyApply(
   lazyCompletionLines = removeTrailingWhitespace(lazyCompletionLines);
 
   // Fill in unchanged code
-  let lines = streamFillUnchangedCode(
+  const lines = streamFillUnchangedCode(
     lazyCompletionLines,
     oldCode,
     replacementFunction,

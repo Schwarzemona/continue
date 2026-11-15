@@ -248,7 +248,7 @@ function TipTapEditorInner(props: TipTapEditorProps) {
         ) {
           return;
         }
-        let file = event.dataTransfer.files[0];
+        const file = event.dataTransfer.files[0];
         void handleImageFile(ideMessenger, file).then((result) => {
           if (!editor) {
             return;

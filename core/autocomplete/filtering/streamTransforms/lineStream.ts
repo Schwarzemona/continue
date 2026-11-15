@@ -632,7 +632,7 @@ export async function* logLines(
   lines: LineStream,
   prefix: string = "STREAMED LINES",
 ): LineStream {
-  let linesToLog = [];
+  const linesToLog = [];
   for await (const line of lines) {
     yield line;
     linesToLog.push(line);

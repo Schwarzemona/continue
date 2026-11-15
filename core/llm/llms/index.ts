@@ -168,7 +168,7 @@ export async function llmFromDescription(
     );
   }
 
-  let options: LLMOptions = {
+  const options: LLMOptions = {
     ...desc,
     completionOptions: {
       ...finalCompletionOptions,

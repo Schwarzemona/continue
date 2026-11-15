@@ -34,7 +34,7 @@ export function parseColorForHex(colorVar: string): string {
     .filter((_, i) => i < 3) // Only take the first 3 values (RGB, ignore alpha)
     .map((x) => parseInt(x, 10));
 
-  let hex =
+  const hex =
     "#" +
     rgbValues
       .map((x) => x.toString(16))

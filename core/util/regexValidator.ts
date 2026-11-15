@@ -45,7 +45,7 @@ export function validateAndSanitizeRegex(query: string): RegexValidationResult {
   ];
 
   let sanitizedQuery = query;
-  let warnings: string[] = [];
+  const warnings: string[] = [];
 
   // Apply fixes for known issues
   for (const check of problematicPatterns) {
@@ -63,7 +63,7 @@ export function validateAndSanitizeRegex(query: string): RegexValidationResult {
   try {
     new RegExp(sanitizedQuery);
   } catch (e) {
-    let errorMessage = e instanceof Error ? e.message : "Unknown error";
+    const errorMessage = e instanceof Error ? e.message : "Unknown error";
     // If it fails as a JS regex, it might still be valid for ripgrep
     // (ripgrep supports some patterns JS doesn't), but warn the user
     warnings.push(`Pattern may have syntax issues: ${errorMessage}`);

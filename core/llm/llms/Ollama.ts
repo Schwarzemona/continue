@@ -204,12 +204,12 @@ class Ollama extends BaseLLM implements ModelInstaller {
         if (body.parameters) {
           const params = [];
           for (const line of body.parameters.split("\n")) {
-            let parts = line.match(/^(\S+)\s+((?:".*")|\S+)$/);
+            const parts = line.match(/^(\S+)\s+((?:".*")|\S+)$/);
             if (!parts || parts.length < 2) {
               continue;
             }
-            let key = parts[1];
-            let value = parts[2];
+            const key = parts[1];
+            const value = parts[2];
             switch (key) {
               case "num_ctx":
                 if (!this.explicitContextLength) {

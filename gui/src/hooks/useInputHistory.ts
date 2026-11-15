@@ -20,7 +20,7 @@ export function useInputHistory(historyKey: string) {
   const [currentIndex, setCurrentIndex] = useState(inputHistory.length);
 
   function prev(currentInput: JSONContent) {
-    let index = currentIndex;
+    const index = currentIndex;
 
     if (index === inputHistory.length) {
       setPendingInput(currentInput);
@@ -33,7 +33,7 @@ export function useInputHistory(historyKey: string) {
   }
 
   function next() {
-    let index = currentIndex;
+    const index = currentIndex;
     if (index >= 0 && index < inputHistory.length) {
       setCurrentIndex((prevState) => prevState + 1);
       if (index === inputHistory.length - 1) {

@@ -147,7 +147,7 @@ export class ChromiumCrawler {
 
   private stripHashFromUrl(urlStr: string) {
     try {
-      let url = new URL(urlStr);
+      const url = new URL(urlStr);
       url.hash = "";
       return url;
     } catch (err) {

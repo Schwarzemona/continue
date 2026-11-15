@@ -195,13 +195,13 @@ void (async () => {
     // If building for production, only need the binaries for current platform
     try {
       if (!target.startsWith("darwin")) {
-        rimrafSync(path.join(__dirname, "../bin/napi-v3/darwin"));
+        rimrafSync(path.join(__dirname, "../bin/napi-v6/darwin"));
       }
       if (!target.startsWith("linux")) {
-        rimrafSync(path.join(__dirname, "../bin/napi-v3/linux"));
+        rimrafSync(path.join(__dirname, "../bin/napi-v6/linux"));
       }
       if (!target.startsWith("win")) {
-        rimrafSync(path.join(__dirname, "../bin/napi-v3/win32"));
+        rimrafSync(path.join(__dirname, "../bin/napi-v6/win32"));
       }
 
       // Also don't want to include cuda/shared/tensorrt binaries, they are too large
@@ -214,7 +214,7 @@ void (async () => {
         filesToRemove.forEach((file) => {
           const filepath = path.join(
             __dirname,
-            "../bin/napi-v3/linux/x64",
+            "../bin/napi-v6/linux/x64",
             file,
           );
           if (fs.existsSync(filepath)) {
@@ -378,7 +378,7 @@ void (async () => {
   // Copy node_modules for pre-built binaries
   const NODE_MODULES_TO_COPY = [
     "@lancedb",
-    "@vscode/ripgrep-win32-x64",
+    `@vscode/ripgrep${isWinTarget ? "-win32-x64" : ""}`,
     "workerpool",
   ];
 
@@ -452,8 +452,8 @@ void (async () => {
     "tag-qry/tree-sitter-c_sharp-tags.scm",
 
     // onnx runtime bindngs
-    `bin/napi-v3/${os}/${arch}/onnxruntime_binding.node`,
-    `bin/napi-v3/${os}/${arch}/${
+    `bin/napi-v6/${os}/${arch}/onnxruntime_binding.node`,
+    `bin/napi-v6/${os}/${arch}/${
       isMacTarget
         ? "libonnxruntime.1.14.0.dylib"
         : isLinuxTarget
@@ -479,7 +479,7 @@ void (async () => {
     "models/all-MiniLM-L6-v2/onnx/model_quantized.onnx",
 
     // node_modules (it's a bit confusing why this is necessary)
-    `node_modules/@vscode/ripgrep-win32-x64/bin/rg${exe}`,
+    `node_modules/@vscode/ripgrep${isWinTarget ? "-win32-x64" : ""}/bin/rg${exe}`,
 
     // out directory (where the extension.js lives)
     // "out/extension.js", This is generated afterward by vsce
@@ -491,7 +491,7 @@ void (async () => {
     "out/build/Release/node_sqlite3.node",
 
     // out/node_modules (to be accessed by extension.js)
-    `out/node_modules/@vscode/ripgrep-win32-x64/bin/rg${exe}`,
+    `out/node_modules/@vscode/ripgrep${isWinTarget ? "-win32-x64" : ""}/bin/rg${exe}`,
     `out/node_modules/@lancedb/vectordb-${target}${isWinTarget ? "-msvc" : ""}${isLinuxTarget ? "-gnu" : ""}/index.node`,
   ]);
 

@@ -147,7 +147,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
     const hasValidApiKey = apiKey !== undefined && apiKey !== "";
 
     const reqInputFields: Record<string, any> = {};
-    for (let input of selectedProvider.collectInputFor ?? []) {
+    for (const input of selectedProvider.collectInputFor ?? []) {
       reqInputFields[input.key] = formMethods.watch(input.key);
     }
 
@@ -206,7 +206,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                 otherOptions={otherProviders}
                 searchPlaceholder="プロバイダーを検索……"
               />
-              <span className="text-description-muted mt-1 block">
+              <span className="mt-1 block text-description-muted">
                 プロバイダーがありませんか？{" "}
                 <a
                   className="cursor-pointer text-inherit underline hover:text-inherit"
@@ -326,18 +326,18 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                   <Input
                     id="apiKey"
                     className={
-                      apiKeyWarning ? "border-warning w-full" : "w-full"
+                      apiKeyWarning ? "w-full border-warning" : "w-full"
                     }
                     type="password"
                     placeholder={`${selectedProvider.title}のAPIキーを入力してください`}
                     {...formMethods.register("apiKey")}
                   />
                   {apiKeyWarning && (
-                    <span className="text-warning mt-1 block">
+                    <span className="mt-1 block text-warning">
                       {apiKeyWarning}
                     </span>
                   )}
-                  <span className="text-description-muted mt-1 block">
+                  <span className="mt-1 block text-description-muted">
                     <a
                       className="cursor-pointer text-inherit underline hover:text-inherit hover:brightness-125"
                       onClick={() => {
@@ -390,7 +390,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
               接続
             </Button>
 
-            <span className="text-description-muted block w-full text-center">
+            <span className="block w-full text-center text-description-muted">
               これで更新:{" "}
               <span
                 className="cursor-pointer underline hover:brightness-125"

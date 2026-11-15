@@ -3,8 +3,8 @@ import childProcess from "node:child_process";
 import os from "node:os";
 import { ContinueError, ContinueErrorReason } from "../../util/errors";
 
-// Default timeout for terminal commands (2 minutes)
-const DEFAULT_TOOL_TIMEOUT_MS = 120_000;
+// Default timeout for terminal commands (10 minutes)
+const DEFAULT_TOOL_TIMEOUT_MS = 600_000;
 
 // Automatically decode the buffer according to the platform to avoid garbled Chinese
 function getDecodedOutput(data: Buffer): string {
@@ -171,8 +171,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
           if (waitForCompletion) {
             timeoutId = setTimeout(() => {
               if (isRunning()) {
-                terminalOutput +=
-                  "\n[タイムアウト: 2分経過しました]\n";
+                terminalOutput += "\n[タイムアウト: 10分経過しました]\n";
 
                 // Update UI with timeout message
                 if (extras.onPartialOutput) {
@@ -408,7 +407,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
               // Set up timeout
               timeoutId = setTimeout(() => {
                 if (isRunning()) {
-                  stderr += "\n[タイムアウト: 2分経過しました]\n";
+                  stderr += "\n[タイムアウト: 10分経過しました]\n";
 
                   // Try graceful termination first
                   childProc.kill("SIGTERM");
@@ -561,8 +560,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
     {
       name: "端末",
       description: "端末コマンドの出力",
-      content:
-        "リモート端末でコマンドを実行",
+      content: "リモート端末でコマンドを実行",
       status: "実行",
     },
   ];

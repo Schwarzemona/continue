@@ -203,9 +203,9 @@ export function useMainEditorWebviewListeners({
     "addToChat",
     async (data) => {
       if (!editor) return;
-      let chain = editor.chain();
+      const chain = editor.chain();
 
-      for (let mention of data.data) {
+      for (const mention of data.data) {
         chain
           .insertContent({
             type: "mention",

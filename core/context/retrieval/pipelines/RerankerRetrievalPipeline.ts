@@ -26,7 +26,7 @@ export default class RerankerRetrievalPipeline extends BaseRetrievalPipeline {
 
     let embeddingsChunks: Chunk[] = [];
     try {
-      embeddingsChunks = Boolean(config.selectedModelByRole.embed)
+      embeddingsChunks = config.selectedModelByRole.embed
         ? await this.retrieveEmbeddings(input, nRetrieve)
         : [];
     } catch (error) {
@@ -94,7 +94,7 @@ export default class RerankerRetrievalPipeline extends BaseRetrievalPipeline {
     chunks = chunks.filter((chunk) => chunk.content);
 
     try {
-      let scores: number[] =
+      const scores: number[] =
         await this.options.config.selectedModelByRole.rerank.rerank(
           input,
           chunks,
@@ -141,7 +141,7 @@ export default class RerankerRetrievalPipeline extends BaseRetrievalPipeline {
   }
 
   private async _expandRankedResults(chunks: Chunk[]): Promise<Chunk[]> {
-    let results: Chunk[] = [];
+    const results: Chunk[] = [];
 
     const embeddingsResults = await this._expandWithEmbeddings(chunks);
     results.push(...embeddingsResults);

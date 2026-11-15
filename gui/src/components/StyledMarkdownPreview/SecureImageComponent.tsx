@@ -98,7 +98,7 @@ export const SecureImageComponent: React.FC<SecureImageComponentProps> = ({
   }
 
   // Parse URL to check for query parameters
-  let queryParams: Record<string, string> = {};
+  const queryParams: Record<string, string> = {};
   let hasQueryParams = false;
 
   try {

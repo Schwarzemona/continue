@@ -148,7 +148,7 @@ function getExpectedUrl(
   endpoint: string,
   model: string = "gpt-4",
 ) {
-  let baseUrl = config.defaultApiBase || "https://api.openai.com/v1/";
+  const baseUrl = config.defaultApiBase || "https://api.openai.com/v1/";
   if (config.providerName === "azure") {
     return `${baseUrl}openai/deployments/${model}/${endpoint}?api-version=2023-07-01-preview`;
   } else if (config.providerName === "ncompass") {

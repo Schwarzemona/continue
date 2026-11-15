@@ -1,11 +1,8 @@
-import eslint from "@eslint/js";
 import tseslint from "typescript-eslint";
 import importPlugin from "eslint-plugin-import";
 import tsParser from "@typescript-eslint/parser";
 
 export default tseslint.config(
-  eslint.configs.recommended,
-  ...tseslint.configs.recommended,
   {
     files: ["**/*.ts"],
     languageOptions: {
@@ -17,14 +14,22 @@ export default tseslint.config(
     },
     plugins: {
       import: importPlugin,
+      "@typescript-eslint": tseslint.plugin,
     },
     rules: {
-      quotes: ["off", "double", {}],
+      // 移行前 (.eslintrc.json / .eslintrc.shared.json) と同等の厳格さを保つ。
+      // eslint.configs.recommended / tseslint.configs.recommended は移行前には
+      // 有効でなかったため、ここでも適用しない（厳格化はルール単位で行う）。
+      "no-negated-condition": "warn",
+      "no-throw-literal": "warn",
       "@typescript-eslint/naming-convention": "off",
       "@typescript-eslint/no-floating-promises": "error",
-      "import/order": "off",
-      curly: "off",
+      "@typescript-eslint/no-misused-promises": "error",
       "@typescript-eslint/semi": "off",
+      "import/order": "off",
+      quotes: ["off", "double", {}],
+      curly: "off",
+      semi: "off",
       eqeqeq: "error",
       complexity: ["error", { max: 36 }],
       "max-lines-per-function": ["error", { max: 500 }],

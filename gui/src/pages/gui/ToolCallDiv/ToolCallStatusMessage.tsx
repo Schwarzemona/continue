@@ -22,7 +22,7 @@ export function ToolCallStatusMessage({
   // TODO go back and replace arg string values and tool names with <code> tags
   // to make them more readable
 
-  let intro = getStatusIntro(toolCallState.status, tool.isInstant);
+  const intro = getStatusIntro(toolCallState.status, tool.isInstant);
   let message = "";
 
   // Handle the special case for "done" status or instant tools that are calling
@@ -53,7 +53,7 @@ export function ToolCallStatusMessage({
 
   return (
     <div
-      className="text-description line-clamp-4 min-w-0 break-words"
+      className="line-clamp-4 min-w-0 break-words text-description"
       data-testid="tool-call-title"
     >
       {`${message}`}

@@ -20,7 +20,7 @@ function SymbolLink({ symbol, content }: SymbolLinkProps) {
   }
 
   const processedContent = useMemo(() => {
-    let content = symbol.content;
+    const content = symbol.content;
     // TODO Normalize indentation
     // let lines = symbol.content.split("\n");
     // if (lines.length > 1) {
@@ -47,7 +47,7 @@ function SymbolLink({ symbol, content }: SymbolLinkProps) {
         onClick={onClick}
         data-tooltip-delay-show={500}
       >
-        <code className="text-link align-middle">{content}</code>
+        <code className="align-middle text-link">{content}</code>
       </span>
     </ToolTip>
   );

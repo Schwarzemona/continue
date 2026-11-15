@@ -446,7 +446,9 @@ class OpenAI extends BaseLLM {
     // Gemma 4 reasoning conversion
     const currentModel = (body.model ?? "").toLowerCase();
     const reasoningValue = body.reasoning_effort;
-    if (currentModel.includes("gemma4") && reasoningValue !== undefined) {
+    const localModel =
+      currentModel.includes("gemma4") || currentModel.includes("qwen");
+    if (localModel && reasoningValue !== undefined) {
       (body as any).chat_template_kwargs = {
         enable_thinking: true,
       };

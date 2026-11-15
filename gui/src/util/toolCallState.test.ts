@@ -291,7 +291,7 @@ describe("addToolCallDeltaToState", () => {
 
   it("should handle tool call ids correctly", () => {
     // Test when ID comes from current state
-    let currentState: ToolCallState = {
+    const currentState: ToolCallState = {
       status: "generating",
       toolCall: {
         id: "existing-id",

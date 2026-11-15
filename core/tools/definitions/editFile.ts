@@ -9,8 +9,7 @@ export interface EditToolArgs {
 export const NO_PARALLEL_TOOL_CALLING_INSTRUCTION =
   "このツールは他のどのツールとも並行して呼び出すことはできません。";
 
-const CHANGES_DESCRIPTION =
-  "ファイルへの変更内容。";
+const CHANGES_DESCRIPTION = "ファイルへの変更内容。";
 
 export const editFileTool: Tool = {
   type: "function",
@@ -40,7 +39,7 @@ export const editFileTool: Tool = {
       },
     },
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
     prefix: `既存のファイルを編集するには、以下の引数を使用して ${BuiltInToolNames.EditExistingFile} ツールを使用してください:
 - filepath: ファイルへの相対パス。

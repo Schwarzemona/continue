@@ -333,7 +333,8 @@ export class ConfigHandler {
     profileId?: string,
     element?: { sourceFile?: string },
   ) {
-    let openProfileId = profileId || this.currentProfile?.profileDescription.id;
+    const openProfileId =
+      profileId || this.currentProfile?.profileDescription.id;
     if (!openProfileId) {
       return;
     }

@@ -431,7 +431,7 @@ export default class DocsService {
     }
   }
 
-  // eslint-disable-next-line max-statements
+  // eslint-disable-next-line complexity
   async indexAndAdd(
     siteIndexingConfig: SiteIndexingConfig,
     forceReindex: boolean = false,

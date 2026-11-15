@@ -147,10 +147,10 @@ export function dedent(strings: TemplateStringsArray, ...values: any[]) {
       // If the value contains newlines, we need to adjust the indentation
       if (value.includes("\n")) {
         // Find the indentation level of the last line in strings[i]
-        let lines = strings[i].split("\n");
-        let lastLine = lines[lines.length - 1];
-        let match = lastLine.match(/(^|\n)([^\S\n]*)$/);
-        let indent = match ? match[2] : "";
+        const lines = strings[i].split("\n");
+        const lastLine = lines[lines.length - 1];
+        const match = lastLine.match(/(^|\n)([^\S\n]*)$/);
+        const indent = match ? match[2] : "";
         // Add indentation to all lines except the first line of value
         let valueLines = value.split("\n");
         valueLines = valueLines.map((line, index) =>
@@ -163,7 +163,7 @@ export function dedent(strings: TemplateStringsArray, ...values: any[]) {
   }
 
   // Now dedent the full string
-  let result = raw.replace(/^\n/, "").replace(/\n\s*$/, "");
+  const result = raw.replace(/^\n/, "").replace(/\n\s*$/, "");
   let lines = result.split("\n");
 
   // Remove leading/trailing blank lines
@@ -175,10 +175,10 @@ export function dedent(strings: TemplateStringsArray, ...values: any[]) {
   }
 
   // Calculate minimum indentation (excluding empty lines)
-  let minIndent = lines.reduce((min: any, line: any) => {
+  const minIndent = lines.reduce((min: any, line: any) => {
     if (line.trim() === "") return min;
-    let match = line.match(/^(\s*)/);
-    let indent = match ? match[1].length : 0;
+    const match = line.match(/^(\s*)/);
+    const indent = match ? match[1].length : 0;
     return min === null ? indent : Math.min(min, indent);
   }, null);
 

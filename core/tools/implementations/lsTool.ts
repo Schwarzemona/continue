@@ -33,7 +33,7 @@ export const lsToolImpl: ToolImpl = async (args, extras) => {
 
   const lines = entries.slice(0, MAX_LS_TOOL_LINES);
 
-  let content =
+  const content =
     lines.length > 0
       ? lines.join("\n")
       : `「${resolvedPath.displayPath}」にファイルやフォルダは見つかりませんでした`;

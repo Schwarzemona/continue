@@ -101,12 +101,12 @@ export class LLMLogFormatter {
   }
 
   private getInteractionData(item: LLMInteractionItem) {
-    let interaction = this.interactions[item.interactionId];
+    const interaction = this.interactions[item.interactionId];
     if (interaction !== undefined) {
       return interaction;
     }
 
-    let usedPrefixes = Object.values(this.interactions).map(
+    const usedPrefixes = Object.values(this.interactions).map(
       (interaction) => interaction.prefix,
     );
 
@@ -200,7 +200,7 @@ export class LLMLogFormatter {
     }
 
     if (!this.openLine || !this.openLine) {
-      let timestamp = this.formatTimestamp(interaction, item);
+      const timestamp = this.formatTimestamp(interaction, item);
       this.output.write(`${interaction.prefix}${timestamp} ${marker}`);
       this.lastLineStartItem = item;
     }
@@ -368,8 +368,8 @@ export class LLMLogFormatter {
       case "startChat":
         this.logLines(item, "[Chat]");
         this.logOptions(item);
-        let lastMessage = null;
-        for (let message of item.messages) {
+        const lastMessage = null;
+        for (const message of item.messages) {
           this.logMessage(item, message, true);
         }
         break;

@@ -160,7 +160,7 @@ export async function configYamlToContinueConfig(options: {
   uniqueId: string;
   llmLogger: ILLMLogger;
 }): Promise<{ config: ContinueConfig; errors: ConfigValidationError[] }> {
-  let { unrolledAssistant, ide, ideInfo, uniqueId, llmLogger } = options;
+  const { unrolledAssistant, ide, ideInfo, uniqueId, llmLogger } = options;
 
   const localErrors: ConfigValidationError[] = [];
 

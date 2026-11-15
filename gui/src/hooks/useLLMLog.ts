@@ -84,7 +84,7 @@ function appendItemToInteractionResult(
   interaction: LLMInteraction,
   item: LLMInteractionMessage | LLMInteractionChunk,
 ) {
-  let lastGroup = interaction.results[interaction.results.length - 1];
+  const lastGroup = interaction.results[interaction.results.length - 1];
 
   if (lastGroup == undefined || lastGroup.length == MAX_GROUP_LENGTH) {
     interaction.results.push([item]);
@@ -102,7 +102,8 @@ function appendItemToInteractionResult(
  */
 function copyInteractionForMutation(oldInteraction: LLMInteraction) {
   const oldResults = oldInteraction.results;
-  let oldLastGroup = oldInteraction.results[oldInteraction.results.length - 1];
+  const oldLastGroup =
+    oldInteraction.results[oldInteraction.results.length - 1];
   let newResults;
 
   if (oldLastGroup == undefined || oldLastGroup.length == MAX_GROUP_LENGTH) {

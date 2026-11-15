@@ -72,7 +72,7 @@ export const searchWithinContainer = (
     const highlightFullLine =
       textNode.parentElement?.className.includes("hljs");
 
-    let nodeTextValue = options.caseSensitive
+    const nodeTextValue = options.caseSensitive
       ? textNode.nodeValue
       : textNode.nodeValue.toLowerCase();
     let startIndex = 0;

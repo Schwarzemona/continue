@@ -72,7 +72,7 @@ function breakdownArticleComponent(
 
       // Split the long line into chunks
       let remainingLine = line;
-      let subLineStart = i;
+      const subLineStart = i;
       while (remainingLine.length > 0) {
         const chunk = remainingLine.slice(0, max_chunk_size);
         createChunk(chunk, subLineStart, i);

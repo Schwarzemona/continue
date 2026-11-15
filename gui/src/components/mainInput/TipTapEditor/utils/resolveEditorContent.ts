@@ -143,7 +143,7 @@ async function gatherContextItems({
     },
     [],
   );
-  let contextItems: ContextItemWithId[] = [];
+  const contextItems: ContextItemWithId[] = [];
 
   const isInAgentMode = getState().session.mode === "agent";
 

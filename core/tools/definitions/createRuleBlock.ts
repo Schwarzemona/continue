@@ -2,8 +2,7 @@ import { Tool } from "../..";
 import { BUILT_IN_GROUP_NAME, BuiltInToolNames } from "../builtIn";
 
 const NAME_ARG_DESC = "ルール名。";
-const RULE_ARG_DESC =
-  "明確で命令的な指示。";
+const RULE_ARG_DESC = "明確で命令的な指示。";
 const DESC_ARG_DESC =
   "具体的で重要な用語を含む説明。使用すべきトリガー/コンテキストを含めます。";
 const GLOB_ARG_DESC =
@@ -57,7 +56,7 @@ export const createRuleBlock: Tool = {
       },
     },
   },
-  defaultToolPolicy: "disabled",
+  defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
     prefix: `ユーザーがあなたの出力に対してフィードバックやガイダンスを提供することがあります。これらの「ルール」を認識していなかった場合は、${BuiltInToolNames.CreateRuleBlock} ツールを使用して、将来のやり取りのためにルールを保存することを検討してください。
 このツールは既存のルールを編集するために使用することはできませんが、".continue/rules" フォルダ内を検索し、編集ツールを使用してルールを管理できます。

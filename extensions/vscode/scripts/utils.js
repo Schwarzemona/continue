@@ -119,13 +119,13 @@ async function copyOnnxRuntimeFromNodeModules(target) {
     // If building for production, only need the binaries for current platform
     try {
       if (!target.startsWith("darwin")) {
-        rimrafSync(path.join(__dirname, "../bin/napi-v3/darwin"));
+        rimrafSync(path.join(__dirname, "../bin/napi-v6/darwin"));
       }
       if (!target.startsWith("linux")) {
-        rimrafSync(path.join(__dirname, "../bin/napi-v3/linux"));
+        rimrafSync(path.join(__dirname, "../bin/napi-v6/linux"));
       }
       if (!target.startsWith("win")) {
-        rimrafSync(path.join(__dirname, "../bin/napi-v3/win32"));
+        rimrafSync(path.join(__dirname, "../bin/napi-v6/win32"));
       }
 
       // Also don't want to include cuda/shared/tensorrt binaries, they are too large
@@ -138,7 +138,7 @@ async function copyOnnxRuntimeFromNodeModules(target) {
         filesToRemove.forEach((file) => {
           const filepath = path.join(
             __dirname,
-            "../bin/napi-v3/linux/x64",
+            "../bin/napi-v6/linux/x64",
             file,
           );
           if (fs.existsSync(filepath)) {
@@ -224,15 +224,15 @@ async function downloadSqliteBinary(target) {
     "darwin-arm64":
       "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-darwin-arm64.tar.gz",
     "linux-arm64":
-      "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v3-linux-arm64.tar.gz",
+      "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-linux-arm64.tar.gz",
     "win32-arm64":
       "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-win32-arm64.tar.gz",
     "linux-x64":
-      "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v3-linux-x64.tar.gz",
+      "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-linux-x64.tar.gz",
     "darwin-x64":
       "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-darwin-x64.tar.gz",
     "win32-x64":
-      "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v3-win32-x64.tar.gz",
+      "https://github.com/TryGhost/node-sqlite3/releases/download/v5.1.7/sqlite3-v5.1.7-napi-v6-win32-x64.tar.gz",
   }[target];
   execCmdSync(
     `curl -L -o ../../core/node_modules/sqlite3/build.tar.gz ${downloadUrl}`,

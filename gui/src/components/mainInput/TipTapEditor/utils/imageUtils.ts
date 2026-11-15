@@ -32,7 +32,7 @@ export async function handleImageFile(
   ideMessenger: IIdeMessenger,
   file: File,
 ): Promise<[HTMLImageElement, string] | undefined> {
-  let filesize = file.size / 1024 / 1024; // filesize in MB
+  const filesize = file.size / 1024 / 1024; // filesize in MB
   // check image type and size
   if (
     [
@@ -46,8 +46,8 @@ export async function handleImageFile(
     filesize < 10
   ) {
     // check dimensions
-    let _URL = window.URL || window.webkitURL;
-    let img = new window.Image();
+    const _URL = window.URL || window.webkitURL;
+    const img = new window.Image();
     img.src = _URL.createObjectURL(file);
 
     return await new Promise((resolve) => {
@@ -57,7 +57,7 @@ export async function handleImageFile(
           return;
         }
 
-        let image = new window.Image();
+        const image = new window.Image();
         image.src = dataUrl;
         image.onload = function () {
           resolve([image, dataUrl]);

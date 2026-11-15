@@ -338,8 +338,8 @@ async function* createRetryableAsyncGenerator<T>(
   args: any[],
   initialAttempt: number,
 ): AsyncGenerator<T> {
-  let currentGenerator = generator;
-  let attempt = initialAttempt;
+  const currentGenerator = generator;
+  const attempt = initialAttempt;
 
   try {
     for await (const value of currentGenerator) {

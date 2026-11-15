@@ -299,7 +299,7 @@ class Anthropic extends BaseLLM {
 
     let lastToolUseId: string | undefined;
     let lastToolUseName: string | undefined;
-    let usage: Usage = {
+    const usage: Usage = {
       promptTokens: 0,
       completionTokens: 0,
       promptTokensDetails: {

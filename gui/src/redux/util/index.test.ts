@@ -37,7 +37,7 @@ function createChatHistoryItem(
     toolCallId?: string;
   },
 ): ChatHistoryItemWithMessageId {
-  let message: any = {
+  const message: any = {
     id: "test-id",
     role,
     content,

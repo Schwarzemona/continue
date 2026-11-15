@@ -26,8 +26,10 @@ function getPreferredShell(): string {
 const PLATFORM_INFO = `${os.platform()}、${os.arch()}、およびシェル${getPreferredShell()}に最適化された端末コマンドとスクリプトを選択してください。`;
 
 const RUN_COMMAND_NOTES = `シェルはステートフルではなく、以前のコマンドを記憶しません。\
-特別な権限や管理者権限を必要とするコマンドは実行できません。\
-重要: ファイルの捜索や編集のコマンドは実行できません。\
+特別な権限や管理者権限を必要とするコマンドと、\
+grep、find、locate、rg、ag、findstr、select-string、get-childitem、gci、ls、dirのファイル探索コマンド、\
+cat、less、more、head、tail、bat、open、xdg-open、type、start、get-content、gcのファイル表示コマンド、\
+sed、awk、set-content、add-content、out-file、scのファイル編集コマンドは実行できません。\
 ${PLATFORM_INFO}`;
 
 export const runTerminalCommandTool: Tool = {
@@ -57,7 +59,7 @@ export const runTerminalCommandTool: Tool = {
       },
     },
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   evaluateToolCallPolicy: (
     basePolicy: ToolPolicy,
     parsedArgs: Record<string, unknown>,

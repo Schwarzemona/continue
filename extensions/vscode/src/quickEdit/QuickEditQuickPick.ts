@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import { IDE, ILLM, RuleWithSource } from "core";
 import { ConfigHandler } from "core/config/ConfigHandler";
 import { DataLogger } from "core/data/log";
@@ -348,7 +347,10 @@ export class QuickEdit {
     const model = await this.getCurModel();
 
     if (!model) {
-      this.ide.showToast("error", "Quick Editを使用するにはモデルを設定してください");
+      this.ide.showToast(
+        "error",
+        "Quick Editを使用するにはモデルを設定してください",
+      );
       return { label: undefined, value: undefined };
     }
 

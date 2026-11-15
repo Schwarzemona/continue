@@ -34,7 +34,7 @@ export default class CheerioCrawler {
 
     const { baseUrl, basePath } = this.splitUrl(this.startUrl);
 
-    let paths: { path: string; depth: number }[] = [
+    const paths: { path: string; depth: number }[] = [
       { path: basePath, depth: 0 },
     ];
 
@@ -68,7 +68,7 @@ export default class CheerioCrawler {
           }
 
           if (depth < this.maxDepth) {
-            for (let link of linksArray) {
+            for (const link of linksArray) {
               if (!paths.some((p) => p.path === link)) {
                 paths.push({ path: link, depth: depth + 1 });
               }

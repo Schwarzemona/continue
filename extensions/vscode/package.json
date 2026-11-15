@@ -649,7 +649,7 @@
     "tsc-watch": "tsc -watch -p ./",
     "rebuild": "electron-rebuild -v 19.1.8 node-pty",
     "lint": "eslint src",
-    "lint:fix": "eslint . --fix",
+    "lint:fix": "eslint src --fix",
     "test": "vitest run",
     "vitest": "vitest run",
     "write-build-timestamp": "node scripts/write-build-timestamp.js",

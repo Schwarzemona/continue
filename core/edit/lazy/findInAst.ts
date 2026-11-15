@@ -7,7 +7,7 @@ export function findInAst(
 ): Parser.SyntaxNode | null {
   const stack = [node];
   while (stack.length > 0) {
-    let node = stack.pop()!;
+    const node = stack.pop()!;
     if (criterion(node)) {
       return node;
     }

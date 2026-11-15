@@ -31,7 +31,7 @@ export async function runLlmTest(testCase: LlmTestCase) {
 
   if (mockStream) {
     const encoder = new TextEncoder();
-    let streamIndex = 0;
+    const streamIndex = 0;
     mockFetch.mockResolvedValue(
       new Response(
         new ReadableStream({

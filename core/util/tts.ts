@@ -82,7 +82,7 @@ export class TTS {
       // Only kill a TTS process if it's still running
       if (TTS.handle && TTS.handle.exitCode === null) {
         // Use a timeout in case of zombie processes
-        let killTimeout: NodeJS.Timeout = setTimeout(() => {
+        const killTimeout: NodeJS.Timeout = setTimeout(() => {
           reject(`Unable to kill TTS process: ${TTS.handle?.pid}`);
         }, ttsKillTimeout);
 

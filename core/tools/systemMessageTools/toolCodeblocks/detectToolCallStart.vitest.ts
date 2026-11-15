@@ -3,7 +3,7 @@ import { SystemMessageToolCodeblocksFramework } from ".";
 import { detectToolCallStart } from "../detectToolCallStart";
 
 describe("detectToolCallStart", () => {
-  let framework = new SystemMessageToolCodeblocksFramework();
+  const framework = new SystemMessageToolCodeblocksFramework();
   it("detects standard tool call start", () => {
     const buffer = "```tool\nTOOL_NAME: example_tool";
     const result = detectToolCallStart(buffer, framework);

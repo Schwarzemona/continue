@@ -79,7 +79,7 @@ export class GlobalContext {
         );
 
         // Attempt to salvage security-sensitive values before deleting
-        let salvaged: Partial<GlobalContextType> = {};
+        const salvaged: Partial<GlobalContextType> = {};
         try {
           // Try to partially parse the corrupted data to extract sharedConfig
           const match = data.match(/"sharedConfig"\s*:\s*({[^}]*})/);

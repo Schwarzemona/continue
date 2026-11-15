@@ -31,7 +31,7 @@ export const viewSubdirectoryTool: Tool = {
     prefix: `プロジェクト内の特定のフォルダのマップを表示するには、${BuiltInToolNames.ViewSubdirectory} ツールを使用できます。これにより、フォルダの構造と構成の視覚的な表現が提供されます。`,
     exampleArgs: [["directory_path", "path/to/subdirectory"]],
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   toolCallIcon: "FolderOpenIcon",
   preprocessArgs: async (args, { ide }) => {
     const directoryPath = args.directory_path as string;
@@ -47,9 +47,7 @@ export const viewSubdirectoryTool: Tool = {
     processedArgs?: Record<string, unknown>,
   ): ToolPolicy => {
     const resolvedPath = processedArgs?.resolvedPath as
-      | ResolvedPath
-      | null
-      | undefined;
+      ResolvedPath | null | undefined;
     if (!resolvedPath) return basePolicy;
 
     return evaluateFileAccessPolicy(basePolicy, resolvedPath.isWithinWorkspace);

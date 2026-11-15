@@ -35,7 +35,7 @@ class GreptileContextProvider extends BaseContextProvider {
       throw new Error("GitHub トークンが見つかりません。");
     }
 
-    let absPath = await this.getWorkspaceDir(extras);
+    const absPath = await this.getWorkspaceDir(extras);
     if (!absPath) {
       throw new Error("ワークスペースディレクトリの特定に失敗しました。");
     }
@@ -93,11 +93,15 @@ class GreptileContextProvider extends BaseContextProvider {
             (source.filepath.split("/").pop() ?? "").split("\\").pop() ?? "",
         }));
       } catch (jsonError) {
-        throw new Error(`Greptile のレスポンスの解析に失敗しました:\n${rawText}`);
+        throw new Error(
+          `Greptile のレスポンスの解析に失敗しました:\n${rawText}`,
+        );
       }
     } catch (error) {
       console.error("Error getting context items from Greptile:", error);
-      throw new Error("Greptile からコンテキスト項目を取得する際にエラーが発生しました");
+      throw new Error(
+        "Greptile からコンテキスト項目を取得する際にエラーが発生しました",
+      );
     }
   }
 

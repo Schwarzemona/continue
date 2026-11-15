@@ -26,7 +26,7 @@ export const codebaseTool: Tool = {
       },
     },
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
     prefix: `コードベースを検索するには、自然言語のクエリを使用して ${BuiltInToolNames.CodebaseTool} ツールを使用してください。例えば、認証ロジックを見つけるには、次のように応答します:`,
     exampleArgs: [

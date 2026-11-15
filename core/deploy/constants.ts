@@ -6,6 +6,6 @@ export const constants = {
 export function getTimestamp() {
   const x = Date.now().toString();
   const l = new Date().getMinutes();
-  let j = Math.floor(l / 2) + 10;
+  const j = Math.floor(l / 2) + 10;
   return x.slice(0, -2) + j.toString();
 }

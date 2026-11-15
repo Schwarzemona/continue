@@ -111,7 +111,7 @@ class Bedrock extends BaseLLM {
   ): AsyncGenerator<ChatMessage> {
     const client = await this._getClient();
 
-    let config_headers =
+    const config_headers =
       this.requestOptions && this.requestOptions.headers
         ? this.requestOptions.headers
         : {};

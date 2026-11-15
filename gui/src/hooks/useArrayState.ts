@@ -17,7 +17,7 @@ function useArrayState<T>(initialValue: T[]) {
 
   function replace(atIndex: number, withItem: T) {
     setValue((prev) => {
-      let updated = [...prev];
+      const updated = [...prev];
       updated[atIndex] = withItem;
       return updated;
     });

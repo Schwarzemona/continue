@@ -5,7 +5,7 @@ import { interceptSystemToolCalls } from "../interceptSystemToolCalls";
 
 describe("interceptSystemToolCalls", () => {
   let abortController: AbortController;
-  let framework = new SystemMessageToolCodeblocksFramework();
+  const framework = new SystemMessageToolCodeblocksFramework();
 
   beforeEach(() => {
     abortController = new AbortController();

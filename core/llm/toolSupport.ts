@@ -127,7 +127,7 @@ export const PROVIDER_TOOL_SUPPORT: Record<string, (model: string) => boolean> =
       let modelName = "";
       // Extract the model name after the last slash to support other registries
       if (model.includes("/")) {
-        let parts = model.split("/");
+        const parts = model.split("/");
         modelName = parts[parts.length - 1];
       } else {
         modelName = model;
@@ -489,27 +489,27 @@ export const PROVIDER_TOOL_SUPPORT: Record<string, (model: string) => boolean> =
 
 export function isRecommendedAgentModel(modelName: string): boolean {
   // AND behavior
-  const recs: RegExp[][] = [
-    [/o[134]/],
-    [/deepseek/, /r1|reasoner/],
-    [/gemini/, /2\.5/, /pro/],
-    [/gemini/, /3\.1-pro|3-flash-preview/],
-    [/gemma/, /4/, /[2-9][0-9]/],
-    [/gpt-[5-9]/],
-    [/gpt-4\.1/],
-    [/codex/],
-    [/claude/, /sonnet/, /3\.7|3-7|(?<!\d)-[4-9]/],
-    [/claude/, /opus/, /(?<!\d)-[4-9]/],
-    [/grok-code/],
-    [/grok-[4-9][\.-]\d/],
-    [/claude/, /[4-9]-[5-9]/],
-  ];
-  for (const combo of recs) {
-    if (combo.every((regex) => modelName.toLowerCase().match(regex))) {
-      return true;
-    }
-  }
-  return false;
+  //const recs: RegExp[][] = [
+  //  [/o[134]/],
+  //  [/deepseek/, /r1|reasoner/],
+  //  [/gemini/, /2\.5/, /pro/],
+  //  [/gemini/, /3\.1-pro|3-flash-preview/],
+  //  [/gemma/, /4/, /[2-9][0-9]/],
+  //  [/gpt-[5-9]/],
+  //  [/gpt-4\.1/],
+  //  [/codex/],
+  //  [/claude/, /sonnet/, /3\.7|3-7|(?<!\d)-[4-9]/],
+  //  [/claude/, /opus/, /(?<!\d)-[4-9]/],
+  //  [/grok-code/],
+  //  [/grok-[4-9][\.-]\d/],
+  //  [/claude/, /[4-9]-[5-9]/],
+  //];
+  //for (const combo of recs) {
+  //  if (combo.every((regex) => modelName.toLowerCase().match(regex))) {
+  //    return true;
+  //  }
+  //}
+  return true;
 }
 export function modelSupportsNativeTools(modelDescription: ModelDescription) {
   if (modelDescription.capabilities?.tools !== undefined) {

@@ -214,7 +214,7 @@ describe("Many sessions created", () => {
   test("Delete all sessions", () => {
     let sessions = historyManager.list({});
 
-    for (let session of sessions) {
+    for (const session of sessions) {
       historyManager.delete(session.sessionId);
     }
     sessions = historyManager.list({});

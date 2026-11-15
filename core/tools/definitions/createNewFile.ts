@@ -32,7 +32,7 @@ export const createNewFileTool: Tool = {
       },
     },
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
     prefix: `新しいファイルを作成するには、相対パスと新しい内容を指定して ${BuiltInToolNames.CreateNewFile} ツールを使用してください。例えば、'path/to/file.txt' にあるファイルを作成するには、次のように応答します:`,
     exampleArgs: [
@@ -55,9 +55,7 @@ export const createNewFileTool: Tool = {
     processedArgs?: Record<string, unknown>,
   ): ToolPolicy => {
     const resolvedPath = processedArgs?.resolvedPath as
-      | ResolvedPath
-      | null
-      | undefined;
+      ResolvedPath | null | undefined;
     if (!resolvedPath) return basePolicy;
 
     return evaluateFileAccessPolicy(basePolicy, resolvedPath.isWithinWorkspace);

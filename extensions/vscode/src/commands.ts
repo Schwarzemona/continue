@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/naming-convention */
 import * as fs from "node:fs";
 
 import { ContextMenuConfig, ILLM, ModelInstaller } from "core";

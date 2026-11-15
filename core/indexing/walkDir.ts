@@ -277,7 +277,7 @@ export async function walkDir(
   ide: IDE,
   _optionOverrides?: WalkerOptions,
 ): Promise<string[]> {
-  let urisOrRelativePaths: string[] = [];
+  const urisOrRelativePaths: string[] = [];
   for await (const p of walkDirAsync(uri, ide, _optionOverrides)) {
     urisOrRelativePaths.push(p);
   }

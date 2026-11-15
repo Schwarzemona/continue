@@ -166,7 +166,8 @@ export class CodebaseIndexer {
       return [];
     }
 
-    const indexTypesToBuild = new Set( // use set to remove duplicates
+    const indexTypesToBuild = new Set(
+      // use set to remove duplicates
       config.contextProviders
         .map((provider) => provider.description.dependsOnIndexing)
         .filter((indexType) => Array.isArray(indexType)) // remove undefined indexTypes
@@ -335,7 +336,7 @@ export class CodebaseIndexer {
     dirs: string[],
     abortSignal: AbortSignal,
   ): AsyncGenerator<IndexingProgressUpdate> {
-    let progress = 0;
+    const progress = 0;
 
     if (dirs.length === 0) {
       yield {
@@ -477,7 +478,7 @@ export class CodebaseIndexer {
 
   private errorToProgressUpdate(err: Error): IndexingProgressUpdate {
     const cause = getRootCause(err);
-    let errMsg: string = `${cause}`;
+    const errMsg: string = `${cause}`;
     let shouldClearIndexes = false;
 
     // Check if any of the error regexes match

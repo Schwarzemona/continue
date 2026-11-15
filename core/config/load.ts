@@ -254,7 +254,7 @@ async function intermediateToFinalConfig({
     return resolveRelativePathInDir(path, ide, workspaceDirs);
   };
   // Auto-detect models
-  let models: BaseLLM[] = [];
+  const models: BaseLLM[] = [];
   await Promise.all(
     config.models.map(async (desc) => {
       if ("title" in desc) {
@@ -685,7 +685,7 @@ async function handleEsbuildInstallation(
         "esbuild",
       );
       const candidate = require.resolve("esbuild", { paths: [userEsbuild] });
-      // eslint-disable-next-line @typescript-eslint/no-var-requires
+
       require(candidate);
       return true; // available via ~/.continue
     } catch {
@@ -798,7 +798,7 @@ async function loadContinueConfigFromJson(
 ): Promise<ConfigResult<ContinueConfig>> {
   const workspaceConfigs = await getWorkspaceRcConfigs(ide);
   // Serialized config
-  let {
+  const {
     config: serialized,
     errors,
     configLoadInterrupted,

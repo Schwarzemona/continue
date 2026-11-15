@@ -280,7 +280,7 @@ class Gemini extends BaseLLM {
         .filter((msg) => msg.role !== "system") // Exclude system role from contents
         .map((msg) => {
           if (msg.role === "tool") {
-            let functionName = toolCallIdToNameMap.get(msg.toolCallId);
+            const functionName = toolCallIdToNameMap.get(msg.toolCallId);
             if (!functionName) {
               console.warn(
                 "Sending tool call response for unidentified tool call",

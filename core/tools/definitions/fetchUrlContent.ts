@@ -24,7 +24,7 @@ export const fetchUrlContentTool: Tool = {
       },
     },
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
     prefix: `URLの内容を取得するには、${BuiltInToolNames.FetchUrlContent} ツールを使用してください。例えば、ウェブページの内容を読み取るには、次のように応答するかもしれません:`,
     exampleArgs: [["url", "https://example.com"]],

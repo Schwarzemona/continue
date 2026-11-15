@@ -19,7 +19,7 @@ export const readCurrentlyOpenFileTool: Tool = {
       properties: {},
     },
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
     prefix: `ユーザーが現在開いているファイルを確認するには、${BuiltInToolNames.ReadCurrentlyOpenFile} ツールを使用してください。\nユーザーがファイルについて尋ねているのにコードが見当たらない場合は、これを使用して現在のファイルを確認してください。`,
   },

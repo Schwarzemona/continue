@@ -1,7 +1,7 @@
 import { GPTAsyncEncoder, LlamaAsyncEncoder } from "./asyncEncoder";
 
 describe("llama encoder", () => {
-  var tokenizer: LlamaAsyncEncoder;
+  let tokenizer: LlamaAsyncEncoder;
 
   beforeAll(() => {
     tokenizer = new LlamaAsyncEncoder();
@@ -23,7 +23,7 @@ describe("llama encoder", () => {
 });
 
 describe("tiktoken encoder", () => {
-  var tokenizer: GPTAsyncEncoder;
+  let tokenizer: GPTAsyncEncoder;
 
   beforeAll(() => {
     tokenizer = new GPTAsyncEncoder();

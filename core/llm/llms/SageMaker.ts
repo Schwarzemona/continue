@@ -52,7 +52,7 @@ class SageMaker extends BaseLLM {
       let buffer = "";
       for await (const rawValue of response.Body) {
         const binaryChunk = rawValue.PayloadPart?.Bytes;
-        let value = new TextDecoder().decode(binaryChunk);
+        const value = new TextDecoder().decode(binaryChunk);
         buffer += value;
         let position;
         while ((position = buffer.indexOf("\n")) >= 0) {
@@ -101,7 +101,7 @@ class SageMaker extends BaseLLM {
       let buffer = "";
       for await (const rawValue of response.Body) {
         const binaryChunk = rawValue.PayloadPart?.Bytes;
-        let value = new TextDecoder().decode(binaryChunk);
+        const value = new TextDecoder().decode(binaryChunk);
         buffer += value;
         let position;
         while ((position = buffer.indexOf("\n")) >= 0) {
@@ -170,7 +170,7 @@ class SageMaker extends BaseLLM {
           return responseBody;
         }
       } catch (e) {
-        let message = e instanceof Error ? e.message : String(e);
+        const message = e instanceof Error ? e.message : String(e);
         throw new Error(
           `Failed to parse response from SageMaker:\n${decoded}\nError: ${message}`,
         );
@@ -214,7 +214,7 @@ class MessageAPIToolkit implements SageMakerModelToolkit {
   ): InvokeEndpointWithResponseStreamCommand {
     if ("chat_template" in this.sagemaker.completionOptions) {
       // for some model you can apply chat_template to the model
-      let prompt = jinja
+      const prompt = jinja
         .compile(this.sagemaker.completionOptions.chat_template)
         .render(
           { messages: messages, add_generation_prompt: true },

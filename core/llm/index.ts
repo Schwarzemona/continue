@@ -346,9 +346,9 @@ export abstract class BaseLLM implements ILLM {
     usage: Usage | undefined,
     error?: any,
   ): InteractionStatus {
-    let promptTokens = this.countTokens(prompt);
-    let generatedTokens = this.countTokens(completion);
-    let thinkingTokens = thinking ? this.countTokens(thinking) : 0;
+    const promptTokens = this.countTokens(prompt);
+    const generatedTokens = this.countTokens(completion);
+    const thinkingTokens = thinking ? this.countTokens(thinking) : 0;
 
     void DevDataSqliteDb.logTokensGenerated(
       model,
@@ -412,7 +412,7 @@ export abstract class BaseLLM implements ILLM {
         typeof errorMessageRaw === "string"
           ? errorMessageRaw.replace(/"/g, "'")
           : undefined;
-      let model = error?.match(/model '(.*)' not found/)?.[1];
+      const model = error?.match(/model '(.*)' not found/)?.[1];
       if (model && resp.url.match("127.0.0.1:11434")) {
         text = `The model "${model}" was not found. To download it, run \`ollama run ${model}\`.`;
         return new LLMError(text, this); // No need to add HTTP status details
@@ -1092,6 +1092,7 @@ export abstract class BaseLLM implements ILLM {
   }
 
   // Update the streamChat method:
+  // eslint-disable-next-line complexity
   async *streamChat(
     _messages: ChatMessage[],
     signal: AbortSignal,

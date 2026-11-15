@@ -22,6 +22,6 @@ export const viewRepoMapTool: Tool = {
   systemMessageDescription: {
     prefix: `リポジトリマップを表示するには、${BuiltInToolNames.ViewRepoMap} ツールを使用してください。これにより、プロジェクトの構造と構成の視覚的な表現が提供されます。`,
   },
-  defaultToolPolicy: "allowedWithPermission",
+  defaultToolPolicy: "allowedWithoutPermission",
   toolCallIcon: "MapIcon",
 };
