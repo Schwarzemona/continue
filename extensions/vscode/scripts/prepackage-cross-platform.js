@@ -141,7 +141,7 @@ async function package(target, os, arch, exe) {
       os === "darwin"
         ? "libonnxruntime.1.31.1.dylib"
         : os === "linux"
-          ? "libonnxruntime.so.1.31.1"
+          ? "libonnxruntime.so.1"
           : "onnxruntime.dll"
     }`,
 

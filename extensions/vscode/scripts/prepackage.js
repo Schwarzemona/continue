@@ -457,7 +457,7 @@ void (async () => {
       isMacTarget
         ? "libonnxruntime.1.31.1.dylib"
         : isLinuxTarget
-          ? "libonnxruntime.so.1.31.1"
+          ? "libonnxruntime.so.1"
           : "onnxruntime.dll"
     }`,
 
