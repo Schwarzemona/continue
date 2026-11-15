@@ -10,9 +10,10 @@ describe("Parallel Tool Calls - Streaming", () => {
     const { ideMessenger, store } = await renderWithProviders(<Chat />);
 
     // Mock required responses
-    ideMessenger.responses["tools/evaluatePolicy"] = {
-      policy: "allowedWithPermission",
-    };
+    ideMessenger.responseHandlers["tools/evaluatePolicy"] = async () => ({
+      policy: "allowedWithPermission" as const,
+      displayValue: undefined,
+    });
     ideMessenger.responses["context/getSymbolsForFiles"] = {};
 
     // Setup mock model with direct Redux dispatch
