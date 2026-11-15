@@ -229,7 +229,8 @@ export function getAutocompleteStatusBarTitle(
   return title;
 }
 
-const USE_FIM_MENU_ITEM_LABEL = "$(export)Next Editの代わりにFIMオートコンプリートを使用する";
+const USE_FIM_MENU_ITEM_LABEL =
+  "$(export)Next Editの代わりにFIMオートコンプリートを使用する";
 const USE_NEXT_EDIT_MENU_ITEM_LABEL =
   "$(sparkle)FIMオートコンプリートの代わりにNext Editを使用する";
 

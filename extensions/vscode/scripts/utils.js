@@ -293,12 +293,12 @@ async function downloadRipgrepBinary(target) {
     fs.unlinkSync("node_modules/@vscode/ripgrep-win32-x64/bin/build.zip");
   } else {
     execCmdSync(
-      `curl -L -o node_modules/@vscode/ripgrep-win32-x64/bin/build.tar.gz ${downloadUrl}`,
+      `curl -L -o node_modules/@vscode/ripgrep-linux-x64/bin/build.tar.gz ${downloadUrl}`,
     );
     execCmdSync(
-      "cd node_modules/@vscode/ripgrep-win32-x64/bin && tar -xvzf build.tar.gz",
+      "cd node_modules/@vscode/ripgrep-linux-x64/bin && tar -xvzf build.tar.gz",
     );
-    fs.unlinkSync("node_modules/@vscode/ripgrep-win32-x64/bin/build.tar.gz");
+    fs.unlinkSync("node_modules/@vscode/ripgrep-linux-x64/bin/build.tar.gz");
   }
 }
 
