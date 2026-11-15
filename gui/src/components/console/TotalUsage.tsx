@@ -211,7 +211,7 @@ const CostChart: React.FC<{ llmLog: LLMLog }> = ({ llmLog }) => {
             fill="var(--vscode-foreground)"
             transform={`rotate(-90 15 ${chartHeight / 2})`}
           >
-          累積コスト ($)
+            累積コスト ($)
           </text>
         </svg>
       </div>
@@ -358,6 +358,5 @@ const TotalUsage: React.FC<TotalUsageProps> = ({ llmLog }) => {
     </div>
   );
 };
-
 
 export default TotalUsage;

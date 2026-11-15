@@ -66,7 +66,7 @@ export function OnboardingProvidersTab({
             <div className="space-y-4">
               {providerConfigs.map((config) => (
                 <div key={config?.provider}>
-                  <label className="text-foreground mb-1 flex items-center gap-3 font-medium">
+                  <label className="mb-1 flex items-center gap-3 font-medium text-foreground">
                     {window.vscMediaUrl && (
                       <img
                         src={`${window.vscMediaUrl}/logos/${config?.icon}`}
@@ -83,7 +83,7 @@ export function OnboardingProvidersTab({
                     className="w-full"
                     {...formMethods.register(`${config?.provider}_apiKey`)}
                   />
-                  <span className="text-description-muted text-input-placeholder mt-1 block">
+                  <span className="mt-1 block text-description-muted text-input-placeholder">
                     <a
                       href={config?.apiKeyUrl}
                       target="_blank"
@@ -115,10 +115,10 @@ export function OnboardingProvidersTab({
                     onClick={handleClickMoreProviders}
                   >
                     こちらをクリック
-                  </span >{" "}
+                  </span>{" "}
                   して他のプロバイダーを表示する
-                </span >
-              </div >
+                </span>
+              </div>
             </div>
           </div>
         </FormProvider>

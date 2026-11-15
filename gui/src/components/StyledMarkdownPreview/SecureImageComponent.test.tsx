@@ -119,7 +119,9 @@ describe("SecureImageComponent", () => {
 
       // Should show error message and hide image
       await waitFor(() => {
-        expect(screen.getByText(/画像の読み込みに失敗しました。/)).toBeInTheDocument();
+        expect(
+          screen.getByText(/画像の読み込みに失敗しました。/),
+        ).toBeInTheDocument();
         expect(screen.queryByAltText("broken image")).not.toBeInTheDocument();
       });
 

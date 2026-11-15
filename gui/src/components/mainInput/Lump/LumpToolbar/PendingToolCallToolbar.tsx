@@ -40,9 +40,9 @@ export function PendingToolCallToolbar() {
       {pendingToolCalls.map((toolCall, index) => (
         <div
           key={toolCall.toolCallId}
-          className="border-input bg-input flex items-center gap-2 rounded border"
+          className="flex items-center gap-2 rounded border border-input bg-input"
         >
-          <span className="text-description flex-1 truncate italic">
+          <span className="flex-1 truncate italic text-description">
             {toolCall.tool?.displayTitle ?? toolCall.toolCall.function.name}
           </span>
 
@@ -50,7 +50,7 @@ export function PendingToolCallToolbar() {
             <Button
               variant="ghost"
               size="sm"
-              className="text-description-muted my-1 font-medium"
+              className="my-1 font-medium text-description-muted"
               onClick={() => handleReject(toolCall.toolCallId)}
               data-testid={generateToolCallButtonTestId(
                 "reject",

@@ -27,8 +27,8 @@ function ConfigPage() {
   return (
     <div className="flex h-full flex-row overflow-hidden">
       {/* Vertical Sidebar - full height */}
-      <div className="bg-vsc-background flex w-12 flex-shrink-0 flex-col border-0 md:w-40">
-        <div className="border-r-border flex flex-1 flex-col overflow-y-auto border-b-0 border-l-0 border-r-2 border-t-0 border-solid p-2">
+      <div className="flex w-12 flex-shrink-0 flex-col border-0 bg-vsc-background md:w-40">
+        <div className="flex flex-1 flex-col overflow-y-auto border-b-0 border-l-0 border-r-2 border-t-0 border-solid border-r-border p-2">
           {topTabSections.map((section) => (
             <React.Fragment key={section.id}>
               <TabGroup
@@ -69,7 +69,7 @@ function ConfigPage() {
           <Alert type="warning" className="max-w-md">
             <div className="flex flex-col">
               <div className="font-medium">画面幅が狭すぎます</div>
-              <div className="text-description mt-1">
+              <div className="mt-1 text-description">
                 設定を表示するには、左右の境界線をドラッグしてサイドバーを広げてください
               </div>
             </div>

@@ -94,7 +94,7 @@ function AddDocsDialog() {
                       place="top"
                       content="@docsサブメニューでユーザーに表示されるタイトル"
                     >
-                      <InformationCircleIcon className="text-lightgray h-3.5 w-3.5 select-none" />
+                      <InformationCircleIcon className="h-3.5 w-3.5 select-none text-lightgray" />
                     </ToolTip>
                   </div>
                 </div>
@@ -118,7 +118,7 @@ function AddDocsDialog() {
                       place="top"
                       content="ドキュメントサイトのクロールを開始する起点"
                     >
-                      <InformationCircleIcon className="text-lightgray h-3.5 w-3.5 select-none" />
+                      <InformationCircleIcon className="h-3.5 w-3.5 select-none text-lightgray" />
                     </ToolTip>
                   </div>
                 </div>

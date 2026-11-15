@@ -254,7 +254,9 @@ describe("FindAndReplaceDisplay", () => {
       const toggleButton = screen.getByTestId("toggle-find-and-replace-diff");
       fireEvent.click(toggleButton);
 
-      expect(screen.getByText("表示する変更点はありません")).toBeInTheDocument();
+      expect(
+        screen.getByText("表示する変更点はありません"),
+      ).toBeInTheDocument();
     });
   });
 

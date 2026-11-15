@@ -131,7 +131,7 @@ export function ContextItemsPeekItem({
         {contextItem.name}
       </span>
       <div
-        className={`text-description-muted group flex flex-row items-center gap-1.5 pr-1.5 ${isUrl ? "hover:underline" : ""}`}
+        className={`group flex flex-row items-center gap-1.5 pr-1.5 text-description-muted ${isUrl ? "hover:underline" : ""}`}
         onClick={
           isUrl
             ? (e) => {
@@ -151,7 +151,7 @@ export function ContextItemsPeekItem({
             : contextItem.description}
         </span>
         {isUrl && (
-          <ArrowTopRightOnSquareIcon className="text-description-muted h-3 w-3 flex-shrink-0 opacity-80 group-hover:opacity-100" />
+          <ArrowTopRightOnSquareIcon className="h-3 w-3 flex-shrink-0 text-description-muted opacity-80 group-hover:opacity-100" />
         )}
       </div>
     </div>
@@ -196,9 +196,8 @@ export function ContextItemsPeek({
           <ContextItemsPeekItem key={idx} contextItem={contextItem} />
         ))
       ) : (
-        <div className="text-description-muted pl-2 italic">結果なし</div>
+        <div className="pl-2 italic text-description-muted">結果なし</div>
       )}
     </ToggleDiv>
-
   );
 }

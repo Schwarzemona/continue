@@ -115,7 +115,6 @@ export async function evaluateToolPolicies(
         ],
       }),
     );
-
   }
 
   return policyResults;

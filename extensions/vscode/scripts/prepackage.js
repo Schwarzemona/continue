@@ -455,9 +455,9 @@ void (async () => {
     `bin/napi-v6/${os}/${arch}/onnxruntime_binding.node`,
     `bin/napi-v6/${os}/${arch}/${
       isMacTarget
-        ? "libonnxruntime.1.14.0.dylib"
+        ? "libonnxruntime.1.31.1.dylib"
         : isLinuxTarget
-          ? "libonnxruntime.so.1.14.0"
+          ? "libonnxruntime.so.1.31.1"
           : "onnxruntime.dll"
     }`,
 

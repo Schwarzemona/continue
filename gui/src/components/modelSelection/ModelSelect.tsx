@@ -96,12 +96,12 @@ function ModelOption({
             {option.isAutoDetected && (
               <span className="ml-1.5 text-[10px] italic text-description-muted">
                 (自動検出)
-              </span >
+              </span>
             )}
             {showMissingApiKeyMsg && (
               <span className="ml-1.5 text-[10px] italic">
                 (APIキーがありません)
-              </span >
+              </span>
             )}
           </span>
         </div>

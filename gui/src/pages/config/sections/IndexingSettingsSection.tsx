@@ -26,7 +26,9 @@ function CodebaseSubSection() {
         <div className="py-2">
           {config.disableIndexing ? (
             <div className="p-1">
-              <p className="text-center font-semibold">インデックス作成は無効になっています</p>
+              <p className="text-center font-semibold">
+                インデックス作成は無効になっています
+              </p>
             </div>
           ) : (
             <IndexingProgress />

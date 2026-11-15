@@ -10,9 +10,9 @@ export default function FeedbackDialog() {
       <div className="flex items-center gap-2 font-medium">
         <span>👋</span>
         <span>Continueの改善にご協力ください</span>
-      </div >
+      </div>
 
-      <p className="text-foreground leading-relaxed">
+      <p className="leading-relaxed text-foreground">
         Continueをより良くするために常に努力しており、ぜひ皆様の声をお聞かせください。
         もしよろしければ、以下の項目にご記入をお願いいたします。
       </p>
@@ -23,10 +23,9 @@ export default function FeedbackDialog() {
           dispatch(
             setDialogMessage(
               <div className="p-6 text-center">
-                <div className="mb-2">✓ ありがとうございます！</div >
+                <div className="mb-2">✓ ありがとうございます！</div>
                 <p className="text-foreground">後ほどご連絡いたします。</p>
-              </div >
-,
+              </div>,
             ),
           );
 
@@ -39,7 +38,12 @@ export default function FeedbackDialog() {
         className="flex flex-col gap-3"
       >
         <Input type="text" name="name" placeholder="お名前" required />
-        <Input type="email" name="email" placeholder="メールアドレス" required />
+        <Input
+          type="email"
+          name="email"
+          placeholder="メールアドレス"
+          required
+        />
         <div className="mt-2 flex justify-between gap-2">
           <SecondaryButton
             className="flex-1"

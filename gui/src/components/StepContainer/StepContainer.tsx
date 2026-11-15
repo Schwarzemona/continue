@@ -123,9 +123,9 @@ export default function StepContainer(props: StepContainerProps) {
       {isLatestSummary && (
         <div className="mx-1.5 my-5">
           <div className="flex items-center">
-            <div className="border-border flex-1 border-t border-solid"></div>
-            <span className="text-description mx-3">以前の会話を圧縮</span>
-            <div className="border-border flex-1 border-t border-solid"></div>
+            <div className="flex-1 border-t border-solid border-border"></div>
+            <span className="mx-3 text-description">以前の会話を圧縮</span>
+            <div className="flex-1 border-t border-solid border-border"></div>
           </div>
         </div>
       )}

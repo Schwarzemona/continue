@@ -160,7 +160,9 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
             )}
           </li>
           <li>
-            <span className="text-gray-400">モデル/デプロイメントが見つかりません: </span>
+            <span className="text-gray-400">
+              モデル/デプロイメントが見つかりません:{" "}
+            </span>
             {selectedModel && (
               <code className="ml-1">{selectedModel.model}</code>
             )}
@@ -246,7 +248,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
   return (
     <div className="flex flex-col gap-4 px-3 pb-3 pt-3">
       {/* Concise error title */}
-      <h3 className="text-error m-0 p-0 font-medium">モデルの応答エラー</h3>
+      <h3 className="m-0 p-0 font-medium text-error">モデルの応答エラー</h3>
 
       {errorContent}
 
@@ -259,7 +261,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
             defaultOpen
           >
             <div className="flex flex-col gap-0 rounded-sm">
-              <code className="text-editor-foreground block max-h-48 overflow-y-auto p-3 font-mono">
+              <code className="block max-h-48 overflow-y-auto p-3 font-mono text-editor-foreground">
                 {parsedError}
               </code>
 

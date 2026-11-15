@@ -139,9 +139,9 @@ async function package(target, os, arch, exe) {
     `bin/napi-v6/${os}/${arch}/onnxruntime_binding.node`,
     `bin/napi-v6/${os}/${arch}/${
       os === "darwin"
-        ? "libonnxruntime.1.14.0.dylib"
+        ? "libonnxruntime.1.31.1.dylib"
         : os === "linux"
-          ? "libonnxruntime.so.1.14.0"
+          ? "libonnxruntime.so.1.31.1"
           : "onnxruntime.dll"
     }`,
 

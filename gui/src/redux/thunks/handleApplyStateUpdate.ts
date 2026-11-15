@@ -94,48 +94,48 @@ export const handleApplyStateUpdate = createAsyncThunk<
 
                 // Add autoformatting diff to tool output if present
                 if (applyState.autoFormattingDiff) {
-                dispatch(
-                  updateToolCallOutput({
-                    toolCallId: applyState.toolCallId,
-                    contextItems: [
-                      {
-                        icon: "info",
-                        name: "オートフォーマットが適用されました",
-                        description: "エディタによるオートフォーマットの変更",
-                        content: `編集内容に加え、エディタによって以下のオートフォーマットが適用されました:\n\n${applyState.autoFormattingDiff}`,
-                        hidden: false,
-                      },
-                    ],
-                  }),
-                );
+                  dispatch(
+                    updateToolCallOutput({
+                      toolCallId: applyState.toolCallId,
+                      contextItems: [
+                        {
+                          icon: "info",
+                          name: "オートフォーマットが適用されました",
+                          description: "エディタによるオートフォーマットの変更",
+                          content: `編集内容に加え、エディタによって以下のオートフォーマットが適用されました:\n\n${applyState.autoFormattingDiff}`,
+                          hidden: false,
+                        },
+                      ],
+                    }),
+                  );
                 } else {
+                  dispatch(
+                    updateToolCallOutput({
+                      toolCallId: applyState.toolCallId,
+                      contextItems: [
+                        {
+                          name: "編集成功",
+                          content: `編集に成功しました`,
+                          description: "",
+                          hidden: true,
+                        },
+                      ],
+                    }),
+                  );
+                }
+              } else {
                 dispatch(
                   updateToolCallOutput({
                     toolCallId: applyState.toolCallId,
                     contextItems: [
                       {
-                        name: "編集成功",
-                        content: `編集に成功しました`,
+                        name: "編集失敗",
+                        content: `${applyState.filepath}の編集に失敗しました`,
                         description: "",
                         hidden: true,
                       },
                     ],
                   }),
-                );
-                }
-              } else {
-                dispatch(
-                updateToolCallOutput({
-                  toolCallId: applyState.toolCallId,
-                  contextItems: [
-                    {
-                      name: "編集失敗",
-                      content: `${applyState.filepath}の編集に失敗しました`,
-                      description: "",
-                      hidden: true,
-                    },
-                  ],
-                }),
                 );
               }
 
@@ -175,43 +175,43 @@ export const applyForEditTool = createAsyncThunk<
   } catch (e) {
     didError = true;
   }
-      if (didError) {
-        const state = getState();
+  if (didError) {
+    const state = getState();
 
-        const toolCallState = selectToolCallById(state, toolCallId);
-        const applyState = selectApplyStateByToolCallId(state, toolCallId);
-        if (
-          toolCallState &&
-          applyState &&
-          applyState.status !== "closed" &&
-          toolCallState.status === "calling"
-        ) {
-          dispatch(
-            errorToolCall({
-              toolCallId,
-            }),
-          );
-          dispatch(
-            updateToolCallOutput({
-              toolCallId,
-              contextItems: [
-                {
-                  icon: "problems",
-                  name: "適用エラー",
-                  description: "変更の適用に失敗しました",
-                  content: `変更の適用に失敗しました`,
-                  hidden: false,
-                },
-              ],
-            }),
-          );
-          void dispatch(
-            handleApplyStateUpdate({
-              status: "closed",
-              streamId: applyState.streamId,
-              toolCallId,
-            }),
-          );
-        }
-      }
+    const toolCallState = selectToolCallById(state, toolCallId);
+    const applyState = selectApplyStateByToolCallId(state, toolCallId);
+    if (
+      toolCallState &&
+      applyState &&
+      applyState.status !== "closed" &&
+      toolCallState.status === "calling"
+    ) {
+      dispatch(
+        errorToolCall({
+          toolCallId,
+        }),
+      );
+      dispatch(
+        updateToolCallOutput({
+          toolCallId,
+          contextItems: [
+            {
+              icon: "problems",
+              name: "適用エラー",
+              description: "変更の適用に失敗しました",
+              content: `変更の適用に失敗しました`,
+              hidden: false,
+            },
+          ],
+        }),
+      );
+      void dispatch(
+        handleApplyStateUpdate({
+          status: "closed",
+          streamId: applyState.streamId,
+          toolCallId,
+        }),
+      );
+    }
+  }
 });
