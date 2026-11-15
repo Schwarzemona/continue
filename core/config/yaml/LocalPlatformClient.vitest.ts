@@ -40,7 +40,7 @@ describe("LocalPlatformClient", () => {
       const testFixtures = await import("../../test/fixtures");
       testIde = testFixtures.testIde;
     },
-    60000
+    60000,
   );
 
   let secretValue: string;

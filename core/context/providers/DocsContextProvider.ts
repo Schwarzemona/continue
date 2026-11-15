@@ -56,7 +56,10 @@ class DocsContextProvider extends BaseContextProvider {
         this.options?.nFinal ?? DocsContextProvider.nFinal,
       );
     } catch (e) {
-      void ide.showToast("warning", `検索結果の再ランク付けに失敗しました\n${e}`);
+      void ide.showToast(
+        "warning",
+        `検索結果の再ランク付けに失敗しました\n${e}`,
+      );
 
       chunksCopy = chunksCopy.splice(
         0,

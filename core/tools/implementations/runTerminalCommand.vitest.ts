@@ -217,10 +217,7 @@ describe("runTerminalCommandImpl", () => {
       const contextItems = (firstCallData as any).contextItems;
       if (contextItems && Array.isArray(contextItems) && contextItems[0]) {
         expect(contextItems[0].content).toContain("");
-        expect(contextItems[0].status).toMatch(
-          /バックグラウンドで実行中/,
-        );
-
+        expect(contextItems[0].status).toMatch(/バックグラウンドで実行中/);
       }
     }
 
@@ -539,10 +536,9 @@ describe("runTerminalCommandImpl", () => {
       });
 
       it("should properly convert file:// URIs to paths", () => {
-        const testPath = os.platform() === "win32" 
-          ? "C:/test/workspace" 
-          : "/test/workspace";
-        
+        const testPath =
+          os.platform() === "win32" ? "C:/test/workspace" : "/test/workspace";
+
         const fileUri = pathToFileURL(testPath).href;
         const expectedPath = path.normalize(testPath);
 
@@ -622,9 +618,7 @@ describe("runTerminalCommandImpl", () => {
         );
 
         expect(mockRunCommand).toHaveBeenCalledWith("echo test");
-        expect(result[0].content).toContain(
-          "リモート端末でコマンドを実行",
-        );
+        expect(result[0].content).toContain("リモート端末でコマンドを実行");
       });
 
       it("should handle local environment with file URIs", async () => {
@@ -648,9 +642,7 @@ describe("runTerminalCommandImpl", () => {
         );
 
         expect(mockRunCommand).toHaveBeenCalledWith("echo test");
-        expect(result[0].content).toContain(
-          "リモート端末でコマンドを実行",
-        );
+        expect(result[0].content).toContain("リモート端末でコマンドを実行");
       });
 
       it("should use ide.runCommand for dev-container environment", async () => {
@@ -662,9 +654,7 @@ describe("runTerminalCommandImpl", () => {
         );
 
         expect(mockRunCommand).toHaveBeenCalledWith("echo test");
-        expect(result[0].content).toContain(
-          "リモート端末でコマンドを実行",
-        );
+        expect(result[0].content).toContain("リモート端末でコマンドを実行");
       });
     });
 

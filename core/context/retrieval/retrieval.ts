@@ -79,10 +79,7 @@ export async function retrieveContextItemsFromEmbeddings(
 
   if (results.length === 0) {
     if (extras.config.disableIndexing) {
-      void extras.ide.showToast(
-        "warning",
-        "インデックス作成が無効です",
-      );
+      void extras.ide.showToast("warning", "インデックス作成が無効です");
       return [];
     }
     if (extras.isInAgentMode) {
@@ -99,8 +96,7 @@ export async function retrieveContextItemsFromEmbeddings(
   return [
     {
       ...INSTRUCTIONS_BASE_ITEM,
-      content:
-        "以下の質問に関連があるファイルは上記です。",
+      content: "以下の質問に関連があるファイルは上記です。",
     },
     ...results
       .sort((a, b) => a.filepath.localeCompare(b.filepath))

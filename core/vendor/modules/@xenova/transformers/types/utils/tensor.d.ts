@@ -95,8 +95,7 @@ export class Tensor {
    */
   constructor(
     ...args:
-      | [DataType, DataArray, number[]]
-      | [import("onnxruntime-common").Tensor]
+      [DataType, DataArray, number[]] | [import("onnxruntime-common").Tensor]
   );
   /** @type {number[]} Dimensions of the tensor. */
   dims: number[];

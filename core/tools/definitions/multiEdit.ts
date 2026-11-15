@@ -39,7 +39,8 @@ export const multiEditTool: Tool = {
         },
         edits: {
           type: "array",
-          description: "ファイルに対して順次実行する編集操作の配列。成功率を上げるためには、編集操作を分割し、多くの配列で記述する必要があります。",
+          description:
+            "ファイルに対して順次実行する編集操作の配列。成功率を上げるためには、編集操作を分割し、多くの配列で記述する必要があります。",
           items: {
             type: "object",
             required: ["old_string", "new_string"],
@@ -51,8 +52,7 @@ export const multiEditTool: Tool = {
               },
               new_string: {
                 type: "string",
-                description:
-                  "置換後のテキスト。",
+                description: "置換後のテキスト。",
               },
               replace_all: {
                 type: "boolean",

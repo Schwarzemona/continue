@@ -117,7 +117,9 @@ describe("MCPConnection", () => {
       await conn.connectClient(false, abortController.signal);
 
       expect(conn.status).toBe("error");
-      expect(conn.errors[0]).toContain("サポートされていないトランスポートタイプです: invalid");
+      expect(conn.errors[0]).toContain(
+        "サポートされていないトランスポートタイプです: invalid",
+      );
     });
   });
 
@@ -174,9 +176,7 @@ describe("MCPConnection", () => {
         .mockResolvedValue(mockUri);
       const conn = new MCPConnection(baseOptions, { ide });
 
-      await expect((conn as any).resolveCwd("src")).resolves.toBe(
-        mockPath,
-      );
+      await expect((conn as any).resolveCwd("src")).resolves.toBe(mockPath);
       expect(mockResolve).toHaveBeenCalledWith("src", ide);
     });
 

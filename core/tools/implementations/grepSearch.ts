@@ -92,9 +92,7 @@ export const grepSearchImpl: ToolImpl = async (args, extras) => {
     );
   }
   if (truncated) {
-    truncationReasons.push(
-      `${DEFAULT_GREP_SEARCH_CHAR_LIMIT}文字を超えました`,
-    );
+    truncationReasons.push(`${DEFAULT_GREP_SEARCH_CHAR_LIMIT}文字を超えました`);
   }
 
   let contextItems: ContextItem[];

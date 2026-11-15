@@ -105,5 +105,7 @@ test("lsToolImpl shows message when no files are found", async () => {
 
   // Check that the result contains the "no files found" message
   expect(result.length).toBe(1);
-  expect(result[0].content).toBe("「emptyDir」にファイルやフォルダは見つかりませんでした");
+  expect(result[0].content).toBe(
+    "「emptyDir」にファイルやフォルダは見つかりませんでした",
+  );
 });

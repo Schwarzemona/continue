@@ -35,13 +35,11 @@ export const singleFindAndReplaceTool: Tool = {
         },
         old_string: {
           type: "string",
-          description:
-            "置換するテキスト。",
+          description: "置換するテキスト。",
         },
         new_string: {
           type: "string",
-          description:
-            "置換後のテキスト。",
+          description: "置換後のテキスト。",
         },
         replace_all: {
           type: "boolean",

@@ -55,7 +55,9 @@ test("fetchUrlContent should truncate content exceeding character limit", async 
   expect(result).toHaveLength(2); // Original item + warning
   expect(result[0].content.length).toBe(DEFAULT_FETCH_URL_CHAR_LIMIT);
   expect(result[1].name).toBe("切り詰め警告");
-  expect(result[1].content).toContain("は、20000文字を超えたため切り詰められました");
+  expect(result[1].content).toContain(
+    "は、20000文字を超えたため切り詰められました",
+  );
 });
 
 test("fetchUrlContent should add truncation warning with multiple truncated items", async () => {

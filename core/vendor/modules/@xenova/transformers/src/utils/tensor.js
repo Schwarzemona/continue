@@ -937,20 +937,8 @@ export function std_mean(input, dim = null, correction = 1, keepdim = false) {
         (input.data.length - correction),
     );
 
-    const meanTensor = new Tensor(
-      input.type,
-      [mean],
-      [
-        /* scalar */
-      ],
-    );
-    const stdTensor = new Tensor(
-      input.type,
-      [std],
-      [
-        /* scalar */
-      ],
-    );
+    const meanTensor = new Tensor(input.type, [mean], [/* scalar */]);
+    const stdTensor = new Tensor(input.type, [std], [/* scalar */]);
 
     return [stdTensor, meanTensor];
   }
@@ -1018,13 +1006,7 @@ export function mean(input, dim = null, keepdim = false) {
     // None to reduce over all dimensions.
     // @ts-ignore
     let val = input.data.reduce((a, b) => a + b, 0);
-    return new Tensor(
-      input.type,
-      [val / input.data.length],
-      [
-        /* scalar */
-      ],
-    );
+    return new Tensor(input.type, [val / input.data.length], [/* scalar */]);
   }
 
   // Negative indexing

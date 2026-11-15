@@ -275,7 +275,8 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
         });
       }
     } catch (ex) {
-      let content = "# GitLab マージリクエスト\n\nマージリクエストの取得中にエラーが発生しました。 ";
+      let content =
+        "# GitLab マージリクエスト\n\nマージリクエストの取得中にエラーが発生しました。 ";
       if (ex instanceof AxiosError) {
         if (ex.response) {
           const errorMessage = ex.response?.data
@@ -293,7 +294,8 @@ class GitLabMergeRequestContextProvider extends BaseContextProvider {
       result.push({
         name: "GitLab マージリクエスト",
         content,
-        description: "このブランチのマージリクエストの取得中にエラーが発生しました。",
+        description:
+          "このブランチのマージリクエストの取得中にエラーが発生しました。",
       });
     }
 

@@ -103,7 +103,9 @@ test("formats grep search results correctly", () => {
 
   // Check that content is preserved and properly indented
   expect(result.formatted).not.toContain('Console.WriteLine("Hello World!");');
-  expect(result.formatted).not.toContain("fun subtract(number: Double): Test {");
+  expect(result.formatted).not.toContain(
+    "fun subtract(number: Double): Test {",
+  );
   expect(result.formatted).not.toContain("public function subtract($number) {");
   expect(result.formatted).not.toContain(
     "public Calculator subtract(double number) {",

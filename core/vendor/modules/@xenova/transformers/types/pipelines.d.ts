@@ -2480,8 +2480,7 @@ declare const SUPPORTED_TASKS: Readonly<{
     tokenizer: typeof AutoTokenizer;
     pipeline: typeof TextToAudioPipeline;
     model: (
-      | typeof AutoModelForTextToSpectrogram
-      | typeof AutoModelForTextToWaveform
+      typeof AutoModelForTextToSpectrogram | typeof AutoModelForTextToWaveform
     )[];
     processor: (typeof AutoProcessor)[];
     default: {

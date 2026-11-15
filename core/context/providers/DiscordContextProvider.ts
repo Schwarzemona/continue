@@ -99,7 +99,10 @@ class DiscordContextProvider extends BaseContextProvider {
 
     channelId = selectedChannel ? selectedChannel.id : channels[0].id;
 
-    const parts = ["# Discord チャンネルのメッセージ", `Channel ID: ${channelId}`];
+    const parts = [
+      "# Discord チャンネルのメッセージ",
+      `Channel ID: ${channelId}`,
+    ];
     const messages = await this.fetchMessages(channelId, extras.fetch);
 
     if (messages.length > 0) {

@@ -153,9 +153,7 @@ test("readFileRangeImpl validates line number constraints", async () => {
       },
       mockExtras,
     ),
-  ).rejects.toThrow(
-    "endLine(5)はstartLine(10)以上である必要があります",
-  );
+  ).rejects.toThrow("endLine(5)はstartLine(10)以上である必要があります");
 });
 
 test("readFileRangeImpl handles normal ranges correctly", async () => {

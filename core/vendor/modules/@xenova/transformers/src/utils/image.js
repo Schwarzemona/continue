@@ -191,12 +191,10 @@ export class RawImage {
     } else {
       throw new Error(`Unsupported channel format: ${channel_format}`);
     }
-    if (
-      !(
-        tensor.data instanceof Uint8ClampedArray ||
-        tensor.data instanceof Uint8Array
-      )
-    ) {
+    if (!(
+      tensor.data instanceof Uint8ClampedArray ||
+      tensor.data instanceof Uint8Array
+    )) {
       throw new Error(`Unsupported tensor type: ${tensor.type}`);
     }
     switch (tensor.dims[2]) {

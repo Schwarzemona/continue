@@ -21,9 +21,7 @@ class TerminalContextProvider extends BaseContextProvider {
     return [
       {
         description: "端末の内容",
-        content: `現在の端末の内容:\n\n${
-          content || "端末は空です"
-        }`,
+        content: `現在の端末の内容:\n\n${content || "端末は空です"}`,
         name: "端末",
       },
     ];
