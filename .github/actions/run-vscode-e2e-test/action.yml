@@ -42,11 +42,15 @@ runs:
         path: extensions/vscode/e2e/.test-extensions
         key: CONSTANT
 
+    # storage 内の VS Code / chromedriver は package.json の e2e:* スクリプトで
+    # 指定したバージョンでダウンロードされる。キーにバージョンを含めないと、
+    # 古い VS Code がそのまま再利用され、ExTester のロケーター
+    # (@redhat-developer/locators のバージョン差分) と不一致になる。
     - uses: actions/cache@v6
       id: storage-cache
       with:
         path: extensions/vscode/e2e/storage
-        key: ${{ runner.os }}-vscode-storage-${{ hashFiles('extensions/vscode/package-lock.json') }}
+        key: ${{ runner.os }}-vscode-storage-1.138.0-${{ hashFiles('extensions/vscode/package.json', 'extensions/vscode/package-lock.json') }}
 
     - name: Download build artifact
       uses: actions/download-artifact@v8
