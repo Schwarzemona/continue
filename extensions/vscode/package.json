@@ -21,7 +21,7 @@
   "description": "オープンソースのAIコードエージェント",
   "publisher": "Schwarzemona",
   "engines": {
-    "vscode": ">=1.100.0",
+    "vscode": ">=1.70.0",
     "node": ">=26.12.0"
   },
   "engine-strict": true,
@@ -694,7 +694,7 @@
     "@types/react-dom": "^18.3.1",
     "@types/request": "^2.48.13",
     "@types/uuid": "^11.0.0",
-    "@types/vscode": "1.100",
+    "@types/vscode": "1.70.0",
     "@types/ws": "^8.18.2",
     "@typescript-eslint/eslint-plugin": "^8.40.0",
     "@vscode/vsce": "^4.0.0",
