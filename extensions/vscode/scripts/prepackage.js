@@ -378,7 +378,7 @@ void (async () => {
   // Copy node_modules for pre-built binaries
   const NODE_MODULES_TO_COPY = [
     "@lancedb",
-    `@vscode/ripgrep${isWinTarget ? "-win32-x64" : ""}`,
+    `@vscode/ripgrep-${target}`,
     "workerpool",
   ];
 
@@ -479,7 +479,7 @@ void (async () => {
     "models/all-MiniLM-L6-v2/onnx/model_quantized.onnx",
 
     // node_modules (it's a bit confusing why this is necessary)
-    `node_modules/@vscode/ripgrep${isWinTarget ? "-win32-x64" : "-linux-x64"}/bin/rg${exe}`,
+    `node_modules/@vscode/ripgrep-${target}/bin/rg${exe}`,
 
     // out directory (where the extension.js lives)
     // "out/extension.js", This is generated afterward by vsce
@@ -491,7 +491,7 @@ void (async () => {
     "out/build/Release/node_sqlite3.node",
 
     // out/node_modules (to be accessed by extension.js)
-    `out/node_modules/@vscode/ripgrep${isWinTarget ? "-win32-x64" : "-linux-x64"}/bin/rg${exe}`,
+    `out/node_modules/@vscode/ripgrep-${target}/bin/rg${exe}`,
     `out/node_modules/@lancedb/vectordb-${target}${isWinTarget ? "-msvc" : ""}${isLinuxTarget ? "-gnu" : ""}/index.node`,
   ]);
 
