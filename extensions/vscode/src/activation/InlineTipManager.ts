@@ -1,5 +1,4 @@
 import { EXTENSION_NAME } from "core/util/constants";
-// @ts-ignore
 import svgBuilder from "svg-builder";
 import * as vscode from "vscode";
 
@@ -262,10 +261,8 @@ export class InlineTipManager {
     // }
 
     try {
-      const builder = svgBuilder.newInstance
-        ? svgBuilder.newInstance()
-        : svgBuilder;
-      const svgContent = builder
+      const svgContent = svgBuilder
+        .newInstance()
         .width(SVG_CONFIG.tipWidth)
         .height(SVG_CONFIG.tipHeight)
         // Chat

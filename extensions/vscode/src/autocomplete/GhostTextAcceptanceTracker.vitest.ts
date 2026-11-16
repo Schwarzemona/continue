@@ -4,14 +4,22 @@ import { GhostTextAcceptanceTracker } from "./GhostTextAcceptanceTracker";
 
 // Mock the vscode module
 vi.mock("vscode", () => ({
-  Position: vi.fn((line: number, character: number) => ({
-    line,
-    character,
-    isEqual: vi.fn(
-      (other: any) => other.line === line && other.character === character,
-    ),
-  })),
-  Range: vi.fn((start: any, end: any) => ({ start, end })),
+  Position: class {
+    constructor(
+      public line: number,
+      public character: number,
+    ) {}
+
+    isEqual(other: { line: number; character: number }): boolean {
+      return other.line === this.line && other.character === this.character;
+    }
+  },
+  Range: class {
+    constructor(
+      public start: { line: number; character: number },
+      public end: { line: number; character: number },
+    ) {}
+  },
 }));
 
 describe("GhostTextAcceptanceTracker", () => {

@@ -171,6 +171,10 @@ describe("SelectionChangeManager", () => {
       logPath: "/mock/log",
       extensionMode: 1, // Production mode
       extension: {} as any,
+      languageModelAccessInformation: {
+        onDidChange: vi.fn(() => ({ dispose: vi.fn() })),
+        canSendRequest: vi.fn(() => true),
+      },
     } as vscode.ExtensionContext;
     let resolveWebviewProtocol: any = undefined;
     const webviewProtocolPromise = new Promise<VsCodeWebviewProtocol>(

@@ -290,9 +290,9 @@ describe("runTerminalCommandImpl", () => {
     const errorContent = result[0].content;
     console.log("DEBUG: errorContent =", errorContent);
     expect(
-      errorContent.includes("失敗") ||
-        errorContent.includes("見つかりません") ||
-        errorContent.includes("認識されません") ||
+      errorContent.includes("Command failed") ||
+        errorContent.includes("not found") ||
+        errorContent.includes("recognized") ||
         /error/i.test(errorContent),
     ).toBe(true);
 

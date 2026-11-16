@@ -130,6 +130,11 @@ import {
 
 const mockVscode = vi.mocked(vscode);
 
+type ExecuteCommandMock = MockedFunction<typeof vscode.commands.executeCommand>;
+type RegisterCommandMock = MockedFunction<
+  typeof vscode.commands.registerCommand
+>;
+
 describe("NextEditWindowManager", () => {
   let manager: NextEditWindowManager;
   let mockEditor: any;
@@ -179,13 +184,15 @@ describe("NextEditWindowManager", () => {
 
     // Setup default mock implementations
     (
-      mockVscode.commands.executeCommand as MockedFunction<any>
+      mockVscode.commands.executeCommand as ExecuteCommandMock
     ).mockResolvedValue(undefined);
-    (mockVscode.commands.registerCommand as MockedFunction<any>)
-      //@ts-ignore
-      .mockImplementation((command: string, callback: any) => ({
+    (
+      mockVscode.commands.registerCommand as RegisterCommandMock
+    ).mockImplementation(
+      (command: string, callback: (...args: any[]) => any) => ({
         dispose: vi.fn(),
-      }));
+      }),
+    );
     (
       mockVscode.window.createTextEditorDecorationType as MockedFunction<any>
     ).mockReturnValue({
@@ -268,7 +275,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle sequential reserve/free operations", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await NextEditWindowManager.reserveTabAndEsc();
       expect(manager["keyReservationState"]).toBe("reserved");
@@ -285,7 +292,7 @@ describe("NextEditWindowManager", () => {
 
     it("should skip redundant reserve operations", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await NextEditWindowManager.reserveTabAndEsc();
       executeCommand.mockClear();
@@ -300,7 +307,7 @@ describe("NextEditWindowManager", () => {
 
     it("should skip redundant free operations", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
       executeCommand.mockClear();
 
       // Already free, try to free again
@@ -319,7 +326,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle concurrent operations with random delays and last-write-wins", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
       let completedOperations: string[] = [];
 
       // Reset key reservation to ensure clean state
@@ -363,7 +370,7 @@ describe("NextEditWindowManager", () => {
 
     it("should ignore stale operations", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await manager.resetKeyReservation();
       executeCommand.mockClear();
@@ -408,7 +415,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle rapid fire operations correctly (loop)", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await manager.resetKeyReservation();
       executeCommand.mockClear();
@@ -435,7 +442,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle alternating reserve/free with delays", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await manager.resetKeyReservation();
       executeCommand.mockClear();
@@ -466,7 +473,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle rapid alternations correctly", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await manager.resetKeyReservation();
       executeCommand.mockClear();
@@ -497,7 +504,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle concurrent duplicate operations efficiently", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await manager.resetKeyReservation();
       executeCommand.mockClear();
@@ -534,7 +541,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle truly concurrent mixed operations", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await manager.resetKeyReservation();
       // Start in reserved state
@@ -572,7 +579,7 @@ describe("NextEditWindowManager", () => {
 
     it("should maintain correct state with stale operations", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       await manager.resetKeyReservation();
       executeCommand.mockClear();
@@ -620,7 +627,7 @@ describe("NextEditWindowManager", () => {
 
     it("should recover from failed key reservation", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       // Make reservation fail
       executeCommand.mockRejectedValueOnce(new Error("VS Code busy"));
@@ -640,7 +647,7 @@ describe("NextEditWindowManager", () => {
 
     it("should recover from failed key freeing", async () => {
       const executeCommand = mockVscode.commands
-        .executeCommand as MockedFunction<any>;
+        .executeCommand as ExecuteCommandMock;
 
       // First reserve successfully
       await NextEditWindowManager.reserveTabAndEsc();
@@ -702,7 +709,7 @@ describe("NextEditWindowManager", () => {
 
     it("should handle command registration failure gracefully", async () => {
       const registerCommand = mockVscode.commands
-        .registerCommand as MockedFunction<any>;
+        .registerCommand as RegisterCommandMock;
       registerCommand.mockImplementationOnce(() => {
         throw new Error("Command already registered");
       });
@@ -816,7 +823,7 @@ describe("NextEditWindowManager", () => {
 
       // Get the accept command callback
       const registerCalls = (
-        mockVscode.commands.registerCommand as MockedFunction<any>
+        mockVscode.commands.registerCommand as RegisterCommandMock
       ).mock.calls;
       const acceptCall = registerCalls.find(
         (call) => call[0] === ACCEPT_NEXT_EDIT_SUGGESTION_COMMAND,
@@ -839,7 +846,7 @@ describe("NextEditWindowManager", () => {
     it("should not accept when no active window", async () => {
       // Get the accept command callback
       const registerCalls = (
-        mockVscode.commands.registerCommand as MockedFunction<any>
+        mockVscode.commands.registerCommand as RegisterCommandMock
       ).mock.calls;
       const acceptCall = registerCalls.find(
         (call) => call[0] === ACCEPT_NEXT_EDIT_SUGGESTION_COMMAND,
@@ -869,7 +876,7 @@ describe("NextEditWindowManager", () => {
 
       // Get the hide command callback
       const registerCalls = (
-        mockVscode.commands.registerCommand as MockedFunction<any>
+        mockVscode.commands.registerCommand as RegisterCommandMock
       ).mock.calls;
       const hideCall = registerCalls.find(
         (call) => call[0] === HIDE_NEXT_EDIT_SUGGESTION_COMMAND,
