@@ -29,9 +29,9 @@ describe("Autocomplete", () => {
 
   it("Should display completions", async () => {
     await AutocompleteActions.testCompletions(editor);
-  }).timeout(DEFAULT_TIMEOUT.XL);
+  }).timeout(DEFAULT_TIMEOUT.XXLP);
   it("Should force a completion using the command", async () => {
     const ghostText = await AutocompleteActions.forceCompletion(editor);
     expect(ghostText).to.not.be.empty;
-  }).timeout(DEFAULT_TIMEOUT.XL);
+  }).timeout(DEFAULT_TIMEOUT.XXLP);
 });

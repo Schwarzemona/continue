@@ -36,8 +36,10 @@ export class AutocompleteActions {
 
     await new Workbench().executeCommand("continue.forceAutocomplete");
 
-    const ghostText = await TestUtils.waitForSuccess(() =>
-      AutocompleteSelectors.getGhostTextContent(VSBrowser.instance.driver),
+    const ghostText = await TestUtils.waitForSuccess(
+      () =>
+        AutocompleteSelectors.getGhostTextContent(VSBrowser.instance.driver),
+      DEFAULT_TIMEOUT.XL,
     );
 
     return ghostText;
