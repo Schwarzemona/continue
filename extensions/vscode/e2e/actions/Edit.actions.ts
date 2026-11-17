@@ -29,12 +29,12 @@ export class EditActions {
   }
 
   static async acceptEditWithCodeLens(editor: TextEditor): Promise<void> {
-    const acceptCodeLens = await editor.getCodeLens("Accept");
+    const acceptCodeLens = await editor.getCodeLens("承認");
     await acceptCodeLens?.click();
   }
 
   static async rejectEditWithCodeLens(editor: TextEditor): Promise<void> {
-    const rejectCodeLens = await editor.getCodeLens("Reject");
+    const rejectCodeLens = await editor.getCodeLens("却下");
     await rejectCodeLens?.click();
   }
 }

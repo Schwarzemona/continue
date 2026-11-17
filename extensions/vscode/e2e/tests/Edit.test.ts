@@ -1,6 +1,7 @@
 import { expect } from "chai";
 import {
   CodeLens,
+  Key,
   TextEditor,
   VSBrowser,
   WebView,
@@ -31,6 +32,8 @@ describe("Edit Test", () => {
     this.timeout(DEFAULT_TIMEOUT.XL);
 
     await GUIActions.toggleGui();
+    await VSBrowser.instance.driver.actions().sendKeys(Key.ESCAPE).perform();
+    await TestUtils.waitForTimeout(DEFAULT_TIMEOUT.XS);
 
     await editor.typeTextAt(1, 1, originalEditorText);
     await editor.selectText(originalEditorText);
@@ -65,6 +68,7 @@ describe("Edit Test", () => {
       0,
     );
     await tipTapEditor.clear();
+    await view.switchBack();
   });
 
   async function getCodeLensWithRetry(editor: TextEditor, text: string) {
@@ -111,7 +115,7 @@ describe("Edit Test", () => {
   }).timeout(DEFAULT_TIMEOUT.XL);
 
   it("Accepts an Edit using CodeLens buttons", async () => {
-    const acceptCodeLens = await editor.getCodeLens("Accept");
+    const acceptCodeLens = await editor.getCodeLens("承認");
     await acceptCodeLens?.click();
 
     await TestUtils.waitForSuccess(async () => {
@@ -125,7 +129,7 @@ describe("Edit Test", () => {
   }).timeout(DEFAULT_TIMEOUT.XL);
 
   it("Rejects an Edit using CodeLens buttons", async () => {
-    const rejectCodeLens = await getCodeLensWithRetry(editor, "Reject");
+    const rejectCodeLens = await getCodeLensWithRetry(editor, "却下");
     await rejectCodeLens?.click();
 
     await TestUtils.waitForSuccess(async () => {

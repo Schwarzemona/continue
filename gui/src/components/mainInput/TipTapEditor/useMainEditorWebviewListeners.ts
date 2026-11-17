@@ -11,6 +11,35 @@ import { loadSession, saveCurrentSession } from "../../../redux/thunks/session";
 import { CodeBlock, PromptBlock } from "./extensions";
 import { insertCurrentFileContextMention } from "./utils/insertCurrentFileContextMention";
 
+function focusWhenReady(
+  editor: Editor | null,
+  position: "start" | "end" | undefined,
+  { blurFirst = false }: { blurFirst?: boolean } = {},
+): void {
+  if (!editor) {
+    return;
+  }
+
+  const tryFocus = (attempt: number) => {
+    if (editor.isDestroyed) {
+      return;
+    }
+    const dom = editor.view?.dom;
+    if (dom && dom.isConnected) {
+      if (blurFirst) {
+        editor.commands.blur();
+      }
+      editor.commands.focus(position);
+      return;
+    }
+    if (attempt < 20) {
+      setTimeout(() => tryFocus(attempt + 1), 20);
+    }
+  };
+
+  tryFocus(0);
+}
+
 /**
  * Hook for setting up main editor specific webview listeners
  */
@@ -73,10 +102,7 @@ export function useMainEditorWebviewListeners({
         );
       }
 
-      setTimeout(() => {
-        editor?.commands.blur();
-        editor?.commands.focus("end");
-      }, 20);
+      focusWhenReady(editor, "end", { blurFirst: true });
     },
     [historyLength, editor, dispatch],
   );
@@ -84,9 +110,7 @@ export function useMainEditorWebviewListeners({
   useWebviewListener(
     "focusContinueInputWithoutClear",
     async () => {
-      setTimeout(() => {
-        editor?.commands.focus("end");
-      }, 20);
+      focusWhenReady(editor, "end");
     },
     [editor],
   );
@@ -101,9 +125,7 @@ export function useMainEditorWebviewListeners({
         }),
       );
 
-      setTimeout(() => {
-        editor?.commands.focus("end");
-      }, 20);
+      focusWhenReady(editor, "end");
     },
     [editor, dispatch],
   );
@@ -158,10 +180,7 @@ export function useMainEditorWebviewListeners({
         onEnterRef.current({ useCodebase: false, noContext: true });
       }
 
-      setTimeout(() => {
-        editor.commands.blur();
-        editor.commands.focus("end");
-      }, 20);
+      focusWhenReady(editor, "end", { blurFirst: true });
     },
     [editor, inputId, onEnterRef.current],
   );
