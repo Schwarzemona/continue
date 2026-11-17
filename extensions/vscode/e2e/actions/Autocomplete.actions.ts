@@ -1,5 +1,10 @@
 import { expect } from "chai";
-import { TextEditor, VSBrowser, Workbench } from "vscode-extension-tester";
+import {
+  TextEditor,
+  VSBrowser,
+  WebDriver,
+  Workbench,
+} from "vscode-extension-tester";
 
 import { DEFAULT_TIMEOUT } from "../constants";
 import { AutocompleteSelectors } from "../selectors/Autocomplete.selectors";
@@ -19,25 +24,46 @@ export class AutocompleteActions {
     }, DEFAULT_TIMEOUT.SM);
   }
 
-  public static async testCompletions(editor: TextEditor) {
-    const driver = editor.getDriver();
+  private static async getGhostTextWithRetriggers(
+    editor: TextEditor,
+    driver: WebDriver,
+    message: string,
+    totalTimeout: number,
+  ): Promise<string> {
+    // The first completion request can be dropped while the core is still
+    // starting up, and autocomplete only fires on typing events. Re-type to
+    // re-trigger it until the ghost text appears or time runs out.
+    let lastError: Error = new Error("Ghost text never appeared");
+    const deadline = Date.now() + totalTimeout;
+    while (Date.now() < deadline) {
+      await AutocompleteActions.typeTestMessage(editor, message);
+      try {
+        return await TestUtils.waitForSuccess(
+          () => AutocompleteSelectors.getGhostTextContent(driver),
+          DEFAULT_TIMEOUT.MD,
+        );
+      } catch (e) {
+        lastError = e as Error;
+      }
+    }
+    throw lastError;
+  }
 
+  public static async testCompletions(editor: TextEditor) {
     const messagePair0 = TestUtils.generateTestMessagePair(0);
-    await AutocompleteActions.typeTestMessage(editor, messagePair0.userMessage);
-    const ghostText0 = await TestUtils.waitForSuccess(
-      () => AutocompleteSelectors.getGhostTextContent(driver),
-      // The first completion takes longer because Continue needs to load,
-      // and CI runners are slower than local dev environments
+    const ghostText0 = await AutocompleteActions.getGhostTextWithRetriggers(
+      editor,
+      editor.getDriver(),
+      messagePair0.userMessage,
       DEFAULT_TIMEOUT.XXL,
     );
     expect(ghostText0).to.equal(messagePair0.llmResponse);
 
     const messagePair1 = TestUtils.generateTestMessagePair(1);
-    await AutocompleteActions.typeTestMessage(editor, messagePair1.userMessage);
-    const ghostText1 = await TestUtils.waitForSuccess(
-      () => AutocompleteSelectors.getGhostTextContent(driver),
-      // CI runners are slower than local environments, so do not rely on
-      // the default MD timeout here
+    const ghostText1 = await AutocompleteActions.getGhostTextWithRetriggers(
+      editor,
+      editor.getDriver(),
+      messagePair1.userMessage,
       DEFAULT_TIMEOUT.XL,
     );
     expect(ghostText1).to.equal(messagePair1.llmResponse);
