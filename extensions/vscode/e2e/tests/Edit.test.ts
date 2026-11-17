@@ -35,7 +35,13 @@ describe("Edit Test", () => {
     await VSBrowser.instance.driver.actions().sendKeys(Key.ESCAPE).perform();
     await TestUtils.waitForTimeout(DEFAULT_TIMEOUT.XS);
 
-    await editor.typeTextAt(1, 1, originalEditorText);
+    await GlobalActions.clearAllNotifications();
+    await TestUtils.waitForSuccess(async () => {
+      await editor.clearText();
+      await editor.typeTextAt(1, 1, originalEditorText);
+      const text = await editor.getText();
+      expect(text).to.include(originalEditorText);
+    }, DEFAULT_TIMEOUT.MD);
     await editor.selectText(originalEditorText);
 
     await EditActions.invokeEditShortcut(editor);

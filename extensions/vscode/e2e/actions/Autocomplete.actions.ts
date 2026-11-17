@@ -14,8 +14,9 @@ export class AutocompleteActions {
     await editor.typeTextAt(1, messagePair0.userMessage.length + 1, " ");
     const ghostText0 = await TestUtils.waitForSuccess(
       () => AutocompleteSelectors.getGhostTextContent(driver),
-      // The first completion takes longer because Continue needs to load
-      DEFAULT_TIMEOUT.XL,
+      // The first completion takes longer because Continue needs to load,
+      // and CI runners are slower than local dev environments
+      DEFAULT_TIMEOUT.XXL,
     );
     expect(ghostText0).to.equal(messagePair0.llmResponse);
 
