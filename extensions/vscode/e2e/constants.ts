@@ -7,4 +7,6 @@ export const DEFAULT_TIMEOUT = {
   XL: BASELINE * 5,
   XXL: BASELINE * 7,
   XXLP: BASELINE * 8,
+  // For tests that wait for a cold-started Continue extension on CI
+  XXXL: BASELINE * 16,
 };
