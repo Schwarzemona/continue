@@ -9,4 +9,6 @@ export const DEFAULT_TIMEOUT = {
   XXLP: BASELINE * 8,
   // For tests that wait for a cold-started Continue extension on CI
   XXXL: BASELINE * 16,
+  // Outer bound for autocomplete re-trigger loops above
+  XXXXL: BASELINE * 20,
 };

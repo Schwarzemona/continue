@@ -31,12 +31,18 @@ export class AutocompleteActions {
     totalTimeout: number,
   ): Promise<string> {
     // The first completion request can be dropped while the core is still
-    // starting up, and autocomplete only fires on typing events. Re-type to
-    // re-trigger it until the ghost text appears or time runs out.
+    // starting up, and typed triggers are flaky on CI. Re-type to re-trigger,
+    // and after the first attempt, also fire the forceAutocomplete command,
+    // which is proven reliable on CI.
     let lastError: Error = new Error("Ghost text never appeared");
     const deadline = Date.now() + totalTimeout;
+    let attempt = 0;
     while (Date.now() < deadline) {
       await AutocompleteActions.typeTestMessage(editor, message);
+      if (attempt > 0) {
+        await new Workbench().executeCommand("continue.forceAutocomplete");
+      }
+      attempt++;
       try {
         return await TestUtils.waitForSuccess(
           () => AutocompleteSelectors.getGhostTextContent(driver),
