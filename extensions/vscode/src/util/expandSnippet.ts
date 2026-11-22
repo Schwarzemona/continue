@@ -7,7 +7,8 @@ import * as vscode from "vscode";
 
 import { getDefinitionsForNode } from "../autocomplete/lsp";
 
-import type { SyntaxNode } from "web-tree-sitter";
+// web-tree-sitter 0.27 renamed `SyntaxNode` to `Node`.
+import type { Node as SyntaxNode } from "web-tree-sitter";
 
 export async function expandSnippet(
   fileUri: string,
