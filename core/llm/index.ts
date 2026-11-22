@@ -91,9 +91,9 @@ export abstract class BaseLLM implements ILLM {
   static providerName: string;
   static defaultOptions: Partial<LLMOptions> | undefined = undefined;
   // Provider capabilities (overridable by subclasses)
-  protected supportsReasoningField: boolean = true;
-  protected supportsReasoningDetailsField: boolean = true;
-  protected supportsReasoningContentField: boolean = false;
+  protected supportsReasoningField: boolean = false;
+  protected supportsReasoningDetailsField: boolean = false;
+  protected supportsReasoningContentField: boolean = true;
 
   get providerName(): string {
     return (this.constructor as typeof BaseLLM).providerName;
