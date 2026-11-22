@@ -968,7 +968,10 @@ function sanitizeResponsesInput(input: ResponseInput): ResponseInput {
   const validCallIds = new Set<string>();
   for (const item of result) {
     if (isItemType<ResponseFunctionToolCall>(item, "function_call")) {
-      validCallIds.add(item.call_id);
+      // `call_id` is optional in the Responses API types.
+      if (item.call_id) {
+        validCallIds.add(item.call_id);
+      }
     }
   }
   return result.filter((item) => {
@@ -979,7 +982,9 @@ function sanitizeResponsesInput(input: ResponseInput): ResponseInput {
       )
     )
       return true;
-    return validCallIds.has(item.call_id);
+
+    const callId = item.call_id;
+    return callId ? validCallIds.has(callId) : false;
   });
 }
 

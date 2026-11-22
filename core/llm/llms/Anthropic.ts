@@ -8,7 +8,7 @@ import {
   RawMessageDeltaEvent,
   RawMessageStartEvent,
   RawMessageStreamEvent,
-  ToolUseBlock,
+  ToolUseBlockParam,
 } from "@anthropic-ai/sdk/resources/messages.mjs";
 import { streamSse } from "@continuedev/fetch";
 import {
@@ -58,10 +58,10 @@ class Anthropic extends BaseLLM {
   public convertArgs(
     options: CompletionOptions,
   ): Omit<MessageCreateParams, "messages"> {
+    // Anthropic replaced sampling options with `thinking` / `output_config`, and
+    // the SDK no longer types `top_k`, `top_p` or `temperature` on
+    // `MessageCreateParams`, so they are not forwarded.
     const finalOptions = {
-      top_k: options.topK,
-      top_p: options.topP,
-      temperature: options.temperature,
       max_tokens: options.maxTokens ?? 2048,
       model: options.model === "claude-2" ? "claude-2.1" : options.model,
       stop_sequences: options.stop?.filter((x) => x.trim() !== ""),
@@ -130,7 +130,7 @@ class Anthropic extends BaseLLM {
 
   private convertToolCallsToBlocks(
     toolCall: ToolCallDelta,
-  ): ToolUseBlock | undefined {
+  ): ToolUseBlockParam | undefined {
     const toolCallId = toolCall.id;
     const toolName = toolCall.function?.name;
     if (toolCallId && toolName) {

@@ -2,7 +2,8 @@ import fs from "fs";
 import path from "path";
 import { expect, vi } from "vitest";
 
-import Parser from "web-tree-sitter";
+// web-tree-sitter 0.27 exports named members.
+import { Point } from "web-tree-sitter";
 import { Position } from "../../../..";
 import { testIde } from "../../../../test/fixtures";
 import { getAst, getTreePathAtCursor } from "../../../util/ast";
@@ -29,7 +30,7 @@ export async function testRootPathContext(
   folderName: string,
   relativeFilepath: string,
   position: Position,
-  expectedDefinitionPositions: Parser.Point[],
+  expectedDefinitionPositions: Point[],
 ) {
   // Create a mocked instance of RootPathContextService
   const ide = testIde;

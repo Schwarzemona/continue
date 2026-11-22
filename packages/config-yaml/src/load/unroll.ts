@@ -446,15 +446,7 @@ export async function unrollBlocks(
             }
             return { index, block: null, error: null };
           } catch (err) {
-            let msg = "";
-            if (
-              typeof unrolledBlock.uses !== "string" &&
-              "filePath" in unrolledBlock.uses
-            ) {
-              msg = `${(err as Error).message}.\n> ${unrolledBlock.uses.filePath}`;
-            } else {
-              msg = `${(err as Error).message}.\n> ${JSON.stringify(unrolledBlock.uses)}`;
-            }
+            const msg = `${(err as Error).message}.\n> ${JSON.stringify(unrolledBlock.uses)}`;
 
             console.error(
               `Failed to unroll block ${JSON.stringify(unrolledBlock.uses)}: ${(err as Error).message}`,
@@ -840,8 +832,8 @@ export function mergeOverrides<T extends Record<string, any>>(
 }
 
 function formatZodError(error: any): string {
-  if (error.errors && Array.isArray(error.errors)) {
-    return error.errors
+  if (Array.isArray(error.issues)) {
+    return error.issues
       .map((e: any) => {
         const path = e.path.length > 0 ? `${e.path.join(".")}: ` : "";
         return `${path}${e.message}`;

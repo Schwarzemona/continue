@@ -7,7 +7,7 @@ import {
 import { ToolPolicy } from "@continuedev/terminal-security";
 import { McpUiResourceMeta } from "@modelcontextprotocol/ext-apps";
 import { TextResourceContents } from "@modelcontextprotocol/sdk/types.js";
-import Parser from "web-tree-sitter";
+import { Node as SyntaxNode } from "web-tree-sitter";
 import { CodebaseIndexer } from "./indexing/CodebaseIndexer";
 import { LLMConfigurationStatuses } from "./llm/constants";
 
@@ -473,7 +473,7 @@ export interface InputModifiers {
 
 export interface SymbolWithRange extends RangeInFile {
   name: string;
-  type: Parser.SyntaxNode["type"];
+  type: SyntaxNode["type"];
   content: string;
 }
 

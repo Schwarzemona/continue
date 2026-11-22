@@ -75,6 +75,12 @@ export class ImportDefinitionsService {
         },
       ],
     });
+    // web-tree-sitter 0.27 returns `null` when parsing fails.
+    if (!ast) {
+      return {
+        imports: {},
+      };
+    }
     const language = getFullLanguageName(filepath);
     const query = await getQueryForFile(
       filepath,

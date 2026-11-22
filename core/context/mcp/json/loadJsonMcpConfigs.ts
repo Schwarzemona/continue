@@ -4,6 +4,7 @@ import {
   ConfigValidationError,
   convertJsonMcpConfigToYamlMcpConfig,
   McpJsonConfig,
+  McpServersJsonConfigRecord,
   mcpServersJsonSchema,
   RequestOptions,
 } from "@continuedev/config-yaml";
@@ -20,6 +21,14 @@ import { deduplicateArray } from "../../../util";
 import { getGlobalFolderWithName } from "../../../util/paths";
 import { localPathToUri } from "../../../util/pathToUri";
 import { getUriPathBasename, joinPathsToUri } from "../../../util/uri";
+
+/**
+ * Zod 4 loses the value type of `z.record(valueSchema)` inference for the
+ * `projects` field, so the project entries are typed explicitly here.
+ */
+type ClaudeCodeProjectJsonConfig = {
+  mcpServers?: McpServersJsonConfigRecord;
+};
 
 /**
  * Loads MCP configs from JSON files in ~/.continue/mcpServers and workspace .continue/mcpServers
@@ -112,8 +121,11 @@ export async function loadJsonMcpConfigs(
           );
         }
         const projectServers = Object.values(
-          claudeCodeFileParsed.data.projects,
-        ).map((v) => v.mcpServers);
+          claudeCodeFileParsed.data.projects as Record<
+            string,
+            ClaudeCodeProjectJsonConfig
+          >,
+        ).map((project) => project.mcpServers);
         for (const mcpServers of projectServers) {
           if (mcpServers) {
             validJsonConfigs.push(

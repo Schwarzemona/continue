@@ -32,6 +32,14 @@ import {
   toResponsesParams,
 } from "./openaiResponses.js";
 
+/**
+ * `new OpenAI()` throws when every credential option is falsy, so a key-less
+ * OpenAI-compatible local endpoint (ollama, lmstudio, llama.cpp, clawrouter)
+ * needs a non-empty value here. Those servers ignore it, and `getHeaders` keeps
+ * using `config.apiKey`, so this placeholder is never sent in our own requests.
+ */
+const PLACEHOLDER_API_KEY = "unused";
+
 export class OpenAIApi implements BaseLlmApi {
   openai: OpenAI;
   apiBase: string = "https://api.openai.com/v1/";
@@ -41,8 +49,8 @@ export class OpenAIApi implements BaseLlmApi {
 
     // Always create the original OpenAI client for fallback
     this.openai = new OpenAI({
-      // Necessary because `new OpenAI()` will throw an error if there is no API Key
-      apiKey: config.apiKey ?? "",
+      // openai v7 rejects an empty or missing `apiKey` at construction time.
+      apiKey: config.apiKey || PLACEHOLDER_API_KEY,
       baseURL: this.apiBase,
       fetch: customFetch(config.requestOptions),
       timeout: config?.requestOptions?.timeout || undefined,

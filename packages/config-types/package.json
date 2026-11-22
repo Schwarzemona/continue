@@ -12,10 +12,10 @@
   "author": "Nate Sesti and Ty Dunn",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@types/node": "^26.6.5",
+    "@types/node": "^26.6.6",
     "typescript": "^6.0.3"
   },
   "dependencies": {
-    "zod": "^3.25.76"
+    "zod": "^4.6.7"
   }
 }

@@ -5,7 +5,6 @@ import {
   ChatCompletionChunk,
   ChatCompletionContentPart,
   ChatCompletionContentPartImage,
-  ChatCompletionContentPartInputAudio,
   ChatCompletionContentPartRefusal,
   ChatCompletionContentPartText,
   ChatCompletionCreateParams,
@@ -20,7 +19,6 @@ import {
   ResponseFunctionCallArgumentsDoneEvent,
   ResponseIncompleteEvent,
   ResponseInput,
-  ResponseInputAudio,
   ResponseInputContent,
   ResponseInputFile,
   ResponseInputImage,
@@ -61,18 +59,6 @@ function convertImagePart(
   return converted;
 }
 
-function convertAudioPart(
-  part: ChatCompletionContentPartInputAudio,
-): ResponseInputAudio {
-  return {
-    type: "input_audio",
-    input_audio: {
-      data: part.input_audio.data,
-      format: part.input_audio.format,
-    },
-  };
-}
-
 function convertFilePart(
   part: ChatCompletionContentPart.File,
 ): ResponseInputFile {
@@ -94,7 +80,13 @@ function convertMessageContentPart(
     case "image_url":
       return convertImagePart(part);
     case "input_audio":
-      return convertAudioPart(part);
+      // openai v7 removed `ResponseInputAudio` from `ResponseInputContent`, and
+      // `ResponseInputMessageContentList` is `Array<ResponseInputContent>`, so an
+      // audio block can no longer be forwarded inside a message.
+      console.warn(
+        "Responses API: skipping input_audio content part, which the Responses API does not accept",
+      );
+      return undefined;
     case "file":
       return convertFilePart(part);
     case "refusal":

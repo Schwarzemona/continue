@@ -3,6 +3,7 @@ import { ContextItemWithId } from "core";
 import { ctxItemToRifWithContents } from "core/commands/util";
 import { getUriPathBasename } from "core/util/uri";
 import { ComponentType, useContext, useMemo } from "react";
+import type { JSX } from "react";
 import {
   IdeMessengerContext,
   IIdeMessenger,
@@ -123,7 +124,7 @@ export function ContextItemsPeekItem({
   return (
     <div
       onClick={() => openContextItem(contextItem, ideMessenger)}
-      className="mr-2 flex cursor-pointer flex-row items-center gap-1.5 whitespace-nowrap rounded px-1.5 py-1 hover:bg-white/10"
+      className="mr-2 flex cursor-pointer flex-row items-center gap-1.5 rounded px-1.5 py-1 whitespace-nowrap hover:bg-white/10"
       data-testid="context-items-peek-item"
     >
       {getContextItemIcon()}
@@ -131,7 +132,7 @@ export function ContextItemsPeekItem({
         {contextItem.name}
       </span>
       <div
-        className={`group flex flex-row items-center gap-1.5 pr-1.5 text-description-muted ${isUrl ? "hover:underline" : ""}`}
+        className={`group text-description-muted flex flex-row items-center gap-1.5 pr-1.5 ${isUrl ? "hover:underline" : ""}`}
         onClick={
           isUrl
             ? (e) => {
@@ -151,7 +152,7 @@ export function ContextItemsPeekItem({
             : contextItem.description}
         </span>
         {isUrl && (
-          <ArrowTopRightOnSquareIcon className="h-3 w-3 flex-shrink-0 text-description-muted opacity-80 group-hover:opacity-100" />
+          <ArrowTopRightOnSquareIcon className="text-description-muted h-3 w-3 flex-shrink-0 opacity-80 group-hover:opacity-100" />
         )}
       </div>
     </div>
@@ -196,7 +197,7 @@ export function ContextItemsPeek({
           <ContextItemsPeekItem key={idx} contextItem={contextItem} />
         ))
       ) : (
-        <div className="pl-2 italic text-description-muted">結果なし</div>
+        <div className="text-description-muted pl-2 italic">結果なし</div>
       )}
     </ToggleDiv>
   );

@@ -1,4 +1,5 @@
-import Parser from "web-tree-sitter";
+// web-tree-sitter 0.27 exports named members.
+import { Tree } from "web-tree-sitter";
 
 /**
  * Singleton class that keeps track of a map of document paths to their history.
@@ -9,11 +10,11 @@ export class DocumentHistoryTracker {
   private static instance: DocumentHistoryTracker | null = null;
 
   // Map from document path to history (LIFO stack where newest representation is at the front).
-  private documentAstMap: Map<string, Parser.Tree[]>;
+  private documentAstMap: Map<string, Tree[]>;
   private documentContentHistoryMap: Map<string, string[]>;
 
   private constructor() {
-    this.documentAstMap = new Map<string, Parser.Tree[]>();
+    this.documentAstMap = new Map<string, Tree[]>();
     this.documentContentHistoryMap = new Map<string, string[]>();
   }
 
@@ -38,7 +39,7 @@ export class DocumentHistoryTracker {
   public addDocument(
     documentPath: string,
     documentContent: string,
-    ast: Parser.Tree,
+    ast: Tree,
   ): void {
     this.documentAstMap.set(documentPath, [ast]);
     this.documentContentHistoryMap.set(documentPath, [documentContent]);
@@ -52,11 +53,7 @@ export class DocumentHistoryTracker {
    * @param ast The new AST to push to the document's history stack.
    * @throws Error if the document doesn't exist in the tracker.
    */
-  public push(
-    documentPath: string,
-    documentContent: string,
-    ast: Parser.Tree,
-  ): void {
+  public push(documentPath: string, documentContent: string, ast: Tree): void {
     const astHistory = this.documentAstMap.get(documentPath);
     const documentHistory = this.documentContentHistoryMap.get(documentPath);
 
@@ -78,7 +75,7 @@ export class DocumentHistoryTracker {
    * @returns The most recent AST of the document.
    * @throws Error if the document doesn't exist in the tracker.
    */
-  public getMostRecentAst(documentPath: string): Parser.Tree | null {
+  public getMostRecentAst(documentPath: string): Tree | null {
     const astHistory = this.documentAstMap.get(documentPath);
 
     if (!astHistory) {

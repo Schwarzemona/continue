@@ -1,5 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/outline";
 import React, { isValidElement } from "react";
+import type { JSX } from "react";
 import ReactMarkdown from "react-markdown";
 import styled from "styled-components";
 import {
@@ -59,7 +60,7 @@ const TextDialog = (props: TextDialogProps) => {
       tabIndex={-1}
     >
       <DialogContainer
-        className="no-scrollbar max-h-[95%] w-[92%] max-w-[600px] overflow-auto xs:w-[90%] sm:w-[88%] md:w-[80%]"
+        className="no-scrollbar xs:w-[90%] max-h-[95%] w-[92%] max-w-[600px] overflow-auto sm:w-[88%] md:w-[80%]"
         onClick={(e) => {
           e.stopPropagation();
         }}

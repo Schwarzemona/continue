@@ -1,19 +1,18 @@
 import react from "@vitejs/plugin-react-swc";
 import { resolve } from "path";
-import tailwindcss from "tailwindcss";
 import { defineConfig } from "vitest/config";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react()],
   build: {
     sourcemap: true,
-
+    chunkSizeWarningLimit: 4096,
     // Change the output .js filename to not include a hash
     rollupOptions: {
       input: {
-        index: resolve(__dirname, "index.html"),
-        indexConsole: resolve(__dirname, "indexConsole.html"),
+        index: resolve(import.meta.dirname, "index.html"),
+        indexConsole: resolve(import.meta.dirname, "indexConsole.html"),
       },
       output: {
         entryFileNames: `assets/[name].js`,

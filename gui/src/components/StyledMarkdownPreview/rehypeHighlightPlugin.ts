@@ -11,9 +11,9 @@ import powershell from "highlight.js/lib/languages/powershell";
 import protobuf from "highlight.js/lib/languages/protobuf";
 import verilog from "highlight.js/lib/languages/verilog";
 import { common } from "lowlight";
-import rehypeHighlight, { Options } from "rehype-highlight";
+import rehypeHighlight, { type Options } from "rehype-highlight";
 
-export function rehypeHighlightPlugin() {
+export function rehypeHighlightPlugin(): [typeof rehypeHighlight, Options] {
   return [
     rehypeHighlight,
     {
@@ -30,6 +30,6 @@ export function rehypeHighlightPlugin() {
         matlab,
         lisp,
       },
-    } as Options,
+    },
   ];
 }

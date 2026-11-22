@@ -1,4 +1,5 @@
-import Parser from "web-tree-sitter";
+// web-tree-sitter 0.27 exports named members.
+import { QueryMatch } from "web-tree-sitter";
 
 import { migrate } from "../util/paths";
 import {
@@ -123,7 +124,7 @@ export class CodeSnippetsCodebaseIndex implements CodebaseIndex {
     });
   }
 
-  private getSnippetsFromMatch(match: Parser.QueryMatch): SnippetChunk {
+  private getSnippetsFromMatch(match: QueryMatch): SnippetChunk {
     const bodyTypesToTreatAsSignatures = [
       "interface_declaration", // TypeScript, Java
       "struct_item", // Rust
@@ -190,6 +191,10 @@ export class CodeSnippetsCodebaseIndex implements CodebaseIndex {
     }
 
     const ast = parser.parse(contents);
+    // web-tree-sitter 0.27 returns `null` when parsing fails.
+    if (!ast) {
+      return [];
+    }
 
     const language = getFullLanguageName(filepath);
     if (!language) {

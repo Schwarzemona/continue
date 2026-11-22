@@ -1,4 +1,5 @@
-import { SyntaxNode } from "web-tree-sitter";
+// web-tree-sitter 0.27 renamed `SyntaxNode` to `Node`.
+import { Node as SyntaxNode } from "web-tree-sitter";
 
 import { ChunkWithoutID } from "../../index.js";
 import { countTokensAsync } from "../../llm/countTokens.js";
@@ -258,6 +259,10 @@ export async function* codeChunker(
   }
 
   const tree = parser.parse(contents);
+  // web-tree-sitter 0.27 returns `null` when parsing fails.
+  if (!tree) {
+    return;
+  }
 
   yield* getSmartCollapsedChunks(tree.rootNode, contents, maxChunkSize);
 }

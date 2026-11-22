@@ -34,9 +34,14 @@ export function ToolTip({
 
   const tooltipPortalDiv = document.getElementById("tooltip-portal-div");
 
-  const childrenWithTooltipId = cloneElement(children, {
-    "data-tooltip-id": tooltipId,
-  });
+  // `data-*` attributes are not part of `ReactElement`'s default props type,
+  // so the child is viewed as a generic prop record before cloning.
+  const childrenWithTooltipId = cloneElement(
+    children as ReactElement<Record<string, unknown>>,
+    {
+      "data-tooltip-id": tooltipId,
+    },
+  );
 
   return (
     <>

@@ -21,7 +21,12 @@ export async function expandSnippet(
   }
 
   const fullFileContents = await ide.readFile(fileUri);
-  const root: SyntaxNode = parser.parse(fullFileContents).rootNode;
+  // web-tree-sitter 0.27 returns `null` instead of throwing on parse failure.
+  const tree = parser.parse(fullFileContents);
+  if (!tree) {
+    return [];
+  }
+  const root: SyntaxNode = tree.rootNode;
 
   // Find all nodes contained in the range
   const containedInRange: SyntaxNode[] = [];

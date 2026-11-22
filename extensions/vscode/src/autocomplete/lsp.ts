@@ -21,7 +21,8 @@ import type {
   RangeInFileWithContents,
   SignatureHelp,
 } from "core";
-import type Parser from "web-tree-sitter";
+// web-tree-sitter 0.27 renamed `SyntaxNode` to `Node`.
+import type { Node as SyntaxNode } from "web-tree-sitter";
 
 type GotoProviderName =
   | "vscode.executeDefinitionProvider"
@@ -103,11 +104,11 @@ function isRifWithContents(
 }
 
 function findChildren(
-  node: Parser.SyntaxNode,
-  predicate: (n: Parser.SyntaxNode) => boolean,
+  node: SyntaxNode,
+  predicate: (n: SyntaxNode) => boolean,
   firstN?: number,
-): Parser.SyntaxNode[] {
-  let matchingNodes: Parser.SyntaxNode[] = [];
+): SyntaxNode[] {
+  let matchingNodes: SyntaxNode[] = [];
 
   if (firstN && firstN <= 0) {
     return [];
@@ -132,7 +133,7 @@ function findChildren(
   return matchingNodes;
 }
 
-function findTypeIdentifiers(node: Parser.SyntaxNode): Parser.SyntaxNode[] {
+function findTypeIdentifiers(node: SyntaxNode): SyntaxNode[] {
   return findChildren(
     node,
     (childNode) =>
@@ -227,7 +228,7 @@ async function crawlTypes(
 
 export async function getDefinitionsForNode(
   uri: vscode.Uri,
-  node: Parser.SyntaxNode,
+  node: SyntaxNode,
   ide: IDE,
   lang: AutocompleteLanguageInfo,
 ): Promise<RangeInFileWithContents[]> {

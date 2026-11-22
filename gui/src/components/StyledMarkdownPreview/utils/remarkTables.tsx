@@ -117,14 +117,9 @@ export function remarkTables() {
                   children: [{ type: "text", value: cell }],
                 })),
               },
-              ...bodyCells.map((row, i) => {
+              ...bodyCells.map((row) => {
                 return {
                   type: "tableRow",
-                  data: {
-                    hProperties: {
-                      key: i,
-                    },
-                  },
                   children: row.map((cell, i) => ({
                     type: "tableCell",
                     align: alignments[i],

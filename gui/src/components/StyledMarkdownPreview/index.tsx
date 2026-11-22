@@ -1,10 +1,10 @@
 import { ctxItemToRifWithContents } from "core/commands/util";
-import { memo, useEffect, useMemo, useRef } from "react";
-import { useRemark } from "react-remark";
+import { memo, useMemo, useRef } from "react";
+import Markdown, { type Components, type ExtraProps } from "react-markdown";
 import rehypeKatex from "rehype-katex";
 import remarkMath from "remark-math";
 import styled from "styled-components";
-import { visit } from "unist-util-visit";
+import type { PluggableList } from "unified";
 import { v4 as uuidv4 } from "uuid";
 import {
   defaultBorderRadius,
@@ -21,6 +21,7 @@ import { ToolTip } from "../gui/Tooltip";
 import FilenameLink from "./FilenameLink";
 import "./katex.css";
 import "./markdown.css";
+import { annotateCodeNodes, indexCodeBlocks } from "./markdownPlugins";
 import MermaidBlock from "./MermaidBlock";
 import { rehypeHighlightPlugin } from "./rehypeHighlightPlugin";
 import { SecureImageComponent } from "./SecureImageComponent";
@@ -185,6 +186,28 @@ function getCodeChildrenContent(children: any) {
   return undefined;
 }
 
+/*
+  markdown処理はreact-markdown(unified 11 / hast-util-to-jsx-runtime)を使う。
+  旧react-remarkが内部で使うrehype-react@6/hast-to-hyperscript@9は、React要素の
+  内部フィールド(_owner/_store)の有無で「Reactか」を判定してstyle文字列をオブジェクトへ
+  変換するが、React 19ではproductionビルドでこれらのフィールドが消えるためstyleが
+  文字列のまま渡り "The `style` prop expects a mapping..." でクラッシュした。
+*/
+const REMARK_PLUGINS: PluggableList = [
+  remarkTables,
+  [remarkMath, { singleDollarTextMath: true }],
+  annotateCodeNodes,
+];
+
+const REHYPE_PLUGINS: PluggableList = [
+  rehypeKatex,
+  rehypeHighlightPlugin(),
+  // Note: rehype-highlight は lowlight の `common` 言語セットを使う。
+  // 未対応言語を追加する足場として plugins 配列の拡張点は以下に。
+  // https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md
+  indexCodeBlocks,
+];
+
 const StyledMarkdownPreview = memo(function StyledMarkdownPreview(
   props: StyledMarkdownPreviewProps,
 ) {
@@ -224,159 +247,107 @@ const StyledMarkdownPreview = memo(function StyledMarkdownPreview(
 
   const codeblockStreamIds = useRef<string[]>([]);
 
-  const [reactContent, setMarkdownSource] = useRemark({
-    remarkPlugins: [
-      remarkTables,
-      [
-        remarkMath,
-        {
-          singleDollarTextMath: true,
-        },
-      ],
-      () => (tree: any) => {
-        const lastNode = tree.children[tree.children.length - 1];
-        const lastCodeNode = lastNode.type === "code" ? lastNode : null;
-
-        visit(tree, "code", (node: any) => {
-          if (!node.lang) {
-            node.lang = "";
-          } else if (node.lang.includes(".")) {
-            node.lang = node.lang.split(".").slice(-1)[0];
-          }
-
-          node.data = node.data || {};
-          node.data.hProperties = node.data.hProperties || {};
-
-          node.data.hProperties["data-islastcodeblock"] = lastCodeNode === node;
-          node.data.hProperties["data-codeblockcontent"] = node.value;
-
-          if (node.meta) {
-            const meta = node.meta.split(" ");
-            node.data.hProperties["data-relativefilepath"] = meta[0];
-            node.data.hProperties.range = meta[1];
-          }
-        });
-      },
-    ],
-    rehypePlugins: [
-      rehypeKatex as any,
-      {},
-      rehypeHighlightPlugin(),
-      // Note: An empty obj is the default behavior, but leaving this here for scaffolding to
-      // add unsupported languages in the future. We will need to install the `lowlight` package
-      // to use the `common` language set in addition to unsupported languages.
-      // https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md
-      () => {
-        let codeBlockIndex = 0;
-        return (tree) => {
-          visit(tree, { tagName: "pre" }, (node: any) => {
-            // Add an index (0, 1, 2, etc...) to each code block.
-            node.properties = { "data-codeblockindex": codeBlockIndex };
-            codeBlockIndex++;
-          });
-        };
-      },
-      {},
-    ],
-    rehypeReactOptions: {
-      components: {
-        a: ({ ...aProps }) => {
-          return (
-            <ToolTip place="top" className="m-0 p-0" content={aProps.href}>
-              <a href={aProps.href} target="_blank" className="hover:underline">
-                {aProps.children}
-              </a>
-            </ToolTip>
-          );
-        },
-        pre: ({ ...preProps }) => {
-          const codeBlockIndex = preProps["data-codeblockindex"];
-
-          const preChildProps = preProps?.children?.[0]?.props ?? {};
-          const { className, range } = preChildProps;
-
-          const relativeFilePath = preChildProps["data-relativefilepath"];
-          const codeBlockContent = preChildProps["data-codeblockcontent"];
-
-          if (!props.isRenderingInStepContainer) {
-            return <SyntaxHighlightedPre {...preProps} />;
-          }
-
-          const language = getLanguageFromClassName(className);
-
-          const isLastCodeblock = preChildProps["data-islastcodeblock"];
-
-          if (codeblockStreamIds.current[codeBlockIndex] === undefined) {
-            codeblockStreamIds.current[codeBlockIndex] = uuidv4();
-          }
-
-          return (
-            <StepContainerPreToolbar
-              showToolCallStatusIcon={props.showToolCallStatusIcon}
-              codeBlockContent={codeBlockContent}
-              itemIndex={itemIndexRef.current}
-              codeBlockIndex={codeBlockIndex}
-              language={language}
-              relativeFilepath={relativeFilePath}
-              isLastCodeblock={isLastCodeblock}
-              range={range}
-              codeBlockStreamId={codeblockStreamIds.current[codeBlockIndex]} // ignored if toolCallId stream state is found
-              forceToolCallId={props.toolCallId}
-              expanded={props.expandCodeblocks}
-              disableManualApply={props.disableManualApply}
-              collapsible={props.collapsible}
-            >
-              <SyntaxHighlightedPre {...preProps} />
-            </StepContainerPreToolbar>
-          );
-        },
-        code: ({ ...codeProps }) => {
-          const content = getCodeChildrenContent(codeProps.children);
-
-          if (content) {
-            const { symbols, rifs } = pastFileInfoRef.current;
-
-            const matchedSymbolOrFile = matchCodeToSymbolOrFile(
-              content,
-              symbols,
-              rifs,
-            );
-            if (matchedSymbolOrFile) {
-              if (isSymbolNotRif(matchedSymbolOrFile)) {
-                return (
-                  <SymbolLink content={content} symbol={matchedSymbolOrFile} />
-                );
-              } else {
-                return <FilenameLink rif={matchedSymbolOrFile} />;
-              }
-            }
-          }
-          if (codeProps.className?.includes("language-mermaid")) {
-            const codeText = String(codeProps.children || "");
-            return <MermaidBlock code={codeText} />;
-          }
-          return <code {...codeProps}>{codeProps.children}</code>;
-        },
-        img: ({ ...imgProps }) => {
-          return (
-            <SecureImageComponent
-              src={imgProps.src}
-              alt={imgProps.alt}
-              title={imgProps.title}
-              className={imgProps.className}
-            />
-          );
-        },
-      },
-    },
-  });
-
-  useEffect(() => {
-    setMarkdownSource(
+  const markdownSource = useMemo(
+    () =>
       // some patches to source markdown are applied here:
       fixDoubleDollarNewLineLatex(patchNestedMarkdown(props.source ?? "")),
-    );
-  }, [props.source, allSymbols]);
+    [props.source],
+  );
+
+  const components: Components = {
+    a: ({ ...aProps }) => {
+      return (
+        <ToolTip place="top" className="m-0 p-0" content={aProps.href}>
+          <a href={aProps.href} target="_blank" className="hover:underline">
+            {aProps.children}
+          </a>
+        </ToolTip>
+      );
+    },
+    // `data-*` は HTML 要素の既定 props 型に含まれないため、任意 props を
+    // 許容する型で受け取る（hast から hProperties 経由で渡される値）。
+    pre: (preProps: Record<string, any> & ExtraProps) => {
+      const codeBlockIndex = preProps["data-codeblockindex"];
+
+      const preChild = Array.isArray(preProps.children)
+        ? preProps.children[0]
+        : preProps.children;
+      const preChildProps = preChild?.props ?? {};
+      const { className, range } = preChildProps;
+
+      const relativeFilePath = preChildProps["data-relativefilepath"];
+      const codeBlockContent = preChildProps["data-codeblockcontent"];
+
+      if (!props.isRenderingInStepContainer) {
+        return <SyntaxHighlightedPre {...preProps} />;
+      }
+
+      const language = getLanguageFromClassName(className);
+
+      const isLastCodeblock = preChildProps["data-islastcodeblock"];
+
+      if (codeblockStreamIds.current[codeBlockIndex] === undefined) {
+        codeblockStreamIds.current[codeBlockIndex] = uuidv4();
+      }
+
+      return (
+        <StepContainerPreToolbar
+          showToolCallStatusIcon={props.showToolCallStatusIcon}
+          codeBlockContent={codeBlockContent}
+          codeBlockIndex={codeBlockIndex}
+          codeBlockStreamId={codeblockStreamIds.current[codeBlockIndex]} // ignored if toolCallId stream state is found
+          disableManualApply={props.disableManualApply}
+          expanded={props.expandCodeblocks}
+          forceToolCallId={props.toolCallId}
+          isLastCodeblock={isLastCodeblock}
+          itemIndex={itemIndexRef.current}
+          language={language}
+          range={range}
+          relativeFilepath={relativeFilePath}
+          collapsible={props.collapsible}
+        >
+          <SyntaxHighlightedPre {...preProps} />
+        </StepContainerPreToolbar>
+      );
+    },
+    code: ({ ...codeProps }) => {
+      const content = getCodeChildrenContent(codeProps.children);
+
+      if (content) {
+        const { symbols, rifs } = pastFileInfoRef.current;
+
+        const matchedSymbolOrFile = matchCodeToSymbolOrFile(
+          content,
+          symbols,
+          rifs,
+        );
+        if (matchedSymbolOrFile) {
+          if (isSymbolNotRif(matchedSymbolOrFile)) {
+            return (
+              <SymbolLink content={content} symbol={matchedSymbolOrFile} />
+            );
+          } else {
+            return <FilenameLink rif={matchedSymbolOrFile} />;
+          }
+        }
+      }
+      if (codeProps.className?.includes("language-mermaid")) {
+        const codeText = String(codeProps.children || "");
+        return <MermaidBlock code={codeText} />;
+      }
+      return <code {...codeProps}>{codeProps.children}</code>;
+    },
+    img: ({ ...imgProps }) => {
+      return (
+        <SecureImageComponent
+          src={imgProps.src}
+          alt={imgProps.alt}
+          title={imgProps.title}
+          className={imgProps.className}
+        />
+      );
+    },
+  };
 
   const uiConfig = useAppSelector(selectUIConfig);
   const codeWrapState = uiConfig?.codeWrap ? "pre-wrap" : "pre";
@@ -387,7 +358,16 @@ const StyledMarkdownPreview = memo(function StyledMarkdownPreview(
       whiteSpace={codeWrapState}
       bgColor={props.useParentBackgroundColor ? "" : vscBackground}
     >
-      {reactContent}
+      <Markdown
+        remarkPlugins={REMARK_PLUGINS}
+        rehypePlugins={REHYPE_PLUGINS}
+        components={components}
+        // 旧実装(remark-rehype@8)は allowDangerousHtml なしで生のHTMLを
+        // 除去していたため、同じ挙動を維持する。
+        skipHtml
+      >
+        {markdownSource}
+      </Markdown>
     </StyledMarkdown>
   );
 });

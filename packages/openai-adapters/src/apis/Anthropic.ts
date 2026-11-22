@@ -8,7 +8,7 @@ import {
   RawMessageStartEvent,
   RawMessageStreamEvent,
   Tool,
-  ToolUseBlock,
+  ToolUseBlockParam,
 } from "@anthropic-ai/sdk/resources";
 import { streamSse } from "@continuedev/fetch";
 import { OpenAI } from "openai/index";
@@ -133,6 +133,9 @@ export class AnthropicApi implements BaseLlmApi {
       }
     }
 
+    // Anthropic replaced sampling options with `thinking` / `output_config`, and
+    // the SDK no longer types `top_k`, `top_p` or `temperature` on
+    // `MessageCreateParams`, so they are not forwarded.
     const anthropicBody: MessageCreateParams = {
       messages: this._convertMessages(
         oaiBody.messages.filter((msg) => msg.role !== "system"),
@@ -146,8 +149,6 @@ export class AnthropicApi implements BaseLlmApi {
               },
             ]
           : systemMessage,
-      top_p: oaiBody.top_p ?? undefined,
-      temperature: oaiBody.temperature ?? undefined,
       max_tokens: oaiBody.max_tokens ?? this.maxTokensForModel(oaiBody.model), // max_tokens is required
       model: oaiBody.model,
       stop_sequences: stop,
@@ -161,7 +162,7 @@ export class AnthropicApi implements BaseLlmApi {
 
   private convertToolCallsToBlocks(
     toolCall: OpenAI.Chat.Completions.ChatCompletionMessageFunctionToolCall,
-  ): ToolUseBlock | undefined {
+  ): ToolUseBlockParam | undefined {
     const toolCallId = toolCall.id;
     const toolName = toolCall.function?.name;
     if (toolCallId && toolName) {

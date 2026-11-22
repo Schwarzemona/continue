@@ -1,4 +1,4 @@
-import { MessageCreateParams } from "@anthropic-ai/sdk/resources";
+import { MessageCreateParams, MessageParam } from "@anthropic-ai/sdk/resources";
 
 import { addCacheControlToLastTwoUserMessages } from "./AnthropicUtils.js";
 
@@ -11,6 +11,31 @@ export type CachingStrategy = (
 
 // Utility function to estimate token count
 const estimateTokenCount = (text: string): number => Math.ceil(text.length / 4);
+
+/**
+ * Shallow-copies a message so that adding `cache_control` never mutates the body
+ * that was passed in.
+ *
+ * `system` messages are returned as-is: the SDK types `SystemMessageParam.content`
+ * as `TextBlockParam[]` only, and Continue always sends the system prompt through
+ * the top-level `system` field instead of putting it in `messages`.
+ */
+function cloneMessageForCaching(message: MessageParam): MessageParam {
+  if (message.role === "system") {
+    return message;
+  }
+
+  const content = message.content;
+  if (typeof content === "string") {
+    // Nothing to annotate, and strings cannot be mutated in place.
+    return message;
+  }
+
+  return {
+    ...message,
+    content: content.map((block) => ({ ...block })),
+  };
+}
 
 // Strategy 1: No Caching
 const noCachingStrategy: CachingStrategy = (body) => body;
@@ -72,12 +97,7 @@ const systemAndToolsStrategy: CachingStrategy = (body) => {
   // Cache last two user messages for turn-level caching.
   // Uses the remaining 2 breakpoints (system=1, last tool=1, 2 user messages=2, total=4).
   // Clone messages to avoid mutating the original input.
-  result.messages = result.messages.map((msg) => ({
-    ...msg,
-    content: Array.isArray(msg.content)
-      ? msg.content.map((block) => ({ ...block }))
-      : msg.content,
-  }));
+  result.messages = result.messages.map(cloneMessageForCaching);
   addCacheControlToLastTwoUserMessages(result.messages);
 
   return result;
@@ -118,9 +138,17 @@ const optimizedStrategy: CachingStrategy = (body) => {
 
   // Cache large messages (>500 tokens)
   if (result.messages && Array.isArray(result.messages)) {
-    result.messages = result.messages.map((message) => {
-      if (message.content && typeof message.content === "string") {
-        const tokens = estimateTokenCount(message.content);
+    result.messages = result.messages.map((message): MessageParam => {
+      // System prompts travel in the top-level `system` field, and the SDK types
+      // their content as `TextBlockParam[]` only, so they stay untouched here.
+      if (message.role === "system") {
+        return message;
+      }
+
+      const content = message.content;
+
+      if (typeof content === "string") {
+        const tokens = estimateTokenCount(content);
         if (tokens > 500 && availableCacheMessages > 0) {
           availableCacheMessages -= 1;
           return {
@@ -128,40 +156,40 @@ const optimizedStrategy: CachingStrategy = (body) => {
             content: [
               {
                 type: "text",
-                text: message.content,
+                text: content,
                 cache_control: { type: "ephemeral" as const },
               },
             ],
           };
         }
-      } else if (message.content && Array.isArray(message.content)) {
-        // Only add one cache control per message with array content
-        let addedCacheControl = false;
-        const updatedContent = message.content.map((item) => {
-          if (item.type === "text" && item.text) {
-            const tokens = estimateTokenCount(item.text);
-            if (
-              tokens > 500 &&
-              availableCacheMessages > 0 &&
-              !addedCacheControl
-            ) {
-              availableCacheMessages -= 1;
-              addedCacheControl = true;
-              return {
-                ...item,
-                cache_control: { type: "ephemeral" as const },
-              };
-            }
-          }
-          return item;
-        });
-
-        return {
-          ...message,
-          content: updatedContent,
-        };
+        return message;
       }
-      return message;
+
+      // Only add one cache control per message with array content
+      let addedCacheControl = false;
+      const updatedContent = content.map((item) => {
+        if (item.type === "text" && item.text) {
+          const tokens = estimateTokenCount(item.text);
+          if (
+            tokens > 500 &&
+            availableCacheMessages > 0 &&
+            !addedCacheControl
+          ) {
+            availableCacheMessages -= 1;
+            addedCacheControl = true;
+            return {
+              ...item,
+              cache_control: { type: "ephemeral" as const },
+            };
+          }
+        }
+        return item;
+      });
+
+      return {
+        ...message,
+        content: updatedContent,
+      };
     });
   }
 
