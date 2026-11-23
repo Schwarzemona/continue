@@ -80,7 +80,7 @@ export default function StepContainer(props: StepContainerProps) {
         className={`bg-background p-1 px-1.5 ${isBeforeLatestSummary ? "opacity-35" : ""}`}
       >
         {uiConfig?.displayRawMarkdown ? (
-          <pre className="max-w-full overflow-x-auto whitespace-pre-wrap break-words p-4">
+          <pre className="max-w-full overflow-x-auto p-4 break-words whitespace-pre-wrap">
             {renderChatMessage(props.item.message)}
           </pre>
         ) : (
@@ -123,9 +123,9 @@ export default function StepContainer(props: StepContainerProps) {
       {isLatestSummary && (
         <div className="mx-1.5 my-5">
           <div className="flex items-center">
-            <div className="flex-1 border-t border-solid border-border"></div>
-            <span className="mx-3 text-description">以前の会話を圧縮</span>
-            <div className="flex-1 border-t border-solid border-border"></div>
+            <div className="border-border flex-1 border-t border-solid"></div>
+            <span className="text-description mx-3">以前の会話を圧縮</span>
+            <div className="border-border flex-1 border-t border-solid"></div>
           </div>
         </div>
       )}

@@ -75,7 +75,7 @@ function IconBase({
   return (
     <div
       className={cn(
-        "h-[1.2em] w-[1.2em] cursor-pointer rounded-default p-1",
+        "rounded-default h-[1.2em] w-[1.2em] cursor-pointer p-1",
         $hovered ? "visible opacity-75" : "invisible opacity-0",
         "hover:bg-lightgray/20 hover:opacity-100",
         className,

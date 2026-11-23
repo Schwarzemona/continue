@@ -14,12 +14,12 @@ export default function InlineErrorMessage() {
   if (inlineErrorMessage === "out-of-context") {
     return (
       <div
-        className={`relative m-2 flex flex-col rounded-md border border-solid border-border bg-transparent p-4`}
+        className={`border-border relative m-2 flex flex-col rounded-md border border-solid bg-transparent p-4`}
       >
-        <p className={`thread-message text-center text-error`}>
+        <p className={`thread-message text-error text-center`}>
           {`メッセージがコンテキスト制限を超えています。`}
         </p>
-        <div className="flex flex-row items-center justify-center gap-1.5 px-3 text-description">
+        <div className="text-description flex flex-row items-center justify-center gap-1.5 px-3">
           <div
             className="cursor-pointer hover:underline"
             onClick={() => {
@@ -28,7 +28,7 @@ export default function InlineErrorMessage() {
               });
             }}
           >
-            <span className="hidden xs:flex">設定を開く</span>
+            <span className="xs:flex hidden">設定を開く</span>
             <span className="xs:hidden">設定</span>
           </div>
           |

@@ -9,12 +9,12 @@ export function OnboardingCardLanding({
   isDialog?: boolean;
 }) {
   return (
-    <div className="max-full flex w-full flex-col items-center justify-center px-4 text-center xs:px-0">
-      <div className="hidden xs:flex">
+    <div className="max-full xs:px-0 flex w-full flex-col items-center justify-center px-4 text-center">
+      <div className="xs:flex hidden">
         <ContinueLogo height={75} />
       </div>
 
-      <p className="mb-5 mt-0 w-full">
+      <p className="mt-0 mb-5 w-full">
         モデルを設定して、AIを活用したコーディングを始めましょう
       </p>
 

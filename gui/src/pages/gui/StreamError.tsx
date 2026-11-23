@@ -118,7 +118,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
   );
 
   let errorContent = (
-    <div className="mb-1 mt-3">
+    <div className="mt-3 mb-1">
       <div className="m-0 p-0">
         <p className="m-0 mb-2 p-0">
           応答の処理中にエラーが発生: {selectedModel?.title || "the model"}.
@@ -246,9 +246,9 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
   }
 
   return (
-    <div className="flex flex-col gap-4 px-3 pb-3 pt-3">
+    <div className="flex flex-col gap-4 px-3 pt-3 pb-3">
       {/* Concise error title */}
-      <h3 className="m-0 p-0 font-medium text-error">モデルの応答エラー</h3>
+      <h3 className="text-error m-0 p-0 font-medium">モデルの応答エラー</h3>
 
       {errorContent}
 
@@ -261,7 +261,7 @@ const StreamErrorDialog = ({ error }: StreamErrorProps) => {
             defaultOpen
           >
             <div className="flex flex-col gap-0 rounded-sm">
-              <code className="block max-h-48 overflow-y-auto p-3 font-mono text-editor-foreground">
+              <code className="text-editor-foreground block max-h-48 overflow-y-auto p-3 font-mono">
                 {parsedError}
               </code>
 

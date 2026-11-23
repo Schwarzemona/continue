@@ -29,12 +29,12 @@ export function Toggle({
         <div>
           <span>{title}</span>
           {subtitle && (
-            <p className="my-1 font-normal text-description">{subtitle}</p>
+            <p className="text-description my-1 font-normal">{subtitle}</p>
           )}
         </div>
       </div>
       <div
-        className={`duration-400 overflow-hidden transition-all ease-in-out ${
+        className={`overflow-hidden transition-all duration-400 ease-in-out ${
           isOpen ? "mt-4 max-h-screen" : "max-h-0"
         }`}
       >

@@ -54,7 +54,7 @@ export function ConversationStarterCards() {
       </div>
       {bookmarkedSlashCommands.length > NUM_CARDS_TO_RENDER && (
         <span
-          className="mt-1 cursor-pointer text-lightgray hover:underline"
+          className="text-lightgray mt-1 cursor-pointer hover:underline"
           onClick={() => setShowAll(!showAll)}
         >
           {showAll ? "表示を減らす" : `あと${remainingCount}件を表示……`}

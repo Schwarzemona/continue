@@ -26,9 +26,9 @@ export function RulesPeekItem({ rule }: RulesPeekItemProps) {
     >
       <div className="flex w-full items-center">
         {isGlobal ? (
-          <GlobeAltIcon className="mr-2 h-4 w-4 flex-shrink-0 text-description-muted" />
+          <GlobeAltIcon className="text-description-muted mr-2 h-4 w-4 flex-shrink-0" />
         ) : (
-          <DocumentTextIcon className="mr-2 h-4 w-4 flex-shrink-0 text-description-muted" />
+          <DocumentTextIcon className="text-description-muted mr-2 h-4 w-4 flex-shrink-0" />
         )}
 
         <div className="flex min-w-0 flex-1 gap-2">
@@ -36,14 +36,14 @@ export function RulesPeekItem({ rule }: RulesPeekItemProps) {
             {rule.name || "エージェントルール"}
           </div>
 
-          <div className="min-w-0 flex-1 overflow-hidden truncate whitespace-nowrap text-gray-500">
+          <div className="min-w-0 flex-1 truncate overflow-hidden whitespace-nowrap text-gray-500">
             {isGlobal
               ? "常に適用"
               : `パターン: ${typeof rule.globs === "string" ? rule.globs : Array.isArray(rule.globs) ? rule.globs.join(", ") : ""}`}
           </div>
         </div>
       </div>
-      <div className="mt-1 pl-6 pr-2 text-gray-500">
+      <div className="mt-1 pr-2 pl-6 text-gray-500">
         ソース: {getRuleSourceDisplayName(rule)}
       </div>
     </div>

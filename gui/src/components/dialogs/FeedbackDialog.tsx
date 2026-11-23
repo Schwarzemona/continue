@@ -12,7 +12,7 @@ export default function FeedbackDialog() {
         <span>Continueの改善にご協力ください</span>
       </div>
 
-      <p className="leading-relaxed text-foreground">
+      <p className="text-foreground leading-relaxed">
         Continueをより良くするために常に努力しており、ぜひ皆様の声をお聞かせください。
         もしよろしければ、以下の項目にご記入をお願いいたします。
       </p>

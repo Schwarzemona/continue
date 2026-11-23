@@ -73,7 +73,7 @@ export function ConfigsSection() {
                                 error.fatal
                                   ? "bg-error/10 text-error"
                                   : "bg-yellow-500/10 text-yellow-500"
-                              } break-all rounded border border-solid border-transparent px-2 py-1 ${error.uri ? "cursor-pointer " + (error.fatal ? "hover:border-error" : "hover:border-yellow-500") : ""}`}
+                              } rounded border border-solid border-transparent px-2 py-1 break-all ${error.uri ? "cursor-pointer " + (error.fatal ? "hover:border-error" : "hover:border-yellow-500") : ""}`}
                             >
                               {error.message.split("\n")[0]}
                             </div>
@@ -87,7 +87,7 @@ export function ConfigsSection() {
                       onClick={() => handleConfigureAgent(profile.id)}
                       variant="ghost"
                       size="sm"
-                      className="my-0 h-6 w-6 p-0 text-description-muted hover:enabled:text-foreground"
+                      className="text-description-muted hover:enabled:text-foreground my-0 h-6 w-6 p-0"
                     >
                       <Cog6ToothIcon className="h-4 w-4 flex-shrink-0" />
                     </Button>

@@ -22,8 +22,8 @@ export function ApplyActions(props: ApplyActionsProps) {
   switch (props.applyState ? props.applyState.status : null) {
     case "streaming":
       return (
-        <div className="flex select-none items-center rounded bg-badge pl-2 pr-1">
-          <span className="inline-flex items-center gap-2 text-center text-lightgray">
+        <div className="bg-badge flex items-center rounded pr-1 pl-2 select-none">
+          <span className="text-lightgray inline-flex items-center gap-2 text-center">
             適用中
             <Spinner />
           </span>
@@ -31,8 +31,8 @@ export function ApplyActions(props: ApplyActionsProps) {
       );
     case "done":
       return (
-        <div className="flex select-none items-center rounded bg-badge sm:gap-1 md:px-1.5">
-          <span className="flex items-center text-center text-lightgray max-md:hidden">
+        <div className="bg-badge flex items-center rounded select-none sm:gap-1 md:px-1.5">
+          <span className="text-lightgray flex items-center text-center max-md:hidden">
             {`${props.applyState?.numDiffs === 1 ? "差分1つ" : `差分${props.applyState?.numDiffs}つ`}`}
           </span>
 
@@ -42,7 +42,7 @@ export function ApplyActions(props: ApplyActionsProps) {
               onClick={onClickReject}
               tooltipContent={`全て却下(${getMetaKeyLabel()}+⇧+⌫)`}
             >
-              <XMarkIcon className="h-3.5 w-3.5 flex-shrink-0 text-error hover:brightness-125" />
+              <XMarkIcon className="text-error h-3.5 w-3.5 flex-shrink-0 hover:brightness-125" />
             </ToolbarButtonWithTooltip>
 
             <ToolbarButtonWithTooltip
@@ -50,7 +50,7 @@ export function ApplyActions(props: ApplyActionsProps) {
               onClick={props.onClickAccept}
               tooltipContent={`全て承認(${getMetaKeyLabel()}+⇧+⏎)`}
             >
-              <CheckIcon className="h-3.5 w-3.5 flex-shrink-0 text-success hover:brightness-125" />
+              <CheckIcon className="text-success h-3.5 w-3.5 flex-shrink-0 hover:brightness-125" />
             </ToolbarButtonWithTooltip>
           </div>
         </div>
@@ -69,12 +69,12 @@ export function ApplyActions(props: ApplyActionsProps) {
           >
             <button
               data-testid="codeblock-toolbar-apply"
-              className="flex cursor-pointer items-center border-none bg-transparent pl-0 text-lightgray outline-none hover:brightness-125"
+              className="text-lightgray flex cursor-pointer items-center border-none bg-transparent pl-0 outline-none hover:brightness-125"
               onClick={props.onClickApply}
             >
-              <div className="flex items-center gap-1 text-lightgray">
+              <div className="text-lightgray flex items-center gap-1">
                 <PlayIcon className="h-3.5 w-3.5" />
-                <span className="hidden xs:inline">適用</span>
+                <span className="xs:inline hidden">適用</span>
               </div>
             </button>
           </HoverItem>

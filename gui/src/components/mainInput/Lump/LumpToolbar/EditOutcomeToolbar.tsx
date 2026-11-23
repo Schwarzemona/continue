@@ -14,8 +14,8 @@ export function EditOutcomeToolbar() {
   const ideMessenger = useContext(IdeMessengerContext);
 
   return (
-    <div className="flex items-center justify-between py-0.5 text-description-muted">
-      <div className="rounded bg-badge px-1.5">
+    <div className="text-description-muted flex items-center justify-between py-0.5">
+      <div className="bg-badge rounded px-1.5">
         <span>{`差分${editApplyState.numDiffs}つ${editApplyState.numDiffs !== 1 ? "" : ""}`}</span>
       </div>
       <AcceptRejectDiffButtons

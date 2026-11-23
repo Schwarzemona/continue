@@ -40,7 +40,7 @@ export const topTabSections: TabSection[] = [
         id: "back",
         label: "戻る",
         component: <div />,
-        icon: <ArrowLeftIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />,
+        icon: <ArrowLeftIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />,
       },
     ],
   },
@@ -56,7 +56,7 @@ export const topTabSections: TabSection[] = [
             <ModelsSection />
           </ConfigSection>
         ),
-        icon: <CubeIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />,
+        icon: <CubeIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />,
       },
       {
         id: "rules",
@@ -66,7 +66,7 @@ export const topTabSections: TabSection[] = [
             <RulesSection />
           </ConfigSection>
         ),
-        icon: <PencilIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />,
+        icon: <PencilIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />,
       },
       {
         id: "tools",
@@ -77,7 +77,7 @@ export const topTabSections: TabSection[] = [
           </ConfigSection>
         ),
         icon: (
-          <WrenchScrewdriverIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />
+          <WrenchScrewdriverIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />
         ),
       },
     ],
@@ -94,7 +94,7 @@ export const topTabSections: TabSection[] = [
             <ConfigsSection />
           </ConfigSection>
         ),
-        icon: <DocumentIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />,
+        icon: <DocumentIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />,
       },
     ],
   },
@@ -111,7 +111,7 @@ export const topTabSections: TabSection[] = [
           </ConfigSection>
         ),
         icon: (
-          <CircleStackIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />
+          <CircleStackIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />
         ),
       },
     ],
@@ -130,7 +130,7 @@ export const bottomTabSections: TabSection[] = [
             <UserSettingsSection />
           </ConfigSection>
         ),
-        icon: <Cog6ToothIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />,
+        icon: <Cog6ToothIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />,
       },
       {
         id: "help",
@@ -141,7 +141,7 @@ export const bottomTabSections: TabSection[] = [
           </ConfigSection>
         ),
         icon: (
-          <QuestionMarkCircleIcon className="h-3 w-3 flex-shrink-0 xs:h-4 xs:w-4" />
+          <QuestionMarkCircleIcon className="xs:h-4 xs:w-4 h-3 w-3 flex-shrink-0" />
         ),
       },
     ],

@@ -17,10 +17,10 @@ export function InsertButton({ onInsert }: InsertButtonProps) {
     >
       <ToolTip place="top" content="コードを挿入">
         <div
-          className="flex cursor-pointer items-center border-none bg-transparent text-lightgray outline-none hover:brightness-125"
+          className="text-lightgray flex cursor-pointer items-center border-none bg-transparent outline-none hover:brightness-125"
           onClick={onInsert}
         >
-          <div className="flex items-center gap-1 transition-colors duration-200 max-2xs:hidden">
+          <div className="max-2xs:hidden flex items-center gap-1 transition-colors duration-200">
             <ArrowLeftEndOnRectangleIcon className="h-3.5 w-3.5" />
           </div>
         </div>

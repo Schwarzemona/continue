@@ -56,7 +56,7 @@ function DocsIndexingStatuses() {
 
   return (
     <div className="flex flex-col gap-1">
-      <div className="flex flex-col overflow-y-auto overflow-x-hidden pr-2">
+      <div className="flex flex-col overflow-x-hidden overflow-y-auto pr-2">
         {sortedConfigDocs.map((docConfig) => {
           return (
             <div

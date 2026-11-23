@@ -5,8 +5,8 @@ import { LumpToolbar } from "./LumpToolbar/LumpToolbar";
  */
 export function Lump() {
   return (
-    <div className="mx-1.5 rounded-t-default border-l border-r border-t border-command-border bg-input">
-      <div className="px-1 py-0.5 xs:px-2">
+    <div className="rounded-t-default border-command-border bg-input mx-1.5 border-t border-r border-l">
+      <div className="xs:px-2 px-1 py-0.5">
         <LumpToolbar />
       </div>
     </div>

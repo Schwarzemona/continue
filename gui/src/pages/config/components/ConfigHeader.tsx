@@ -36,7 +36,7 @@ export function ConfigHeader({
     >
       <div className="flex flex-col">
         <HeadingTag className={`my-0 ${titleSize}`}>{title}</HeadingTag>
-        {subtext && <p className="mt-1 text-description">{subtext}</p>}
+        {subtext && <p className="text-description mt-1">{subtext}</p>}
       </div>
       {showAddButton && onAddClick && (
         <ToolTip content={addButtonTooltip}>

@@ -206,7 +206,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                 otherOptions={otherProviders}
                 searchPlaceholder="プロバイダーを検索……"
               />
-              <span className="mt-1 block text-description-muted">
+              <span className="text-description-muted mt-1 block">
                 プロバイダーがありませんか？{" "}
                 <a
                   className="cursor-pointer text-inherit underline hover:text-inherit"
@@ -326,18 +326,18 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
                   <Input
                     id="apiKey"
                     className={
-                      apiKeyWarning ? "w-full border-warning" : "w-full"
+                      apiKeyWarning ? "border-warning w-full" : "w-full"
                     }
                     type="password"
                     placeholder={`${selectedProvider.title}のAPIキーを入力してください`}
                     {...formMethods.register("apiKey")}
                   />
                   {apiKeyWarning && (
-                    <span className="mt-1 block text-warning">
+                    <span className="text-warning mt-1 block">
                       {apiKeyWarning}
                     </span>
                   )}
-                  <span className="mt-1 block text-description-muted">
+                  <span className="text-description-muted mt-1 block">
                     <a
                       className="cursor-pointer text-inherit underline hover:text-inherit hover:brightness-125"
                       onClick={() => {
@@ -390,7 +390,7 @@ export function AddModelForm({ onDone }: AddModelFormProps) {
               接続
             </Button>
 
-            <span className="block w-full text-center text-description-muted">
+            <span className="text-description-muted block w-full text-center">
               これで更新:{" "}
               <span
                 className="cursor-pointer underline hover:brightness-125"

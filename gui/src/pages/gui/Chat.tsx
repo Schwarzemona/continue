@@ -425,8 +425,8 @@ export function Chat() {
             pointerEvents: isStreaming ? "none" : "auto",
           }}
         >
-          <div className="flex flex-row items-center justify-between pb-1 pl-0.5 pr-2">
-            <div className="hidden xs:inline">
+          <div className="flex flex-row items-center justify-between pr-2 pb-1 pl-0.5">
+            <div className="xs:inline hidden">
               {history.length === 0 && lastSessionId && !isInEdit && (
                 <NewSessionButton
                   onClick={async () => {

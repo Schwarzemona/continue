@@ -83,7 +83,7 @@ export function ModeSelect() {
         className="flex items-center gap-1"
         content={`${mode} might not work well with this model.`}
       >
-        <ExclamationTriangleIcon className="h-2.5 w-2.5 text-warning" />
+        <ExclamationTriangleIcon className="text-warning h-2.5 w-2.5" />
       </ToolTip>
     </>
   );
@@ -93,7 +93,7 @@ export function ModeSelect() {
       <div className="relative">
         <ListboxButton
           data-testid="mode-select-button"
-          className="gap-1 rounded-full border-none bg-lightgray/20 px-1.5 py-0.5 text-description transition-colors duration-200 hover:brightness-110 xs:px-3"
+          className="bg-lightgray/20 text-description xs:px-3 gap-1 rounded-full border-none px-1.5 py-0.5 transition-colors duration-200 hover:brightness-110"
         >
           <ModeIcon mode={mode} />
           <span className="hidden sm:block" style={{ fontSize: tinyFont }}>
@@ -104,7 +104,7 @@ export function ModeSelect() {
             aria-hidden="true"
           />
         </ListboxButton>
-        <ListboxOptions className="min-w-32 max-w-48">
+        <ListboxOptions className="max-w-48 min-w-32">
           <ListboxOption value="chat">
             <div
               className="flex flex-row items-center gap-1.5"
@@ -123,7 +123,7 @@ export function ModeSelect() {
                   className="h-3 w-3 flex-shrink-0"
                 />
               </ToolTip>
-              <span className={`mr-auto text-description-muted`}>
+              <span className={`text-description-muted mr-auto`}>
                 {getMetaKeyLabel()}L
               </span>
             </div>
@@ -174,7 +174,7 @@ export function ModeSelect() {
           </ListboxOption>
 
           <div
-            className="px-2 py-1 text-description-muted"
+            className="text-description-muted px-2 py-1"
             style={{ fontSize: tinyFont }}
           >
             {`${metaKeyLabel} .で次のモード`}

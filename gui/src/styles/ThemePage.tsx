@@ -29,11 +29,11 @@ const ThemeTailwindClassExample = ({
 }) => {
   return (
     <>
-      <div className={`line-clamp-1 break-all px-2 text-right`}>
+      <div className={`line-clamp-1 px-2 text-right break-all`}>
         {colorName}
       </div>
       <div
-        className={`line-clamp-1 break-all p-1 text-[9px] ${isMissing ? "text-error" : ""}`}
+        className={`line-clamp-1 p-1 text-[9px] break-all ${isMissing ? "text-error" : ""}`}
         style={{
           backgroundColor: varWithFallback(
             colorName as keyof typeof THEME_COLORS,
@@ -43,7 +43,7 @@ const ThemeTailwindClassExample = ({
         {varNames.join(", ")}
       </div>
       <div
-        className={`line-clamp-1 break-all p-1 text-[9px]`}
+        className={`line-clamp-1 p-1 text-[9px] break-all`}
         style={{
           backgroundColor: defaultColor,
         }}
@@ -106,48 +106,48 @@ function ThemePage() {
         <span className="">←</span>
         Back to Chat
       </span>
-      <h2 className="mb-2 mt-0 p-0 text-center font-semibold">Theme Tester</h2>
-      <div className="grid grid-cols-1 gap-4 rounded-md border border-solid border-border bg-background p-4 md:grid-cols-2">
+      <h2 className="mt-0 mb-2 p-0 text-center font-semibold">Theme Tester</h2>
+      <div className="border-border bg-background grid grid-cols-1 gap-4 rounded-md border border-solid p-4 md:grid-cols-2">
         <div className="col-span-2 flex gap-4">
           <p className="">Normal text</p>
           <p className="text-description">Description text</p>
           <p className="text-description-muted">Muted text</p>
         </div>
 
-        <button className="cursor-pointer rounded border-none bg-primary px-4 py-2 text-primary-foreground hover:bg-primary-hover disabled:cursor-not-allowed disabled:brightness-75">
+        <button className="bg-primary text-primary-foreground hover:bg-primary-hover cursor-pointer rounded border-none px-4 py-2 disabled:cursor-not-allowed disabled:brightness-75">
           Primary Button
         </button>
-        <button className="cursor-pointer rounded border-none bg-secondary px-4 py-2 text-secondary-foreground hover:bg-secondary-hover disabled:cursor-not-allowed disabled:brightness-75">
+        <button className="bg-secondary text-secondary-foreground hover:bg-secondary-hover cursor-pointer rounded border-none px-4 py-2 disabled:cursor-not-allowed disabled:brightness-75">
           Secondary Button
         </button>
 
-        <div className="rounded-md border border-solid border-border p-3">
+        <div className="border-border rounded-md border border-solid p-3">
           Normal border
         </div>
 
-        <div className="rounded-md border border-solid border-border-focus p-3">
+        <div className="border-border-focus rounded-md border border-solid p-3">
           Focus border
         </div>
 
         <input
-          className="rounded-md border border-solid border-input-border bg-input p-2 text-input-foreground placeholder:text-input-placeholder focus:border-border-focus focus:outline-none"
+          className="border-input-border bg-input text-input-foreground placeholder:text-input-placeholder focus:border-border-focus rounded-md border border-solid p-2 focus:outline-none"
           placeholder="Input example"
         />
 
-        <div className="inline-block rounded-full border border-solid border-border bg-badge p-2 text-badge-foreground">
+        <div className="border-border bg-badge text-badge-foreground inline-block rounded-full border border-solid p-2">
           <span className="px-2">Badge</span>
         </div>
 
         <div className="flex items-center gap-2">
-          <CheckCircleIcon className="h-4 w-4 text-success" />
+          <CheckCircleIcon className="text-success h-4 w-4" />
           <span className="text-success">成功</span>
         </div>
         <div className="flex items-center gap-2">
-          <ExclamationCircleIcon className="h-4 w-4 text-warning" />
+          <ExclamationCircleIcon className="text-warning h-4 w-4" />
           <span className="text-warning">警告</span>
         </div>
         <div className="flex items-center gap-2">
-          <ExclamationTriangleIcon className="h-4 w-4 text-error" />
+          <ExclamationTriangleIcon className="text-error h-4 w-4" />
           <span className="text-error">エラー</span>
         </div>
 
@@ -157,18 +157,18 @@ function ThemePage() {
         >
           List item (clickable)
         </div>
-        <div className="rounded-sm border border-solid border-border bg-editor p-2 text-editor-foreground">
+        <div className="border-border bg-editor text-editor-foreground rounded-sm border border-solid p-2">
           <span>Editor</span>
         </div>
         <table>
           <tbody>
             <tr>
-              <td className="border-b border-solid border-border p-2">
+              <td className="border-border border-b border-solid p-2">
                 <span>even table row</span>
               </td>
             </tr>
             <tr className="bg-table-oddRow">
-              <td className="border-b border-solid border-border p-2">
+              <td className="border-border border-b border-solid p-2">
                 <span>odd table row</span>
               </td>
             </tr>
@@ -183,10 +183,10 @@ function ThemePage() {
         </div>
         <div className="flex items-center gap-2">
           <span className="">Accent</span>
-          <div className="h-3 w-3 bg-accent" />
+          <div className="bg-accent h-3 w-3" />
         </div>
       </div>
-      <h2 className="mb-2 mt-6 font-semibold">Manage Theme</h2>
+      <h2 className="mt-6 mb-2 font-semibold">Manage Theme</h2>
       <h2 className="mb-2 font-semibold">Missing Theme Colors</h2>
       {missingVars.length > 0 ? (
         <div className="flex flex-col gap-1">
@@ -203,7 +203,7 @@ function ThemePage() {
       {jetbrains ? (
         <Button onClick={clearThemeLocalCache}>Clear Theme Cache</Button>
       ) : null}
-      <h2 className="mb-2 mt-6 font-semibold">All Theme Colors</h2>
+      <h2 className="mt-6 mb-2 font-semibold">All Theme Colors</h2>
       <div className="grid grid-cols-3">
         <div className="p-1">
           <span className="font-bold">Theme Color</span>

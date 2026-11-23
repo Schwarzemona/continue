@@ -385,8 +385,8 @@ ${html}
         sandbox={sandboxAttribute}
         allow={allowAttribute}
         onLoad={handleIframeLoad}
-        className={`w-full bg-input ${
-          prefersBorder ? "rounded border border-input" : "border-none"
+        className={`bg-input w-full ${
+          prefersBorder ? "border-input rounded border" : "border-none"
         }`}
         style={{ height: iframeHeight }}
         title={`MCP App - ${toolCallState.toolCall.function.name}`}
@@ -400,10 +400,10 @@ ${html}
         >
           <div className="max-w-[25rem] text-center">
             <div className="mb-3">⚠️</div>
-            <p className="mb-2 font-medium text-foreground">
+            <p className="text-foreground mb-2 font-medium">
               Limited Functionality
             </p>
-            <p className="mb-4 leading-relaxed text-description">
+            <p className="text-description mb-4 leading-relaxed">
               This app requires{" "}
               <strong className="text-foreground">
                 {restrictedPermissions.join(", ")}
@@ -413,7 +413,7 @@ ${html}
             </p>
             <button
               onClick={() => setPermissionWarningDismissed(true)}
-              className="cursor-pointer rounded border-none bg-primary px-4 py-2 font-medium text-primary-foreground hover:bg-primary-hover"
+              className="bg-primary text-primary-foreground hover:bg-primary-hover cursor-pointer rounded border-none px-4 py-2 font-medium"
             >
               Continue Anyway
             </button>

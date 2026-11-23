@@ -19,11 +19,11 @@ export function RunInTerminalButton({ command }: RunInTerminalButtonProps) {
 
   return (
     <div
-      className={`flex items-center border-none bg-transparent text-lightgray text-[${vscForeground}] cursor-pointer outline-none hover:brightness-125`}
+      className={`text-lightgray flex items-center border-none bg-transparent text-[${vscForeground}] cursor-pointer outline-none hover:brightness-125`}
       onClick={runInTerminal}
     >
       <div
-        className="flex items-center gap-1 transition-colors duration-200 hover:brightness-125 max-2xs:hidden"
+        className="max-2xs:hidden flex items-center gap-1 transition-colors duration-200 hover:brightness-125"
         style={{ color: lightGray }}
       >
         <>

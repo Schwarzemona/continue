@@ -164,12 +164,12 @@ function MCPServerPreview({
     return (
       <div>
         <div
-          className="mx-2 flex cursor-pointer items-center justify-between rounded hover:bg-gray-50 hover:bg-opacity-5"
+          className="hover:bg-opacity-5 mx-2 flex cursor-pointer items-center justify-between rounded hover:bg-gray-50"
           onClick={() => toggleSection(sectionKey)}
         >
           <div className="flex items-center gap-3">
             <ChevronDownIcon
-              className={`h-3 w-3 text-description transition-transform ${isExpanded ? "rotate-180" : ""}`}
+              className={`text-description h-3 w-3 transition-transform ${isExpanded ? "rotate-180" : ""}`}
             />
             <div className="flex items-center gap-2">
               {icon}
@@ -189,7 +189,7 @@ function MCPServerPreview({
                   return (
                     <div
                       key={idx}
-                      className="rounded bg-gray-50 bg-opacity-5 px-2 py-1 text-description"
+                      className="bg-opacity-5 text-description rounded bg-gray-50 px-2 py-1"
                     >
                       <code>{item.name}</code>
                       {item.description && (
@@ -202,7 +202,7 @@ function MCPServerPreview({
                 })}
               </div>
             ) : (
-              <div className="italic text-gray-500">
+              <div className="text-gray-500 italic">
                 {title}は利用できません
               </div>
             )}
@@ -251,11 +251,11 @@ function MCPServerPreview({
                   }
                   variant="ghost"
                   size="sm"
-                  className="my-0 h-6 w-6 p-0 pt-0.5 text-description-muted hover:enabled:text-foreground"
+                  className="text-description-muted hover:enabled:text-foreground my-0 h-6 w-6 p-0 pt-0.5"
                   disabled={server.status === "authenticating"}
                 >
                   {server.status === "authenticating" ? (
-                    <GlobeAltIcon className="h-4 w-4 flex-shrink-0 animate-spin-slow" />
+                    <GlobeAltIcon className="animate-spin-slow h-4 w-4 flex-shrink-0" />
                   ) : (
                     <UserCircleIcon className="h-4 w-4 flex-shrink-0" />
                   )}
@@ -350,7 +350,7 @@ function MCPServerPreview({
             title="プロンプト"
             items={server.prompts}
             icon={
-              <CommandLineIcon className="h-4 w-4 flex-shrink-0 text-description" />
+              <CommandLineIcon className="text-description h-4 w-4 flex-shrink-0" />
             }
             sectionKey={`${server.id}-prompts`}
           />
@@ -361,7 +361,7 @@ function MCPServerPreview({
             title="リソース"
             items={[...server.resources, ...server.resourceTemplates]}
             icon={
-              <CircleStackIcon className="h-4 w-4 flex-shrink-0 text-description" />
+              <CircleStackIcon className="text-description h-4 w-4 flex-shrink-0" />
             }
             sectionKey={`${server.id}-resources`}
           />

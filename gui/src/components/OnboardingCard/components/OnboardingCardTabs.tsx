@@ -23,7 +23,7 @@ const renderTabButton = (
         onClick={() => onTabClick(tabTitle)}
         data-testid={`onboarding-tab-${tabTitle}`}
       >
-        <KeyIcon className="-mb-0.5 mr-2 h-4 w-4" />
+        <KeyIcon className="mr-2 -mb-0.5 h-4 w-4" />
         {tabTitle}
       </button>
     );
@@ -37,7 +37,7 @@ const renderTabButton = (
         onClick={() => onTabClick(tabTitle)}
         data-testid={`onboarding-tab-${tabTitle}`}
       >
-        <OllamaLogo width={18} height={18} className="-mb-0.5 mr-2" />
+        <OllamaLogo width={18} height={18} className="mr-2 -mb-0.5" />
         {tabTitle}
       </button>
     );
@@ -57,7 +57,7 @@ export function OnboardingCardTabs({
   return (
     <div>
       <div className="hidden sm:block">
-        <div className="border-x-0 border-b border-t-0 border-solid border-foreground">
+        <div className="border-foreground border-x-0 border-t-0 border-b border-solid">
           {tabs.map((tabTitle, index) =>
             renderTabButton(tabTitle, index, activeTab, onTabClick),
           )}
@@ -66,7 +66,7 @@ export function OnboardingCardTabs({
 
       <div className="block sm:hidden">
         <select
-          className="mt-4 w-full cursor-pointer rounded-none border-x-0 border-b border-t-0 border-border bg-transparent p-2 text-foreground focus:outline-none"
+          className="border-border text-foreground mt-4 w-full cursor-pointer rounded-none border-x-0 border-t-0 border-b bg-transparent p-2 focus:outline-none"
           value={activeTab}
           onChange={(e) => onTabClick(e.target.value as OnboardingModes)}
         >

@@ -26,7 +26,7 @@ export function SelectedAssistantButton({
   return (
     <ListboxButton
       data-testid="assistant-select-button"
-      className={`overflow-hidden border-none bg-transparent text-description hover:brightness-110 ${isSidebar ? "w-full justify-start" : "gap-1.5"} ${buttonPadding}`}
+      className={`text-description overflow-hidden border-none bg-transparent hover:brightness-110 ${isSidebar ? "w-full justify-start" : "gap-1.5"} ${buttonPadding}`}
       style={buttonStyle}
     >
       <div
@@ -36,10 +36,10 @@ export function SelectedAssistantButton({
           {selectedProfile === null ? (
             "Set up config file"
           ) : configLoading ? (
-            <span className="flex flex-row items-center text-description">
+            <span className="text-description flex flex-row items-center">
               <ArrowPathIcon
                 className={cn(
-                  `mr-1.5 text-description ${iconSize}`,
+                  `text-description mr-1.5 ${iconSize}`,
                   configLoading && "animate-spin-slow",
                 )}
               />
@@ -50,14 +50,14 @@ export function SelectedAssistantButton({
               {selectedProfile.iconUrl && (
                 <AssistantIcon assistant={selectedProfile} size={iconSize} />
               )}
-              <span className={`hidden select-none xs:line-clamp-1`}>
+              <span className={`xs:line-clamp-1 hidden select-none`}>
                 {selectedProfile.title}
               </span>
             </>
           )}
         </div>
         <ChevronDownIcon
-          className={`ml-0.5 h-3 w-3 flex-shrink-0 select-none text-description ${isSidebar && "hidden md:block"}`}
+          className={`text-description ml-0.5 h-3 w-3 flex-shrink-0 select-none ${isSidebar && "hidden md:block"}`}
           aria-hidden="true"
         />
       </div>

@@ -150,7 +150,7 @@ export function History() {
     >
       <div className="relative my-2 mt-4 flex justify-center space-x-2">
         <input
-          className="flex-1 rounded-md border border-none bg-vsc-input-background py-1 pl-2 pr-8 text-vsc-foreground outline-none focus:outline-none"
+          className="bg-vsc-input-background text-vsc-foreground flex-1 rounded-md border border-none py-1 pr-8 pl-2 outline-none focus:outline-none"
           ref={searchInputRef}
           placeholder="履歴を検索"
           type="text"
@@ -159,7 +159,7 @@ export function History() {
         />
         {searchTerm && (
           <XMarkIcon
-            className="duration-50 absolute right-3 top-1/2 h-5 w-5 -translate-y-1/2 transform cursor-pointer rounded-full p-0.5 text-vsc-foreground transition-colors hover:bg-vsc-background"
+            className="text-vsc-foreground hover:bg-vsc-background absolute top-1/2 right-3 h-5 w-5 -translate-y-1/2 transform cursor-pointer rounded-full p-0.5 transition-colors duration-50"
             onClick={() => {
               setSearchTerm("");
               if (searchInputRef.current) {
@@ -209,7 +209,7 @@ export function History() {
         </table>
       </div>
 
-      <div className="flex flex-col items-end justify-center border-0 border-t border-solid border-border px-2 py-3">
+      <div className="border-border flex flex-col items-end justify-center border-0 border-t border-solid px-2 py-3">
         <Button variant="secondary" size="sm" onClick={showClearSessionsDialog}>
           履歴の消去
         </Button>

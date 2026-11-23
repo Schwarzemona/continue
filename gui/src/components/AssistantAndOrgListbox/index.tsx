@@ -107,7 +107,7 @@ export function AssistantAndOrgListbox({
             style={{ fontSize: tinyFont }}
           >
             <div className="flex items-center justify-between px-1.5 py-1">
-              <span className="font-medium text-description">設定ファイル</span>
+              <span className="text-description font-medium">設定ファイル</span>
               <div className="flex items-center gap-0.5">
                 <Button
                   onClick={(e) => {
@@ -118,7 +118,7 @@ export function AssistantAndOrgListbox({
                   size="sm"
                   className="my-0 h-5 w-5 p-0"
                 >
-                  <PlusIcon className="h-3.5 w-3.5 text-description" />
+                  <PlusIcon className="text-description h-3.5 w-3.5" />
                 </Button>
                 <Button
                   onClick={(e) => {
@@ -129,7 +129,7 @@ export function AssistantAndOrgListbox({
                   size="sm"
                   className="my-0 h-5 w-5 p-0"
                 >
-                  <Cog6ToothIcon className="h-3.5 w-3.5 text-description" />
+                  <Cog6ToothIcon className="text-description h-3.5 w-3.5" />
                 </Button>
               </div>
             </div>
@@ -148,12 +148,12 @@ export function AssistantAndOrgListbox({
                     void refreshProfiles("Manual refresh from assistant list");
                   }}
                   variant="ghost"
-                  className="my-0 w-full justify-start py-1.5 pl-1 text-left text-description hover:bg-input"
+                  className="text-description hover:bg-input my-0 w-full justify-start py-1.5 pl-1 text-left"
                 >
                   <div className="flex w-full items-center">
                     <ArrowPathIcon
                       className={cn(
-                        "ml-1 mr-3 h-3.5 w-3.5 flex-shrink-0",
+                        "mr-3 ml-1 h-3.5 w-3.5 flex-shrink-0",
                         configLoading && "animate-spin-slow",
                       )}
                     />
@@ -165,7 +165,7 @@ export function AssistantAndOrgListbox({
 
             {/* Bottom Actions */}
             <div>
-              <div className="flex items-center justify-start px-2 py-1 text-description">
+              <div className="text-description flex items-center justify-start px-2 py-1">
                 <span className="block">
                   <code>{getMetaKeyLabel()} ⇧ '</code>で設定ファイル切り替え
                 </span>

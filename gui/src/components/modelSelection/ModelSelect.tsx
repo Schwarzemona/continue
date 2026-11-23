@@ -94,7 +94,7 @@ function ModelOption({
           <span className="line-clamp-1" style={{ fontSize: tinyFont }}>
             {option.title}
             {option.isAutoDetected && (
-              <span className="ml-1.5 text-[10px] italic text-description-muted">
+              <span className="text-description-muted ml-1.5 text-[10px] italic">
                 (自動検出)
               </span>
             )}
@@ -108,7 +108,7 @@ function ModelOption({
         <Button
           variant="ghost"
           size="sm"
-          className="my-0 h-4 w-4 p-0 text-description-muted opacity-0 transition-opacity hover:enabled:text-foreground group-hover:opacity-100"
+          className="text-description-muted hover:enabled:text-foreground my-0 h-4 w-4 p-0 opacity-0 transition-opacity group-hover:opacity-100"
           onClick={handleConfigureClick}
         >
           <Cog6ToothIcon className="h-3.5 w-3.5" />
@@ -250,7 +250,7 @@ function ModelSelect() {
         <ListboxButton
           data-testid="model-select-button"
           ref={buttonRef}
-          className="h-[18px] gap-1 border-none text-description"
+          className="text-description h-[18px] gap-1 border-none"
         >
           <span
             className="line-clamp-1 break-all hover:brightness-110"
@@ -266,7 +266,7 @@ function ModelSelect() {
         <ListboxOptions className="min-w-[160px]">
           <div className="flex items-center justify-between px-1.5 py-1">
             <span
-              className="font-medium text-description"
+              className="text-description font-medium"
               style={{ fontSize: tinyFont }}
             >
               モデル
@@ -281,7 +281,7 @@ function ModelSelect() {
                 size="sm"
                 className="my-0 h-5 w-5 p-0"
               >
-                <Cog6ToothIcon className="h-3.5 w-3.5 text-description" />
+                <Cog6ToothIcon className="text-description h-3.5 w-3.5" />
               </Button>
             </div>
           </div>
@@ -291,12 +291,12 @@ function ModelSelect() {
             style={{ fontSize: tinyFont }}
           >
             {isConfigLoading ? (
-              <div className="flex items-center gap-2 px-2 pb-2 pt-1 text-description">
-                <ArrowPathIcon className="h-3 w-3 animate-spin-slow" />
+              <div className="text-description flex items-center gap-2 px-2 pt-1 pb-2">
+                <ArrowPathIcon className="animate-spin-slow h-3 w-3" />
                 <span>設定を読み込み中</span>
               </div>
             ) : hasNoModels ? (
-              <div className="px-2 py-4 text-center text-description-muted">
+              <div className="text-description-muted px-2 py-4 text-center">
                 モデルの設定がありません
               </div>
             ) : (
@@ -322,7 +322,7 @@ function ModelSelect() {
                 className="px-2 py-2"
               >
                 <span
-                  className="flex flex-row items-center text-description"
+                  className="text-description flex flex-row items-center"
                   style={{ fontSize: tinyFont }}
                 >
                   <PlusIcon className="mr-1.5 h-3.5 w-3.5" />
@@ -332,7 +332,7 @@ function ModelSelect() {
 
               <Divider className="!my-0" />
               <div
-                className="flex items-center justify-start p-2 text-description"
+                className="text-description flex items-center justify-start p-2"
                 style={{ fontSize: tinyFont }}
               >
                 <span className="block">

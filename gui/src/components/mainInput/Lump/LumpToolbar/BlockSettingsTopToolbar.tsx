@@ -83,10 +83,10 @@ export function BlockSettingsTopToolbar() {
                 }
               }}
               data-testid="block-settings-toolbar-icon-error"
-              className="relative flex cursor-pointer select-none items-center rounded-full px-1.5 py-1 sm:px-1.5"
+              className="relative flex cursor-pointer items-center rounded-full px-1.5 py-1 select-none sm:px-1.5"
             >
               <ExclamationTriangleIcon
-                className="h-[13px] w-[13px] flex-shrink-0 text-warning"
+                className="text-warning h-[13px] w-[13px] flex-shrink-0"
                 aria-hidden="true"
               />
             </div>
@@ -97,19 +97,19 @@ export function BlockSettingsTopToolbar() {
           <div className="flex items-center gap-1.5">
             <ToolTip content="ルールの設定">
               <HoverItem onClick={handleRulesClick} px={2}>
-                <PencilIcon className="h-4 w-4 text-description-muted hover:brightness-125" />
+                <PencilIcon className="text-description-muted h-4 w-4 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
 
             <ToolTip content="ツールの設定">
               <HoverItem onClick={handleToolsClick} px={2}>
-                <WrenchScrewdriverIcon className="h-4 w-4 text-description-muted hover:brightness-125" />
+                <WrenchScrewdriverIcon className="text-description-muted h-4 w-4 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
 
             <ToolTip content="モデルの設定">
               <HoverItem onClick={handleModelsClick} px={2}>
-                <CubeIcon className="h-4 w-4 text-description-muted hover:brightness-125" />
+                <CubeIcon className="text-description-muted h-4 w-4 hover:brightness-125" />
               </HoverItem>
             </ToolTip>
           </div>

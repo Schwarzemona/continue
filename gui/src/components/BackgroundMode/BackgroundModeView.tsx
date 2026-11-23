@@ -15,7 +15,7 @@ export function BackgroundModeView({
           バックグラウンドエージェントを実行するには、上のタスクを送信してください。コンテナが開始されると、約30秒後に下のリストにタスクが表示されます。
         </div>
         {isCreatingAgent && (
-          <div className="mt-2 flex items-center gap-2 text-description-muted">
+          <div className="text-description-muted mt-2 flex items-center gap-2">
             <ArrowPathIcon className="h-3 w-3 animate-spin" />
             <span>タスクを作成中……</span>
           </div>
