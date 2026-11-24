@@ -210,7 +210,7 @@ async function loadLanguageForFileExt(
   const wasmPath = path.join(
     process.env.NODE_ENV === "test" ? process.cwd() : __dirname,
     ...(process.env.NODE_ENV === "test"
-      ? ["node_modules", "tree-sitter-wasms", "out"]
+      ? ["node_modules", "@s-h-a-d-o-w", "tree-sitter-wasms", "out"]
       : ["tree-sitter-wasms"]),
     `tree-sitter-${supportedLanguages[fileExtension]}.wasm`,
   );

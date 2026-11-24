@@ -181,7 +181,13 @@ describe("BaseLLM", () => {
         throw new Error(`did not find LLM provider for ${modelProvider.id}`);
       }
       const testContextLength = (llmInfo: LlmInfo) => () => {
-        const llm = new LLMClass({ model: llmInfo.model });
+        // A dummy apiKey is required because providers like Azure construct
+        // their OpenAI client eagerly, and openai 7.x throws on missing
+        // credentials (see ADR 012). No requests are made in these tests.
+        const llm = new LLMClass({
+          model: llmInfo.model,
+          apiKey: "test-api-key",
+        });
         if (llmInfo.contextLength) {
           expect(llm.contextLength).toEqual(llmInfo.contextLength);
         } else {
