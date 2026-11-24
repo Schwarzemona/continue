@@ -779,7 +779,7 @@ describe("runTerminalCommandTool.evaluateToolCallPolicy", () => {
       args,
     );
 
-    expect(result).toBe("disabled");
+    expect(result).toBe("allowedWithoutPermission");
   });
 
   it("should return base policy for git commands", () => {

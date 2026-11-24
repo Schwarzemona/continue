@@ -547,59 +547,6 @@ function isCriticalCommand(baseCommand: string, args: string[]): boolean {
     return true;
   }
 
-  // Ban file search, open, and non-interactive editing commands (use dedicated tools instead)
-  const bannedFileSearch = [
-    // Unix
-    "grep",
-    "find",
-    "locate",
-    "rg",
-    "ag",
-    // Windows cmd
-    "findstr",
-    // PowerShell
-    "select-string",
-    "get-childitem",
-    "gci",
-    "ls",
-    "dir",
-  ];
-  const bannedFileOpen = [
-    // Unix
-    "cat",
-    "less",
-    "more",
-    "head",
-    "tail",
-    "bat",
-    "open",
-    "xdg-open",
-    // Windows cmd
-    "type",
-    "start",
-    // PowerShell
-    "get-content",
-    "gc",
-  ];
-  const bannedFileEditing = [
-    // Unix (non-interactive)
-    "sed",
-    "awk",
-    // PowerShell
-    "set-content",
-    "add-content",
-    "out-file",
-    "sc",
-  ];
-
-  if (
-    bannedFileSearch.includes(baseCommand) ||
-    bannedFileOpen.includes(baseCommand) ||
-    bannedFileEditing.includes(baseCommand)
-  ) {
-    return true;
-  }
-
   // Eval and exec commands
   if (baseCommand === "eval" || baseCommand === "exec") {
     return true;
