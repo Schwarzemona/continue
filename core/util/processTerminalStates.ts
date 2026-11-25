@@ -11,6 +11,8 @@ interface RunningProcessInfo {
     contextItems: any[];
   }) => void;
   currentOutput: string;
+  /** コマンドログの位置。バックグラウンド化後のログリンクに引き継ぐ */
+  log?: { uri: string; relativePath: string };
 }
 
 const processTerminalForegroundStates = new Map<string, RunningProcessInfo>();
@@ -37,11 +39,13 @@ export function markProcessAsRunning(
     contextItems: any[];
   }) => void,
   currentOutput: string = "",
+  log?: { uri: string; relativePath: string },
 ): void {
   processTerminalForegroundStates.set(toolCallId, {
     process,
     onPartialOutput,
     currentOutput,
+    log,
   });
 }
 
@@ -61,6 +65,13 @@ export function updateProcessOutput(toolCallId: string, output: string): void {
   if (info) {
     info.currentOutput = output;
   }
+}
+
+/** 実行中プロセスのログ位置。未登録またはログ無しなら undefined */
+export function getRunningProcessLog(
+  toolCallId: string,
+): { uri: string; relativePath: string } | undefined {
+  return processTerminalForegroundStates.get(toolCallId)?.log;
 }
 
 export function removeRunningProcess(toolCallId: string): void {

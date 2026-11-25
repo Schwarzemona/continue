@@ -6,16 +6,15 @@ import {
   updateToolCallOutput,
 } from "../slices/sessionSlice";
 import { ThunkApiType } from "../store";
-import { findToolCallById } from "../util";
 import { streamResponseAfterToolCall } from "./streamResponseAfterToolCall";
 
 /**
  * This thunk is used to move a terminal command to the background
  * when the user clicks the "Move to background" link in the UI
  *
- * It preserves all existing terminal output, marks the command as
- * visually complete, and stops listening to further output from
- * the already running process
+ * 全出力はモデルへ返さず、ステータスだけを返す。
+ * 出力の続きは core 側がログへ書き出し続け、コマンド自体は走り続ける。
+ * ログパスは core の実行中追跡から引き継ぎ、ログリンクをカードに残す。
  */
 export const moveTerminalProcessToBackground = createAsyncThunk<
   void,
@@ -23,33 +22,32 @@ export const moveTerminalProcessToBackground = createAsyncThunk<
   ThunkApiType
 >(
   "chat/moveTerminalProcessToBackground",
-  async ({ toolCallId }, { dispatch, getState, extra }) => {
-    // Find the current tool call using utility function
-    const state = getState();
-    const toolCall = findToolCallById(state.session.history, toolCallId);
-
-    if (!toolCall) {
-      console.error("Could not find tool call with ID:", toolCallId);
-      return;
-    }
-
-    // Find existing terminal output to preserve it
-    const existingOutput = toolCall.output?.find(
-      (item) => item.name === "端末",
+  async ({ toolCallId }, { dispatch, extra }) => {
+    const logResponse = await extra.ideMessenger.request(
+      "process/getRunningLog",
+      { toolCallId },
     );
-    const existingContent = existingOutput?.content || "";
+    const terminalLog =
+      logResponse.status === "success" ? logResponse.content : undefined;
 
-    const status =
-      "コマンドをバックグラウンドに移動しました。以降の出力は無視されます。";
+    const status = "バックグラウンドで実行中";
 
     const contextItems: ContextItem[] = [
       {
         name: "端末",
         description: "端末コマンド出力",
-        content: existingContent,
-        status: status,
+        content: terminalLog
+          ? `${status}\nログ: ${terminalLog.relativePath}`
+          : status,
+        status,
       },
     ];
+    if (terminalLog) {
+      contextItems[0].uri = {
+        type: "file",
+        value: terminalLog.uri,
+      };
+    }
 
     // Abort any existing stream for this tool call
     dispatch(abortStream());
@@ -72,7 +70,6 @@ export const moveTerminalProcessToBackground = createAsyncThunk<
     dispatch(acceptToolCall({ toolCallId }));
 
     // Trigger an LLM response about the command being moved to background
-    dispatch(updateToolCallOutput({ toolCallId, contextItems }));
     dispatch(
       streamResponseAfterToolCall({
         toolCallId,

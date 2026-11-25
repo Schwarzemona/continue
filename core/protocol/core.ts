@@ -331,6 +331,10 @@ export type ToCoreFromIdeOrWebviewProtocol = {
   "process/markAsBackgrounded": [{ toolCallId: string }, void];
   "process/isBackgrounded": [{ toolCallId: string }, boolean];
   "process/killTerminalProcess": [{ toolCallId: string }, void];
+  "process/getRunningLog": [
+    { toolCallId: string },
+    { uri: string; relativePath: string } | undefined,
+  ];
   "mdm/setLicenseKey": [{ licenseKey: string }, boolean];
   "models/fetch": [
     { provider: string; apiKey?: string; apiBase?: string },

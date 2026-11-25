@@ -1,5 +1,6 @@
 import { screen, waitFor } from "@testing-library/react";
 import { ToolCallState } from "core";
+import { MockIdeMessenger } from "../../context/MockIdeMessenger";
 import { renderWithProviders } from "../../util/test/render";
 import { UnifiedTerminalCommand } from "./UnifiedTerminal";
 
@@ -13,22 +14,9 @@ const MOCK_OUTPUT = `Running tests...
 Test Results:
   2 passed, 1 failed
   Total: 3 tests`;
-
-const LONG_OUTPUT = Array.from({ length: 25 }, (_, i) => `Line ${i + 1}`).join(
-  "\n",
-);
 const MOCK_TOOL_CALL_ID = "terminal-call-123";
-
-const MOCK_ANSI_OUTPUT = `\u001b[32m✓\u001b[0m Test passed
-\u001b[31m✗\u001b[0m Test failed
-\u001b[1mBold text\u001b[0m
-\u001b[4mUnderlined text\u001b[0m`;
-
-const MOCK_OUTPUT_WITH_LINKS = `Build successful!
-Visit https://example.com for more info
-Check www.github.com/user/repo
-Error logs at file:///tmp/error.log
-Available on: http://192.168.137.1:8081`;
+const MOCK_LOG_URI = "file:///workspace/.continue/logs/npm-test.log";
+const MOCK_STATUS_MESSAGE = "実行完了";
 
 // Mock the redux hooks
 const mockDispatch = vi.fn();
@@ -38,13 +26,29 @@ vi.mock("../../redux/hooks", () => ({
   useAppSelector: () => mockSelector,
 }));
 
+function createRunningToolCallState(): ToolCallState {
+  return {
+    status: "calling",
+    toolCallId: MOCK_TOOL_CALL_ID,
+    toolCall: {
+      id: MOCK_TOOL_CALL_ID,
+      type: "function",
+      function: {
+        name: "terminal",
+        arguments: "{}",
+      },
+    },
+    parsedArgs: {},
+  };
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
 });
 
 describe("UnifiedTerminalCommand", () => {
   test("renders basic terminal command without output", async () => {
-    const { user } = await renderWithProviders(
+    await renderWithProviders(
       <UnifiedTerminalCommand command={MOCK_COMMAND} status="completed" />,
     );
 
@@ -53,13 +57,69 @@ describe("UnifiedTerminalCommand", () => {
 
     // Should show terminal header
     expect(screen.getByText("端末")).toBeInTheDocument();
-
-    // Should show completed status icon (green dot)
-    const terminalContainer = screen.getByTestId("terminal-container");
-    expect(terminalContainer).toBeInTheDocument();
   });
 
-  test("renders terminal command with output", async () => {
+  test("ログURIが指定されるとstatusMessageをログリンクとして表示する", async () => {
+    await renderWithProviders(
+      <UnifiedTerminalCommand
+        command={MOCK_COMMAND}
+        statusMessage={MOCK_STATUS_MESSAGE}
+        logUri={MOCK_LOG_URI}
+      />,
+    );
+
+    const link = await screen.findByTestId("terminal-log-link");
+    expect(link.textContent).toBe(MOCK_STATUS_MESSAGE);
+    expect(screen.queryByText(MOCK_STATUS_MESSAGE)).toBe(link);
+  });
+
+  test("ログURIが無い場合はstatusMessageをリンク外で表示する", async () => {
+    await renderWithProviders(
+      <UnifiedTerminalCommand
+        command={MOCK_COMMAND}
+        statusMessage={MOCK_STATUS_MESSAGE}
+      />,
+    );
+
+    expect(screen.getByText(MOCK_STATUS_MESSAGE)).toBeInTheDocument();
+    expect(screen.queryByTestId("terminal-log-link")).toBeNull();
+  });
+
+  test("ログリンクのクリックでide.openFileが呼ばれる", async () => {
+    const mockIdeMessenger = new MockIdeMessenger();
+    const openFileSpy = vi
+      .spyOn(mockIdeMessenger.ide, "openFile")
+      .mockResolvedValue(undefined);
+
+    const { user } = await renderWithProviders(
+      <UnifiedTerminalCommand
+        command={MOCK_COMMAND}
+        statusMessage={MOCK_STATUS_MESSAGE}
+        logUri={MOCK_LOG_URI}
+      />,
+      { mockIdeMessenger },
+    );
+
+    await user.click(screen.getByTestId("terminal-log-link"));
+
+    expect(openFileSpy).toHaveBeenCalledWith(MOCK_LOG_URI);
+  });
+
+  test("実行中はログリンクを表示しない", async () => {
+    await renderWithProviders(
+      <UnifiedTerminalCommand
+        command={MOCK_COMMAND}
+        status="running"
+        statusMessage={MOCK_STATUS_MESSAGE}
+        toolCallId={MOCK_TOOL_CALL_ID}
+        logUri={MOCK_LOG_URI}
+      />,
+    );
+
+    expect(screen.queryByTestId("terminal-log-link")).toBeNull();
+  });
+
+  test("出力内容はインライン表示しない（ログへ外部化）", async () => {
     const { container } = await renderWithProviders(
       <UnifiedTerminalCommand
         command={MOCK_COMMAND}
@@ -68,34 +128,20 @@ describe("UnifiedTerminalCommand", () => {
       />,
     );
 
-    // Should show the command and output
+    // The command itself is rendered
     expect(screen.getByText(MOCK_COMMAND)).toBeInTheDocument();
 
-    // Check that the output content exists in the container
-    expect(container.textContent).toMatch(/Test 1 passed/);
-    expect(container.textContent).toMatch(/Test 3 failed/);
+    // Output is externalized to the log file, so it must not appear inline
+    expect(container.textContent).not.toMatch(/Test 1 passed/);
+    expect(container.textContent).not.toMatch(/Test 3 failed/);
   });
 
-  test("shows running state with blinking cursor", async () => {
-    const mockToolCallState: ToolCallState = {
-      status: "calling",
-      toolCallId: MOCK_TOOL_CALL_ID,
-      toolCall: {
-        id: MOCK_TOOL_CALL_ID,
-        type: "function",
-        function: {
-          name: "terminal",
-          arguments: "{}",
-        },
-      },
-      parsedArgs: {},
-    };
-
-    const { user } = await renderWithProviders(
+  test("shows running state with move to background link", async () => {
+    await renderWithProviders(
       <UnifiedTerminalCommand
         command={MOCK_COMMAND}
         status="running"
-        toolCallState={mockToolCallState}
+        toolCallState={createRunningToolCallState()}
         toolCallId={MOCK_TOOL_CALL_ID}
       />,
     );
@@ -109,15 +155,11 @@ describe("UnifiedTerminalCommand", () => {
 
   test("can expand and collapse terminal", async () => {
     const { user, container } = await renderWithProviders(
-      <UnifiedTerminalCommand
-        command={MOCK_COMMAND}
-        output={MOCK_OUTPUT}
-        status="completed"
-      />,
+      <UnifiedTerminalCommand command={MOCK_COMMAND} status="completed" />,
     );
 
-    // Should initially be expanded and show output
-    expect(container.textContent).toMatch(/Test 1 passed/);
+    // Should initially be expanded and show the command
+    expect(screen.getByText(MOCK_COMMAND)).toBeInTheDocument();
 
     // Find and click the collapse chevron (SVG icon)
     const chevron = container.querySelector(
@@ -128,86 +170,16 @@ describe("UnifiedTerminalCommand", () => {
     if (chevron) {
       await user.click(chevron);
 
-      // After collapsing, output should not be visible
+      // After collapsing, the command block should be removed
       await waitFor(() => {
-        expect(container.textContent).not.toMatch(/Test 1 passed/);
+        expect(screen.queryByText(MOCK_COMMAND)).toBeNull();
+      });
+
+      await user.click(chevron);
+      await waitFor(() => {
+        expect(screen.getByText(MOCK_COMMAND)).toBeInTheDocument();
       });
     }
-  });
-
-  test("shows collapsible output for long content", async () => {
-    const { user, container } = await renderWithProviders(
-      <UnifiedTerminalCommand
-        command={MOCK_COMMAND}
-        output={LONG_OUTPUT}
-        status="completed"
-        displayLines={15}
-      />,
-    );
-
-    // Should show the "+X行表示" indicator
-    expect(screen.getByText(/\+\d+行表示/)).toBeInTheDocument();
-
-    // Should initially show only some of the last lines
-    expect(container.textContent).toMatch(/Line 25/);
-
-    // Click to expand using the "+X行表示" button
-    const expandButton = screen.getByText(/\+\d+行表示/);
-    await user.click(expandButton);
-
-    // Should now show all lines
-    await waitFor(() => {
-      expect(container.textContent).toMatch(/Line 1/);
-    });
-
-    // Should show collapse option
-    expect(screen.getByText(/格納/)).toBeInTheDocument();
-  });
-
-  test("renders ANSI colors and formatting", async () => {
-    const { container } = await renderWithProviders(
-      <UnifiedTerminalCommand
-        command={MOCK_COMMAND}
-        output={MOCK_ANSI_OUTPUT}
-        status="completed"
-      />,
-    );
-
-    // Should render ANSI content (check the container text since ANSI splits across elements)
-    expect(container.textContent).toMatch(/Test passed/);
-    expect(container.textContent).toMatch(/Test failed/);
-    expect(container.textContent).toMatch(/Bold text/);
-    expect(container.textContent).toMatch(/Underlined text/);
-
-    // Verify ANSI processing created span elements within the code block
-    // The AnsiRenderer creates spans for each ANSI segment
-    const codeElement = container.querySelector("code");
-    expect(codeElement).toBeInTheDocument();
-
-    // Count all spans inside the code element (ANSI creates multiple spans)
-    const spans = codeElement?.querySelectorAll("span");
-    expect(spans?.length).toBeGreaterThan(0);
-  });
-
-  test("handles links in output", async () => {
-    const { container } = await renderWithProviders(
-      <UnifiedTerminalCommand
-        command={MOCK_COMMAND}
-        output={MOCK_OUTPUT_WITH_LINKS}
-        status="completed"
-      />,
-    );
-
-    // Should contain the link text in the output
-    expect(container.textContent).toMatch(/https:\/\/example\.com/);
-    expect(container.textContent).toMatch(/www\.github\.com/);
-    expect(container.textContent).toMatch(/http:\/\/192\.168\.137\.1:8081/);
-
-    // Verify rendered links have correct hrefs including port
-    const links = container.querySelectorAll("a");
-    const hrefs = Array.from(links).map((a) => a.getAttribute("href"));
-    expect(hrefs).toContainEqual("https://example.com");
-    expect(hrefs).toContainEqual(expect.stringContaining("192.168.137.1:8081"));
   });
 
   test("shows copy and run in terminal buttons when not running", async () => {
@@ -227,30 +199,16 @@ describe("UnifiedTerminalCommand", () => {
     const svgIcons = container.querySelectorAll("svg");
     expect(svgIcons.length).toBeGreaterThan(0);
 
-    // Should show "Run" text (may be hidden on small screens)
-    expect(container.textContent).toMatch(/Run/);
+    // Should show the "実行" label (hidden on small screens, but present in DOM)
+    expect(screen.getByText("実行")).toBeInTheDocument();
   });
 
   test("handles move to background action", async () => {
-    const mockToolCallState: ToolCallState = {
-      status: "calling",
-      toolCallId: MOCK_TOOL_CALL_ID,
-      toolCall: {
-        id: MOCK_TOOL_CALL_ID,
-        type: "function",
-        function: {
-          name: "terminal",
-          arguments: "{}",
-        },
-      },
-      parsedArgs: {},
-    };
-
     const { user } = await renderWithProviders(
       <UnifiedTerminalCommand
         command={MOCK_COMMAND}
         status="running"
-        toolCallState={mockToolCallState}
+        toolCallState={createRunningToolCallState()}
         toolCallId={MOCK_TOOL_CALL_ID}
       />,
     );
@@ -315,49 +273,5 @@ describe("UnifiedTerminalCommand", () => {
       "pre code > div:not(:first-child)",
     );
     expect(outputElements.length).toBe(0);
-  });
-
-  test("processes terminal content correctly for line limiting", async () => {
-    const { container } = await renderWithProviders(
-      <UnifiedTerminalCommand
-        command={MOCK_COMMAND}
-        output={LONG_OUTPUT}
-        status="completed"
-        displayLines={10}
-      />,
-    );
-
-    // Should show correct number of hidden lines
-    expect(screen.getByText(/\+15行表示/)).toBeInTheDocument();
-
-    // Should show the last lines
-    expect(container.textContent).toMatch(/Line 25/);
-
-    // Should not initially show the first lines (Line 1-15 should be hidden)
-    // The component shows last 10 lines (16-25) with a +15 more lines indicator
-    expect(container.textContent).toMatch(/Line 16/);
-  });
-
-  test("clicking on collapsible output toggles expansion", async () => {
-    const { user, container } = await renderWithProviders(
-      <UnifiedTerminalCommand
-        command={MOCK_COMMAND}
-        output={LONG_OUTPUT}
-        status="completed"
-        displayLines={10}
-      />,
-    );
-
-    // Click on the "+15行表示" button to expand
-    const expandButton = screen.getByText(/\+15行表示/);
-    await user.click(expandButton);
-
-    // Should expand and show all content
-    await waitFor(() => {
-      expect(container.textContent).toMatch(/Line 1/);
-    });
-
-    // Should show collapse option after expansion
-    expect(screen.getByText(/格納/)).toBeInTheDocument();
   });
 });

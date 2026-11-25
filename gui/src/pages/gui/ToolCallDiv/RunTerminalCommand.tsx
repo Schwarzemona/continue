@@ -24,9 +24,9 @@ export function RunTerminalCommand(props: RunTerminalCommandToolCallProps) {
     "completed";
   if (isRunning) {
     statusType = "running";
-  } else if (isErrored || statusMessage?.includes("failed")) {
+  } else if (isErrored || /失敗|タイムアウト|停止/.test(statusMessage)) {
     statusType = "failed";
-  } else if (statusMessage?.includes("background")) {
+  } else if (statusMessage?.includes("バックグラウンド")) {
     statusType = "background";
   }
 
@@ -36,6 +36,9 @@ export function RunTerminalCommand(props: RunTerminalCommandToolCallProps) {
       output={terminalContent}
       status={statusType}
       statusMessage={statusMessage}
+      logUri={
+        outputItem?.uri?.type === "file" ? outputItem.uri.value : undefined
+      }
       toolCallState={props.toolCallState}
       toolCallId={props.toolCallId}
     />

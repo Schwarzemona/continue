@@ -772,7 +772,7 @@ describe("constructMessages", () => {
       expect(toolMessage.content).not.toContain("This should be ignored");
     });
 
-    test("should use renderContextItemsWithStatus for RunTerminalCommand with output", () => {
+    test("should render terminal output without duplicating status", () => {
       const assistantWithTerminalCall: AssistantChatMessage = {
         role: "assistant",
         content: "I'll run a terminal command",
@@ -832,15 +832,11 @@ describe("constructMessages", () => {
       const toolMessage = messages[2] as ToolResultChatMessage;
       expect(toolMessage.role).toBe("tool");
       expect(toolMessage.toolCallId).toBe("terminal-call-1");
-      // Should contain content with status appended
-      expect(toolMessage.content).toContain("file1.txt\nfile2.txt");
-      expect(toolMessage.content).toContain("[Status: completed]");
-      expect(toolMessage.content).toContain("Warning: deprecated flag");
-      expect(toolMessage.content).toContain("[Status: warning]");
-      // Should use renderContextItemsWithStatus format with double newlines between items
-      expect(toolMessage.content).toMatch(
-        /file1\.txt\nfile2\.txt\n\[Status: completed\]\n\nWarning: deprecated flag\n\[Status: warning\]/,
+      // status は UI のバッジ専用で、履歴には content しか送らない
+      expect(toolMessage.content).toBe(
+        "file1.txt\nfile2.txt\n\nWarning: deprecated flag",
       );
+      expect(toolMessage.content).not.toContain("[Status:");
     });
 
     test("should use renderContextItems for non-RunTerminalCommand tools with output", () => {

@@ -27,6 +27,7 @@ import historyManager from "./util/history";
 import { editConfigFile, migrateV1DevDataFiles } from "./util/paths";
 
 import {
+  getRunningProcessLog,
   isProcessBackgrounded,
   killTerminalProcess,
   markProcessAsBackgrounded,
@@ -1131,6 +1132,11 @@ export class Core {
 
     on("process/killTerminalProcess", async ({ data: { toolCallId } }) => {
       await killTerminalProcess(toolCallId);
+    });
+
+    // バックグラウンド化時にログリンクを引き継ぐため、実行中コマンドのログ位置を返す
+    on("process/getRunningLog", async ({ data: { toolCallId } }) => {
+      return getRunningProcessLog(toolCallId);
     });
 
     on("models/fetch", async (msg) => {

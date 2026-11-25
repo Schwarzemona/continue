@@ -36,7 +36,11 @@ function getShellCommand(command: string): { shell: string; args: string[] } {
   }
 }
 
-import { fileURLToPath } from "node:url";
+import type { StdioOptions } from "node:child_process";
+import fs from "node:fs";
+import path from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { ContextItem } from "../..";
 import { ToolImpl } from ".";
 import {
   isProcessBackgrounded,
@@ -97,6 +101,90 @@ const getColorEnv = () => ({
   CLICOLOR_FORCE: "1",
 });
 
+// ログは read_file で読む前提のため、ANSI カラーシーケンスは除去して書き出す。
+// GUI への partial output はライブ表示に使うため ANSI を保持する。
+const ANSI_ESCAPE_PATTERN =
+  // eslint-disable-next-line no-control-regex
+  /\x1b\[[0-9;?]*[ -/]*[@-~]|\x1b\][^\x07]*\x07|\x1b[()][A-Za-z0-9]/g;
+
+function stripAnsi(text: string): string {
+  return text.replace(ANSI_ESCAPE_PATTERN, "");
+}
+
+interface TerminalLog {
+  fsPath: string;
+  uri: string;
+  /** read_file に渡すワークスペース基準の相対パス */
+  relativePath: string;
+  /** ANSI を除去してログへ追記する */
+  append(text: string): void;
+}
+
+// ログを準備する。create_new_file の前例に倣い、既存ログの上書きは拒否する。
+// ワークスペースの実体がローカルに無い場合は書き出せないため undefined を返す。
+function createTerminalLog(
+  cwd: string,
+  logFilename: string,
+): TerminalLog | undefined {
+  // 拡張子の無いファイル名が渡されることもあるため、.log を補記して区別可能にする
+  const logname =
+    logFilename.length === 0 ? `run_terminal_command.log` : logFilename;
+  const filename = /\.log$/i.test(logname) ? logname : `${logname}.log`;
+  const segments = filename.split(/[\\/]+/).filter((s) => s !== "");
+  if (segments.includes("..") || path.isAbsolute(filename)) {
+    throw new ContinueError(
+      ContinueErrorReason.PathResolutionFailed,
+      "logFilenameは.continue/logs/からの相対ファイル名にしてください（絶対パスと..は使用できません）。",
+    );
+  }
+  if (!fs.existsSync(cwd)) {
+    return undefined;
+  }
+  const relativePath = path
+    .join(".continue", "logs", ...segments)
+    .split(path.sep)
+    .join("/");
+  const fsPath = path.resolve(cwd, relativePath);
+  fs.mkdirSync(path.dirname(fsPath), { recursive: true });
+  // ログリンクが常に実在するファイルへ向くよう、空でも作成しておく
+  fs.writeFileSync(fsPath, "");
+  return {
+    fsPath,
+    uri: pathToFileURL(fsPath).toString(),
+    relativePath,
+    append: (text) => fs.appendFileSync(fsPath, stripAnsi(text)),
+  };
+}
+
+// status は UI のバッジ専用なので、モデルへは content で終了状態とログ位置を伝える
+function toTerminalLogItem(
+  status: string,
+  log: TerminalLog | undefined,
+  description: string,
+): ContextItem {
+  const item: ContextItem = {
+    name: "端末",
+    description,
+    content: log ? `${status}\nログ: ${log.relativePath}` : status,
+    status,
+  };
+  if (log) {
+    item.uri = { type: "file", value: log.uri };
+  }
+  return item;
+}
+
+// code が null の場合はシグナルで停止した場合
+function terminationStatus(code: number | null, signal: string | null): string {
+  if (code === 0) {
+    return "実行完了";
+  }
+  if (code !== null) {
+    return `コマンドが終了コード${code}で失敗`;
+  }
+  return `コマンドがシグナル${signal}で停止`;
+}
+
 // Only spawn processes locally when there is no remote workspace.
 // With extensionKind: ["ui", "workspace"], the extension host almost always
 // runs on the local machine. childProcess.spawn() executes on the extension
@@ -108,6 +196,7 @@ const LOCAL_ONLY = ["", "local"];
 
 export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
   const command = getStringArg(args, "command");
+  const logFilename = getStringArg(args, "logFilename");
   // Default to waiting for completion if not specified
   const waitForCompletion =
     getBooleanArg(args, "waitForCompletion", false) ?? true;
@@ -122,27 +211,13 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
         const workspaceDirs = await extras.ide.getWorkspaceDirs();
         const cwd = resolveWorkingDirectory(workspaceDirs);
 
+        const log = createTerminalLog(cwd, logFilename);
+
         return new Promise((resolve, reject) => {
           let terminalOutput = "";
+          let timedOut = false;
           let timeoutId: ReturnType<typeof setTimeout> | undefined;
           let sigkillTimeoutId: ReturnType<typeof setTimeout> | undefined;
-
-          if (!waitForCompletion) {
-            const status = "コマンドはバックグラウンドで実行中……";
-            if (extras.onPartialOutput) {
-              extras.onPartialOutput({
-                toolCallId,
-                contextItems: [
-                  {
-                    name: "端末",
-                    description: "端末コマンド出力",
-                    content: "",
-                    status: status,
-                  },
-                ],
-              });
-            }
-          }
 
           // Use spawn with color environment
           const { shell, args } = getShellCommand(command);
@@ -158,6 +233,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
               childProc,
               extras.onPartialOutput,
               terminalOutput,
+              log && { uri: log.uri, relativePath: log.relativePath },
             );
           }
 
@@ -171,22 +247,11 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
           if (waitForCompletion) {
             timeoutId = setTimeout(() => {
               if (isRunning()) {
+                timedOut = true;
                 terminalOutput += "\n[タイムアウト: 10分経過しました]\n";
+                log?.append("\n[タイムアウト: 10分経過しました]\n");
 
-                // Update UI with timeout message
-                if (extras.onPartialOutput) {
-                  extras.onPartialOutput({
-                    toolCallId,
-                    contextItems: [
-                      {
-                        name: "端末",
-                        description: "端末コマンド出力",
-                        content: terminalOutput,
-                        status: "コマンドタイムアウト",
-                      },
-                    ],
-                  });
-                }
+                // ライブ表示は廃止済み。完走時にタイムアウトステータスが返る
 
                 // Try graceful termination first
                 childProc.kill("SIGTERM");
@@ -202,77 +267,42 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
           }
 
           childProc.stdout?.on("data", (data) => {
+            const newOutput = getDecodedOutput(data);
+            // バックグラウンド化後もログには全出力を追記し続ける
+            log?.append(newOutput);
             // Skip if this process has been backgrounded
             if (isProcessBackgrounded(toolCallId)) return;
 
-            const newOutput = getDecodedOutput(data);
             terminalOutput += newOutput;
 
             // Update the tracked output for potential cancellation notifications
             if (toolCallId && waitForCompletion) {
               updateProcessOutput(toolCallId, terminalOutput);
             }
-
-            // Send partial output to UI
-            if (extras.onPartialOutput) {
-              const status = waitForCompletion
-                ? ""
-                : "コマンドはバックグラウンドで実行中……";
-              extras.onPartialOutput({
-                toolCallId,
-                contextItems: [
-                  {
-                    name: "端末",
-                    description: "端末コマンド出力",
-                    content: terminalOutput,
-                    status: status,
-                  },
-                ],
-              });
-            }
+            // 実行中のライブ表示（partial output）は廃止。出力はログにのみ追記
           });
 
           childProc.stderr?.on("data", (data) => {
+            const newOutput = getDecodedOutput(data);
+            log?.append(newOutput);
             // Skip if this process has been backgrounded
             if (isProcessBackgrounded(toolCallId)) return;
 
-            const newOutput = getDecodedOutput(data);
             terminalOutput += newOutput;
 
             // Update the tracked output for potential cancellation notifications
             if (toolCallId && waitForCompletion) {
               updateProcessOutput(toolCallId, terminalOutput);
-            }
-
-            // Send partial output to UI, status is not required
-            if (extras.onPartialOutput) {
-              extras.onPartialOutput({
-                toolCallId,
-                contextItems: [
-                  {
-                    name: "端末",
-                    description: "端末コマンド出力",
-                    content: terminalOutput,
-                  },
-                ],
-              });
             }
           });
 
           // If we don't need to wait for completion, resolve immediately
           if (!waitForCompletion) {
             const status = "コマンドはバックグラウンドで実行中……";
-            resolve([
-              {
-                name: "端末",
-                description: "端末コマンド出力",
-                content: terminalOutput,
-                status: status,
-              },
-            ]);
+            resolve([toTerminalLogItem(status, log, "端末コマンド出力")]);
           }
 
-          childProc.on("close", (code) => {
+          childProc.on("close", (code, signal) => {
             // Clear timeout on normal completion
             if (timeoutId) {
               clearTimeout(timeoutId);
@@ -286,7 +316,18 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
             // Clean up process tracking
             if (toolCallId) {
               if (isProcessBackgrounded(toolCallId)) {
+                // 終了文言をログ末尾へ追記し、ログリンク付きで完了を UI へ通知する。
+                // モデルはログを読み直す次のターンで、ログ末尾から終了を確認する
+                const status = terminationStatus(code, signal);
+                log?.append(`\n[${status}]\n`);
+                extras.onPartialOutput?.({
+                  toolCallId,
+                  contextItems: [
+                    toTerminalLogItem(status, log, "端末コマンド出力"),
+                  ],
+                });
                 removeBackgroundedProcess(toolCallId);
+                removeRunningProcess(toolCallId);
                 return;
               }
               // Remove from foreground tracking if it was tracked
@@ -295,43 +336,22 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
 
             if (waitForCompletion) {
               // Normal completion, resolve now
-              if (!code || code === 0) {
-                const status = "実行完了";
-                resolve([
-                  {
-                    name: "端末",
-                    description: "端末コマンド出力",
-                    content: terminalOutput,
-                    status: status,
-                  },
-                ]);
-              } else {
-                const status = `コマンドが終了コード${code}で失敗`;
-                resolve([
-                  {
-                    name: "端末",
-                    description: "端末コマンド出力",
-                    content: terminalOutput,
-                    status: status,
-                  },
-                ]);
-              }
+              const status = timedOut
+                ? "タイムアウト(10分)"
+                : terminationStatus(code, signal);
+              resolve([toTerminalLogItem(status, log, "端末コマンド出力")]);
             } else {
-              // Already resolved, just update the UI with final output
+              // Already resolved, just notify the UI of the final status
+              const status =
+                code === 0
+                  ? "バックグラウンド処理完了"
+                  : terminationStatus(code, signal);
+              log?.append(`\n[${status}]\n`);
               if (extras.onPartialOutput) {
-                const status =
-                  code === 0 || !code
-                    ? "\nバックグラウンド処理完了"
-                    : `\nバックグラウンド処理が終了コード${code}で失敗`;
                 extras.onPartialOutput({
                   toolCallId,
                   contextItems: [
-                    {
-                      name: "端末",
-                      description: "端末コマンド出力",
-                      content: terminalOutput,
-                      status: status,
-                    },
+                    toTerminalLogItem(status, log, "端末コマンド出力"),
                   ],
                 });
               }
@@ -369,6 +389,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
       // Fallback to non-streaming for older clients
       const workspaceDirs = await extras.ide.getWorkspaceDirs();
       const cwd = resolveWorkingDirectory(workspaceDirs);
+      const log = createTerminalLog(cwd, logFilename);
 
       if (waitForCompletion) {
         // Standard execution, waiting for completion
@@ -376,126 +397,113 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
           // Use spawn approach for consistency with streaming version
           const { shell: nonStreamingShell, args: nonStreamingArgs } =
             getShellCommand(command);
-          const output = await new Promise<{ stdout: string; stderr: string }>(
-            (resolve, reject) => {
-              let timeoutId: ReturnType<typeof setTimeout> | undefined;
-              let sigkillTimeoutId: ReturnType<typeof setTimeout> | undefined;
+          await new Promise<void>((resolve, reject) => {
+            let timeoutId: ReturnType<typeof setTimeout> | undefined;
+            let sigkillTimeoutId: ReturnType<typeof setTimeout> | undefined;
 
-              const childProc = childProcess.spawn(
-                nonStreamingShell,
-                nonStreamingArgs,
-                {
-                  cwd,
-                  env: getColorEnv(),
-                },
+            const childProc = childProcess.spawn(
+              nonStreamingShell,
+              nonStreamingArgs,
+              {
+                cwd,
+                env: getColorEnv(),
+              },
+            );
+
+            // Track this process for foreground cancellation
+            if (toolCallId) {
+              markProcessAsRunning(
+                toolCallId,
+                childProc,
+                undefined,
+                "",
+                log && { uri: log.uri, relativePath: log.relativePath },
               );
+            }
 
-              // Track this process for foreground cancellation
-              if (toolCallId) {
-                markProcessAsRunning(toolCallId, childProc, undefined, "");
+            // Check if the child process is still running.
+            // `childProc.killed` only indicates that kill() was called,
+            // not that the process has actually exited.
+            const isRunning = () =>
+              childProc.exitCode === null && childProc.signalCode === null;
+
+            // Set up timeout
+            timeoutId = setTimeout(() => {
+              if (isRunning()) {
+                log?.append("\n[タイムアウト: 10分経過しました]\n");
+
+                // Try graceful termination first
+                childProc.kill("SIGTERM");
+
+                // Force kill after 5 seconds if still running
+                sigkillTimeoutId = setTimeout(() => {
+                  if (isRunning()) {
+                    childProc.kill("SIGKILL");
+                  }
+                }, 5_000);
+              }
+            }, DEFAULT_TOOL_TIMEOUT_MS);
+
+            childProc.stdout?.on("data", (data) => {
+              log?.append(getDecodedOutput(data));
+            });
+
+            childProc.stderr?.on("data", (data) => {
+              log?.append(getDecodedOutput(data));
+            });
+
+            childProc.on("close", (code, signal) => {
+              // Clear outer timeout
+              if (timeoutId) {
+                clearTimeout(timeoutId);
               }
 
-              let stdout = "";
-              let stderr = "";
+              // Clear inner SIGKILL timeout if process exits before grace period
+              if (sigkillTimeoutId) {
+                clearTimeout(sigkillTimeoutId);
+              }
 
-              // Check if the child process is still running.
-              // `childProc.killed` only indicates that kill() was called,
-              // not that the process has actually exited.
-              const isRunning = () =>
-                childProc.exitCode === null && childProc.signalCode === null;
+              // Clean up process tracking
+              if (toolCallId) {
+                removeRunningProcess(toolCallId);
+              }
 
-              // Set up timeout
-              timeoutId = setTimeout(() => {
-                if (isRunning()) {
-                  stderr += "\n[タイムアウト: 10分経過しました]\n";
-
-                  // Try graceful termination first
-                  childProc.kill("SIGTERM");
-
-                  // Force kill after 5 seconds if still running
-                  sigkillTimeoutId = setTimeout(() => {
-                    if (isRunning()) {
-                      childProc.kill("SIGKILL");
-                    }
-                  }, 5_000);
-                }
-              }, DEFAULT_TOOL_TIMEOUT_MS);
-
-              childProc.stdout?.on("data", (data) => {
-                stdout += getDecodedOutput(data);
-              });
-
-              childProc.stderr?.on("data", (data) => {
-                stderr += getDecodedOutput(data);
-              });
-
-              childProc.on("close", (code) => {
-                // Clear outer timeout
-                if (timeoutId) {
-                  clearTimeout(timeoutId);
-                }
-
-                // Clear inner SIGKILL timeout if process exits before grace period
-                if (sigkillTimeoutId) {
-                  clearTimeout(sigkillTimeoutId);
-                }
-
-                // Clean up process tracking
-                if (toolCallId) {
-                  removeRunningProcess(toolCallId);
-                }
-
-                if (code === 0) {
-                  resolve({ stdout, stderr });
-                } else {
-                  const error = new ContinueError(
+              if (code === 0) {
+                resolve();
+              } else {
+                reject(
+                  new ContinueError(
                     ContinueErrorReason.CommandExecutionFailed,
-                    `コマンドが終了コード${code}で失敗`,
-                  );
-                  (error as any).stderr = stderr;
-                  reject(error);
-                }
-              });
+                    terminationStatus(code, signal),
+                  ),
+                );
+              }
+            });
 
-              childProc.on("error", (error) => {
-                // Clear timeout on error
-                if (timeoutId) {
-                  clearTimeout(timeoutId);
-                }
+            childProc.on("error", (error) => {
+              // Clear timeout on error
+              if (timeoutId) {
+                clearTimeout(timeoutId);
+              }
 
-                // Clear SIGKILL timeout to prevent delayed kill after rejection
-                if (sigkillTimeoutId) {
-                  clearTimeout(sigkillTimeoutId);
-                }
+              // Clear SIGKILL timeout to prevent delayed kill after rejection
+              if (sigkillTimeoutId) {
+                clearTimeout(sigkillTimeoutId);
+              }
 
-                // Clean up process tracking
-                if (toolCallId) {
-                  removeRunningProcess(toolCallId);
-                }
-                reject(error);
-              });
-            },
-          );
+              // Clean up process tracking
+              if (toolCallId) {
+                removeRunningProcess(toolCallId);
+              }
+              reject(error);
+            });
+          });
 
           const status = "実行完了";
-          return [
-            {
-              name: "端末",
-              description: "端末コマンドの出力",
-              content: output.stdout ?? "",
-              status: status,
-            },
-          ];
+          return [toTerminalLogItem(status, log, "端末コマンドの出力")];
         } catch (error: any) {
           const status = `コマンドが失敗しました: ${error.message || error.toString()}`;
-          return [
-            {
-              name: "端末",
-              description: "端末コマンドの出力",
-              content: error.stderr ?? error.toString(),
-              status: status,
-            },
-          ];
+          return [toTerminalLogItem(status, log, "端末コマンドの出力")];
         }
       } else {
         // For non-streaming but also not waiting for completion, use spawn
@@ -504,17 +512,25 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
           // Use spawn with color environment
           const { shell: detachedShell, args: detachedArgs } =
             getShellCommand(command);
+          // fd を直接渡してログへ書き出す。パイプを接続しないためこの分岐だけ
+          // ANSI を除去できないが、detached を維持できる
+          const logFd = log ? fs.openSync(log.fsPath, "w") : undefined;
+          const stdio: StdioOptions =
+            logFd === undefined ? "ignore" : ["ignore", logFd, logFd];
           const childProc = childProcess.spawn(detachedShell, detachedArgs, {
             cwd,
             env: getColorEnv(), // Add color environment
             // Detach the process so it's not tied to the parent
             detached: true,
-            // Redirect to /dev/null equivalent (works cross-platform)
-            stdio: "ignore",
+            stdio,
           });
+          if (logFd !== undefined) {
+            fs.closeSync(logFd);
+          }
 
           // Even for detached processes, add event handlers to clean up the background process map
-          childProc.on("close", () => {
+          childProc.on("close", (code, signal) => {
+            log?.append(`\n[${terminationStatus(code, signal)}]\n`);
             if (isProcessBackgrounded(toolCallId)) {
               removeBackgroundedProcess(toolCallId);
             }
@@ -529,24 +545,10 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
           // Unref the child to allow the Node.js process to exit
           childProc.unref();
           const status = "コマンドはバックグラウンドで実行中……";
-          return [
-            {
-              name: "端末",
-              description: "端末コマンドの出力",
-              content: status,
-              status: status,
-            },
-          ];
+          return [toTerminalLogItem(status, log, "端末コマンドの出力")];
         } catch (error: any) {
           const status = `コマンドが失敗しました: ${error.message || error.toString()}`;
-          return [
-            {
-              name: "端末",
-              description: "端末コマンドの出力",
-              content: status,
-              status: status,
-            },
-          ];
+          return [toTerminalLogItem(status, log, "端末コマンドの出力")];
         }
       }
     }
@@ -555,12 +557,14 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
   // For remote environments (SSH, WSL, Dev Container, Codespaces, etc.),
   // delegate to VS Code's integrated terminal which handles remote execution.
   // Note: output capture and waitForCompletion are not yet supported for remotes.
+  // 拡張ホストがローカル側で動くためログをリモート FS へも書けないので、logFilename は未使用。
   await extras.ide.runCommand(command);
   return [
     {
       name: "端末",
       description: "端末コマンドの出力",
-      content: "リモート端末でコマンドを実行",
+      content:
+        "リモート端末でコマンドを実行しました。リモートではログの書き出しも出力・終了コードの捕捉もできないため、VS Code 統合端末の出力をご確認ください。",
       status: "実行",
     },
   ];

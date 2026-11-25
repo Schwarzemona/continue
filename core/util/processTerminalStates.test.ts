@@ -4,6 +4,7 @@ import {
   getAllBackgroundedProcessIds,
   getAllRunningProcessIds,
   getRunningProcess,
+  getRunningProcessLog,
   isProcessBackgrounded,
   isProcessRunning,
   killAllRunningTerminalProcesses,
@@ -54,6 +55,20 @@ describe("processTerminalStates", () => {
     const toolCallId = "test-123";
     markProcessAsBackgrounded(toolCallId);
     expect(isProcessBackgrounded(toolCallId)).toBe(true);
+  });
+
+  test("should track the log location of a running process", () => {
+    const toolCallId = "test-log-1";
+    markProcessAsRunning(toolCallId, createMockProcess(), undefined, "", {
+      uri: "file:///tmp/bg.log",
+      relativePath: ".continue/logs/bg.log",
+    });
+    expect(getRunningProcessLog(toolCallId)).toEqual({
+      uri: "file:///tmp/bg.log",
+      relativePath: ".continue/logs/bg.log",
+    });
+    removeRunningProcess(toolCallId);
+    expect(getRunningProcessLog(toolCallId)).toBeUndefined();
   });
 
   test("should correctly identify non-backgrounded processes", () => {

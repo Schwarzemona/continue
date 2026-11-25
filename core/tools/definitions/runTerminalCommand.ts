@@ -23,14 +23,12 @@ function getPreferredShell(): string {
   }
 }
 
-const PLATFORM_INFO = `${os.platform()}、${os.arch()}、およびシェル${getPreferredShell()}に最適化された端末コマンドとスクリプトを選択してください。`;
+const PLATFORM_INFO = `環境は${os.platform()}の${os.arch()}で${getPreferredShell()}です。`;
 
-const RUN_COMMAND_NOTES = `シェルはステートフルではなく、以前のコマンドを記憶しません。\
-特別な権限や管理者権限を必要とするコマンドと、\
-grep、find、locate、rg、ag、findstr、select-string、get-childitem、gci、ls、dirのファイル探索コマンド、\
-cat、less、more、head、tail、bat、open、xdg-open、type、start、get-content、gcのファイル表示コマンド、\
-sed、awk、set-content、add-content、out-file、scのファイル編集コマンドは実行できません。\
-${PLATFORM_INFO}`;
+const RUN_COMMAND_NOTES = `${PLATFORM_INFO}
+コマンドの出力はlogFilenameで指定した.continue/logs/下のログファイルへ書き出されます。\
+シェルはステートフルではなく、以前のコマンドを記憶しません。\
+特別な権限や管理者権限を必要とするコマンドは実行できません。`;
 
 export const runTerminalCommandTool: Tool = {
   type: "function",
@@ -42,14 +40,18 @@ export const runTerminalCommandTool: Tool = {
   group: BUILT_IN_GROUP_NAME,
   function: {
     name: BuiltInToolNames.RunTerminalCommand,
-    description: `現在のディレクトリで端末コマンドを実行します。\n${RUN_COMMAND_NOTES}`,
+    description: `端末コマンドを実行します。\n${RUN_COMMAND_NOTES}`,
     parameters: {
       type: "object",
       required: ["command"],
       properties: {
         command: {
           type: "string",
-          description: "実行するコマンド。これはIDEのシェルに直接渡されます。",
+          description: "実行するコマンド。",
+        },
+        logFilename: {
+          type: "string",
+          description: "ログを書き出すログファイル名。",
         },
         waitForCompletion: {
           type: "boolean",
@@ -71,6 +73,9 @@ export const runTerminalCommandTool: Tool = {
   },
   systemMessageDescription: {
     prefix: `端末コマンドを実行するには、${BuiltInToolNames.RunTerminalCommand} ツールを使用してください。\n${RUN_COMMAND_NOTES}\nまた、waitForCompletion 引数を false に設定して、コマンドをバックグラウンドで実行することもできます。\n例えば、git log を表示するには、次のように応答できます:`,
-    exampleArgs: [["command", "git log"]],
+    exampleArgs: [
+      ["command", "git log"],
+      ["logFilename", "git-log.log"],
+    ],
   },
 };
