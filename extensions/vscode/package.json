@@ -778,6 +778,7 @@
     "onnxruntime-node": true,
     "yarn": true,
     "@openapitools/openapi-generator-cli": true,
-    "@vscode/vsce-sign": true
+    "@vscode/vsce-sign": true,
+    "win-export-certificate-and-key": true
   }
 }
