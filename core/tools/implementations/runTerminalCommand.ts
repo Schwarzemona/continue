@@ -40,8 +40,8 @@ import type { StdioOptions } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { ContextItem } from "../..";
 import { ToolImpl } from ".";
+import { ContextItem } from "../..";
 import {
   isProcessBackgrounded,
   markProcessAsRunning,
@@ -49,6 +49,7 @@ import {
   removeRunningProcess,
   updateProcessOutput,
 } from "../../util/processTerminalStates";
+import { TERMINAL_LOG_FILENAME } from "../definitions/runTerminalCommand";
 import { getBooleanArg, getStringArg } from "../parseArgs";
 
 /**
@@ -120,15 +121,16 @@ interface TerminalLog {
   append(text: string): void;
 }
 
-// ログを準備する。create_new_file の前例に倣い、既存ログの上書きは拒否する。
-// ワークスペースの実体がローカルに無い場合は書き出せないため undefined を返す。
+// ログを準備する。呼び出し側は固定名を渡すため、実行のたびに同じファイルへ切り詰められ、
+// 最新1コマ分のログが残る。書き出せない場合は undefined を返してコマンド実行は続ける。
+// logFilename の正規化と検証は、agent による名前指定を復活させる際の足場として残している。
 function createTerminalLog(
   cwd: string,
   logFilename: string,
 ): TerminalLog | undefined {
   // 拡張子の無いファイル名が渡されることもあるため、.log を補記して区別可能にする
   const logname =
-    logFilename.length === 0 ? `run_terminal_command.log` : logFilename;
+    logFilename.length === 0 ? TERMINAL_LOG_FILENAME : logFilename;
   const filename = /\.log$/i.test(logname) ? logname : `${logname}.log`;
   const segments = filename.split(/[\\/]+/).filter((s) => s !== "");
   if (segments.includes("..") || path.isAbsolute(filename)) {
@@ -145,14 +147,26 @@ function createTerminalLog(
     .split(path.sep)
     .join("/");
   const fsPath = path.resolve(cwd, relativePath);
-  fs.mkdirSync(path.dirname(fsPath), { recursive: true });
-  // ログリンクが常に実在するファイルへ向くよう、空でも作成しておく
-  fs.writeFileSync(fsPath, "");
+  try {
+    fs.mkdirSync(path.dirname(fsPath), { recursive: true });
+    // ログリンクが常に実在するファイルへ向くよう、空でも作成しておく
+    fs.writeFileSync(fsPath, "");
+  } catch {
+    // 書き込み権限の無いフォールバック先でもコマンド実行は続ける
+    return undefined;
+  }
   return {
     fsPath,
     uri: pathToFileURL(fsPath).toString(),
     relativePath,
-    append: (text) => fs.appendFileSync(fsPath, stripAnsi(text)),
+    // 実行中にログが削除されてもコマンドを止めない
+    append: (text) => {
+      try {
+        fs.appendFileSync(fsPath, stripAnsi(text));
+      } catch {
+        // ログが削除済みでも実行を続ける
+      }
+    },
   };
 }
 
@@ -196,7 +210,6 @@ const LOCAL_ONLY = ["", "local"];
 
 export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
   const command = getStringArg(args, "command");
-  const logFilename = getStringArg(args, "logFilename");
   // Default to waiting for completion if not specified
   const waitForCompletion =
     getBooleanArg(args, "waitForCompletion", false) ?? true;
@@ -211,7 +224,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
         const workspaceDirs = await extras.ide.getWorkspaceDirs();
         const cwd = resolveWorkingDirectory(workspaceDirs);
 
-        const log = createTerminalLog(cwd, logFilename);
+        const log = createTerminalLog(cwd, TERMINAL_LOG_FILENAME);
 
         return new Promise((resolve, reject) => {
           let terminalOutput = "";
@@ -389,7 +402,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
       // Fallback to non-streaming for older clients
       const workspaceDirs = await extras.ide.getWorkspaceDirs();
       const cwd = resolveWorkingDirectory(workspaceDirs);
-      const log = createTerminalLog(cwd, logFilename);
+      const log = createTerminalLog(cwd, TERMINAL_LOG_FILENAME);
 
       if (waitForCompletion) {
         // Standard execution, waiting for completion
@@ -557,7 +570,7 @@ export const runTerminalCommandImpl: ToolImpl = async (args, extras) => {
   // For remote environments (SSH, WSL, Dev Container, Codespaces, etc.),
   // delegate to VS Code's integrated terminal which handles remote execution.
   // Note: output capture and waitForCompletion are not yet supported for remotes.
-  // 拡張ホストがローカル側で動くためログをリモート FS へも書けないので、logFilename は未使用。
+  // 拡張ホストがローカル側で動くためログをリモート FS へも書けないので、ログの書き出しは行わない。
   await extras.ide.runCommand(command);
   return [
     {

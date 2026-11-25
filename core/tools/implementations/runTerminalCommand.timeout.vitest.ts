@@ -5,11 +5,12 @@ import * as path from "node:path";
 import { pathToFileURL } from "node:url";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { IDE, ToolExtras } from "../..";
-import { runTerminalCommandImpl } from "./runTerminalCommand";
 import {
   getRunningProcessLog,
   markProcessAsBackgrounded,
 } from "../../util/processTerminalStates";
+import { TERMINAL_LOG_FILENAME } from "../definitions/runTerminalCommand";
+import { runTerminalCommandImpl } from "./runTerminalCommand";
 
 // Hoist mock function so it can be referenced in vi.mock factory
 const { mockSpawn } = vi.hoisted(() => ({
@@ -99,8 +100,8 @@ describe("runTerminalCommand timeout functionality", () => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
-  function logPath(logFilename: string): string {
-    return path.join(workspaceDir, ".continue", "logs", logFilename);
+  function logPath(): string {
+    return path.join(workspaceDir, ".continue", "logs", TERMINAL_LOG_FILENAME);
   }
 
   const createMockExtras = (
@@ -151,7 +152,6 @@ describe("runTerminalCommand timeout functionality", () => {
     const extras = createMockExtras();
     const args = {
       command: "echo test",
-      logFilename: "timeout-test.log",
       waitForCompletion: true,
     };
     const resultPromise = runTerminalCommandImpl(args, extras);
@@ -167,7 +167,6 @@ describe("runTerminalCommand timeout functionality", () => {
     const extras = createMockExtras();
     const args = {
       command: "sleep 10",
-      logFilename: "background-test.log",
       waitForCompletion: false,
     };
     const result = await runTerminalCommandImpl(args, extras);
@@ -177,14 +176,13 @@ describe("runTerminalCommand timeout functionality", () => {
     expect(timeoutCalls.length).toBe(0);
     expect(result[0].status).toContain("バックグラウンドで実行中");
     expect(result[0].content).toContain("ログ: .continue/logs/");
-    expect(fs.existsSync(logPath("background-test.log"))).toBe(true);
+    expect(fs.existsSync(logPath())).toBe(true);
   });
 
   it("should kill process when timeout fires (streaming)", async () => {
     const extras = createMockExtras();
     const args = {
       command: "sleep 300",
-      logFilename: "sleep-300.log",
       waitForCompletion: true,
     };
     const resultPromise = runTerminalCommandImpl(args, extras);
@@ -197,7 +195,7 @@ describe("runTerminalCommand timeout functionality", () => {
     expect(result[0].status).toContain("タイムアウト");
     expect(result[0].content).not.toContain("タイムアウト: 10分経過");
     // タイムアウトの記録も実際の出力も、残るのはログだけ
-    expect(fs.readFileSync(logPath("sleep-300.log"), "utf-8")).toContain(
+    expect(fs.readFileSync(logPath(), "utf-8")).toContain(
       "[タイムアウト: 10分経過しました]",
     );
   });
@@ -206,7 +204,6 @@ describe("runTerminalCommand timeout functionality", () => {
     const extras = createMockExtras();
     const args = {
       command: "echo quick",
-      logFilename: "quick.log",
       waitForCompletion: true,
     };
     const resultPromise = runTerminalCommandImpl(args, extras);
@@ -224,7 +221,6 @@ describe("runTerminalCommand timeout functionality", () => {
     const extras = createMockExtras();
     const args = {
       command: "sleep 300",
-      logFilename: "sleep-300.log",
       waitForCompletion: true,
     };
     const resultPromise = runTerminalCommandImpl(args, extras);
@@ -258,14 +254,13 @@ describe("runTerminalCommand timeout functionality", () => {
     const extras = createMockExtras();
     const args = {
       command: "long-running",
-      logFilename: "bg-handoff.log",
       waitForCompletion: true,
     };
     const resultPromise = runTerminalCommandImpl(args, extras);
     // setup の await を流して spawn と markProcessAsRunning まで進める
     await vi.advanceTimersByTimeAsync(0);
     expect(getRunningProcessLog("test-tool-call-id")?.relativePath).toBe(
-      ".continue/logs/bg-handoff.log",
+      `.continue/logs/${TERMINAL_LOG_FILENAME}`,
     );
 
     // ユーザー操作でのバックグラウンド化を再現
@@ -278,12 +273,12 @@ describe("runTerminalCommand timeout functionality", () => {
     // UI へログリンク付きの完了が通知される
     const lastCall = mockOnPartialOutput.mock.calls.at(-1)?.[0];
     expect(lastCall?.contextItems[0].status).toBe("実行完了");
-    expect(lastCall?.contextItems[0].uri?.value).toContain("bg-handoff.log");
+    expect(lastCall?.contextItems[0].uri?.value).toContain(
+      TERMINAL_LOG_FILENAME,
+    );
 
     // ログ末尾へ終了マーカーが残る
-    expect(fs.readFileSync(logPath("bg-handoff.log"), "utf-8")).toContain(
-      "[実行完了]",
-    );
+    expect(fs.readFileSync(logPath(), "utf-8")).toContain("[実行完了]");
 
     // 終了で前台・后台の追跡は解除される
     expect(getRunningProcessLog("test-tool-call-id")).toBeUndefined();

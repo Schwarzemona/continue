@@ -14,7 +14,10 @@ import {
 } from "vitest";
 import { IDE, ToolExtras } from "../..";
 import * as processTerminalStates from "../../util/processTerminalStates";
-import { runTerminalCommandTool } from "../definitions/runTerminalCommand";
+import {
+  TERMINAL_LOG_FILENAME,
+  runTerminalCommandTool,
+} from "../definitions/runTerminalCommand";
 import { runTerminalCommandImpl } from "./runTerminalCommand";
 
 // We're using real child processes, so ensure these aren't mocked
@@ -36,17 +39,13 @@ describe("runTerminalCommandImpl", () => {
     path.join(os.tmpdir(), "terminal-command-test-"),
   );
 
-  // ログはワークスペース直下の .continue/logs/ にこの名前で書かれる
-  const LOG_FILENAME = "test.log";
+  // ログはワークスペース直下の .continue/logs/ に固定名で書かれる
+  const terminalLogPath = () =>
+    path.join(workspaceDir, ".continue", "logs", TERMINAL_LOG_FILENAME);
 
-  const readLog = (logFilename: string = LOG_FILENAME): string =>
-    fs.readFileSync(
-      path.join(workspaceDir, ".continue", "logs", logFilename),
-      "utf-8",
-    );
+  const readLog = (): string => fs.readFileSync(terminalLogPath(), "utf-8");
 
-  const logExists = (logFilename: string = LOG_FILENAME): boolean =>
-    fs.existsSync(path.join(workspaceDir, ".continue", "logs", logFilename));
+  const logExists = (): boolean => fs.existsSync(terminalLogPath());
 
   // 各テストは空のワークスペースを持つ(ログの名前衝突を防ぐ)
   let workspaceDir: string;
@@ -173,7 +172,6 @@ describe("runTerminalCommandImpl", () => {
     const command = `node -e "console.log('real test output')"`;
     const args = {
       command,
-      logFilename: LOG_FILENAME,
       waitForCompletion: true,
     };
     const extras = createMockExtras();
@@ -185,38 +183,55 @@ describe("runTerminalCommandImpl", () => {
     expect(result[0].name).toBe("端末");
     expect(result[0].description).toBe("端末コマンドの出力");
     expect(result[0].content).not.toContain("real test output");
-    expect(result[0].content).toContain(`ログ: .continue/logs/${LOG_FILENAME}`);
+    expect(result[0].content).toContain(
+      `ログ: .continue/logs/${TERMINAL_LOG_FILENAME}`,
+    );
     // Verify status field indicates successful completion
     expect(result[0].status).toBe("実行完了");
 
     // 実出力はログファイルへ書き出されている
     expect(readLog()).toContain("real test output");
-    expect(result[0].uri?.value).toContain("logs/test.log");
+    expect(result[0].uri?.value).toContain(`logs/${TERMINAL_LOG_FILENAME}`);
   });
 
-  it("logFilenameに拡張子が無い場合は .log を補記する", async () => {
-    const args = {
-      command: `node -e "console.log('ext test output')"`,
-      logFilename: "appended",
-      waitForCompletion: true,
-    };
-    const result = await runTerminalCommandImpl(args, createMockExtras());
+  it("agent が logFilename を渡しても単一ログへ書き出す", async () => {
+    const result = await runTerminalCommandImpl(
+      {
+        command: `node -e "console.log('fixed log')"`,
+        logFilename: "hallucinated.log",
+        waitForCompletion: true,
+      },
+      createMockExtras(),
+    );
 
-    expect(result[0].content).toContain("ログ: .continue/logs/appended.log");
-    expect(readLog("appended.log")).toContain("ext test output");
-    expect(logExists("appended")).toBe(false);
+    expect(result[0].content).toContain(
+      `ログ: .continue/logs/${TERMINAL_LOG_FILENAME}`,
+    );
+    expect(readLog()).toContain("fixed log");
   });
 
-  it("logFilenameが既に .log 末尾の場合は補記しない", async () => {
-    const args = {
-      command: `node -e "console.log('no double ext')"`,
-      logFilename: LOG_FILENAME,
-      waitForCompletion: true,
-    };
-    const result = await runTerminalCommandImpl(args, createMockExtras());
+  it("実行のたびに単一ログを切り詰め、logs 下にファイルを1つだけ残す", async () => {
+    await runTerminalCommandImpl(
+      {
+        command: `node -e "console.log('first run')"`,
+        waitForCompletion: true,
+      },
+      createMockExtras(),
+    );
+    await runTerminalCommandImpl(
+      {
+        command: `node -e "console.log('second run')"`,
+        waitForCompletion: true,
+      },
+      createMockExtras(),
+    );
 
-    expect(result[0].content).toContain(`ログ: .continue/logs/${LOG_FILENAME}`);
-    expect(logExists("test.log.log")).toBe(false);
+    const log = readLog();
+    expect(log).not.toContain("first run");
+    expect(log).toContain("second run");
+    expect(
+      fs.readdirSync(path.join(workspaceDir, ".continue", "logs")),
+    ).toEqual([TERMINAL_LOG_FILENAME]);
   });
 
   it("should not use onPartialOutput in foreground when provided", async () => {
@@ -231,7 +246,6 @@ describe("runTerminalCommandImpl", () => {
 
     const args = {
       command,
-      logFilename: LOG_FILENAME,
       waitForCompletion: true,
     };
     const mockOutputFn = vi.fn();
@@ -273,7 +287,6 @@ describe("runTerminalCommandImpl", () => {
 
     const args = {
       command,
-      logFilename: LOG_FILENAME,
       waitForCompletion: false,
     };
     const mockOutputFn = vi.fn();
@@ -314,7 +327,7 @@ describe("runTerminalCommandImpl", () => {
       "バックグラウンド処理完了",
     );
     expect(completion.contextItems[0].content).toContain(
-      `ログ: .continue/logs/${LOG_FILENAME}`,
+      `ログ: .continue/logs/${TERMINAL_LOG_FILENAME}`,
     );
   });
 
@@ -322,7 +335,6 @@ describe("runTerminalCommandImpl", () => {
     // We'll keep mocking for remote environments as we can't test those directly
     const args = {
       command: "echo 'test'",
-      logFilename: LOG_FILENAME,
       waitForCompletion: true,
     };
     const extras = createMockExtras({ remoteName: "ssh" });
@@ -342,7 +354,6 @@ describe("runTerminalCommandImpl", () => {
     // Use a command that should fail on any platform
     const args = {
       command: "non-existent-command-xyz",
-      logFilename: LOG_FILENAME,
       waitForCompletion: true,
     };
     const extras = createMockExtras();
@@ -353,16 +364,12 @@ describe("runTerminalCommandImpl", () => {
     expect(result[0].description).toBe("端末コマンドの出力");
 
     // 戻り値はステータスとログ位置のみ
-    expect(result[0].content).toContain(`ログ: .continue/logs/${LOG_FILENAME}`);
+    expect(result[0].content).toContain(
+      `ログ: .continue/logs/${TERMINAL_LOG_FILENAME}`,
+    );
 
-    // 具体的なエラー文言はログに残る(プラットフォーム依存)
-    const log = readLog();
-    expect(
-      log.includes("Command failed") ||
-        log.includes("not found") ||
-        log.includes("recognized") ||
-        /error/i.test(log),
-    ).toBe(true);
+    // エラー文言はシェルとOSの言語に依存するため、内容が残っていることだけを確認する
+    expect(readLog().trim().length).toBeGreaterThan(0);
 
     // Verify status field indicates command failure
     expect(result[0].status).toContain("コマンドが失敗しました:");
@@ -373,7 +380,6 @@ describe("runTerminalCommandImpl", () => {
     const command = `node -e "process.stderr.write('This is an error message'); process.exit(1)"`;
     const args = {
       command,
-      logFilename: LOG_FILENAME,
       waitForCompletion: true,
     };
     const extras = createMockExtras();
@@ -401,7 +407,6 @@ describe("runTerminalCommandImpl", () => {
     const command = `node -e "console.log('success test')"`;
     const args = {
       command,
-      logFilename: LOG_FILENAME,
       waitForCompletion: true,
     };
     const extras = createMockExtras();
@@ -421,7 +426,6 @@ describe("runTerminalCommandImpl", () => {
     const command = `node -e "setTimeout(() => console.log('done'), 300)"`;
     const args = {
       command,
-      logFilename: LOG_FILENAME,
       waitForCompletion: false,
     };
     // No streaming in this test (no onPartialOutput)
@@ -433,45 +437,13 @@ describe("runTerminalCommandImpl", () => {
     expect(result[0].name).toBe("端末");
     // Verify both content and status fields for background commands
     expect(result[0].content).toContain("コマンドはバックグラウンドで実行中……");
-    expect(result[0].content).toContain(`ログ: .continue/logs/${LOG_FILENAME}`);
+    expect(result[0].content).toContain(
+      `ログ: .continue/logs/${TERMINAL_LOG_FILENAME}`,
+    );
     expect(result[0].status).toBe("コマンドはバックグラウンドで実行中……");
 
     // detached でも fd 経由でログが作成される
     expect(logExists()).toBe(true);
-  });
-
-  it("runTerminalCommandImpl rejects absolute path and .. in logFilename", async () => {
-    const command = `node -e "console.log('x')"`;
-
-    for (const logFilename of ["/abs/test.log", "../escape.log"]) {
-      await expect(
-        runTerminalCommandImpl(
-          {
-            command,
-            logFilename,
-            waitForCompletion: true,
-          },
-          createMockExtras(),
-        ),
-      ).rejects.toThrow(/相対ファイル名/);
-    }
-  });
-
-  it("runTerminalCommandImpl puts the log in a subdirectory when logFilename has one", async () => {
-    const command = `node -e "console.log('nested log')"`;
-    const result = await runTerminalCommandImpl(
-      {
-        command,
-        logFilename: "build/nested.log",
-        waitForCompletion: true,
-      },
-      createMockExtras(),
-    );
-
-    expect(result[0].content).toContain(
-      "ログ: .continue/logs/build/nested.log",
-    );
-    expect(readLog("build/nested.log")).toContain("nested log");
   });
 
   it("runTerminalCommandImpl strips ANSI escapes when writing the log", async () => {
@@ -479,7 +451,6 @@ describe("runTerminalCommandImpl", () => {
     await runTerminalCommandImpl(
       {
         command,
-        logFilename: LOG_FILENAME,
         waitForCompletion: true,
       },
       createMockExtras(),
@@ -495,14 +466,15 @@ describe("runTerminalCommandImpl", () => {
     const result = await runTerminalCommandImpl(
       {
         command,
-        logFilename: LOG_FILENAME,
         waitForCompletion: true,
       },
       createMockExtras(),
     );
 
     expect(result[0].status).toContain("コマンドが失敗しました:");
-    expect(result[0].content).toContain(`ログ: .continue/logs/${LOG_FILENAME}`);
+    expect(result[0].content).toContain(
+      `ログ: .continue/logs/${TERMINAL_LOG_FILENAME}`,
+    );
     expect(readLog()).toContain("before failure");
   });
 
@@ -540,7 +512,6 @@ describe("runTerminalCommandImpl", () => {
     const command = `node -e "console.log('no workspace test')"`;
     const args = {
       command,
-      logFilename: LOG_FILENAME,
       waitForCompletion: true,
     };
 
@@ -608,7 +579,6 @@ describe("runTerminalCommandImpl", () => {
       const command = `node -e "console.log('fallback test')"`;
       const args = {
         command,
-        logFilename: LOG_FILENAME,
         waitForCompletion: true,
       };
 
@@ -652,7 +622,6 @@ describe("runTerminalCommandImpl", () => {
           runTerminalCommandImpl(
             {
               command: "echo test",
-              logFilename: "cwd-test.log",
               waitForCompletion: false,
             },
             createMockExtras(),
@@ -673,7 +642,6 @@ describe("runTerminalCommandImpl", () => {
           runTerminalCommandImpl(
             {
               command: "echo test",
-              logFilename: "cwd-test.log",
               waitForCompletion: false,
             },
             createMockExtras(),
@@ -693,7 +661,6 @@ describe("runTerminalCommandImpl", () => {
           runTerminalCommandImpl(
             {
               command: "echo test",
-              logFilename: "cwd-test.log",
               waitForCompletion: false,
             },
             createMockExtras(),
@@ -709,7 +676,6 @@ describe("runTerminalCommandImpl", () => {
           runTerminalCommandImpl(
             {
               command: "echo test",
-              logFilename: "cwd-test.log",
               waitForCompletion: false,
             },
             createMockExtras(),
@@ -751,7 +717,6 @@ describe("runTerminalCommandImpl", () => {
             runTerminalCommandImpl(
               {
                 command: "echo test",
-                logFilename: "cwd-test.log",
                 waitForCompletion: false,
               },
               createMockExtras(),
@@ -771,7 +736,6 @@ describe("runTerminalCommandImpl", () => {
           runTerminalCommandImpl(
             {
               command: "echo test",
-              logFilename: "cwd-test.log",
               waitForCompletion: false,
             },
             createMockExtras(),
@@ -791,7 +755,6 @@ describe("runTerminalCommandImpl", () => {
           runTerminalCommandImpl(
             {
               command: "echo test",
-              logFilename: "cwd-test.log",
               waitForCompletion: false,
             },
             createMockExtras(),
@@ -807,7 +770,7 @@ describe("runTerminalCommandImpl", () => {
         });
 
         const result = await runTerminalCommandImpl(
-          { command: "echo test", logFilename: "remote-test.log" },
+          { command: "echo test" },
           extras,
         );
 
@@ -822,7 +785,6 @@ describe("runTerminalCommandImpl", () => {
           runTerminalCommandImpl(
             {
               command: "echo test",
-              logFilename: "cwd-test.log",
               waitForCompletion: false,
             },
             createMockExtras(),
@@ -835,7 +797,7 @@ describe("runTerminalCommandImpl", () => {
         const extras = createMockExtras({ remoteName: "wsl" });
 
         const result = await runTerminalCommandImpl(
-          { command: "echo test", logFilename: "remote-test.log" },
+          { command: "echo test" },
           extras,
         );
 
@@ -847,7 +809,7 @@ describe("runTerminalCommandImpl", () => {
         const extras = createMockExtras({ remoteName: "dev-container" });
 
         const result = await runTerminalCommandImpl(
-          { command: "echo test", logFilename: "remote-test.log" },
+          { command: "echo test" },
           extras,
         );
 
@@ -870,7 +832,6 @@ describe("runTerminalCommandImpl", () => {
             runTerminalCommandImpl(
               {
                 command: "echo test",
-                logFilename: "cwd-test.log",
                 waitForCompletion: false,
               },
               createMockExtras(),
@@ -895,7 +856,6 @@ describe("runTerminalCommandImpl", () => {
             runTerminalCommandImpl(
               {
                 command: "echo test",
-                logFilename: "cwd-test.log",
                 waitForCompletion: false,
               },
               createMockExtras(),
@@ -927,7 +887,6 @@ describe("runTerminalCommandImpl", () => {
             runTerminalCommandImpl(
               {
                 command: "echo test",
-                logFilename: "cwd-test.log",
                 waitForCompletion: false,
               },
               createMockExtras(),
@@ -935,7 +894,7 @@ describe("runTerminalCommandImpl", () => {
           ).resolves.toBeDefined();
         } finally {
           fs.rmSync(
-            path.join(os.tmpdir(), ".continue", "logs", "cwd-test.log"),
+            path.join(os.tmpdir(), ".continue", "logs", TERMINAL_LOG_FILENAME),
             { force: true },
           );
           process.env.HOME = originalHome;
