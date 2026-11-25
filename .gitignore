@@ -178,3 +178,9 @@ keys
 .users_cache.json
 .copy-status
 .copy-log
+
+# continue
+.continue/adrs/
+.continue/knowledge/
+.continue/logs/
+.continue/themes/

@@ -6,4 +6,7 @@ docs/docs/languages
 .archive/
 **/*.scm
 **/*.diff
-.continue/
+!.continue/adrs/
+!.continue/knowledge/
+!.continue/logs/
+!.continue/themes/
