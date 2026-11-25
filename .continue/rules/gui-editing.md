@@ -1,6 +1,6 @@
 ---
 name: gui-editing
-description: GUIを編集する際に読むスキル。
+description: GUIを編集する際に読むルール。
 alwaysApply: false
 globs: ["**/gui/**"]
 ---

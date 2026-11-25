@@ -17,7 +17,7 @@ description: テストの基本原則。テストを計画や実行する際に�
 
 ## 2. テストの実行場所
 
-特定のパッケージディレクトリ内からテストを実行してください（例: `cd continue/core && ..`）。
+特定のパッケージディレクトリ内からテストを実行してください（例: `cd core && ..`）。
 
 ## 3. Vitest テスト
 
@@ -47,12 +47,12 @@ description: テストの基本原則。テストを計画や実行する際に�
 
 ## GUI フォルダのテスト:
 
-- すべてのテストを実行: `cd continue/gui && npm test`
+- すべてのテストを実行: `cd gui && npm test`
 
 ## Core フォルダのテスト:
 
-- Jest テストを実行: `$env:IGNORE_API_KEY_TESTS="true"; cd continue/core && npm test`
-- Vitest テストを実行: `$env:IGNORE_API_KEY_TESTS="true"; cd continue/core && npm run vitest`
+- Jest テストを実行: `$env:IGNORE_API_KEY_TESTS="true"; cd core && npm test`
+- Vitest テストを実行: `$env:IGNORE_API_KEY_TESTS="true"; cd core && npm run vitest`
 
 ## テストファイルのパターン:
 

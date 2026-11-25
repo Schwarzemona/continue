@@ -1,6 +1,6 @@
 ---
 name: anti-slop
-description: コードとコメントがAI-slopにならないように読むスキル。
+description: コードとコメントがAI-slopにならないように読むルール。
 alwaysApply: false
 globs: ["**/*.{ts,test.ts}"]
 ---
