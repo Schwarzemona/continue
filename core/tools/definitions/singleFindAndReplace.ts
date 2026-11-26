@@ -17,7 +17,7 @@ export const singleFindAndReplaceTool: Tool = {
   displayTitle: "Find and Replace",
   wouldLikeTo: "{{{ filepath }}}を編集します",
   isCurrently: "{{{ filepath }}}を編集中",
-  hasAlready: "{{{ filepath }}}を編集",
+  hasAlready: "{{{ filepath }}}を編集しました",
   group: BUILT_IN_GROUP_NAME,
   readonly: false,
   isInstant: false,

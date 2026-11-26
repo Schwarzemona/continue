@@ -7,7 +7,7 @@ export const searchWebTool: Tool = {
   displayTitle: "Search Web",
   wouldLikeTo: '"{{{ query }}}"をウェブ検索します',
   isCurrently: '"{{{ query }}}"をウェブ検索中',
-  hasAlready: '"{{{ query }}}"をウェブ検索',
+  hasAlready: '"{{{ query }}}"をウェブ検索しました',
   readonly: true,
   group: BUILT_IN_GROUP_NAME,
   function: {

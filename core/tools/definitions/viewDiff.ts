@@ -7,7 +7,7 @@ export const viewDiffTool: Tool = {
   displayTitle: "View Diff",
   wouldLikeTo: "git diffを取得します",
   isCurrently: "git diffを取得中",
-  hasAlready: "git diffを取得",
+  hasAlready: "git diffを取得しました",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,

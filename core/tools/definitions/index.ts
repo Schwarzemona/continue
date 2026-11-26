@@ -1,17 +1,23 @@
 export { codebaseTool } from "./codebaseTool";
+export { countLinesTool } from "./countLines";
+export { createDirTool } from "./createDir";
 export { createNewFileTool } from "./createNewFile";
 export { createRuleBlock } from "./createRuleBlock";
 export { editFileTool } from "./editFile";
 export { fetchUrlContentTool } from "./fetchUrlContent";
+export { getErrorsTool } from "./getErrors";
 export { globSearchTool } from "./globSearch";
+export { grepFileTool } from "./grepFile";
 export { grepSearchTool } from "./grepSearch";
 export { lsTool } from "./ls";
+export { moveFileTool } from "./moveFile";
 export { multiEditTool } from "./multiEdit";
 export { readCurrentlyOpenFileTool } from "./readCurrentlyOpenFile";
 export { readFileTool } from "./readFile";
 
 export { readFileRangeTool } from "./readFileRange";
 export { readSkillTool } from "./readSkill";
+export { removeFileTool } from "./removeFile";
 export { requestRuleTool } from "./requestRule";
 export { runTerminalCommandTool } from "./runTerminalCommand";
 export { searchWebTool } from "./searchWeb";

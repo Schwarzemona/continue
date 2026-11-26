@@ -2,8 +2,8 @@ import * as child_process from "node:child_process";
 import { exec } from "node:child_process";
 
 import { Range } from "core";
-import { EXTENSION_NAME } from "core/util/constants";
 import { DEFAULT_IGNORES, defaultIgnoresGlob } from "core/indexing/ignore";
+import { EXTENSION_NAME } from "core/util/constants";
 import * as URI from "uri-js";
 import * as vscode from "vscode";
 
@@ -305,6 +305,18 @@ class VsCodeIde implements IDE {
     await vscode.workspace.fs.delete(vscode.Uri.parse(fileUri));
   }
 
+  async renameFile(fromUri: string, toUri: string): Promise<void> {
+    await vscode.workspace.fs.rename(
+      vscode.Uri.parse(fromUri),
+      vscode.Uri.parse(toUri),
+      { overwrite: false },
+    );
+  }
+
+  async createDirectory(dirUri: string): Promise<void> {
+    await vscode.workspace.fs.createDirectory(vscode.Uri.parse(dirUri));
+  }
+
   async showVirtualFile(title: string, contents: string): Promise<void> {
     this.ideUtils.showVirtualFile(title, contents);
   }
@@ -481,10 +493,16 @@ class VsCodeIde implements IDE {
   async getFileResults(
     pattern: string,
     maxResults?: number,
+    dirUri?: string,
   ): Promise<string[]> {
     // Create a single combined ignore pattern for ripgrep (calculated once)
 
     if (vscode.env.remoteName) {
+      if (dirUri) {
+        throw new Error(
+          "dirPath is not supported in remote workspaces for glob search",
+        );
+      }
       // TODO better tests for this remote search implementation
       // throw new Error("Ripgrep not supported, this workspace is remote");
 
@@ -561,7 +579,8 @@ class VsCodeIde implements IDE {
     } else {
       const results: string[] = [];
       // Create a single combined ignore pattern using glob brace expansion
-      for (const dir of await this.getWorkspaceDirs()) {
+      const searchDirs = dirUri ? [dirUri] : await this.getWorkspaceDirs();
+      for (const dir of searchDirs) {
         const dirResults = await this.runRipgrepQuery(dir, [
           "--files",
           "--iglob",
@@ -589,13 +608,18 @@ class VsCodeIde implements IDE {
     }
   }
 
-  async getSearchResults(query: string, maxResults?: number): Promise<string> {
+  async getSearchResults(
+    query: string,
+    maxResults?: number,
+    dirUri?: string,
+  ): Promise<string> {
     if (vscode.env.remoteName) {
       throw new Error("Ripgrep not supported, this workspace is remote");
     }
     const results: string[] = [];
 
-    for (const dir of await this.getWorkspaceDirs()) {
+    const searchDirs = dirUri ? [dirUri] : await this.getWorkspaceDirs();
+    for (const dir of searchDirs) {
       const dirResults = await this.runRipgrepQuery(dir, [
         "-i", // Case-insensitive search
         "--ignore-file",

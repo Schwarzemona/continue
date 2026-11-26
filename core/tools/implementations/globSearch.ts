@@ -1,14 +1,31 @@
 import { ToolImpl } from ".";
 import { ContextItem } from "../..";
+import { ContinueError, ContinueErrorReason } from "../../util/errors";
+import { resolveInputPath } from "../../util/pathResolver";
 import { getStringArg } from "../parseArgs";
 
 const MAX_AGENT_GLOB_RESULTS = 100;
 
 export const fileGlobSearchImpl: ToolImpl = async (args, extras) => {
   const pattern = getStringArg(args, "pattern");
+
+  let dirUri: string | undefined;
+  const dirPath = args?.dirPath as string | undefined;
+  if (dirPath) {
+    const resolved = await resolveInputPath(extras.ide, dirPath);
+    if (!resolved) {
+      throw new ContinueError(
+        ContinueErrorReason.DirectoryNotFound,
+        `ディレクトリ「${dirPath}」を解決できませんでした`,
+      );
+    }
+    dirUri = resolved.uri;
+  }
+
   const results = await extras.ide.getFileResults(
     pattern,
     MAX_AGENT_GLOB_RESULTS,
+    dirUri,
   );
 
   if (results.length === 0) {

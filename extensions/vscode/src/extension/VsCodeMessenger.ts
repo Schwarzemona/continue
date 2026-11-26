@@ -330,10 +330,24 @@ export class VsCodeMessenger {
       await ide.runCommand(msg.data.command);
     });
     this.onWebviewOrCore("getSearchResults", async (msg) => {
-      return ide.getSearchResults(msg.data.query, msg.data.maxResults);
+      return ide.getSearchResults(
+        msg.data.query,
+        msg.data.maxResults,
+        msg.data.dirUri,
+      );
     });
     this.onWebviewOrCore("getFileResults", async (msg) => {
-      return ide.getFileResults(msg.data.pattern, msg.data.maxResults);
+      return ide.getFileResults(
+        msg.data.pattern,
+        msg.data.maxResults,
+        msg.data.dirUri,
+      );
+    });
+    this.onWebviewOrCore("renameFile", async (msg) => {
+      return ide.renameFile(msg.data.fromUri, msg.data.toUri);
+    });
+    this.onWebviewOrCore("createDirectory", async (msg) => {
+      return ide.createDirectory(msg.data.dirUri);
     });
     this.onWebviewOrCore("subprocess", async (msg) => {
       return ide.subprocess(msg.data.command, msg.data.cwd);

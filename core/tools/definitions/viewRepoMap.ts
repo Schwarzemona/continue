@@ -7,7 +7,7 @@ export const viewRepoMapTool: Tool = {
   displayTitle: "View Repo Map",
   wouldLikeTo: "リポジトリマップを取得します",
   isCurrently: "リポジトリマップを取得中",
-  hasAlready: "リポジトリマップを取得",
+  hasAlready: "リポジトリマップを取得しました",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,

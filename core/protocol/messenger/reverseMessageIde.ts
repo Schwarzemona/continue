@@ -150,11 +150,27 @@ export class ReverseMessageIde {
     });
 
     this.on("getSearchResults", (data) => {
-      return this.ide.getSearchResults(data.query, data.maxResults);
+      return this.ide.getSearchResults(
+        data.query,
+        data.maxResults,
+        data.dirUri,
+      );
     });
 
     this.on("getFileResults", (data) => {
-      return this.ide.getFileResults(data.pattern, data.maxResults);
+      return this.ide.getFileResults(
+        data.pattern,
+        data.maxResults,
+        data.dirUri,
+      );
+    });
+
+    this.on("renameFile", (data) => {
+      return this.ide.renameFile(data.fromUri, data.toUri);
+    });
+
+    this.on("createDirectory", (data) => {
+      return this.ide.createDirectory(data.dirUri);
     });
 
     this.on("getProblems", (data) => {

@@ -9,7 +9,7 @@ export const createNewFileTool: Tool = {
   displayTitle: "Create New File",
   wouldLikeTo: "{{{ filepath }}}を作成します",
   isCurrently: "{{{ filepath }}}を作成中",
-  hasAlready: "{{{ filepath }}}を作成",
+  hasAlready: "{{{ filepath }}}を作成しました",
   group: BUILT_IN_GROUP_NAME,
   readonly: false,
   isInstant: true,

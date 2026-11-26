@@ -2,6 +2,7 @@ import { ToolImpl } from ".";
 import { ContextItem } from "../..";
 import { ContinueError, ContinueErrorReason } from "../../util/errors";
 import { formatGrepSearchResults } from "../../util/grepSearch";
+import { resolveInputPath } from "../../util/pathResolver";
 import { prepareQueryForRipgrep } from "../../util/regexValidator";
 import { getStringArg } from "../parseArgs";
 
@@ -28,7 +29,7 @@ function splitGrepResultsByFile(content: string): ContextItem[] {
 
     if (fileContent) {
       contextItems.push({
-        name: `検索結果 (${filepath})`,
+        name: `検索結果`,
         description: `Grep検索結果: ${filepath}`,
         content: fileContent,
         uri: { type: "file", value: filepath },
@@ -42,6 +43,19 @@ function splitGrepResultsByFile(content: string): ContextItem[] {
 export const grepSearchImpl: ToolImpl = async (args, extras) => {
   const rawQuery = getStringArg(args, "query");
 
+  let dirUri: string | undefined;
+  const dirPath = args?.dirPath as string | undefined;
+  if (dirPath) {
+    const resolved = await resolveInputPath(extras.ide, dirPath);
+    if (!resolved) {
+      throw new ContinueError(
+        ContinueErrorReason.DirectoryNotFound,
+        `ディレクトリ「${dirPath}」を解決できませんでした`,
+      );
+    }
+    dirUri = resolved.uri;
+  }
+
   const { query, warning } = prepareQueryForRipgrep(rawQuery);
 
   let results: string;
@@ -49,6 +63,7 @@ export const grepSearchImpl: ToolImpl = async (args, extras) => {
     results = await extras.ide.getSearchResults(
       query,
       DEFAULT_GREP_SEARCH_RESULTS_LIMIT,
+      dirUri,
     );
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : String(error);

@@ -42,7 +42,7 @@ export const requestRuleTool: GetTool = async ({ rules }) => ({
   displayTitle: "Request Rules",
   wouldLikeTo: "{{{ name }}}を取得します",
   isCurrently: "{{{ name }}}を取得中",
-  hasAlready: "{{{ name }}}を取得",
+  hasAlready: "{{{ name }}}を取得しました",
   group: BUILT_IN_GROUP_NAME,
   readonly: false,
   function: {

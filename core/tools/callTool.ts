@@ -6,17 +6,22 @@ import { canParseUrl } from "../util/url";
 import { BuiltInToolNames } from "./builtIn";
 
 import { codebaseToolImpl } from "./implementations/codebaseTool";
+import { countLinesImpl } from "./implementations/countLines";
+import { createDirImpl } from "./implementations/createDir";
 import { createNewFileImpl } from "./implementations/createNewFile";
 import { createRuleBlockImpl } from "./implementations/createRuleBlock";
 import { fetchUrlContentImpl } from "./implementations/fetchUrlContent";
+import { getErrorsImpl } from "./implementations/getErrors";
 import { fileGlobSearchImpl } from "./implementations/globSearch";
+import { grepFileImpl } from "./implementations/grepFile";
 import { grepSearchImpl } from "./implementations/grepSearch";
 import { lsToolImpl } from "./implementations/lsTool";
+import { moveFileImpl } from "./implementations/moveFile";
 import { readCurrentlyOpenFileImpl } from "./implementations/readCurrentlyOpenFile";
 import { readFileImpl } from "./implementations/readFile";
-
 import { readFileRangeImpl } from "./implementations/readFileRange";
 import { readSkillImpl } from "./implementations/readSkill";
+import { removeFileImpl } from "./implementations/removeFile";
 import { requestRuleImpl } from "./implementations/requestRule";
 import { runTerminalCommandImpl } from "./implementations/runTerminalCommand";
 import { searchWebImpl } from "./implementations/searchWeb";
@@ -196,6 +201,18 @@ export async function callBuiltInTool(
       return await readFileRangeImpl(args, extras);
     case BuiltInToolNames.CreateNewFile:
       return await createNewFileImpl(args, extras);
+    case BuiltInToolNames.MoveFile:
+      return await moveFileImpl(args, extras);
+    case BuiltInToolNames.RemoveFile:
+      return await removeFileImpl(args, extras);
+    case BuiltInToolNames.CreateDir:
+      return await createDirImpl(args, extras);
+    case BuiltInToolNames.GrepFile:
+      return await grepFileImpl(args, extras);
+    case BuiltInToolNames.CountLines:
+      return await countLinesImpl(args, extras);
+    case BuiltInToolNames.GetErrors:
+      return await getErrorsImpl(args, extras);
     case BuiltInToolNames.GrepSearch:
       return await grepSearchImpl(args, extras);
     case BuiltInToolNames.FileGlobSearch:

@@ -6,7 +6,7 @@ export const codebaseTool: Tool = {
   displayTitle: "Codebase Search",
   wouldLikeTo: "{{{ query }}}をコードベースから検索します",
   isCurrently: "{{{ query }}}をコードベースから検索中",
-  hasAlready: "{{{ query }}}をコードベースから検索",
+  hasAlready: "{{{ query }}}をコードベースから検索しました",
   readonly: true,
   isInstant: false,
   group: BUILT_IN_GROUP_NAME,

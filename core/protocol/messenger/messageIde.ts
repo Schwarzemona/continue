@@ -172,6 +172,14 @@ export class MessageIde implements IDE {
     await this.request("removeFile", { path: fileUri });
   }
 
+  async renameFile(fromUri: string, toUri: string): Promise<void> {
+    await this.request("renameFile", { fromUri, toUri });
+  }
+
+  async createDirectory(dirUri: string): Promise<void> {
+    await this.request("createDirectory", { dirUri });
+  }
+
   async showVirtualFile(title: string, contents: string): Promise<void> {
     await this.request("showVirtualFile", { name: title, content: contents });
   }
@@ -208,12 +216,20 @@ export class MessageIde implements IDE {
     return this.request("getPinnedFiles", undefined);
   }
 
-  getSearchResults(query: string, maxResults?: number): Promise<string> {
-    return this.request("getSearchResults", { query, maxResults });
+  getSearchResults(
+    query: string,
+    maxResults?: number,
+    dirUri?: string,
+  ): Promise<string> {
+    return this.request("getSearchResults", { query, maxResults, dirUri });
   }
 
-  getFileResults(pattern: string): Promise<string[]> {
-    return this.request("getFileResults", { pattern });
+  getFileResults(
+    pattern: string,
+    maxResults?: number,
+    dirUri?: string,
+  ): Promise<string[]> {
+    return this.request("getFileResults", { pattern, maxResults, dirUri });
   }
 
   getProblems(fileUri: string): Promise<Problem[]> {

@@ -10,7 +10,7 @@ export const lsTool: Tool = {
   displayTitle: "ls",
   wouldLikeTo: "{{{ dirPath }}}内を確認します",
   isCurrently: "{{{ dirPath }}}内を確認中",
-  hasAlready: "{{{ dirPath }}}内を確認",
+  hasAlready: "{{{ dirPath }}}内を確認しました",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,

@@ -216,6 +216,28 @@ class FileSystemIde implements IDE {
     });
   }
 
+  renameFile(fromUri: string, toUri: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      fs.rename(fileURLToPath(fromUri), fileURLToPath(toUri), (err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+  }
+
+  createDirectory(dirUri: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      fs.mkdir(fileURLToPath(dirUri), (err) => {
+        if (err) {
+          reject(err);
+        }
+        resolve();
+      });
+    });
+  }
+
   showVirtualFile(title: string, contents: string): Promise<void> {
     return Promise.resolve();
   }
@@ -264,13 +286,18 @@ class FileSystemIde implements IDE {
     return Promise.resolve([]);
   }
 
-  async getSearchResults(query: string, maxResults?: number): Promise<string> {
+  async getSearchResults(
+    query: string,
+    maxResults?: number,
+    dirUri?: string,
+  ): Promise<string> {
     return "";
   }
 
   async getFileResults(
     pattern: string,
     maxResults?: number,
+    dirUri?: string,
   ): Promise<string[]> {
     return [];
   }

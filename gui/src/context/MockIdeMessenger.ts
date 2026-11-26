@@ -39,6 +39,13 @@ const DEFAULT_MOCK_CORE_RESPONSES: MockResponses = {
   "history/list": [],
   "docs/getIndexedPages": [],
   "history/save": undefined,
+  "history/load": {
+    sessionId: "mock-session-id",
+    title: "Mock Session",
+    workspaceDirectory: "file:///Users/user/workspace1",
+    history: [],
+  },
+  "conversation/compact": undefined,
   "config/getSerializedProfileInfo": {
     profileId: "local",
     profiles: [],

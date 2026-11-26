@@ -6,7 +6,7 @@ export const grepSearchTool: Tool = {
   displayTitle: "Grep Search",
   wouldLikeTo: '"{{{ query }}}"を検索します',
   isCurrently: '"{{{ query }}}"を検索中',
-  hasAlready: '"{{{ query }}}"を検索',
+  hasAlready: '"{{{ query }}}"を検索しました',
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
@@ -22,12 +22,17 @@ export const grepSearchTool: Tool = {
           type: "string",
           description: "検索する正規表現パターン。",
         },
+        dirPath: {
+          type: "string",
+          description:
+            "検索対象を絞るディレクトリのパス。プロジェクトルートからの相対パス、絶対パス、チルダパス(~/...)、またはfile://URIが指定できます。省略した場合はワークスペース全体が対象です。",
+        },
       },
     },
   },
   defaultToolPolicy: "allowedWithoutPermission",
   systemMessageDescription: {
-    prefix: `プロジェクト内で grep 検索を実行するには、一致するクエリパターンを指定して ${BuiltInToolNames.GrepSearch} ツールを呼び出してください。例:`,
+    prefix: `プロジェクト内で grep 検索を実行するには、一致するクエリパターンを指定して ${BuiltInToolNames.GrepSearch} ツールを呼び出してください。検索対象を特定のディレクトリに絞る場合は dirPath を指定します。例:`,
     exampleArgs: [["query", ".*main_services.*"]],
   },
   toolCallIcon: "MagnifyingGlassIcon",

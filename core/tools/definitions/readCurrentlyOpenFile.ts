@@ -6,7 +6,7 @@ export const readCurrentlyOpenFileTool: Tool = {
   displayTitle: "Read Currently Open File",
   wouldLikeTo: "現在開いているファイルを確認します",
   isCurrently: "現在開いているファイルを確認中",
-  hasAlready: "現在開いているファイルを確認",
+  hasAlready: "現在開いているファイルを確認しました",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,

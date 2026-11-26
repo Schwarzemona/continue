@@ -9,7 +9,7 @@ export const viewSubdirectoryTool: Tool = {
   displayTitle: "View Subdirectory",
   wouldLikeTo: '"{{{ directory_path }}}"のマップを取得します',
   isCurrently: '"{{{ directory_path }}}"のマップを取得中',
-  hasAlready: '"{{{ directory_path }}}"のマップを取得',
+  hasAlready: '"{{{ directory_path }}}"のマップを取得しました',
   readonly: true,
   group: BUILT_IN_GROUP_NAME,
   isInstant: true,

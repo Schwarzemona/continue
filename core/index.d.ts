@@ -857,6 +857,10 @@ export interface IDE {
 
   removeFile(path: string): Promise<void>;
 
+  renameFile(fromUri: string, toUri: string): Promise<void>;
+
+  createDirectory(dirUri: string): Promise<void>;
+
   showVirtualFile(title: string, contents: string): Promise<void>;
 
   openFile(path: string): Promise<void>;
@@ -888,9 +892,17 @@ export interface IDE {
 
   getPinnedFiles(): Promise<string[]>;
 
-  getSearchResults(query: string, maxResults?: number): Promise<string>;
+  getSearchResults(
+    query: string,
+    maxResults?: number,
+    dirUri?: string,
+  ): Promise<string>;
 
-  getFileResults(pattern: string, maxResults?: number): Promise<string[]>;
+  getFileResults(
+    pattern: string,
+    maxResults?: number,
+    dirUri?: string,
+  ): Promise<string[]>;
 
   subprocess(command: string, cwd?: string): Promise<[string, string]>;
 

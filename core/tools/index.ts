@@ -1,49 +1,44 @@
 import { ConfigDependentToolParams, Tool } from "..";
-import { isRecommendedAgentModel } from "../llm/toolSupport";
 import * as toolDefinitions from "./definitions";
 
 // I'm writing these as functions because we've messed up 3 TIMES by pushing to const, causing duplicate tool definitions on subsequent config loads.
 export const getBaseToolDefinitions = () => [
   toolDefinitions.readFileTool,
-  toolDefinitions.createNewFileTool,
-  toolDefinitions.runTerminalCommandTool,
-  toolDefinitions.globSearchTool,
-  toolDefinitions.readCurrentlyOpenFileTool,
-  toolDefinitions.lsTool,
-  toolDefinitions.createRuleBlock,
   toolDefinitions.readFileRangeTool,
+  toolDefinitions.readCurrentlyOpenFileTool,
+  toolDefinitions.multiEditTool,
+  toolDefinitions.singleFindAndReplaceTool,
+  toolDefinitions.createNewFileTool,
+  toolDefinitions.createDirTool,
+  toolDefinitions.removeFileTool,
+  toolDefinitions.moveFileTool,
+  toolDefinitions.lsTool,
+  toolDefinitions.globSearchTool,
+  toolDefinitions.grepSearchTool,
+  toolDefinitions.grepFileTool,
+  toolDefinitions.countLinesTool,
   toolDefinitions.codebaseTool,
+  toolDefinitions.runTerminalCommandTool,
+  toolDefinitions.getErrorsTool,
+  toolDefinitions.createRuleBlock,
 ];
 
 export const getConfigDependentToolDefinitions = async (
   params: ConfigDependentToolParams,
 ): Promise<Tool[]> => {
-  const { modelName, enableExperimentalTools, isRemote } = params;
-  const tools: Tool[] = [];
+  const tools: Tool[] = [
+    await toolDefinitions.requestRuleTool(params),
+    await toolDefinitions.readSkillTool(params),
+  ];
 
-  tools.push(await toolDefinitions.requestRuleTool(params));
-  tools.push(await toolDefinitions.readSkillTool(params));
-
-  if (enableExperimentalTools) {
+  if (params.enableExperimentalTools) {
     tools.push(
       toolDefinitions.viewRepoMapTool,
       toolDefinitions.viewSubdirectoryTool,
-      toolDefinitions.searchWebTool,
       toolDefinitions.viewDiffTool,
+      toolDefinitions.searchWebTool,
       toolDefinitions.fetchUrlContentTool,
     );
-  }
-
-  if (modelName && isRecommendedAgentModel(modelName)) {
-    tools.push(toolDefinitions.multiEditTool);
-  } else {
-    tools.push(toolDefinitions.editFileTool);
-    tools.push(toolDefinitions.singleFindAndReplaceTool);
-  }
-
-  // missing support for remote os calls: https://github.com/microsoft/vscode/issues/252269
-  if (!isRemote) {
-    tools.push(toolDefinitions.grepSearchTool);
   }
 
   return tools;

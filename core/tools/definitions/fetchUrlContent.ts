@@ -6,7 +6,7 @@ export const fetchUrlContentTool: Tool = {
   displayTitle: "Read URL",
   wouldLikeTo: "{{{ url }}}を取得します",
   isCurrently: "{{{ url }}}を取得中",
-  hasAlready: "{{{ url }}}を取得",
+  hasAlready: "{{{ url }}}を取得しました",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,

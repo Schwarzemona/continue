@@ -6,7 +6,7 @@ export const globSearchTool: Tool = {
   displayTitle: "Glob File Search",
   wouldLikeTo: '"{{{ pattern }}}"のファイル名を検索します',
   isCurrently: '"{{{ pattern }}}"のファイル名を検索中',
-  hasAlready: '"{{{ pattern }}}"のファイル名を検索',
+  hasAlready: '"{{{ pattern }}}"のファイル名を検索しました',
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
@@ -21,6 +21,11 @@ export const globSearchTool: Tool = {
         pattern: {
           type: "string",
           description: "検索するGlobパターン。",
+        },
+        dirPath: {
+          type: "string",
+          description:
+            "検索対象を絞るディレクトリのパス。プロジェクトルートからの相対パス、絶対パス、チルダパス(~/...)、またはfile://URIが指定できます。省略した場合はワークスペース全体が対象です。",
         },
       },
     },

@@ -17,7 +17,7 @@ export const createRuleBlock: Tool = {
   displayTitle: "Create Rule Block",
   wouldLikeTo: '"{{{ name }}}"のルールブロックを作成します',
   isCurrently: '"{{{ name }}}"のルールブロックを作成中',
-  hasAlready: '"{{{ name }}}"のルールブロックを作成',
+  hasAlready: '"{{{ name }}}"のルールブロックを作成しました',
   readonly: false,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,

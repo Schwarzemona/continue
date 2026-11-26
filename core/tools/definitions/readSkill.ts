@@ -9,7 +9,7 @@ export const readSkillTool: GetTool = async (params) => {
     displayTitle: "Read Skill",
     wouldLikeTo: "{{{ skillName }}}を参照します",
     isCurrently: "{{{ skillName }}}を参照中",
-    hasAlready: "{{{ skillName }}}を参照",
+    hasAlready: "{{{ skillName }}}を参照しました",
     readonly: true,
     isInstant: true,
     group: BUILT_IN_GROUP_NAME,

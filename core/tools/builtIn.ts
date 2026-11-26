@@ -17,6 +17,12 @@ export enum BuiltInToolNames {
   FetchUrlContent = "fetch_url_content",
   CodebaseTool = "codebase",
   ReadSkill = "read_skill",
+  MoveFile = "move_file",
+  RemoveFile = "remove_file",
+  CreateDir = "create_dir",
+  GrepFile = "grep_file",
+  CountLines = "count_lines",
+  GetErrors = "get_errors",
 
   // excluded from allTools for now
   ViewRepoMap = "view_repo_map",

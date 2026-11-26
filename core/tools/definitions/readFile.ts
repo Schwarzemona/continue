@@ -9,7 +9,7 @@ export const readFileTool: Tool = {
   displayTitle: "Read File",
   wouldLikeTo: "{{{ filepath }}}を読み込みます",
   isCurrently: "{{{ filepath }}}を読み込み中",
-  hasAlready: "{{{ filepath }}}を読み込み",
+  hasAlready: "{{{ filepath }}}を読み込みました",
   readonly: true,
   isInstant: true,
   group: BUILT_IN_GROUP_NAME,
