@@ -63,6 +63,8 @@ export function UserSettingsSection() {
     config.experimental?.onlyUseSystemMessageTools ?? false;
   const codebaseToolCallingOnly =
     config.experimental?.codebaseToolCallingOnly ?? false;
+  const autoCompactConversation =
+    config.experimental?.autoCompactConversation ?? true;
   const allowAnonymousTelemetry = config.allowAnonymousTelemetry ?? true;
 
   const useAutocompleteMultilineCompletions =
@@ -141,6 +143,15 @@ export function UserSettingsSection() {
                   value={!displayRawMarkdown}
                   onChange={(value) =>
                     handleUpdate({ displayRawMarkdown: !value })
+                  }
+                />
+                <UserSetting
+                  type="toggle"
+                  title="会話の自動圧縮"
+                  description="送信前にコンテキスト使用率が75%に達している場合、会話履歴を自動で要約・圧縮します。"
+                  value={autoCompactConversation}
+                  onChange={(value) =>
+                    handleUpdate({ autoCompactConversation: value })
                   }
                 />
               </div>

@@ -1700,6 +1700,14 @@ export interface ExperimentalConfig {
    * gather context for the model where necessary.
    */
   enableStaticContextualization?: boolean;
+
+  /**
+   * If enabled, conversation history is automatically summarized and
+   * compacted before a chat request when its context usage crosses the
+   * automatic compaction threshold. Defaults to true.
+   * Disable to keep context intact and rely on manual compaction only.
+   */
+  autoCompactConversation?: boolean;
 }
 
 export interface AnalyticsConfig {

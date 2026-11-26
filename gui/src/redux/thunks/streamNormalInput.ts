@@ -1,5 +1,10 @@
 import { createAsyncThunk, unwrapResult } from "@reduxjs/toolkit";
-import { LLMFullCompletionOptions, ModelDescription } from "core";
+import {
+  ChatMessage,
+  LLMFullCompletionOptions,
+  ModelDescription,
+  RuleMetadata,
+} from "core";
 import { getRuleId } from "core/llm/rules/getSystemMessageWithRules";
 import { ToCoreProtocol } from "core/protocol";
 import { BUILT_IN_GROUP_NAME } from "core/tools/builtIn";
@@ -28,6 +33,10 @@ import { interceptSystemToolCalls } from "core/tools/systemMessageTools/intercep
 import { SystemMessageToolCodeblocksFramework } from "core/tools/systemMessageTools/toolCodeblocks";
 
 import {
+  AUTO_COMPACT_THRESHOLD,
+  selectCompactionCutoffIndex,
+} from "../../util/compactionCutoff";
+import {
   selectCurrentToolCalls,
   selectPendingToolCalls,
 } from "../selectors/selectToolCalls";
@@ -35,6 +44,7 @@ import { getBaseSystemMessage } from "../util/getBaseSystemMessage";
 import { callToolById } from "./callToolById";
 import { evaluateToolPolicies } from "./evaluateToolPolicies";
 import { preprocessToolCalls } from "./preprocessToolCallArgs";
+import { loadSession, saveCurrentSession } from "./session";
 import { streamResponseAfterToolCall } from "./streamResponseAfterToolCall";
 
 /**
@@ -147,54 +157,134 @@ export const streamNormalInput = createAsyncThunk<
         )
       : baseSystemMessage;
 
-    const withoutMessageIds = state.session.history.map((item) => {
-      const { id, ...messageWithoutId } = item.message;
-      return { ...item, message: messageWithoutId };
-    });
+    // 矢印関数にしているのは、null チェック後のクロージャで selectedChatModel の狭められた型を保持するため
+    const buildAndCompileMessages = async (
+      beginStreaming: boolean,
+    ): Promise<{
+      compiledChatMessages: ChatMessage[];
+      appliedRules: RuleMetadata[];
+      contextPercentage: number;
+    } | null> => {
+      const withoutMessageIds = getState().session.history.map((item) => {
+        const { id, ...messageWithoutId } = item.message;
+        return { ...item, message: messageWithoutId };
+      });
 
-    const { messages, appliedRules, appliedRuleIndex } = constructMessages(
-      withoutMessageIds,
-      systemMessage,
-      state.config.config.rules,
-      state.ui.ruleSettings,
-      systemToolsFramework,
-    );
+      const { messages, appliedRules, appliedRuleIndex } = constructMessages(
+        withoutMessageIds,
+        systemMessage,
+        getState().config.config.rules,
+        getState().ui.ruleSettings,
+        systemToolsFramework,
+      );
 
-    // TODO parallel tool calls will cause issues with this
-    // because there will be multiple tool messages, so which one should have applied rules?
-    dispatch(
-      setAppliedRulesAtIndex({
-        index: appliedRuleIndex,
-        appliedRules: appliedRules,
-      }),
-    );
+      // TODO parallel tool calls will cause issues with this
+      // because there will be multiple tool messages, so which one should have applied rules?
+      dispatch(
+        setAppliedRulesAtIndex({
+          index: appliedRuleIndex,
+          appliedRules: appliedRules,
+        }),
+      );
 
-    dispatch(setActive());
-    dispatch(setInlineErrorMessage(undefined));
-
-    const precompiledRes = await extra.ideMessenger.request("llm/compileChat", {
-      messages,
-      options: completionOptions,
-    });
-
-    if (precompiledRes.status === "error") {
-      if (precompiledRes.error.includes("Not enough context")) {
-        dispatch(setInlineErrorMessage("out-of-context"));
-        dispatch(setInactive());
-        return;
-      } else {
-        throw new Error(precompiledRes.error);
+      if (beginStreaming) {
+        dispatch(setActive());
+        dispatch(setInlineErrorMessage(undefined));
       }
+
+      const precompiledRes = await extra.ideMessenger.request(
+        "llm/compileChat",
+        {
+          messages,
+          options: completionOptions,
+        },
+      );
+
+      if (precompiledRes.status === "error") {
+        if (precompiledRes.error.includes("Not enough context")) {
+          dispatch(setInlineErrorMessage("out-of-context"));
+          dispatch(setInactive());
+          return null;
+        } else {
+          throw new Error(precompiledRes.error);
+        }
+      }
+
+      const { compiledChatMessages, didPrune, contextPercentage } =
+        precompiledRes.content;
+
+      dispatch(setIsPruned(didPrune));
+      dispatch(setContextPercentage(contextPercentage));
+
+      return { compiledChatMessages, appliedRules, contextPercentage };
+    };
+
+    // tool ループは user ターン無しで継続されるため、閾値到達時に送信前へ
+    // 自動圧縮を挟み、summary をシステムメッセージ経由で復元させる
+    const tryAutomaticCompaction = async (
+      sessionId: string,
+    ): Promise<boolean> => {
+      const contextLength = selectedChatModel.contextLength;
+      if (!contextLength) {
+        return false;
+      }
+      const cutoffIndex = selectCompactionCutoffIndex({
+        history: getState().session.history,
+        contextLength,
+      });
+      if (cutoffIndex < 0) {
+        return false;
+      }
+
+      // compact は core 側 HistoryManager の永続化履歴を読むため先に保存する
+      await dispatch(
+        saveCurrentSession({
+          openNewSession: false,
+          generateTitle: false,
+        }),
+      );
+      const compactRes = await extra.ideMessenger.request(
+        "conversation/compact",
+        { index: cutoffIndex, sessionId },
+      );
+      if (compactRes.status === "error") {
+        console.error(
+          "Automatic conversation compaction failed:",
+          compactRes.error,
+        );
+        return false;
+      }
+      await dispatch(loadSession({ sessionId, saveCurrentSession: false }));
+      return true;
+    };
+
+    let compiled = await buildAndCompileMessages(true);
+    if (!compiled) {
+      return;
     }
 
-    const { compiledChatMessages, didPrune, contextPercentage } =
-      precompiledRes.content;
+    const sessionId = getState().session.id;
+    const autoCompactEnabled =
+      getState().config.config.experimental?.autoCompactConversation ?? true;
+    if (
+      autoCompactEnabled &&
+      sessionId &&
+      compiled.contextPercentage >= AUTO_COMPACT_THRESHOLD &&
+      (await tryAutomaticCompaction(sessionId))
+    ) {
+      compiled = await buildAndCompileMessages(false);
+      if (!compiled) {
+        return;
+      }
+      // loadSession の newSession が isStreaming を戻すため、ストリーム状態を再有効化する
+      dispatch(setActive());
+    }
 
-    dispatch(setIsPruned(didPrune));
-    dispatch(setContextPercentage(contextPercentage));
+    const { compiledChatMessages, appliedRules } = compiled;
 
     const start = Date.now();
-    const streamAborter = state.session.streamAborter;
+    // 自動圧縮時は loadSession が streamAborter を再生成するため最新を取得する
+    const streamAborter = getState().session.streamAborter;
     try {
       let gen = extra.ideMessenger.llmStreamChat(
         {
