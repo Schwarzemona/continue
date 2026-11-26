@@ -3,7 +3,7 @@
     "declaration": true,
     "target": "es6",
     "module": "commonjs",
-    "moduleResolution": "NodeNext",
+    "moduleResolution": "node",
     "outDir": "dist",
     "typeRoots": ["node_modules/@types"]
   },
