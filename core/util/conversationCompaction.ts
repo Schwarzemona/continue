@@ -78,7 +78,7 @@ export async function compactConversation({
   if (summaryContent) {
     messages.unshift({
       role: "user",
-      content: `${summaryContent}\n\nこれまでの会話を要約してください。`,
+      content: `${summaryContent}\n\nこれまでの会話の要約です。`,
     });
   }
 
