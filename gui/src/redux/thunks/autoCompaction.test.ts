@@ -6,7 +6,10 @@ import {
 } from "core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { MockIdeMessenger } from "../../context/MockIdeMessenger";
-import { selectCompactionCutoffIndex } from "../../util/compactionCutoff";
+import {
+  AUTO_COMPACT_THRESHOLD,
+  selectCompactionCutoffIndex,
+} from "../../util/compactionCutoff";
 import { createMockStore, getEmptyRootState } from "../../util/test/mockStore";
 import { RootState } from "../store";
 import { streamNormalInput } from "./streamNormalInput";
@@ -87,7 +90,8 @@ describe("streamNormalInput automatic compaction", () => {
       return {
         compiledChatMessages: [{ role: "user", content: "compiled" }] as any,
         didPrune: false,
-        contextPercentage: compileCount === 1 ? 0.9 : 0.3,
+        contextPercentage:
+          compileCount === 1 ? AUTO_COMPACT_THRESHOLD + 0.05 : 0.3,
       };
     };
 
@@ -168,7 +172,7 @@ describe("streamNormalInput automatic compaction", () => {
       return {
         compiledChatMessages: [{ role: "user", content: "compiled" }] as any,
         didPrune: false,
-        contextPercentage: 0.9,
+        contextPercentage: AUTO_COMPACT_THRESHOLD + 0.05,
       };
     };
     const compactHandler = vi.fn(async () => undefined);
@@ -195,7 +199,7 @@ describe("streamNormalInput automatic compaction", () => {
     messenger.responseHandlers["llm/compileChat"] = async () => ({
       compiledChatMessages: [{ role: "user", content: "compiled" }] as any,
       didPrune: false,
-      contextPercentage: 0.9,
+      contextPercentage: AUTO_COMPACT_THRESHOLD + 0.05,
     });
     const compactHandler = vi.fn(async () => undefined);
     messenger.responseHandlers["conversation/compact"] = compactHandler;

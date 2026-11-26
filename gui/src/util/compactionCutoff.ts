@@ -5,8 +5,12 @@ import {
   renderContextItems,
 } from "core/util/messageContent";
 
-/** contextUsage that reaches this ratio triggers automatic compaction */
-export const AUTO_COMPACT_THRESHOLD = 0.75;
+/**
+ * contextUsage がこの比率に達したときに自動圧縮を発動する。
+ * core が送信前に prune する「利用可能トークン」(`contextLength - 安全バッファ -
+ * MIN_RESPONSE_TOKENS`)に対する比率で、1 未満 = prune 発動前に圧縮する余白を残す。
+ */
+export const AUTO_COMPACT_THRESHOLD = 0.9;
 
 // core/llm/countTokens.ts の MIN_RESPONSE_TOKENS / 安全バッファと同期させること
 const MIN_RESPONSE_TOKENS = 1000;
