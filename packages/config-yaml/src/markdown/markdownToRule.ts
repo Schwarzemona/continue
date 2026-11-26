@@ -21,8 +21,11 @@ export function parseMarkdownRule(content: string): {
   frontmatter: RuleFrontmatter;
   markdown: string;
 } {
-  // Normalize line endings to \n
-  const normalizedContent = content.replace(/\r\n/g, "\n");
+  // Normalize line endings to \n and strip a leading BOM (otherwise the first
+  // `---` is not recognized and frontmatter parsing fails)
+  const normalizedContent = content
+    .replace(/\r\n/g, "\n")
+    .replace(/^\uFEFF/, "");
 
   // More reliable frontmatter detection
   const parts = normalizedContent.split(/^---\s*$/m);
