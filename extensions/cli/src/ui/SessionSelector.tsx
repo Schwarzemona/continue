@@ -1,8 +1,10 @@
 import type { Session } from "core/index.js";
 import { format, isThisWeek, isThisYear, isToday, isYesterday } from "date-fns";
+import { ja } from "date-fns/locale";
 import { Box, Text, useInput } from "ink";
 import React, { useEffect, useMemo, useState } from "react";
 
+import { detectLang, t } from "../i18n.js";
 import { ExtendedSessionMetadata, loadSessionById } from "../session.js";
 
 import { useTerminalSize } from "./hooks/useTerminalSize.js";
@@ -16,21 +18,30 @@ interface SessionSelectorProps {
 }
 
 function formatTimestamp(date: Date): string {
+  const japanese = detectLang() === "ja";
+  const locale = japanese ? { locale: ja } : undefined;
   if (isToday(date)) {
-    return format(date, "h:mm a");
+    return japanese ? format(date, "H時M分", locale) : format(date, "h:mm a");
   } else if (isYesterday(date)) {
-    return "yesterday";
+    return t("yesterday", "昨日");
   } else if (isThisWeek(date)) {
-    return format(date, "EEEE"); // Day name (e.g., "Monday")
+    // Day name (e.g., "Monday" / "月曜日")
+    return format(date, "EEEE", locale);
   } else if (isThisYear(date)) {
-    return format(date, "MMM d"); // e.g., "Jan 15"
+    // e.g., "Jan 15" / "1月15日"
+    return japanese
+      ? format(date, "M月d日", locale)
+      : format(date, "MMM d", locale);
   } else {
-    return format(date, "MMM d, yyyy"); // e.g., "Jan 15, 2023"
+    // e.g., "Jan 15, 2023" / "2023年1月15日"
+    return japanese
+      ? format(date, "yyyy年M月d日", locale)
+      : format(date, "MMM d, yyyy", locale);
   }
 }
 
 function formatMessage(message: string | undefined): string {
-  if (!message) return "(no messages)";
+  if (!message) return t("(no messages)", "(メッセージなし)");
   // Ensure we're working with a string, handle edge cases from persisted data
   const messageStr = typeof message === "string" ? message : String(message);
   return messageStr.split("\n")[0];
@@ -108,9 +119,19 @@ export function SessionSelector({
   if (sessions.length === 0) {
     return (
       <Box {...defaultBoxStyles("blue")}>
-        <Text color="yellow">No previous sessions found.</Text>
-        <Text color="gray">Start a new conversation with: cn</Text>
-        <Text color="gray">Press Esc to exit</Text>
+        <Text color="yellow">
+          {t(
+            "No previous sessions found.",
+            "過去のセッションが見つかりません。",
+          )}
+        </Text>
+        <Text color="gray">
+          {t(
+            "Start a new conversation with: cn",
+            "cn を実行して新しい会話を開始してください",
+          )}
+        </Text>
+        <Text color="gray">{t("Press Esc to exit", "Esc で終了します")}</Text>
       </Box>
     );
   }
@@ -129,16 +150,25 @@ export function SessionSelector({
       {/* Left side: Session list */}
       <Box {...defaultBoxStyles("blue")} width={listWidth}>
         <Text color="blue" bold>
-          Recent Sessions{" "}
+          {t("Recent Sessions", "最近のセッション")}{" "}
           {sessions.length > displaySessions.length &&
             `(${selectedIndex + 1}/${sessions.length})`}
         </Text>
-        <Text color="gray">↑/↓ to navigate, Enter to select, Esc to exit</Text>
+        <Text color="gray">
+          {t(
+            "↑/↓ to navigate, Enter to select, Esc to exit",
+            "↑/↓ で移動、Enter で選択、Esc で終了",
+          )}
+        </Text>
         <Text> </Text>
 
         {hasMoreAbove && (
           <Text color="gray" italic>
-            ⬆ {scrollOffset} more sessions above...
+            ⬆{" "}
+            {t(
+              `${scrollOffset} more sessions above...`,
+              `${scrollOffset}件前のセッションがあります…`,
+            )}
           </Text>
         )}
 
@@ -159,7 +189,9 @@ export function SessionSelector({
               <Box marginLeft={2}>
                 <Text color="gray">
                   {formatTimestamp(new Date(session.dateCreated))}
-                  {session.isRemote ? " (remote)" : " (local)"}
+                  {session.isRemote
+                    ? t(" (remote)", " (リモート)")
+                    : t(" (local)", " (ローカル)")}
                 </Text>
               </Box>
               {index < displaySessions.length - 1 && (
@@ -171,8 +203,10 @@ export function SessionSelector({
 
         {hasMoreBelow && (
           <Text color="gray" italic>
-            ⬇ {sessions.length - scrollOffset - displaySessions.length} more
-            sessions below...
+            {t(
+              `⬇ ${sessions.length - scrollOffset - displaySessions.length} more sessions below...`,
+              `⬇ ${sessions.length - scrollOffset - displaySessions.length}件後のセッションがあります…`,
+            )}
           </Text>
         )}
       </Box>
@@ -192,12 +226,15 @@ export function SessionSelector({
               width="100%"
             >
               <Text color="blue" bold>
-                Preview
+                {t("Preview", "プレビュー")}
               </Text>
               <Text color="gray">
                 {sessions[selectedIndex]?.isRemote
-                  ? "(remote session preview not available)"
-                  : "(loading...)"}
+                  ? t(
+                      "(remote session preview not available)",
+                      "(リモートセッションのプレビューは利用できません)",
+                    )
+                  : t("(loading...)", "(読み込み中...)")}
               </Text>
             </Box>
           )}

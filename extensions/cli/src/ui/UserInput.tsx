@@ -9,6 +9,7 @@ import {
   type SlashCommand,
 } from "../commands/commands.js";
 import { useServices } from "../hooks/useService.js";
+import { t } from "../i18n.js";
 import type { PermissionMode } from "../permissions/types.js";
 import type { FileIndexServiceState } from "../services/FileIndexService.js";
 import {
@@ -36,7 +37,12 @@ const InterruptedBanner: React.FC<{ wasInterrupted: boolean }> = ({
   if (!wasInterrupted) return null;
   return (
     <Box paddingX={1} marginBottom={0}>
-      <Text color="yellow">Interrupted by user - Press enter to continue</Text>
+      <Text color="yellow">
+        {t(
+          "Interrupted by user - Press enter to continue",
+          "ユーザーによって中断されました - Enter で再開します",
+        )}
+      </Text>
     </Box>
   );
 };
@@ -182,13 +188,21 @@ const UserInput: React.FC<UserInputProps> = ({
   }>(["fileIndex"]);
 
   const [slashCommands, setSlashCommands] = useState<SlashCommand[]>([
-    { name: "help", description: "Show help message", category: "system" },
     {
-      name: "clear",
-      description: "Clear the chat history",
+      name: "help",
+      description: t("Show help message", "ヘルプメッセージを表示する"),
       category: "system",
     },
-    { name: "exit", description: "Exit the chat", category: "system" },
+    {
+      name: "clear",
+      description: t("Clear the chat history", "チャット履歴を消去する"),
+      category: "system",
+    },
+    {
+      name: "exit",
+      description: t("Exit the chat", "チャットを終了する"),
+      category: "system",
+    },
   ]);
 
   useEffect(() => {
@@ -783,9 +797,15 @@ const UserInput: React.FC<UserInputProps> = ({
 
   const renderInputText = () => {
     const placeholderText = isRemoteMode
-      ? "Ask anything, / for slash commands, ! for shell mode"
+      ? t(
+          "Ask anything, / for slash commands, ! for shell mode",
+          "何でも質問してください。/ でスラッシュコマンド、! でシェルモード",
+        )
       : placeholder ||
-        "Ask anything, @ for context, / for slash commands, ! for shell mode";
+        t(
+          "Ask anything, @ for context, / for slash commands, ! for shell mode",
+          "何でも質問してください。@ でコンテキスト、/ でスラッシュコマンド、! でシェルモード",
+        );
     if (inputText.length === 0) {
       return (
         <>

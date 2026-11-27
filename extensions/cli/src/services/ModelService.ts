@@ -1,4 +1,5 @@
 import { AssistantUnrolled, ModelConfig } from "@continuedev/config-yaml";
+import { t } from "../i18n.js";
 
 import { AuthConfig, getModelName } from "../auth/workos.js";
 import { createLlmApi, getLlmApi } from "../config.js";
@@ -101,7 +102,12 @@ export class ModelService
 
         const llmApi = createLlmApi(selectedModel, authConfig);
         if (!llmApi) {
-          throw new Error(`Failed to initialize LLM with ${modelSource} model`);
+          throw new Error(
+            t(
+              `Failed to initialize LLM with ${modelSource} model`,
+              `${modelSource} モデルでの LLM の初期化に失敗しました`,
+            ),
+          );
         }
 
         return {
@@ -208,7 +214,12 @@ export class ModelService
           hasAuthConfig: !!stateValues.authConfig,
         },
       });
-      throw new Error("ModelService not initialized - assistant data missing");
+      throw new Error(
+        t(
+          "ModelService not initialized - assistant data missing",
+          "ModelService が初期化されていません - assistant データがありません",
+        ),
+      );
     }
 
     // Get available models from assistant in state
@@ -219,7 +230,10 @@ export class ModelService
 
     if (modelIndex < 0 || modelIndex >= availableModels.length) {
       throw new Error(
-        `Invalid model index: ${modelIndex}. Available models: 0-${availableModels.length - 1}`,
+        t(
+          `Invalid model index: ${modelIndex}. Available models: 0-${availableModels.length - 1}`,
+          `無効なモデルインデックス: ${modelIndex}。利用可能なモデル: 0-${availableModels.length - 1}`,
+        ),
       );
     }
 
@@ -234,7 +248,12 @@ export class ModelService
       const llmApi = createLlmApi(selectedModel, authConfig);
 
       if (!llmApi) {
-        throw new Error("Failed to initialize LLM with selected model");
+        throw new Error(
+          t(
+            "Failed to initialize LLM with selected model",
+            "選択したモデルでの LLM の初期化に失敗しました",
+          ),
+        );
       }
 
       this.setState({

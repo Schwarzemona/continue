@@ -6,6 +6,7 @@ import {
   getAllSlashCommands,
   type SlashCommand,
 } from "../commands/commands.js";
+import { t } from "../i18n.js";
 
 const MAX_DESCRIPTION_LENGTH = 80;
 
@@ -33,13 +34,21 @@ const SlashCommandUI: React.FC<SlashCommandUIProps> = ({
   const [allCommands, setAllCommands] = useState<SlashCommand[]>(
     // Fallback - basic commands without assistant
     [
-      { name: "help", description: "Show help message", category: "system" },
       {
-        name: "clear",
-        description: "Clear the chat history",
+        name: "help",
+        description: t("Show help message", "ヘルプメッセージを表示する"),
         category: "system",
       },
-      { name: "exit", description: "Exit the chat", category: "system" },
+      {
+        name: "clear",
+        description: t("Clear the chat history", "チャット履歴を消去する"),
+        category: "system",
+      },
+      {
+        name: "exit",
+        description: t("Exit the chat", "チャットを終了する"),
+        category: "system",
+      },
     ],
   );
 
@@ -78,7 +87,9 @@ const SlashCommandUI: React.FC<SlashCommandUIProps> = ({
   if (filteredCommands.length === 0) {
     return (
       <Box paddingX={1} marginX={1} marginBottom={1}>
-        <Text color="gray">No matching commands found</Text>
+        <Text color="gray">
+          {t("No matching commands found", "一致するコマンドが見つかりません")}
+        </Text>
       </Box>
     );
   }
@@ -112,7 +123,10 @@ const SlashCommandUI: React.FC<SlashCommandUIProps> = ({
 
       <Box marginTop={1}>
         <Text color="gray" dimColor>
-          ↑/↓ to navigate, Enter to select, Tab to complete
+          {t(
+            "↑/↓ to navigate, Enter to select, Tab to complete",
+            "↑/↓ で移動、Enter で選択、Tab で補完",
+          )}
         </Text>
       </Box>
     </Box>

@@ -14,6 +14,7 @@ import {
   handleValidationErrors,
   validateFlags,
 } from "./flags/flagValidator.js";
+import { t } from "./i18n.js";
 import { configureConsoleForHeadless, safeStderr } from "./init.js";
 import { addCommonOptions, mergeParentOptions } from "./shared-options.js";
 import { post } from "./util/apiClient.js";
@@ -173,28 +174,62 @@ const program = new Command();
 program
   .name("cn")
   .description(
-    "Continue CLI - AI-powered development assistant. Starts an interactive session by default, use -p/--print for non-interactive output.",
+    t(
+      "Continue CLI - AI-powered development assistant. Starts an interactive session by default, use -p/--print for non-interactive output.",
+      "Continue CLI - AI活用型の開発アシスタント。既定では対話セッションを開始します。非対話の出力には -p/--print を使用してください。",
+    ),
   )
-  .version(getVersion(), "-v, --version", "Display version number");
+  .version(
+    getVersion(),
+    "-v, --version",
+    t("Display version number", "バージョン番号を表示する"),
+  );
 
 // Root command - chat functionality (default)
 // Add common options to the root command
 addCommonOptions(program)
-  .argument("[prompt]", "Optional prompt to send to the assistant")
-  .option("-p, --print", "Print response and exit (useful for pipes)")
+  .argument(
+    "[prompt]",
+    t(
+      "Optional prompt to send to the assistant",
+      "アシスタントへ送信する任意のプロンプト",
+    ),
+  )
+  .option(
+    "-p, --print",
+    t(
+      "Print response and exit (useful for pipes)",
+      "応答を出力して終了する(パイプ連携に便利)",
+    ),
+  )
   .option(
     "--format <format>",
-    "Output format for headless mode (json). Only works with -p/--print flag.",
+    t(
+      "Output format for headless mode (json). Only works with -p/--print flag.",
+      "ヘッドレスモードの出力形式(json)。-p/--print フラグと併せてのみ動作します。",
+    ),
   )
   .option(
     "--silent",
-    "Strip <think></think> tags and excess whitespace from output. Only works with -p/--print flag.",
+    t(
+      "Strip <think></think> tags and excess whitespace from output. Only works with -p/--print flag.",
+      "出力から <think></think> タグと過剰な空白を除く。-p/--print フラグと併せてのみ動作します。",
+    ),
   )
-  .option("--resume", "Resume from last session")
-  .option("--fork <sessionId>", "Fork from an existing session ID")
+  .option(
+    "--resume",
+    t("Resume from last session", "前回のセッションから再開する"),
+  )
+  .option(
+    "--fork <sessionId>",
+    t("Fork from an existing session ID", "既存のセッションIDからフォークする"),
+  )
   .option(
     "--beta-subagent-tool",
-    "Enable beta Subagent tool for invoking subagents",
+    t(
+      "Enable beta Subagent tool for invoking subagents",
+      "サブエージェント呼び出し用のベータ版 Subagent ツールを有効化する",
+    ),
   )
   .action(async (prompt, options) => {
     // Handle piped input - detect it early and decide on mode
@@ -251,10 +286,18 @@ addCommonOptions(program)
       const sessionId = logger.getSessionId();
       // In headless mode, suppress these verbose logs
       if (!isHeadless) {
-        console.log(`Verbose logging enabled (session: ${sessionId})`);
-        console.log(`Logs: ${logPath}`);
         console.log(
-          `Filter this session: grep '\\[${sessionId}\\]' ${logPath}`,
+          t(
+            `Verbose logging enabled (session: ${sessionId})`,
+            `詳細ログを有効化しました(セッション: ${sessionId})`,
+          ),
+        );
+        console.log(t(`Logs: ${logPath}`, `ログ: ${logPath}`));
+        console.log(
+          t(
+            `Filter this session: grep '\\[${sessionId}\\]' ${logPath}`,
+            `このセッションのみ抽出: grep '\\[${sessionId}\\]' ${logPath}`,
+          ),
         );
       }
       logger.debug("Verbose logging enabled");
@@ -278,9 +321,12 @@ addCommonOptions(program)
     // Agent files can provide their own prompts, and resume can work without new input
     if (options.print && !prompt && !options.agent && !options.resume) {
       safeStderr(
-        "Error: A prompt is required when using the -p/--print flag, unless --prompt, --agent, or --resume is provided.\n\n",
+        t(
+          "Error: A prompt is required when using the -p/--print flag, unless --prompt, --agent, or --resume is provided.\n\n",
+          "エラー: -p/--print フラグの使用時には、--prompt、--agent、--resume のいずれかを指定しない限りプロンプトが必須です。\n\n",
+        ),
       );
-      safeStderr("Usage examples:\n");
+      safeStderr(t("Usage examples:\n", "使用例:\n"));
       safeStderr('  cn -p "please review my current git diff"\n');
       safeStderr('  echo "hello" | cn -p\n');
       safeStderr('  cn -p "analyze the code in src/"\n');
@@ -299,8 +345,13 @@ addCommonOptions(program)
 // List sessions subcommand
 program
   .command("ls")
-  .description("List recent chat sessions and select one to resume")
-  .option("--json", "Output in JSON format")
+  .description(
+    t(
+      "List recent chat sessions and select one to resume",
+      "最近のチャットセッションを一覧し、再開するものを選択する",
+    ),
+  )
+  .option("--json", t("Output in JSON format", "JSON形式で出力する"))
   .action(async (options) => {
     await listSessionsCommand({
       format: options.json ? "json" : undefined,
@@ -310,20 +361,41 @@ program
 // Serve subcommand
 program
   .command("serve [prompt]", { hidden: true })
-  .description("Start an HTTP server with /state and /message endpoints")
+  .description(
+    t(
+      "Start an HTTP server with /state and /message endpoints",
+      "/state と /message エンドポイントを備えたHTTPサーバーを起動する",
+    ),
+  )
   .option(
     "--timeout <seconds>",
-    "Inactivity timeout in seconds (default: 300)",
+    t(
+      "Inactivity timeout in seconds (default: 300)",
+      "非アクティブタイムアウトの秒数(既定: 300)",
+    ),
     "300",
   )
-  .option("--port <port>", "Port to run the server on (default: 8000)", "8000")
+  .option(
+    "--port <port>",
+    t(
+      "Port to run the server on (default: 8000)",
+      "サーバーを起動するポート(既定: 8000)",
+    ),
+    "8000",
+  )
   .option(
     "--id <storageId>",
-    "Upload session snapshots to Continue-managed storage using the provided identifier",
+    t(
+      "Upload session snapshots to Continue-managed storage using the provided identifier",
+      "指定の識別子を用いて、Continue管理のストレージへセッションスナップショットをアップロードする",
+    ),
   )
   .option(
     "--beta-upload-artifact-tool",
-    "Enable beta UploadArtifact tool for uploading screenshots, videos, and logs",
+    t(
+      "Enable beta UploadArtifact tool for uploading screenshots, videos, and logs",
+      "スクリーンショット・動画・ログをアップロードするベータ版 UploadArtifact ツールを有効化する",
+    ),
   )
   .action(async (prompt, options) => {
     // Merge parent options with subcommand options
@@ -340,7 +412,9 @@ program
 // Checks subcommand
 program
   .command("checks [action] [pr-url]")
-  .description("Show CI check statuses for a PR")
+  .description(
+    t("Show CI check statuses for a PR", "PRのCIチェック状況を表示する"),
+  )
   .action(async (action: string | undefined, prUrl: string | undefined) => {
     await checks(action, prUrl);
   });
@@ -348,21 +422,49 @@ program
 // Review subcommand
 program
   .command("review")
-  .description("Run AI-powered reviews on your changes")
-  .option("--base <ref>", "Base git ref to diff against (default: auto-detect)")
-  .option("--format <format>", "Output format")
-  .option("--fix", "Automatically apply suggested fixes")
-  .option("--patch", "Show patches")
-  .option("--fail-fast", "Stop on first failure")
-  .option("--review-agents <agents...>", "Specific review agents to run")
-  .option("--verbose", "Enable verbose logging")
+  .description(
+    t(
+      "Run AI-powered reviews on your changes",
+      "変更内容に対してAIレビューを実行する",
+    ),
+  )
+  .option(
+    "--base <ref>",
+    t(
+      "Base git ref to diff against (default: auto-detect)",
+      "差分比較の基準となるgit ref(既定: 自動検出)",
+    ),
+  )
+  .option("--format <format>", t("Output format", "出力形式"))
+  .option(
+    "--fix",
+    t(
+      "Automatically apply suggested fixes",
+      "提案された修正を自動的に適用する",
+    ),
+  )
+  .option("--patch", t("Show patches", "パッチを表示する"))
+  .option("--fail-fast", t("Stop on first failure", "最初の失敗で停止する"))
+  .option(
+    "--review-agents <agents...>",
+    t(
+      "Specific review agents to run",
+      "実行するレビューエージェントを指定する",
+    ),
+  )
+  .option("--verbose", t("Enable verbose logging", "詳細ログを有効化する"))
   .action(async (options) => {
     await review(options);
   });
 
 // Handle unknown commands
 program.on("command:*", () => {
-  console.error(`Error: Unknown command '${program.args.join(" ")}'\n`);
+  console.error(
+    t(
+      `Error: Unknown command '${program.args.join(" ")}'\n`,
+      `エラー: 不明なコマンド '${program.args.join(" ")}'\n`,
+    ),
+  );
   program.outputHelp();
   void gracefulExit(1);
 });

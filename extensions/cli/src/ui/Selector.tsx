@@ -1,6 +1,8 @@
 import { Box, Text, useInput } from "ink";
 import React, { ReactNode } from "react";
 
+import { t } from "../i18n.js";
+
 import { defaultBoxStyles } from "./styles.js";
 
 export interface SelectorOption {
@@ -33,7 +35,7 @@ export function Selector<T extends SelectorOption>({
   selectedIndex,
   loading,
   error,
-  loadingMessage = "Loading...",
+  loadingMessage = t("Loading...", "読み込み中..."),
   currentId,
   onSelect,
   onCancel,
@@ -92,11 +94,11 @@ export function Selector<T extends SelectorOption>({
     return (
       <Box {...defaultBoxStyles("blue")}>
         <Text color="red" bold>
-          Error
+          {t("Error", "エラー")}
         </Text>
         <Text color="red">{error}</Text>
         <Text color="gray" dimColor>
-          Press Esc to cancel
+          {t("Press Esc to cancel", "Esc でキャンセルします")}
         </Text>
       </Box>
     );
@@ -142,7 +144,10 @@ export function Selector<T extends SelectorOption>({
       </Box>
       <Box marginTop={1}>
         <Text color="gray" dimColor>
-          ↑/↓ to navigate, Enter to select, Esc to cancel
+          {t(
+            "↑/↓ to navigate, Enter to select, Esc to cancel",
+            "↑/↓ で移動、Enter で選択、Esc でキャンセル",
+          )}
         </Text>
       </Box>
     </Box>

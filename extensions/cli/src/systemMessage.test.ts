@@ -19,14 +19,14 @@ vi.mock("./hubLoader.js", () => ({
     .mockImplementation((spec: string) => Promise.resolve(spec)),
 }));
 
-const PLAN_MODE_STRING = "You are operating in _Plan Mode_";
+const PLAN_MODE_STRING = "_Plan Mode_ で動作しています";
 
 describe("constructSystemMessage", () => {
   it("should return base system message with rules when additionalRules is provided", async () => {
     const rules = ["These are the rules for the assistant."];
     const result = await constructSystemMessage("normal", rules);
 
-    expect(result).toContain("You are an agent in the Continue CLI");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
     expect(result).toContain('<context name="userRules">');
     expect(result).toContain(rules[0]);
     expect(result).toContain("</context>");
@@ -36,7 +36,7 @@ describe("constructSystemMessage", () => {
     // The implementation checks for agent files like AGENTS.md which exists in this project
     const result = await constructSystemMessage("normal");
 
-    expect(result).toContain("You are an agent in the Continue CLI");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
     expect(result).toContain('<context name="userRules">');
     expect(result).toContain("AGENTS.md");
   });
@@ -44,7 +44,7 @@ describe("constructSystemMessage", () => {
   it("should include base system message components", async () => {
     const result = await constructSystemMessage("normal");
 
-    expect(result).toContain("You are an agent in the Continue CLI");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
     expect(result).toContain("<env>");
     expect(result).toContain('<context name="gitStatus">');
   });
@@ -52,7 +52,7 @@ describe("constructSystemMessage", () => {
   it("should handle whitespace-only rules message", async () => {
     const result = await constructSystemMessage("normal", ["   "]);
 
-    expect(result).toContain("You are an agent in the Continue CLI");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
     expect(result).toContain('<context name="userRules">');
   });
 
@@ -130,12 +130,10 @@ Rule 3: Third rule`;
       true,
     );
 
-    expect(result).toContain("You are an agent in the Continue CLI");
-    expect(result).toContain("IMPORTANT: You are running in headless mode");
-    expect(result).toContain("Provide ONLY your final answer");
-    expect(result).toContain(
-      "Do not include explanations, reasoning, or additional commentary",
-    );
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
+    expect(result).toContain("headless モードで実行しています");
+    expect(result).toContain("最終回答のみを提供してください");
+    expect(result).toContain("説明・推論・追加のコメントは含めないでください");
   });
 
   it("should not add headless mode instructions when headless is false", async () => {
@@ -146,27 +144,25 @@ Rule 3: Third rule`;
       false,
     );
 
-    expect(result).toContain("You are an agent in the Continue CLI");
-    expect(result).not.toContain("IMPORTANT: You are running in headless mode");
-    expect(result).not.toContain("Provide ONLY your final answer");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
+    expect(result).not.toContain("headless モードで実行しています");
+    expect(result).not.toContain("最終回答のみを提供してください");
   });
 
   it("should not add headless mode instructions when headless is undefined", async () => {
     const result = await constructSystemMessage("normal");
 
-    expect(result).toContain("You are an agent in the Continue CLI");
-    expect(result).not.toContain("IMPORTANT: You are running in headless mode");
-    expect(result).not.toContain("Provide ONLY your final answer");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
+    expect(result).not.toContain("headless モードで実行しています");
+    expect(result).not.toContain("最終回答のみを提供してください");
   });
 
   it("should add JSON format instructions when format is json", async () => {
     const result = await constructSystemMessage("normal", undefined, "json");
 
-    expect(result).toContain("You are an agent in the Continue CLI");
-    expect(result).toContain(
-      "IMPORTANT: You are operating in JSON output mode",
-    );
-    expect(result).toContain("Your final response MUST be valid JSON");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
+    expect(result).toContain("JSON 出力モードで動作しています");
+    expect(result).toContain("有効な JSON でなければなりません");
     expect(result).toContain("JSON.parse()");
   });
 
@@ -178,15 +174,13 @@ Rule 3: Third rule`;
       false,
     );
 
-    expect(result).toContain("You are an agent in the Continue CLI");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
     expect(result).toContain(PLAN_MODE_STRING);
+    expect(result).toContain("ユーザーのアイデアの調査と計画の立案を支援する");
+    expect(result).toContain("行動を起こす前に");
+    expect(result).toContain("読み取り専用ツール");
     expect(result).toContain(
-      "which means that your goal is to help the user investigate their ideas",
-    );
-    expect(result).toContain("develop a plan before taking action");
-    expect(result).toContain("read-only tools");
-    expect(result).toContain(
-      "should not attempt to circumvent them to write / delete / create files",
+      "これらを迂回してファイルの書き込み / 削除 / 作成を試みてはいけません",
     );
   });
 
@@ -198,20 +192,20 @@ Rule 3: Third rule`;
       false,
     );
 
-    expect(result).toContain("You are an agent in the Continue CLI");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
     expect(result).not.toContain(PLAN_MODE_STRING);
     expect(result).not.toContain(
-      "which means that your goal is to help the user investigate their ideas",
+      "ユーザーのアイデアの調査と計画の立案を支援する",
     );
   });
 
   it("should not add plan mode instructions when mode is normal", async () => {
     const result = await constructSystemMessage("normal");
 
-    expect(result).toContain("You are an agent in the Continue CLI");
+    expect(result).toContain("あなたは Continue CLI のエージェントです");
     expect(result).not.toContain(PLAN_MODE_STRING);
     expect(result).not.toContain(
-      "which means that your goal is to help the user investigate their ideas",
+      "ユーザーのアイデアの調査と計画の立案を支援する",
     );
   });
 
@@ -224,8 +218,8 @@ Rule 3: Third rule`;
     );
 
     expect(result).toContain(PLAN_MODE_STRING);
-    expect(result).toContain("read-only tools");
-    expect(result).toContain("write / delete / create files");
+    expect(result).toContain("読み取り専用ツール");
+    expect(result).toContain("書き込み / 削除 / 作成");
   });
 
   it("should combine plan mode with headless mode instructions", async () => {
@@ -236,11 +230,9 @@ Rule 3: Third rule`;
       true,
     );
 
-    expect(result).toContain("IMPORTANT: You are running in headless mode");
+    expect(result).toContain("headless モードで実行しています");
     expect(result).toContain(PLAN_MODE_STRING);
-    expect(result).toContain(
-      "which means that your goal is to help the user investigate their ideas",
-    );
+    expect(result).toContain("ユーザーのアイデアの調査と計画の立案を支援する");
   });
 
   it("should combine plan mode with JSON format instructions", async () => {
@@ -251,12 +243,8 @@ Rule 3: Third rule`;
       false,
     );
 
-    expect(result).toContain(
-      "IMPORTANT: You are operating in JSON output mode",
-    );
+    expect(result).toContain("JSON 出力モードで動作しています");
     expect(result).toContain(PLAN_MODE_STRING);
-    expect(result).toContain(
-      "which means that your goal is to help the user investigate their ideas",
-    );
+    expect(result).toContain("ユーザーのアイデアの調査と計画の立案を支援する");
   });
 });

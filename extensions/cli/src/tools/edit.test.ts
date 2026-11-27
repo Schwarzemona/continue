@@ -152,7 +152,7 @@ describe("editTool", () => {
       expect(result.preview).toHaveLength(2);
       expect(result.preview?.[0]).toEqual({
         type: "text",
-        content: "Will make the following changes:",
+        content: "以下の変更を行う予定です:",
       });
       expect(result.preview?.[1]).toEqual({
         type: "diff",
@@ -190,7 +190,7 @@ describe("editTool", () => {
       const result = await editTool.run(args);
 
       expect(result).toBe(
-        `Successfully edited ${testFilePath}\nDiff:\nmocked diff`,
+        `${testFilePath} を正常に編集しました\nDiff:\nmocked diff`,
       );
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         testFilePath,

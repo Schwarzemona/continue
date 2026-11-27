@@ -1,6 +1,7 @@
 import { Box, Text } from "ink";
 import React, { useEffect, useState } from "react";
 
+import { t } from "../../i18n.js";
 import { setExitMessageCallback, shouldShowExitMessage } from "../../index.js";
 import type { PermissionMode } from "../../permissions/types.js";
 import type { NavigationScreen } from "../context/NavigationContext.js";
@@ -54,11 +55,14 @@ export const BottomStatusBar: React.FC<BottomStatusBarProps> = ({
           <React.Fragment>
             {hasImageInClipboard ? (
               <Text key="image-paste-hint" color="cyan" wrap="truncate-start">
-                Press Ctrl+V to paste image
+                {t(
+                  "Press Ctrl+V to paste image",
+                  "Ctrl+V で画像を貼り付けられます",
+                )}
               </Text>
             ) : showingExitMessage ? (
               <Text key="repo-url" color="dim" wrap="truncate-start">
-                {"ctrl+c to exit"}
+                {t("ctrl+c to exit", "ctrl+c で終了")}
               </Text>
             ) : (
               <ResponsiveRepoDisplay remoteUrl={remoteUrl} />
@@ -83,7 +87,7 @@ export const BottomStatusBar: React.FC<BottomStatusBarProps> = ({
               •{" "}
             </Text>
             <Text key="cost-display" color="dim">
-              Cost: ${totalCost.toFixed(4)}
+              {t("Cost:", "コスト:")} ${totalCost.toFixed(4)}
             </Text>
           </React.Fragment>
         )}

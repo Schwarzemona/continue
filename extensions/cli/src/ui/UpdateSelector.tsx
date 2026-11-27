@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 
 import { useService } from "../hooks/useService.js";
+import { t } from "../i18n.js";
 import { services } from "../services/index.js";
 import type { UpdateServiceState } from "../services/types.js";
 import { SERVICE_NAMES } from "../services/types.js";
@@ -30,32 +31,41 @@ export const UpdateSelector: React.FC<UpdateSelectorProps> = ({ onCancel }) => {
 
   const error: string | null = useMemo(() => {
     if (updateServiceState.state === "error") {
-      return updateServiceState.error?.message || "Update service error";
+      return (
+        updateServiceState.error?.message ||
+        t("Update service error", "アップデートサービスエラー")
+      );
     }
     if (updateState?.status === "error") {
-      return updateState.message || "Update failed";
+      return (
+        updateState.message || t("Update failed", "アップデートに失敗しました")
+      );
     }
     return null;
   }, [updateServiceState.state, updateServiceState.error, updateState]);
 
   const loadingMessage = useMemo(() => {
-    if (!updateState) return "Preparing update...";
-    return updateState.message || "Working...";
+    if (!updateState)
+      return t("Preparing update...", "アップデートを準備中...");
+    return updateState.message || t("Working...", "処理中...");
   }, [updateState]);
 
   const options: UpdateOption[] = useMemo(() => {
     const runLabel = updateState?.latestVersion
-      ? `Run update to v${updateState.latestVersion}`
-      : "Run update";
+      ? t(
+          `Run update to v${updateState.latestVersion}`,
+          `v${updateState.latestVersion} へアップデートを実行`,
+        )
+      : t("Run update", "アップデートを実行");
 
     const autoUpdateLabel = updateState?.autoUpdate
-      ? "Turn off auto-updates"
-      : "Turn on auto-updates";
+      ? t("Turn off auto-updates", "自動アップデートをオフにする")
+      : t("Turn on auto-updates", "自動アップデートをオンにする");
 
     return [
       { id: "run-update", name: runLabel, action: "run" },
       { id: "toggle-auto", name: autoUpdateLabel, action: "toggle-auto" },
-      { id: "back", name: "Back", action: "back" },
+      { id: "back", name: t("Back", "戻る"), action: "back" },
     ];
   }, [updateState?.latestVersion, updateState?.autoUpdate]);
 
@@ -78,7 +88,7 @@ export const UpdateSelector: React.FC<UpdateSelectorProps> = ({ onCancel }) => {
 
   return (
     <Selector
-      title="Update Continue CLI"
+      title={t("Update Continue CLI", "Continue CLIをアップデート")}
       options={options}
       selectedIndex={selectedIndex}
       loading={!!isWorking}

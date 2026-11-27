@@ -4,7 +4,7 @@ export const writeChecklistTool: Tool = {
   name: "Checklist",
   displayName: "Checklist",
   description:
-    "Create or update a task checklist. The old checklist can be seen in the chat history if it exists. Use this tool to write a new checklist or edit the existing one.",
+    "タスクリストを作成または更新します。既存のリストはチャット履歴で確認できます。新しいリストの作成や既存リストの編集にこのツールを使用してください。",
   readonly: false,
   isBuiltIn: true,
   parameters: {
@@ -14,7 +14,7 @@ export const writeChecklistTool: Tool = {
       checklist: {
         type: "string",
         description:
-          "The complete checklist in markdown format using - [ ] for incomplete tasks and - [x] for completed tasks. Avoid headers and additional content unless specifically being used to group checkboxes. Try to keep the list short, and make each item specific and actionable.",
+          "未完了タスクは - [ ]、完了タスクは - [x] で記述した、Markdown形式の完全なタスクリスト。チェックボックスをグループ化する場合を除き、見出しや追加内容包括は避けてください。リストは短めに保ち、各項目を具体的で実行可能なものにしてください。",
       },
     },
   },

@@ -1,6 +1,7 @@
 import { Box, Text, useInput } from "ink";
 import React, { useState } from "react";
 
+import { t } from "../../i18n.js";
 import { defaultBoxStyles } from "../styles.js";
 
 interface QuizPromptProps {
@@ -127,7 +128,11 @@ export const QuizPrompt: React.FC<QuizPromptProps> = ({
           })}
           <Box>
             <Text color="gray" dimColor>
-              {"  "}(or start typing for custom answer)
+              {"  "}
+              {t(
+                "(or start typing for custom answer)",
+                "(または入力すると自由回答)",
+              )}
             </Text>
           </Box>
         </Box>
@@ -143,7 +148,10 @@ export const QuizPrompt: React.FC<QuizPromptProps> = ({
           {defaultAnswer && !customInput && (
             <Box marginTop={1}>
               <Text color="gray" dimColor>
-                (Press Enter for default: {defaultAnswer})
+                {t(
+                  `Press Enter for default: ${defaultAnswer}`,
+                  `Enter で既定の回答: ${defaultAnswer}`,
+                )}
               </Text>
             </Box>
           )}
@@ -153,8 +161,8 @@ export const QuizPrompt: React.FC<QuizPromptProps> = ({
       <Box marginTop={1}>
         <Text color="gray" dimColor>
           {hasOptions && !isCustomMode
-            ? "↑/↓ navigate, Enter select"
-            : "Type answer, Enter submit"}
+            ? t("↑/↓ navigate, Enter select", "↑/↓ で移動、Enter で選択")
+            : t("Type answer, Enter submit", "入力して Enter で送信")}
         </Text>
       </Box>
     </Box>

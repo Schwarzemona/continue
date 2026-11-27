@@ -1,3 +1,5 @@
+import { t } from "../i18n.js";
+
 /**
  * Validates an Anthropic API key format
  * @param apiKey The API key to validate
@@ -23,16 +25,19 @@ export function getApiKeyValidationError(
   apiKey: string | null | undefined,
 ): string {
   if (!apiKey || typeof apiKey !== "string") {
-    return "API key is required";
+    return t("API key is required", "APIキーが必須です");
   }
 
   if (!apiKey.startsWith("sk-ant-")) {
-    return 'API key must start with "sk-ant-"';
+    return t(
+      'API key must start with "sk-ant-"',
+      'APIキーは "sk-ant-" で始まる必要があります',
+    );
   }
 
   if (apiKey.length <= "sk-ant-".length) {
-    return "API key is too short";
+    return t("API key is too short", "APIキーが短すぎます");
   }
 
-  return "Invalid API key format";
+  return t("Invalid API key format", "APIキーの形式が不正です");
 }

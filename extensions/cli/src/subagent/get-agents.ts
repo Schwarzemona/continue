@@ -26,9 +26,9 @@ export function generateSubagentToolDescription(
     .join("\n");
 
   // todo: refine this prompt later
-  return `Launch a specialized subagent to handle a specific task.
+  return `専門化されたサブエージェントを起動して、特定のタスクを処理させます。
 
-Here are the available subagents:
+利用可能なサブエージェント:
 ${agentList}
 `;
 }

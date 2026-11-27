@@ -1,6 +1,8 @@
 import fs from "fs";
+
 import path from "path";
 import { fileURLToPath } from "url";
+import { t } from "../i18n.js";
 
 import {
   AgentFile,
@@ -77,7 +79,10 @@ export class AgentFileService
       // Only load from file path for markdown files
       if (!isMarkdownPath) {
         throw new Error(
-          `Failed to load agent from ${agentPath}. Not a markdown file`,
+          t(
+            `Failed to load agent from ${agentPath}. Not a markdown file`,
+            `エージェントを ${agentPath} から読み込めませんでした。マークダウンファイルではありません`,
+          ),
         );
       }
 
@@ -88,7 +93,10 @@ export class AgentFileService
       return parseAgentFile(content);
     } catch (e) {
       throw new Error(
-        `Failed to load agent from ${agentPath}: ${getErrorString(e)}`,
+        t(
+          `Failed to load agent from ${agentPath}: ${getErrorString(e)}`,
+          `エージェントを ${agentPath} から読み込めませんでした: ${getErrorString(e)}`,
+        ),
       );
     }
   }
@@ -119,7 +127,10 @@ export class AgentFileService
       if (agentFile.model) {
         if (!apiClientState.apiClient) {
           throw new Error(
-            "Cannot load agent model, failed to load api client service",
+            t(
+              "Cannot load agent model, failed to load api client service",
+              "エージェントモデルを読み込めません。api client サービスの読み込みに失敗しました",
+            ),
           );
         }
         const model = await loadModelFromHub(agentFile.model);

@@ -3,6 +3,7 @@ import * as fs from "fs";
 import { throwIfFileIsSecurityConcern } from "core/indexing/ignore.js";
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 
+import { t } from "../i18n.js";
 import { parseEnvNumber } from "../util/truncateOutput.js";
 
 import { formatToolArgument } from "./formatters.js";
@@ -35,14 +36,14 @@ export function markFileAsRead(filePath: string) {
 export const readFileTool: Tool = {
   name: "Read",
   displayName: "Read",
-  description: "Read the contents of a file at the specified path",
+  description: "指定したパスのファイル内容を読み取ります",
   parameters: {
     type: "object",
     required: ["filepath"],
     properties: {
       filepath: {
         type: "string",
-        description: "The path to the file to read",
+        description: "読み取るファイルへのパス",
       },
     },
   },
@@ -59,7 +60,10 @@ export const readFileTool: Tool = {
       preview: [
         {
           type: "text",
-          content: `Will read ${formatToolArgument(filepath)}`,
+          content: t(
+            `Will read ${formatToolArgument(filepath)}`,
+            `${formatToolArgument(filepath)} を読み込みます`,
+          ),
         },
       ],
     };
@@ -77,7 +81,10 @@ export const readFileTool: Tool = {
       if (!fs.existsSync(filepath)) {
         throw new ContinueError(
           ContinueErrorReason.Unspecified,
-          `File does not exist: ${filepath}`,
+          t(
+            `File does not exist: ${filepath}`,
+            `ファイルが存在しません: ${filepath}`,
+          ),
         );
       }
       const realPath = fs.realpathSync(filepath);
@@ -93,24 +100,36 @@ export const readFileTool: Tool = {
       const charCount = content.length;
 
       if (charCount > maxChars || lineCount > maxLines) {
+        const chars = charCount.toLocaleString();
+        const lines = lineCount.toLocaleString();
+        const maxCharsLabel = maxChars.toLocaleString();
+        const maxLinesLabel = maxLines.toLocaleString();
+
         // Include note about single-tool limit when parallel calls reduce the limit
         const parallelNote =
           parallelCount > 1
-            ? ` (Note: limit reduced due to ${parallelCount} parallel tool calls. Single-tool limit: ${baseMaxChars.toLocaleString()} characters or ${baseMaxLines.toLocaleString()} lines.)`
+            ? t(
+                ` (Note: limit reduced due to ${parallelCount} parallel tool calls. Single-tool limit: ${baseMaxChars.toLocaleString()} characters or ${baseMaxLines.toLocaleString()} lines.)`,
+                ` (注意: ${parallelCount} 件の並列ツール呼び出しのため上限が低下しています。単独呼び出し時の上限: ${baseMaxChars.toLocaleString()} 文字または ${baseMaxLines.toLocaleString()} 行。)`,
+              )
             : "";
 
         throw new ContinueError(
           ContinueErrorReason.FileTooLarge,
-          `File is too large to read: ${filepath} (${charCount.toLocaleString()} characters, ${lineCount.toLocaleString()} lines). ` +
-            `Maximum allowed: ${maxChars.toLocaleString()} characters or ${maxLines.toLocaleString()} lines.${parallelNote} ` +
-            `Consider using terminal commands like 'head', 'tail', 'sed', or 'grep' to read targeted parts of the file.`,
+          t(
+            `File is too large to read: ${filepath} (${chars} characters, ${lines} lines). Maximum allowed: ${maxCharsLabel} characters or ${maxLinesLabel} lines.${parallelNote} Consider using terminal commands like 'head', 'tail', 'sed', or 'grep' to read targeted parts of the file.`,
+            `ファイルを読み取るにはサイズが大きすぎます: ${filepath} (${chars} 文字、${lines} 行)。許可される上限: ${maxCharsLabel} 文字または ${maxLinesLabel} 行。${parallelNote} terminal コマンド（'head'、'tail'、'sed'、'grep' など）を使い、ファイルの必要な部分だけを読む方法も検討してください。`,
+          ),
         );
       }
 
       // Mark this file as read for the edit tool
       markFileAsRead(realPath);
 
-      return `Content of ${filepath}:\n${content}`;
+      return t(
+        `Content of ${filepath}:\n${content}`,
+        `${filepath} の内容:\n${content}`,
+      );
     } catch (error) {
       if (error instanceof ContinueError) {
         throw error;

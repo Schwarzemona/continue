@@ -2,6 +2,7 @@ import { decodeFQSN, getTemplateVariables } from "@continuedev/config-yaml";
 import { type AssistantConfig } from "@continuedev/sdk";
 import { Client } from "@modelcontextprotocol/sdk/client/index.js";
 
+import { t } from "../i18n.js";
 import { getErrorString } from "../util/error.js";
 import { logger } from "../util/logger.js";
 
@@ -90,7 +91,10 @@ export class MCPService
             (c) => `${c.config?.name}: ${c.error}`,
           );
           throw new Error(
-            `MCP server(s) failed to load:\n${errorMessages.join("\n")}`,
+            t(
+              `MCP server(s) failed to load:\n${errorMessages.join("\n")}`,
+              `MCP サーバーの読み込みに失敗しました:\n${errorMessages.join("\n")}`,
+            ),
           );
         }
       }
@@ -164,7 +168,12 @@ export class MCPService
   ): Promise<T> {
     const connection = this.connections.get(serverName);
     if (!connection) {
-      throw new Error(`Connection ${serverName} not found`);
+      throw new Error(
+        t(
+          `Connection ${serverName} not found`,
+          `接続 ${serverName} が見つかりません`,
+        ),
+      );
     }
 
     const serverConfig = connection.config;
@@ -189,7 +198,12 @@ export class MCPService
           return await this.withTokenRefresh(serverName, async () => {
             const conn = this.connections.get(serverName);
             if (!conn?.client) {
-              throw new Error(`Client for ${serverName} not available`);
+              throw new Error(
+                t(
+                  `Client for ${serverName} not available`,
+                  `${serverName} のクライアントが利用できません`,
+                ),
+              );
             }
             return await conn.client.callTool({
               name,
@@ -199,7 +213,9 @@ export class MCPService
         }
       }
     }
-    throw new Error(`Tool ${name} not found`);
+    throw new Error(
+      t(`Tool ${name} not found`, `ツール ${name} が見つかりません`),
+    );
   }
 
   /**
@@ -223,7 +239,12 @@ export class MCPService
     );
 
     if (!serverConfig) {
-      throw new Error(`Server ${serverName} not found in configuration`);
+      throw new Error(
+        t(
+          `Server ${serverName} not found in configuration`,
+          `サーバー ${serverName} が設定内に見つかりません`,
+        ),
+      );
     }
 
     const existingConnection = this.connections.get(serverName);
@@ -257,9 +278,14 @@ export class MCPService
 
     try {
       if (unrendered.length > 0) {
-        const message = `${serverConfig.name} MCP Server has unresolved secrets: ${unrendered.join(", ")}
+        const message = t(
+          `${serverConfig.name} MCP Server has unresolved secrets: ${unrendered.join(", ")}
 For personal use you can set the secret in the hub at https://continue.dev/settings/secrets or pass it to the CLI environment.
-Org-level secrets can only be used for MCP by Background Agents (https://docs.continue.dev/hub/agents/overview) when \"Include in Env\" is enabled for the secret.`;
+Org-level secrets can only be used for MCP by Background Agents (https://docs.continue.dev/hub/agents/overview) when \"Include in Env\" is enabled for the secret.`,
+          `${serverConfig.name} の MCP サーバーに未解決の secrets があります: ${unrendered.join(", ")}
+個人利用の場合は https://continue.dev/settings/secrets で hub に secret を設定するか、CLI の環境変数に渡してください。
+組織レベルの secret は MCP では Background Agents（https://docs.continue.dev/hub/agents/overview）でのみ使用できます。使用には secret の \"Include in Env\" を有効にする必要があります。`,
+        );
         if (this.isHeadless) {
           throw new Error(message);
         } else {
@@ -282,7 +308,12 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
             async () => {
               const conn = this.connections.get(serverName);
               if (!conn?.client) {
-                throw new Error(`Client for ${serverName} not available`);
+                throw new Error(
+                  t(
+                    `Client for ${serverName} not available`,
+                    `${serverName} のクライアントが利用できません`,
+                  ),
+                );
               }
               return (await conn.client.listPrompts()).prompts;
             },
@@ -304,7 +335,12 @@ Org-level secrets can only be used for MCP by Background Agents (https://docs.co
             async () => {
               const conn = this.connections.get(serverName);
               if (!conn?.client) {
-                throw new Error(`Client for ${serverName} not available`);
+                throw new Error(
+                  t(
+                    `Client for ${serverName} not available`,
+                    `${serverName} のクライアントが利用できません`,
+                  ),
+                );
               }
               return (await conn.client.listTools()).tools;
             },

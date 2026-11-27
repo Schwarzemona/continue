@@ -6,9 +6,9 @@ import { Tool } from "./types.js";
 export const checkBackgroundJobTool: Tool = {
   name: "CheckBackgroundJob",
   displayName: "Check Background Job",
-  description: `Check the status and output of a background job.
-Returns the current status, exit code (if finished), and all available output.
-If the job is still running, returns partial output with "running" status.`,
+  description: `バックグラウンドジョブのステータスと出力を確認します。
+現在のステータス、終了コード（終了している場合）、および利用可能なすべての出力を返します。
+ジョブがまだ実行中の場合は、"running" ステータスと共に部分的な出力を返します。`,
   parameters: {
     type: "object",
     required: ["job_id"],
@@ -16,7 +16,7 @@ If the job is still running, returns partial output with "running" status.`,
       job_id: {
         type: "string",
         description:
-          "The ID of the background job to check (e.g., bg-1-1234567890)",
+          "確認するバックグラウンドジョブのID（例: bg-1-1234567890）",
       },
     },
   },
@@ -27,7 +27,7 @@ If the job is still running, returns partial output with "running" status.`,
 
     if (!job) {
       return JSON.stringify({
-        error: `Job ${job_id} not found`,
+        error: `ジョブ ${job_id} が見つかりません`,
         available_jobs: services.backgroundJobs
           .getAllJobs()
           .map((j: BackgroundJob) => ({

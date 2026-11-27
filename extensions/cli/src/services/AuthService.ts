@@ -1,3 +1,4 @@
+import { t } from "../i18n.js";
 import { logger } from "../util/logger.js";
 
 import { BaseService } from "./BaseService.js";
@@ -28,7 +29,10 @@ export class AuthService extends BaseService<AuthServiceState> {
 
   async login(): Promise<AuthServiceState> {
     throw new Error(
-      "Login is not available. Hub authentication has been removed.",
+      t(
+        "Login is not available. Hub authentication has been removed.",
+        "ログインは利用できません。Hub 認証は廃止されました。",
+      ),
     );
   }
 

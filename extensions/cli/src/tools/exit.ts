@@ -6,7 +6,7 @@ export const exitTool: Tool = {
   name: "Exit",
   displayName: "Exit",
   description:
-    "Exit the current process with status code 1, indicating a failure or error",
+    "失敗またはエラーを示すためにステータスコード1で現在のプロセスを終了します",
   parameters: {
     type: "object",
     properties: {},
@@ -23,7 +23,7 @@ export const exitTool: Tool = {
     } catch (err) {
       // Non-critical: log but don't block exit
       logger.debug(
-        "Failed to update completion metadata (non-critical)",
+        "完了メタデータの更新に失敗しました（致命的ではありません）",
         err as any,
       );
     }

@@ -2,6 +2,7 @@ import * as child_process from "child_process";
 import * as fs from "fs";
 import * as util from "util";
 
+import { t } from "../i18n.js";
 import {
   parseEnvNumber,
   truncateOutputFromEnd,
@@ -24,14 +25,13 @@ const execPromise = util.promisify(child_process.exec);
 export const viewDiffTool: Tool = {
   name: "Diff",
   displayName: "Diff",
-  description: "View all uncommitted changes in the git repository",
+  description: "gitリポジトリ内の未コミット変更をすべて表示します",
   parameters: {
     type: "object",
     properties: {
       path: {
         type: "string",
-        description:
-          "The path to the git repository (defaults to current directory)",
+        description: "gitリポジトリへのパス（既定は現在のディレクトリ）",
       },
     },
   },
@@ -43,7 +43,7 @@ export const viewDiffTool: Tool = {
       preview: [
         {
           type: "text",
-          content: "Will show git diff",
+          content: t("Will show git diff", "git diff を表示する予定です"),
         },
       ],
     };
@@ -52,7 +52,10 @@ export const viewDiffTool: Tool = {
     try {
       const repoPath = args.path || process.cwd();
       if (!fs.existsSync(repoPath)) {
-        return `Error: Path does not exist: ${repoPath}`;
+        return t(
+          `Error: Path does not exist: ${repoPath}`,
+          `エラー: パスが存在しません: ${repoPath}`,
+        );
       }
 
       try {
@@ -60,7 +63,10 @@ export const viewDiffTool: Tool = {
           cwd: repoPath,
         });
       } catch {
-        return `Error: The specified path is not a git repository: ${repoPath}`;
+        return t(
+          `Error: The specified path is not a git repository: ${repoPath}`,
+          `エラー: 指定されたパスは git リポジトリではありません: ${repoPath}`,
+        );
       }
 
       const { stdout, stderr } = await execPromise("git diff", {
@@ -68,21 +74,30 @@ export const viewDiffTool: Tool = {
       });
 
       if (stderr) {
-        return `Error executing git diff: ${stderr}`;
+        return t(
+          `Error executing git diff: ${stderr}`,
+          `git diff の実行に失敗しました: ${stderr}`,
+        );
       }
 
       if (!stdout.trim()) {
-        return "No changes detected in the git repository.";
+        return t(
+          "No changes detected in the git repository.",
+          "git リポジトリに変更は見つかりませんでした。",
+        );
       }
 
       const maxChars = getDiffMaxChars();
       const { output: truncatedOutput } = truncateOutputFromEnd(
         stdout,
         maxChars,
-        "diff output",
+        t("diff output", "diff 出力"),
       );
 
-      return `Git diff for repository at ${repoPath}:\n\n${truncatedOutput}`;
+      return t(
+        `Git diff for repository at ${repoPath}:\n\n${truncatedOutput}`,
+        `${repoPath} の git diff:\n\n${truncatedOutput}`,
+      );
     } catch (error) {
       return `Error running git diff: ${
         error instanceof Error ? error.message : String(error)

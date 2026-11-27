@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 
 import { getAllSlashCommands } from "./commands/commands.js";
 import { handleInit } from "./commands/init.js";
+import { t } from "./i18n.js";
 import { handleInfoSlashCommand } from "./infoScreen.js";
 import { getCurrentSession, updateSessionTitle } from "./session.js";
 import { telemetryService } from "./telemetry/telemetryService.js";
@@ -25,31 +26,37 @@ type CommandHandler = (
 
 async function handleHelp(_args: string[], _assistant: AssistantConfig) {
   const helpMessage = [
-    chalk.bold("Keyboard Shortcuts:"),
+    chalk.bold(t("Keyboard Shortcuts:", "キーボードショートカット:")),
     "",
-    chalk.white("Navigation:"),
-    `  ${chalk.cyan("↑/↓")}        Navigate command/file suggestions or history`,
-    `  ${chalk.cyan("Tab")}        Complete command or file selection`,
-    `  ${chalk.cyan("Enter")}      Submit message`,
-    `  ${chalk.cyan("Shift+Enter")} New line`,
-    `  ${chalk.cyan("\\")}          Line continuation (at end of line)`,
-    `  ${chalk.cyan("!")}          Shell mode - run shell commands`,
+    chalk.white(t("Navigation:", "移動:")),
+    `  ${chalk.cyan("↑/↓")}        ${t("Navigate command/file suggestions or history", "コマンド/ファイルの補完候補または履歴を移動する")}`,
+    `  ${chalk.cyan("Tab")}        ${t("Complete command or file selection", "コマンドまたはファイル選択を確定する")}`,
+    `  ${chalk.cyan("Enter")}      ${t("Submit message", "メッセージを送信する")}`,
+    `  ${chalk.cyan("Shift+Enter")} ${t("New line", "改行")}`,
+    `  ${chalk.cyan("\\")}          ${t("Line continuation (at end of line)", "行の続き(行末尾で)")}`,
+    `  ${chalk.cyan("!")}          ${t("Shell mode - run shell commands", "シェルモード - シェルコマンドを実行")}`,
     "",
-    chalk.white("Controls:"),
-    `  ${chalk.cyan("Ctrl+C")}     Clear input`,
-    `  ${chalk.cyan("Ctrl+D")}     Exit application`,
-    `  ${chalk.cyan("Ctrl+L")}     Clear screen`,
-    `  ${chalk.cyan("Shift+Tab")}  Cycle permission modes (normal/plan/auto)`,
-    `  ${chalk.cyan("Esc")}        Cancel streaming or close suggestions`,
+    chalk.white(t("Controls:", "操作:")),
+    `  ${chalk.cyan("Ctrl+C")}     ${t("Clear input", "入力をクリアする")}`,
+    `  ${chalk.cyan("Ctrl+D")}     ${t("Exit application", "アプリケーションを終了する")}`,
+    `  ${chalk.cyan("Ctrl+L")}     ${t("Clear screen", "画面をクリアする")}`,
+    `  ${chalk.cyan("Shift+Tab")}  ${t("Cycle permission modes (normal/plan/auto)", "権限モードを切り替える(normal/plan/auto)")}`,
+    `  ${chalk.cyan("Esc")}        ${t("Cancel streaming or close suggestions", "ストリーミングを中断または補完候補を閉じる")}`,
     "",
-    chalk.white("Special Characters:"),
-    `  ${chalk.cyan("@")}          Search and attach files for context`,
-    `  ${chalk.cyan("/")}          Access slash commands`,
-    `  ${chalk.cyan("!")}          Execute bash commands directly`,
+    chalk.white(t("Special Characters:", "特殊文字:")),
+    `  ${chalk.cyan("@")}          ${t("Search and attach files for context", "ファイルを検索してコンテキストに添付する")}`,
+    `  ${chalk.cyan("/")}          ${t("Access slash commands", "スラッシュコマンドを開く")}`,
+    `  ${chalk.cyan("!")}          ${t("Execute bash commands directly", "bashコマンドを直接実行する")}`,
     "",
-    chalk.white("Available Commands:"),
-    `  Type ${chalk.cyan("/")} to see available slash commands`,
-    `  Type ${chalk.cyan("!")} followed by a command to execute bash directly`,
+    chalk.white(t("Available Commands:", "利用可能なコマンド:")),
+    `  ${t(
+      `Type ${chalk.cyan("/")} to see available slash commands`,
+      `${chalk.cyan("/")} を入力すると利用可能なスラッシュコマンドを一覧できます`,
+    )}`,
+    `  ${t(
+      `Type ${chalk.cyan("!")} followed by a command to execute bash directly`,
+      `${chalk.cyan("!")} の後にコマンドを入力すると bash を直接実行できます`,
+    )}`,
   ].join("\n");
   return { output: helpMessage };
 }
@@ -64,7 +71,9 @@ async function handleFork() {
       await clipboardy.default.write(forkCommand);
       return {
         exit: false,
-        output: chalk.gray(`${forkCommand} (copied to clipboard)`),
+        output: chalk.gray(
+          `${forkCommand} ${t("(copied to clipboard)", "(クリップボードにコピーしました)")}`,
+        ),
       };
     } catch {
       return {
@@ -75,7 +84,9 @@ async function handleFork() {
   } catch (error: any) {
     return {
       exit: false,
-      output: chalk.red(`Failed to create fork command: ${error.message}`),
+      output: chalk.red(
+        `${t("Failed to create fork command:", "フォークコマンドの作成に失敗しました:")} ${error.message}`,
+      ),
     };
   }
 }
@@ -86,7 +97,10 @@ function handleTitle(args: string[]) {
     return {
       exit: false,
       output: chalk.yellow(
-        "Please provide a title. Usage: /title <your title>",
+        t(
+          "Please provide a title. Usage: /title <your title>",
+          "タイトルを入力してください。使い方: /title <タイトル>",
+        ),
       ),
     };
   }
@@ -95,12 +109,16 @@ function handleTitle(args: string[]) {
     updateSessionTitle(title);
     return {
       exit: false,
-      output: chalk.green(`Session title updated to: "${title}"`),
+      output: chalk.green(
+        `${t("Session title updated to:", "セッションタイトルを更新しました:")} "${title}"`,
+      ),
     };
   } catch (error: any) {
     return {
       exit: false,
-      output: chalk.red(`Failed to update title: ${error.message}`),
+      output: chalk.red(
+        `${t("Failed to update title:", "タイトルの更新に失敗しました:")} ${error.message}`,
+      ),
     };
   }
 }
@@ -116,12 +134,15 @@ async function handleSkills(): Promise<SlashCommandResult> {
     return {
       exit: false,
       output: chalk.yellow(
-        "No skills found. Add skills under .continue/skills or .claude/skills.",
+        t(
+          "No skills found. Add skills under .continue/skills or .claude/skills.",
+          "スキルが見つかりません。.continue/skills または .claude/skills にスキルを追加してください。",
+        ),
       ),
     };
   }
 
-  const header = chalk.bold("Available skills:");
+  const header = chalk.bold(t("Available skills:", "利用可能なスキル:"));
   const lines = skills.map(
     (skill) =>
       `${chalk.cyan(skill.name)} - ${skill.description} ${chalk.gray(
@@ -142,7 +163,10 @@ async function handleImportSkill(args: string[]): Promise<SlashCommandResult> {
     return {
       exit: false,
       output: chalk.yellow(
-        "Please provide a skill URL or name. Usage: /import-skill <url-or-name>",
+        t(
+          "Please provide a skill URL or name. Usage: /import-skill <url-or-name>",
+          "スキルのURLまたは名前を入力してください。使い方: /import-skill <url-or-name>",
+        ),
       ),
     };
   }
@@ -193,7 +217,10 @@ function handleImport(args: string[]): SlashCommandResult {
     return {
       exit: false,
       output: chalk.yellow(
-        "Please provide a file path. Usage: /import <file-path>",
+        t(
+          "Please provide a file path. Usage: /import <file-path>",
+          "ファイルパスを入力してください。使い方: /import <file-path>",
+        ),
       ),
     };
   }
@@ -201,7 +228,9 @@ function handleImport(args: string[]): SlashCommandResult {
   if (!fs.existsSync(filePath)) {
     return {
       exit: false,
-      output: chalk.red(`File not found: ${filePath}`),
+      output: chalk.red(
+        `${t("File not found:", "ファイルが見つかりません:")} ${filePath}`,
+      ),
     };
   }
 
@@ -213,7 +242,10 @@ function handleImport(args: string[]): SlashCommandResult {
       return {
         exit: false,
         output: chalk.red(
-          "Invalid session file: expected a valid Continue exported session (version 1).",
+          t(
+            "Invalid session file: expected a valid Continue exported session (version 1).",
+            "無効なセッションファイル: 有効な Continue エクスポートセッション(バージョン1)が必要です。",
+          ),
         ),
       };
     }
@@ -233,8 +265,10 @@ function handleImport(args: string[]): SlashCommandResult {
       return {
         exit: false,
         output: chalk.green(
-          `Session imported with new ID: ${session.sessionId}\n` +
-            chalk.gray(`(original ID: ${originalId} already existed)`),
+          `${t("Session imported with new ID:", "新しいIDでセッションをインポートしました:")} ${session.sessionId}\n` +
+            chalk.gray(
+              `(${t("original ID", "元のID")}: ${originalId} ${t("already existed", "は既に存在していました")})`,
+            ),
         ),
       };
     }
@@ -243,13 +277,15 @@ function handleImport(args: string[]): SlashCommandResult {
     return {
       exit: false,
       output: chalk.green(
-        `Session imported: ${session.sessionId} (${session.title})`,
+        `${t("Session imported:", "セッションをインポートしました:")} ${session.sessionId} (${session.title})`,
       ),
     };
   } catch (error: any) {
     return {
       exit: false,
-      output: chalk.red(`Failed to import session: ${error.message}`),
+      output: chalk.red(
+        `${t("Failed to import session:", "セッションのインポートに失敗しました:")} ${error.message}`,
+      ),
     };
   }
 }
@@ -257,10 +293,13 @@ function handleImport(args: string[]): SlashCommandResult {
 const commandHandlers: Record<string, CommandHandler> = {
   help: handleHelp,
   clear: () => {
-    return { clear: true, output: "Chat history cleared" };
+    return {
+      clear: true,
+      output: t("Chat history cleared", "チャット履歴を消去しました"),
+    };
   },
   exit: () => {
-    return { exit: true, output: "Goodbye!" };
+    return { exit: true, output: t("Goodbye!", "さようなら！") };
   },
   config: () => {
     return { openConfigSelector: true };
@@ -360,5 +399,5 @@ export async function handleSlashCommands(
     return null;
   }
 
-  return { output: `Unknown command: ${command}` };
+  return { output: `${t("Unknown command:", "不明なコマンド:")} ${command}` };
 }

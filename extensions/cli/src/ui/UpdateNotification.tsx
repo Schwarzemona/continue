@@ -2,6 +2,7 @@ import { Box, Text } from "ink";
 import React, { useMemo } from "react";
 
 import { useServices } from "../hooks/useService.js";
+import { t } from "../i18n.js";
 import {
   SERVICE_NAMES,
   UpdateServiceState,
@@ -46,7 +47,9 @@ const UpdateNotification: React.FC<UpdateNotificationProps> = ({
   }, [columns, services.update?.message]);
 
   if (!services.update?.isUpdateAvailable && isRemoteMode) {
-    return <Text color="cyan">◉ Remote Mode</Text>;
+    return (
+      <Text color="cyan">{`◉ ${t("Remote Mode", "リモートモード")}`}</Text>
+    );
   }
 
   if (services.update?.status === UpdateStatus.UPDATING) {

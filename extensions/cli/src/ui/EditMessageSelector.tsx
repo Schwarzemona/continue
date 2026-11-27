@@ -2,6 +2,7 @@ import { Box, Text, useInput } from "ink";
 import React, { useMemo, useState } from "react";
 
 import type { ChatHistoryItem } from "../../../../core/index.js";
+import { t } from "../i18n.js";
 
 import { defaultBoxStyles } from "./styles.js";
 import { TextBuffer } from "./TextBuffer.js";
@@ -235,18 +236,32 @@ export function EditMessageSelector({
   return (
     <Box {...defaultBoxStyles("yellow")}>
       <Text color="yellow" bold>
-        Edit Message (Rewind Conversation)
+        {t(
+          "Edit Message (Rewind Conversation)",
+          "メッセージ編集（会話を巻き戻します）",
+        )}
       </Text>
       <Text color="gray">
         {isEditing
-          ? "Enter to submit, Esc to cancel, Shift+Enter for newline"
-          : "↑/↓ to navigate, Enter to edit, Esc to exit"}
+          ? t(
+              "Enter to submit, Esc to cancel, Shift+Enter for newline",
+              "Enter で送信、Esc でキャンセル、Shift+Enter で改行",
+            )
+          : t(
+              "↑/↓ to navigate, Enter to edit, Esc to exit",
+              "↑/↓ で移動、Enter で編集、Esc で終了",
+            )}
       </Text>
       <Text> </Text>
 
       {!isEditing && (
         <>
-          <Text color="blue">Select a message to edit:</Text>
+          <Text color="blue">
+            {t(
+              "Select a message to edit:",
+              "編集するメッセージを選択してください:",
+            )}
+          </Text>
           <Text> </Text>
           {userMessages.map((msg, index) => {
             const isSelected = index === selectedIndex;
@@ -262,7 +277,9 @@ export function EditMessageSelector({
             return (
               <Box key={msg.originalIndex} flexDirection="column">
                 <Text bold={isSelected} color={color}>
-                  {indicator}Message {index + 1}: {preview}
+                  {indicator}
+                  {t(`Message ${index + 1}:`, `メッセージ${index + 1}:`)}{" "}
+                  {preview}
                   {truncated}
                 </Text>
               </Box>
@@ -274,7 +291,10 @@ export function EditMessageSelector({
       {isEditing && (
         <>
           <Text color="blue">
-            Editing Message {selectedIndex + 1} (will rewind to this point):
+            {t(
+              `Editing Message ${selectedIndex + 1} (will rewind to this point):`,
+              `メッセージ${selectedIndex + 1} を編集中（この時点まで巻き戻します）:`,
+            )}
           </Text>
           <Text> </Text>
           <Box

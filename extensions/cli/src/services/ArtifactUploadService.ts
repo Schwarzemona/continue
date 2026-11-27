@@ -1,5 +1,7 @@
 import * as fs from "fs";
+
 import * as path from "path";
+import { t } from "../i18n.js";
 
 import { env } from "../env.js";
 import { formatError } from "../util/formatError.js";
@@ -237,7 +239,12 @@ export class ArtifactUploadService extends BaseService<ArtifactUploadServiceStat
     if (!response.ok) {
       const statusText = `${response.status} ${response.statusText}`.trim();
       const responseBody = await response.text();
-      throw new Error(`S3 upload failed (${statusText}): ${responseBody}`);
+      throw new Error(
+        t(
+          `S3 upload failed (${statusText}): ${responseBody}`,
+          `S3 アップロードに失敗しました (${statusText}): ${responseBody}`,
+        ),
+      );
     }
   }
 

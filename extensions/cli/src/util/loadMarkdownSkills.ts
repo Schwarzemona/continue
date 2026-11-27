@@ -104,8 +104,9 @@ export async function loadMarkdownSkills(): Promise<LoadSkillsResult> {
       )
     ).flat();
 
-    await Promise.all(
-      skillFilePaths.map(async (skillFilePath) => {
+    // 順序を保って収集する(push 順がファイル読み込みの完了順に依存しないようにする)
+    const loadedSkills = await Promise.all(
+      skillFilePaths.map(async (skillFilePath): Promise<Skill | null> => {
         try {
           const content = await fsPromises.readFile(skillFilePath, "utf-8");
           const { frontmatter, markdown } = parseMarkdownRule(content) as {
@@ -121,19 +122,24 @@ export async function loadMarkdownSkills(): Promise<LoadSkillsResult> {
             skillFilePath,
           );
 
-          skills.push({
+          return {
             ...validatedFrontmatter,
             content: markdown,
             path: getRelativePath(cwd, skillFilePath),
             files: filesInSkillsDirectory,
-          });
+          };
         } catch (error) {
           errors.push({
             fatal: false,
             message: `Failed to parse markdown skill file: ${error instanceof Error ? error.message : error}`,
           });
+          return null;
         }
       }),
+    );
+
+    skills.push(
+      ...loadedSkills.filter((skill): skill is Skill => skill !== null),
     );
   } catch (err) {
     errors.push({

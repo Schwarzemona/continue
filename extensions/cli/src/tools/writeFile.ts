@@ -4,6 +4,7 @@ import * as path from "path";
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 import { createTwoFilesPatch } from "diff";
 
+import { t } from "../i18n.js";
 import { telemetryService } from "../telemetry/telemetryService.js";
 import {
   calculateLinesOfCodeDiff,
@@ -31,18 +32,18 @@ export function generateDiff(
 export const writeFileTool: Tool = {
   name: "Write",
   displayName: "Write",
-  description: "Write content to a file at the specified path",
+  description: "指定したパスのファイルにコンテンツを書き込みます",
   parameters: {
     type: "object",
     required: ["filepath", "content"],
     properties: {
       filepath: {
         type: "string",
-        description: "The path to the file to write",
+        description: "書き込むファイルへのパス",
       },
       content: {
         type: "string",
-        description: "The content to write to the file",
+        description: "ファイルに書き込むコンテンツ",
       },
     },
   },
@@ -52,10 +53,17 @@ export const writeFileTool: Tool = {
     const filepath = args?.filepath;
     const content = args?.content ?? "";
     if (typeof filepath !== "string") {
-      throw new Error("Filepath must be a string");
+      throw new Error(
+        t("Filepath must be a string", "filepath は文字列である必要があります"),
+      );
     }
     if (typeof content !== "string") {
-      throw new Error("New file content must be a string");
+      throw new Error(
+        t(
+          "New file content must be a string",
+          "書き込む内容は文字列である必要があります",
+        ),
+      );
     }
     try {
       if (fs.existsSync(filepath)) {
@@ -76,7 +84,7 @@ export const writeFileTool: Tool = {
           preview: [
             {
               type: "text",
-              content: "Preview of changes:",
+              content: t("Preview of changes:", "変更のプレビュー:"),
             },
             {
               type: "diff",
@@ -94,7 +102,7 @@ export const writeFileTool: Tool = {
     const preview: ToolCallPreview[] = [
       {
         type: "text",
-        content: "New file content:",
+        content: t("New file content:", "新しいファイル内容:"),
       },
       ...previewLines.map((line) => ({
         type: "text" as const,
@@ -155,7 +163,10 @@ export const writeFileTool: Tool = {
         // Generate diff for result display
         const diff = generateDiff(oldContent, args.content, args.filepath);
 
-        return `Successfully wrote to file: ${args.filepath}\nDiff:\n${diff}`;
+        return t(
+          `Successfully wrote to file: ${args.filepath}\nDiff:\n${diff}`,
+          `ファイルに書き込みました: ${args.filepath}\nDiff:\n${diff}`,
+        );
       } else {
         // New file creation - count all lines as added
         const lineCount = args.content.split("\n").length;
@@ -167,7 +178,10 @@ export const writeFileTool: Tool = {
           language,
         );
 
-        return `Successfully created file: ${args.filepath}`;
+        return t(
+          `Successfully created file: ${args.filepath}`,
+          `ファイルを正常に作成しました: ${args.filepath}`,
+        );
       }
     } catch (error) {
       if (error instanceof ContinueError) {

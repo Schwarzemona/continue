@@ -10,12 +10,26 @@ export type Lang = "en" | "ja";
 
 let cached: Lang | undefined;
 
+/** Safely reads process.env (some tests stub the global `process` object). */
+function readEnv(key: string): string | undefined {
+  try {
+    const env = (globalThis as any)?.process?.env;
+    if (!env || typeof env !== "object") {
+      return undefined;
+    }
+    const value = env[key];
+    return typeof value === "string" ? value : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function detectLang(): Lang {
   if (cached) {
     return cached;
   }
 
-  const override = process.env.CONTINUE_LANG?.toLowerCase();
+  const override = readEnv("CONTINUE_LANG")?.toLowerCase();
   if (override === "ja" || override === "en") {
     cached = override;
     return cached;
@@ -23,9 +37,9 @@ export function detectLang(): Lang {
 
   // Keep test runs deterministic (English), regardless of the developer's OS locale.
   if (
-    process.env.VITEST === "true" ||
-    process.env.NODE_ENV === "test" ||
-    process.env.CI === "true"
+    readEnv("VITEST") === "true" ||
+    readEnv("NODE_ENV") === "test" ||
+    readEnv("CI") === "true"
   ) {
     cached = "en";
     return cached;

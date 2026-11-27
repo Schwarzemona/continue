@@ -4,8 +4,8 @@ import {
   runCLI,
 } from "../test-helpers/cli-helpers.js";
 import {
-  setupMockLLMTest,
   cleanupMockLLMServer,
+  setupMockLLMTest,
   type MockLLMServer,
 } from "../test-helpers/mock-llm-server.js";
 
@@ -102,9 +102,9 @@ describe("E2E: Headless Mode with JSON Format", () => {
     const systemMessage = mockServer.requests[0].body.messages.find(
       (m: any) => m.role === "system",
     );
-    expect(systemMessage.content).toContain("JSON output mode");
+    expect(systemMessage.content).toContain("JSON 出力モード");
     expect(systemMessage.content).toContain(
-      "valid JSON that can be parsed by JSON.parse()",
+      "JSON.parse() で解析可能な有効な JSON",
     );
   }, 20000);
 

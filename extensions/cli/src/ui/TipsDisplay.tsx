@@ -1,15 +1,38 @@
 import { Box, Text } from "ink";
 import React, { useMemo } from "react";
 
+import { t } from "../i18n.js";
+
 // Array of helpful tips for Continue CLI users
 const CONTINUE_CLI_TIPS = [
-  "Use `/help` to learn keyboard shortcuts",
-  "Press escape to pause cn, and press enter to continue",
-  "Use arrow keys (↑/↓) to navigate through your input history",
-  'Multi-line input is supported by typing "\\" and pressing enter',
-  "Use `cn ls` or `/resume` to resume a previous conversation",
-  'Run `cn` with the `-p` flag for headless mode. For example: `cn -p "Generate a commit message for the current changes. Output _only_ the commit message and nothing else."`',
-  "Use the /init slash command to generate an AGENTS.md file. This will help `cn` understand your codebase and generate better responses.",
+  t(
+    "Use `/help` to learn keyboard shortcuts",
+    "`/help` を使ってキーボードショートカットを確認できます",
+  ),
+  t(
+    "Press escape to pause cn, and press enter to continue",
+    "Esc で cn を一時停止し、Enter で再開できます",
+  ),
+  t(
+    "Use arrow keys (↑/↓) to navigate through your input history",
+    "矢印キー(↑/↓)で入力履歴をたどれます",
+  ),
+  t(
+    'Multi-line input is supported by typing "\\" and pressing enter',
+    '"\\" を入力して Enter を押すと、複数行入力ができます',
+  ),
+  t(
+    "Use `cn ls` or `/resume` to resume a previous conversation",
+    "`cn ls` または `/resume` で過去の会話を再開できます",
+  ),
+  t(
+    'Run `cn` with the `-p` flag for headless mode. For example: `cn -p "Generate a commit message for the current changes. Output _only_ the commit message and nothing else."`',
+    '`-p` フラグを付けた `cn` でヘッドレスモードが実行できます。例: `cn -p "現在の変更に対するコミットメッセージを生成して、コミットメッセージのみを出力して、他は一切出力しないでください。"`',
+  ),
+  t(
+    "Use the /init slash command to generate an AGENTS.md file. This will help `cn` understand your codebase and generate better responses.",
+    "/init スラッシュコマンドで AGENTS.md を生成できます。これにより `cn` がコードベースを理解し、より良い応答を生成します。",
+  ),
 ];
 
 interface TipsDisplayProps {
@@ -31,7 +54,7 @@ const TipsDisplay: React.FC<TipsDisplayProps> = () => {
   return (
     <Box flexDirection="row" paddingX={1} paddingBottom={1}>
       <Text color="green" bold>
-        * Tip:
+        {t("* Tip:", "* ヒント:")}
       </Text>
       <Text color="dim" italic>
         {" "}

@@ -5,10 +5,10 @@ import { Tool } from "./types.js";
 export const askQuestionTool: Tool = {
   name: "AskQuestion",
   displayName: "Ask Question",
-  description: `Ask the user a clarifying question to gather requirements, preferences, or implementation details before proceeding.
-Guidelines:
-- You should use this tool **whenever you want to clarify your assumption or need answers to build your plan**.
-- DO NOT supply "other" or "none of the above" or similar as an option. User can always provide a free-form answer when needed.
+  description: `作業を進める前に、要件、好み、または実装の詳細を確認するために、ユーザーに明確化のための質問を行います。
+ガイドライン:
+- 仮定を明確にしたい場合や、計画を立てるための回答が必要な場合は、**常に**このツールを使用してください。
+- 「その他」や「上記のいずれでもない」といった選択肢は提供しないでください。必要に応じて、ユーザーは自由記述で回答できます。
 `,
   parameters: {
     type: "object",
@@ -16,20 +16,19 @@ Guidelines:
     properties: {
       question: {
         type: "string",
-        description: "The question to ask the user",
+        description: "ユーザーに質問する内容",
       },
       options: {
         type: "array",
         description:
-          "The list of choices. Leave as empty array if user should provide a free-form answer.",
+          "選択肢のリスト。ユーザーに自由記述で回答させる場合は空の配列にしてください。",
         items: {
           type: "string",
         },
       },
       defaultAnswer: {
         type: "string",
-        description:
-          "Default answer if user presses Enter without providing input",
+        description: "ユーザーが入力せずにEnterを押した場合の既定の回答",
       },
     },
   },
@@ -51,11 +50,11 @@ Guidelines:
     if (options && options.length > 0) {
       const selectedIndex = options.indexOf(answer);
       if (selectedIndex !== -1) {
-        return `User selected option ${selectedIndex + 1}: "${answer}"`;
+        return `ユーザーが選択肢 ${selectedIndex + 1} を選択: "${answer}"`;
       }
-      return `User provided custom answer: "${answer}"`;
+      return `ユーザーが自由記述で回答: "${answer}"`;
     }
 
-    return `User answered: "${answer}"`;
+    return `ユーザーの回答: "${answer}"`;
   },
 };

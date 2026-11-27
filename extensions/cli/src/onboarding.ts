@@ -8,6 +8,7 @@ import type { AuthConfig } from "./auth/workos.js";
 import { getApiClient } from "./config.js";
 import { loadConfiguration } from "./configLoader.js";
 import { env } from "./env.js";
+import { t } from "./i18n.js";
 import {
   getApiKeyValidationError,
   isValidAnthropicApiKey,
@@ -66,7 +67,12 @@ export async function runOnboardingFlow(
   // Step 2: Check for CONTINUE_USE_BEDROCK environment variable first (before test env check)
   if (process.env.CONTINUE_USE_BEDROCK === "1") {
     console.log(
-      chalk.blue("✓ Using AWS Bedrock (CONTINUE_USE_BEDROCK detected)"),
+      chalk.blue(
+        t(
+          "✓ Using AWS Bedrock (CONTINUE_USE_BEDROCK detected)",
+          "✓ AWS Bedrock を使用しています(CONTINUE_USE_BEDROCK を検出)",
+        ),
+      ),
     );
     return true;
   }
@@ -82,9 +88,23 @@ export async function runOnboardingFlow(
   if (isTestEnv) {
     // In test/CI environment, check for ANTHROPIC_API_KEY first
     if (process.env.ANTHROPIC_API_KEY) {
-      console.log(chalk.blue("✓ Using ANTHROPIC_API_KEY from environment"));
+      console.log(
+        chalk.blue(
+          t(
+            "✓ Using ANTHROPIC_API_KEY from environment",
+            "✓ 環境変数 ANTHROPIC_API_KEY を使用しています",
+          ),
+        ),
+      );
       await createOrUpdateConfig(process.env.ANTHROPIC_API_KEY);
-      console.log(chalk.gray(`  Config saved to: ${CONFIG_PATH}`));
+      console.log(
+        chalk.gray(
+          t(
+            `  Config saved to: ${CONFIG_PATH}`,
+            `  設定を保存しました: ${CONFIG_PATH}`,
+          ),
+        ),
+      );
       return false;
     }
 
@@ -98,46 +118,96 @@ export async function runOnboardingFlow(
     hasChatModel(fs.readFileSync(CONFIG_PATH, "utf8"))
   ) {
     console.log(
-      chalk.blue(`✓ Using existing model configuration at ${CONFIG_PATH}`),
+      chalk.blue(
+        t(
+          `✓ Using existing model configuration at ${CONFIG_PATH}`,
+          `✓ 既存のモデル設定を使用しています: ${CONFIG_PATH}`,
+        ),
+      ),
     );
     return true;
   }
 
   // Step 5: Prompt for provider and credentials
-  console.log(chalk.yellow("To get started, choose a model provider:"));
-  console.log("  1. Anthropic (sk-ant-... API key)");
-  console.log("  2. OpenAI-compatible endpoint (base URL + API key)");
-  console.log("  3. Ollama (local models, no API key)");
+  console.log(
+    chalk.yellow(
+      t(
+        "To get started, choose a model provider:",
+        "始めに、モデルプロバイダーを選択してください:",
+      ),
+    ),
+  );
+  console.log(
+    t(
+      "  1. Anthropic (sk-ant-... API key)",
+      "  1. Anthropic (sk-ant-... APIキー)",
+    ),
+  );
+  console.log(
+    t(
+      "  2. OpenAI-compatible endpoint (base URL + API key)",
+      "  2. OpenAI互換エンドポイント(ベースURL + APIキー)",
+    ),
+  );
+  console.log(
+    t(
+      "  3. Ollama (local models, no API key)",
+      "  3. Ollama(ローカルモデル、APIキー不要)",
+    ),
+  );
 
-  const choice = (await question(chalk.white("\nProvider [1]: "))).trim();
+  const choice = (
+    await question(chalk.white(t("\nProvider [1]: ", "\nプロバイダー [1]: ")))
+  ).trim();
 
   if (choice === "2" || choice === "3") {
     const isOllama = choice === "3";
 
     const apiBaseRaw = await question(
       isOllama
-        ? chalk.white("Ollama base URL [http://localhost:11434]: ")
+        ? chalk.white(
+            t(
+              "Ollama base URL [http://localhost:11434]: ",
+              "OllamaのベースURL [http://localhost:11434]: ",
+            ),
+          )
         : chalk.white(
-            "OpenAI-compatible base URL (e.g. https://api.openai.com/v1): ",
+            t(
+              "OpenAI-compatible base URL (e.g. https://api.openai.com/v1): ",
+              "OpenAI互換のベースURL(例: https://api.openai.com/v1): ",
+            ),
           ),
     );
     const apiBase =
       apiBaseRaw.trim() || (isOllama ? "http://localhost:11434" : "");
     if (!apiBase) {
-      throw new Error("A base URL is required for OpenAI-compatible models.");
+      throw new Error(
+        t(
+          "A base URL is required for OpenAI-compatible models.",
+          "OpenAI互換モデルにはベースURLが必須です。",
+        ),
+      );
     }
 
     const model = (
-      await question(chalk.white("Model name (e.g. llama3.1:8b): "))
+      await question(
+        chalk.white(
+          t("Model name (e.g. llama3.1:8b): ", "モデル名(例: llama3.1:8b): "),
+        ),
+      )
     ).trim();
     if (!model) {
-      throw new Error("A model name is required.");
+      throw new Error(t("A model name is required.", "モデル名が必須です。"));
     }
 
     const apiKey = isOllama
       ? undefined
       : (
-          await question(chalk.white("API key (leave empty to omit): "))
+          await question(
+            chalk.white(
+              t("API key (leave empty to omit): ", "APIキー(空欄で省略): "),
+            ),
+          )
         ).trim() || undefined;
 
     await createOrUpdateCustomModel({
@@ -148,13 +218,23 @@ export async function runOnboardingFlow(
       apiKey,
     });
     console.log(
-      chalk.green(`✓ Config file updated successfully at ${CONFIG_PATH}`),
+      chalk.green(
+        t(
+          `✓ Config file updated successfully at ${CONFIG_PATH}`,
+          `✓ 設定ファイルを更新しました: ${CONFIG_PATH}`,
+        ),
+      ),
     );
     return true;
   }
 
   const apiKey = await question(
-    chalk.white("\nEnter your Anthropic API key: "),
+    chalk.white(
+      t(
+        "\nEnter your Anthropic API key: ",
+        "\nAnthropicのAPIキーを入力してください: ",
+      ),
+    ),
   );
 
   if (!isValidAnthropicApiKey(apiKey)) {
@@ -163,7 +243,12 @@ export async function runOnboardingFlow(
 
   await createOrUpdateConfig(apiKey);
   console.log(
-    chalk.green(`✓ Config file updated successfully at ${CONFIG_PATH}`),
+    chalk.green(
+      t(
+        `✓ Config file updated successfully at ${CONFIG_PATH}`,
+        `✓ 設定ファイルを更新しました: ${CONFIG_PATH}`,
+      ),
+    ),
   );
 
   return true;
@@ -202,7 +287,10 @@ export async function initializeWithOnboarding(
       );
     } catch (errorMessage) {
       throw new Error(
-        `Failed to load config from "${configPath}": ${errorMessage}`,
+        t(
+          `Failed to load config from "${configPath}": ${errorMessage}`,
+          `"${configPath}" から設定を読み込めませんでした: ${errorMessage}`,
+        ),
       );
     }
   }

@@ -1,6 +1,8 @@
 import * as fs from "fs";
 import * as path from "path";
 
+import { t } from "../i18n.js";
+
 import { formatToolArgument } from "./formatters.js";
 import { Tool } from "./types.js";
 
@@ -8,14 +10,14 @@ import { Tool } from "./types.js";
 export const listFilesTool: Tool = {
   name: "List",
   displayName: "List",
-  description: "List files in a directory",
+  description: "ディレクトリ内のファイルを一覧表示します",
   parameters: {
     type: "object",
     required: ["dirpath"],
     properties: {
       dirpath: {
         type: "string",
-        description: "The path to the directory to list",
+        description: "一覧表示するディレクトリへのパス",
       },
     },
   },
@@ -27,11 +29,11 @@ export const listFilesTool: Tool = {
     const dirPath = path.resolve(process.cwd(), normalizedPath);
 
     if (!fs.existsSync(dirPath)) {
-      throw new Error(`Directory does not exist: ${dirPath}`);
+      throw new Error(`ディレクトリが存在しません: ${dirPath}`);
     }
 
     if (!fs.statSync(dirPath).isDirectory()) {
-      throw new Error(`Error: Path is not a directory: ${dirPath}`);
+      throw new Error(`エラー: パスはディレクトリではありません: ${dirPath}`);
     }
 
     return {
@@ -42,8 +44,8 @@ export const listFilesTool: Tool = {
         {
           type: "text",
           content: dirPath
-            ? `Will list files in: ${formatToolArgument(dirPath)}`
-            : "Will list files in current directory",
+            ? `一覧表示予定: ${formatToolArgument(dirPath)}`
+            : "現在のディレクトリのファイルを一覧表示する予定です",
         },
       ],
     };
@@ -59,7 +61,7 @@ export const listFilesTool: Tool = {
         return `${file} (${type}${size ? `, ${size}` : ""})`;
       });
 
-      return `Files in ${args.dirpath}:\n${fileDetails.join("\n")}`;
+      return `${args.dirpath} 内のファイル:\n${fileDetails.join("\n")}`;
     } catch (error) {
       throw new Error(
         `Error listing files: ${

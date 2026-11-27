@@ -1,6 +1,7 @@
 import { Box, Text } from "ink";
 import React from "react";
 
+import { t } from "../../i18n.js";
 import { getToolDisplayName } from "../../tools/index.js";
 import { ToolCallPreview } from "../../tools/types.js";
 import { ColoredDiff } from "../ColoredDiff.js";
@@ -36,7 +37,7 @@ export const ToolPreview: React.FC<ToolPreviewProps> = ({
             return (
               <Box key={index}>
                 <ChecklistDisplay
-                  content={`Task list status:\n${preview.content}`}
+                  content={`${t("Task list status:", "タスクリストの状態:")}\n${preview.content}`}
                 />
               </Box>
             );
@@ -48,10 +49,16 @@ export const ToolPreview: React.FC<ToolPreviewProps> = ({
     );
   }
 
-  let message = `Will call ${getToolDisplayName(toolName)}`;
+  let message = t(
+    `Will call ${getToolDisplayName(toolName)}`,
+    `${getToolDisplayName(toolName)} を実行する予定です`,
+  );
   const argCount = Object.keys(toolArgs || {}).length;
   if (argCount > 0) {
-    message += ` with ${argCount} argument${argCount === 1 ? "" : "s"}`;
+    message += t(
+      ` with ${argCount} argument${argCount === 1 ? "" : "s"}`,
+      `（引数 ${argCount} 個）`,
+    );
   }
 
   return (

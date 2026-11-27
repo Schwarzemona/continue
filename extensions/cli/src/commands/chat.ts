@@ -4,7 +4,11 @@ import chalk from "chalk";
 import { ChatHistoryItem, Session } from "core";
 import { ChatDescriber } from "core/util/chatDescriber.js";
 
-import { compactChatHistory, findCompactionIndex } from "../compaction.js";
+import {
+  AUTO_COMPACT_MARKERS,
+  compactChatHistory,
+  findCompactionIndex,
+} from "../compaction.js";
 import { processCommandFlags } from "../flags/flagProcessor.js";
 import { safeStderr, safeStdout } from "../init.js";
 import { configureLogger } from "../logger.js";
@@ -232,10 +236,7 @@ async function handleAutoCompaction(
   // Custom callbacks for headless mode console output
   const callbacks = {
     onSystemMessage: (message: string) => {
-      if (
-        message.includes("Auto-compacting") ||
-        message.includes("Approaching")
-      ) {
+      if (AUTO_COMPACT_MARKERS.some((marker) => message.includes(marker))) {
         if (!isHeadless) {
           console.info(chalk.yellow(`\n${message}`));
         } else if (format === "json") {

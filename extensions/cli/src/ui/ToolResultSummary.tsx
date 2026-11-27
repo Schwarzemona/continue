@@ -5,6 +5,8 @@ import React from "react";
 
 import { getToolDisplayName } from "src/tools/index.js";
 
+import { t } from "../i18n.js";
+
 import { ColoredDiff } from "./ColoredDiff.js";
 import { ChecklistDisplay } from "./components/ChecklistDisplay.js";
 
@@ -30,7 +32,9 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
 
   const lines = content.split("\n").length;
   const chars = content.length;
-  const displayName = toolName ? getToolDisplayName(toolName) : "Tool";
+  const displayName = toolName
+    ? getToolDisplayName(toolName)
+    : t("Tool", "ツール");
 
   // Handle Checklist specially with styled display
   if (toolName === "Checklist") {
@@ -38,9 +42,16 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
       <Box flexDirection="column">
         <Box marginBottom={1}>
           <Text color="dim">⎿ </Text>
-          <Text color="blue">Task List Updated</Text>
+          <Text color="blue">
+            {t("Task List Updated", "タスクリスト更新済み")}
+          </Text>
         </Box>
-        <ChecklistDisplay content={`Task list status:\n${content}`} />
+        <ChecklistDisplay
+          content={t(
+            `Task list status:\n${content}`,
+            `タスクリストの状態:\n${content}`,
+          )}
+        />
       </Box>
     );
   }
@@ -58,10 +69,19 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
             <Text color="dim">⎿ </Text>
             <Text color="green">
               {toolName === "Edit"
-                ? " File edited successfully"
+                ? t(
+                    " File edited successfully",
+                    " ファイルを正常に編集しました",
+                  )
                 : toolName === "MultiEdit"
-                  ? " File edited successfully"
-                  : " File written successfully"}
+                  ? t(
+                      " File edited successfully",
+                      " ファイルを正常に編集しました",
+                    )
+                  : t(
+                      " File written successfully",
+                      " ファイルに書き込みました",
+                    )}
             </Text>
           </Box>
           <ColoredDiff diffContent={diffSection} />
@@ -82,7 +102,7 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
         <Box flexDirection="column">
           <Box>
             <Text color="dim">⎿ </Text>
-            <Text color="dim"> Terminal output:</Text>
+            <Text color="dim"> {t("Terminal output:", "ターミナル出力:")}</Text>
           </Box>
           <Box paddingLeft={2}>
             <Text color={isStderr ? "red" : "white"}>
@@ -98,7 +118,7 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
         <Box flexDirection="column">
           <Box>
             <Text color="dim">⎿ </Text>
-            <Text color="dim"> Terminal output:</Text>
+            <Text color="dim"> {t("Terminal output:", "ターミナル出力:")}</Text>
           </Box>
           <Box paddingLeft={2}>
             <Text color={isStderr ? "red" : "white"}>
@@ -107,7 +127,10 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
           </Box>
           <Box paddingLeft={2}>
             <Text color="dim">
-              ... +{outputLines.length - MAX_BASH_OUTPUT_LINES} lines
+              {t(
+                `... +${outputLines.length - MAX_BASH_OUTPUT_LINES} lines`,
+                `... ほか ${outputLines.length - MAX_BASH_OUTPUT_LINES} 行`,
+              )}
             </Text>
           </Box>
         </Box>
@@ -125,7 +148,10 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
       return (
         <Box>
           <Text color="dim">⎿ </Text>
-          <Text color="dim"> Subagent executing...</Text>
+          <Text color="dim">
+            {" "}
+            {t("Subagent executing...", "サブエージェント実行中...")}
+          </Text>
         </Box>
       );
     }
@@ -138,7 +164,10 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
         <Box flexDirection="column">
           <Box>
             <Text color="dim">⎿ </Text>
-            <Text color="dim"> Subagent output:</Text>
+            <Text color="dim">
+              {" "}
+              {t("Subagent output:", "サブエージェント出力:")}
+            </Text>
           </Box>
           <Box paddingLeft={2}>
             <Text>{actualOutput.trimEnd()}</Text>
@@ -151,11 +180,17 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
         <Box flexDirection="column">
           <Box>
             <Text color="dim">⎿ </Text>
-            <Text color="dim"> Subagent output:</Text>
+            <Text color="dim">
+              {" "}
+              {t("Subagent output:", "サブエージェント出力:")}
+            </Text>
           </Box>
           <Box paddingLeft={2}>
             <Text color="dim">
-              ... +{outputLines.length - MAX_TASK_OUTPUT_LINES} lines
+              {t(
+                `... +${outputLines.length - MAX_TASK_OUTPUT_LINES} lines`,
+                `... ほか ${outputLines.length - MAX_TASK_OUTPUT_LINES} 行`,
+              )}
             </Text>
           </Box>
           <Box paddingLeft={2}>
@@ -169,14 +204,23 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
   // Handle all other cases with text summary
   const getSummary = () => {
     // Check if this is a user cancellation first
-    if (content === "Permission denied by user") {
-      return "Cancelled by user";
+    if (
+      content ===
+      t("Permission denied by user", "ユーザーにより権限が拒否されました")
+    ) {
+      return t("Cancelled by user", "ユーザーによりキャンセルされました");
     }
 
     // Check if it was an error
-    if (content.startsWith("Error")) {
+    if (
+      content.startsWith("Error") ||
+      content.startsWith(t("Error", "エラー"))
+    ) {
       const lines = content.split("\n");
-      return `Error: ${lines[0]}${lines.length > 1 ? "..." : ""}`;
+      return t(
+        `Error: ${lines[0]}${lines.length > 1 ? "..." : ""}`,
+        `エラー: ${lines[0]}${lines.length > 1 ? "..." : ""}`,
+      );
     }
 
     // Convert absolute paths to relative paths from workspace root
@@ -195,37 +239,57 @@ const ToolResultSummary: React.FC<ToolResultSummaryProps> = ({
         // Try to extract file path from content if it contains line numbers
         if (content.includes("→")) {
           const pathMatch = content.match(/^(.+?):/);
-          const filePath = pathMatch ? pathMatch[1] : "file";
-          return `${displayName} ${formatPath(filePath)} (${lines} lines)`;
+          const filePath = pathMatch ? pathMatch[1] : t("file", "ファイル");
+          return t(
+            `${displayName} ${formatPath(filePath)} (${lines} lines)`,
+            `${displayName} ${formatPath(filePath)}（${lines} 行）`,
+          );
         }
-        return `${displayName} tool output (${lines} lines)`;
+        return t(
+          `${displayName} tool output (${lines} lines)`,
+          `${displayName} ツールの出力（${lines} 行）`,
+        );
 
       case "Write":
-        return content.includes("Successfully created file")
-          ? "File created successfully"
-          : "File updated successfully";
+        return content.includes(
+          t("Successfully created file", "ファイルを正常に作成しました"),
+        )
+          ? t("File created successfully", "ファイルを作成しました")
+          : t("File updated successfully", "ファイルを更新しました");
 
       case "Edit":
-        return "File edited successfully";
+        return t("File edited successfully", "ファイルを正常に編集しました");
 
       case "MultiEdit":
-        return "File edited successfully";
+        return t("File edited successfully", "ファイルを正常に編集しました");
 
       case "List":
-        return `Listed ${lines} ${lines === 1 ? "item" : "items"}`;
+        return t(
+          `Listed ${lines} ${lines === 1 ? "item" : "items"}`,
+          `${lines} 件を一覧表示しました`,
+        );
 
       case "Search":
-        return `Found ${lines} ${lines === 1 ? "match" : "matches"}`;
+        return t(
+          `Found ${lines} ${lines === 1 ? "match" : "matches"}`,
+          `${lines} 件見つかりました`,
+        );
 
       case "Diff":
-        return `Diff output (${lines} lines)`;
+        return t(`Diff output (${lines} lines)`, `diff 出力（${lines} 行）`);
 
       default:
         // Fallback for all tools using display name
         if (chars > 1000) {
-          return `${displayName} output: ${lines} lines, ${chars} characters`;
+          return t(
+            `${displayName} output: ${lines} lines, ${chars} characters`,
+            `${displayName} の出力: ${lines} 行、${chars} 文字`,
+          );
         } else if (lines > 10) {
-          return `${displayName} output: ${lines} lines`;
+          return t(
+            `${displayName} output: ${lines} lines`,
+            `${displayName} の出力: ${lines} 行`,
+          );
         } else {
           return content.slice(0, 100) + (content.length > 100 ? "..." : "");
         }

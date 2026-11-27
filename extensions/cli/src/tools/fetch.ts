@@ -2,6 +2,7 @@ import type { ContextItem } from "core/index.js";
 import { fetchUrlContentImpl } from "core/tools/implementations/fetchUrlContent.js";
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 
+import { t } from "../i18n.js";
 import {
   parseEnvNumber,
   truncateOutputFromEnd,
@@ -23,14 +24,14 @@ export const fetchTool: Tool = {
   name: "Fetch",
   displayName: "Fetch",
   description:
-    "Fetches content from a URL, converts to markdown, and handles long content with truncation",
+    "URLからコンテンツを取得し、Markdownに変換します。長いコンテンツは切り詰めて扱います",
   parameters: {
     type: "object",
     required: ["url"],
     properties: {
       url: {
         type: "string",
-        description: "The URL to fetch content from",
+        description: "コンテンツを取得するURL",
       },
     },
   },
@@ -41,7 +42,7 @@ export const fetchTool: Tool = {
       preview: [
         {
           type: "text",
-          content: `Will fetch: ${args.url}`,
+          content: `取得予定: ${args.url}`,
         },
       ],
       args,
@@ -64,7 +65,7 @@ export const fetchTool: Tool = {
       if (contextItems.length === 0) {
         throw new ContinueError(
           ContinueErrorReason.Unspecified,
-          `Could not fetch content from ${url}`,
+          `${url} からコンテンツを取得できませんでした`,
         );
       }
 
@@ -79,7 +80,7 @@ export const fetchTool: Tool = {
       const { output: truncatedOutput } = truncateOutputFromEnd(
         combinedContent,
         maxChars,
-        "fetched content",
+        "取得したコンテンツ",
       );
 
       return truncatedOutput;

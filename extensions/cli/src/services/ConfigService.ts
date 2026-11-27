@@ -16,6 +16,7 @@ import {
   loadConfiguration,
   unrollPackageIdentifiersAsConfigYaml,
 } from "../configLoader.js";
+import { t } from "../i18n.js";
 import { logger } from "../util/logger.js";
 
 import { BaseService, ServiceWithDependencies } from "./BaseService.js";
@@ -231,13 +232,21 @@ export class ConfigService
         );
         const defaultModel = modelConfig?.models?.[0];
         if (!defaultModel) {
-          throw new Error("Loaded default model contained no model block");
+          throw new Error(
+            t(
+              "Loaded default model contained no model block",
+              "読み込んだデフォルトモデルに model ブロックが含まれていません",
+            ),
+          );
         }
         config.models = [...(config.models || []), defaultModel];
       } catch (e) {
         if (isHeadless) {
           throw new Error(
-            "No model specified in headless mode (and failed to load default model)",
+            t(
+              "No model specified in headless mode (and failed to load default model)",
+              "headless モードでモデルが指定されていません(デフォルトモデルの読み込みにも失敗しました)",
+            ),
           );
         } else {
           logger.error(
@@ -348,7 +357,12 @@ export class ConfigService
     init: Omit<ConfigServiceInit, "configPath">,
   ): Promise<ConfigServiceState> {
     if (!this.currentState.configPath) {
-      throw new Error("No configuration path available for reload");
+      throw new Error(
+        t(
+          "No configuration path available for reload",
+          "リロードに使用できる設定パスがありません",
+        ),
+      );
     }
 
     logger.debug("Reloading current configuration");
@@ -377,7 +391,9 @@ export class ConfigService
       );
 
       if (!apiClient) {
-        throw new Error("API client not available");
+        throw new Error(
+          t("API client not available", "API クライアントが利用できません"),
+        );
       }
 
       const agentFileState = await serviceContainer.get<AgentFileServiceState>(

@@ -2,6 +2,8 @@ import type { ChatHistoryItem } from "core/index.js";
 import { Box, Text } from "ink";
 import React, { useMemo } from "react";
 
+import { t } from "../i18n.js";
+
 import { useTerminalSize } from "./hooks/useTerminalSize.js";
 import { defaultBoxStyles } from "./styles.js";
 
@@ -18,9 +20,9 @@ function formatMessageContent(content: string | any): string {
     const textPart = content.find((part: any) => part.type === "text");
     return textPart && "text" in textPart
       ? textPart.text
-      : "(multimodal message)";
+      : t("(multimodal message)", "(マルチモーダルメッセージ)");
   }
-  return "(unknown content type)";
+  return t("(unknown content type)", "(不明なコンテンツ種別)");
 }
 
 export function SessionPreview({
@@ -69,9 +71,9 @@ export function SessionPreview({
     return (
       <Box {...defaultBoxStyles("blue")} flexDirection="column" width="100%">
         <Text color="blue" bold>
-          Preview
+          {t("Preview", "プレビュー")}
         </Text>
-        <Text color="gray">(no messages)</Text>
+        <Text color="gray">{t("(no messages)", "(メッセージなし)")}</Text>
       </Box>
     );
   }
@@ -84,7 +86,10 @@ export function SessionPreview({
       <Text> </Text>
       {previewMessages.slice(0, maxMessages).map((msg, index) => {
         const roleColor = msg.role === "user" ? "green" : "cyan";
-        const roleLabel = msg.role === "user" ? "You" : "Assistant";
+        const roleLabel =
+          msg.role === "user"
+            ? t("You", "あなた")
+            : t("Assistant", "アシスタント");
         // Truncate long messages for preview
         const truncatedContent =
           msg.content.length > 150
@@ -102,7 +107,10 @@ export function SessionPreview({
       })}
       {previewMessages.length > maxMessages && (
         <Text color="gray" italic>
-          ... and {previewMessages.length - maxMessages} more messages
+          {t(
+            `... and ${previewMessages.length - maxMessages} more messages`,
+            `... ほか ${previewMessages.length - maxMessages} 件のメッセージ`,
+          )}
         </Text>
       )}
     </Box>

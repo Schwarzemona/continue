@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 
+import { t } from "../i18n.js";
 import { services } from "../services/index.js";
 
 import { Selector, SelectorOption } from "./Selector.js";
@@ -31,7 +32,12 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
         const currentIndex = services.model.getCurrentModelIndex();
 
         if (availableModels.length === 0) {
-          setError("No chat models available in the configuration");
+          setError(
+            t(
+              "No chat models available in the configuration",
+              "設定に利用可能なチャットモデルがありません",
+            ),
+          );
           setLoading(false);
           return;
         }
@@ -48,7 +54,10 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
         setSelectedIndex(Math.max(0, currentIndex));
         setLoading(false);
       } catch (err: any) {
-        setError(err.message || "Failed to load models");
+        setError(
+          err.message ||
+            t("Failed to load models", "モデルの読み込みに失敗しました"),
+        );
         setLoading(false);
       }
     };
@@ -58,12 +67,15 @@ const ModelSelector: React.FC<ModelSelectorProps> = ({
 
   return (
     <Selector
-      title="Select Model"
+      title={t("Select Model", "モデルを選択")}
       options={models}
       selectedIndex={selectedIndex}
       loading={loading}
       error={error}
-      loadingMessage="Loading available models..."
+      loadingMessage={t(
+        "Loading available models...",
+        "利用可能なモデルを読み込み中...",
+      )}
       currentId={
         currentModelIndex >= 0 && models[currentModelIndex]
           ? models[currentModelIndex].id

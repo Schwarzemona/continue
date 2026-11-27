@@ -28,24 +28,24 @@ function isGitRepo(): boolean {
 function getGitStatus(): string {
   try {
     if (!isGitRepo()) {
-      return "Not a git repository";
+      return "gitリポジトリではありません";
     }
     const result = execSync("git status --porcelain", {
       encoding: "utf-8",
       cwd: process.cwd(),
     });
-    return result.trim() || "Working tree clean";
+    return result.trim() || "作業ツリーはクリーンです";
   } catch {
-    return "Git status not available";
+    return "git ステータスを利用できません";
   }
 }
 
-const baseSystemMessage = `You are an agent in the Continue CLI. Given the user's prompt, you should use the tools available to you to answer the user's question.
+const baseSystemMessage = `あなたは Continue CLI のエージェントです。ユーザーのプロンプトを受け、利用可能なツールを使ってユーザーの質問に回答してください。
 
-Notes:
-1. IMPORTANT: You should be concise, direct, and to the point, since your responses will be displayed on a command line interface.
-2. When relevant, share file names and code snippets relevant to the query
-Here is useful information about the environment you are running in:
+注意事項:
+1. 重要: 回答はコマンドラインインターフェースに表示されるため、簡潔で直接的、要点を絞ってください。
+2. 質問に関連するファイル名やコードスニペットがあれば、それを共有してください
+あなたは現在次の環境で実行しています:
 <env>
 Working directory: ${process.cwd()}
 Is directory a git repo: ${isGitRepo()}
@@ -53,9 +53,9 @@ Platform: ${process.platform}
 Today's date: ${new Date().toISOString().split("T")[0]}
 </env>
 
-As you answer the user's questions, you can use the following context:
+ユーザーの質問に回答する際は、次のコンテキストを利用できます:
 
-<context name="gitStatus">This is the git status at the start of the conversation. Note that this status is a snapshot in time, and will not update during the conversation.
+<context name="gitStatus">これは会話開始時点の git ステータスです。このステータスは時点のスナップショットであり、会話中は更新されないことに注意してください。
 
 ${getGitStatus()}
 </context>`;
@@ -217,11 +217,11 @@ export async function constructSystemMessage(
   // Add plan mode specific instructions if in plan mode
   if (mode === "plan") {
     systemMessage +=
-      '\n<context name="planMode">You are operating in _Plan Mode_, which means that your goal is to help the user investigate their ideas and develop a plan before taking action. You only have access to read-only tools and should not attempt to circumvent them to write / delete / create files. Ask the user to switch to agent mode if they want to make changes. For example, it is not acceptable to use the Bash tool to write to files.</context>\n';
+      '\n<context name="planMode">あなたは _Plan Mode_ で動作しています。これは、行動を起こす前にユーザーのアイデアの調査と計画の立案を支援することが目標であることを意味します。読み取り専用ツールのみ利用可能で、これらを迂回してファイルの書き込み / 削除 / 作成を試みてはいけません。変更を望む場合は、ユーザーに agent mode への切り替えを依頼してください。例えば、Bash ツールを使ってファイルに書き込むことは許容されません。</context>\n';
   } else {
     // Check if commit signature is disabled via environment variable
     if (!process.env.CONTINUE_CLI_DISABLE_COMMIT_SIGNATURE) {
-      systemMessage += `\n<context name="commitSignature">When creating commits using any CLI or tool, include the following in the commit message:
+      systemMessage += `\n<context name="commitSignature">CLI やツールを使ってコミットを作成する際は、コミットメッセージに以下を含めてください:
 Generated with [Continue](https://continue.dev)
 
 Co-Authored-By: Continue <noreply@continue.dev>
@@ -233,16 +233,16 @@ Co-Authored-By: Continue <noreply@continue.dev>
   if (headless) {
     systemMessage += `
 
-IMPORTANT: You are running in headless mode. Provide ONLY your final answer to the user's question. Do not include explanations, reasoning, or additional commentary unless specifically requested. Be direct and concise.`;
+重要: あなたは headless モードで実行しています。ユーザーの質問への最終回答のみを提供してください。明確に要求されない限り、説明・推論・追加のコメントは含めないでください。直接的かつ簡潔に回答してください。`;
   }
 
   // Add JSON formatting instructions if format is json
   if (format === "json") {
     systemMessage += `
 
-IMPORTANT: You are operating in JSON output mode. Your final response MUST be valid JSON that can be parsed by JSON.parse(). The JSON should contain properties relevant to answer the user's question. You don't need to include any general "response" or "answer" field. Do not include any text before or after the JSON - the entire response must be parseable JSON.
+重要: あなたは JSON 出力モードで動作しています。最終応答は JSON.parse() で解析可能な有効な JSON でなければなりません。JSON にはユーザーの質問に回答するためのプロパティを含めてください。一般的な "response" や "answer" フィールドを含める必要はありません。JSON の前後にテキストを含めないでください — 応答全体が解析可能な JSON である必要があります。
 
-Example response format:
+応答形式の例:
 {
   "property": "value"
 }`;

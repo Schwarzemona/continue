@@ -134,7 +134,7 @@ describe("multiEditTool CLI specific", () => {
       expect(result.preview).toHaveLength(2);
       expect(result.preview?.[0]).toEqual({
         type: "text",
-        content: "Will apply 1 edit to /tmp/test-multi-edit-file.txt:",
+        content: `${testFilePath} に対して 1 件の編集を行う予定です:`,
       });
       expect(result.preview?.[1]).toEqual({
         type: "diff",
@@ -156,7 +156,7 @@ describe("multiEditTool CLI specific", () => {
       const result = await multiEditTool.run(args);
 
       expect(result).toBe(
-        `Successfully edited ${testFilePath} with 1 edit\nDiff:\nmocked diff`,
+        `${testFilePath} を 1 件の編集で正常に編集しました\nDiff:\nmocked diff`,
       );
       expect(fs.writeFileSync).toHaveBeenCalledWith(
         testFilePath,
@@ -176,7 +176,7 @@ describe("multiEditTool CLI specific", () => {
       const result = await multiEditTool.run(args);
 
       expect(result).toBe(
-        `Successfully edited ${testFilePath} with 3 edits\nDiff:\nmocked diff`,
+        `${testFilePath} を 3 件の編集で正常に編集しました\nDiff:\nmocked diff`,
       );
     });
 

@@ -10,6 +10,7 @@ import React, {
 import { ToolPermissionServiceState } from "src/services/ToolPermissionService.js";
 
 import { useServices } from "../hooks/useService.js";
+import { t } from "../i18n.js";
 import {
   ApiClientServiceState,
   AuthServiceState,
@@ -79,7 +80,10 @@ async function loadAndSetSession(
     // Clear the intro message since we're now showing a resumed session
     setShowIntroMessage(false);
   } catch (error) {
-    console.error("Error loading session:", error);
+    console.error(
+      t("Error loading session:", "セッションの読み込みに失敗しました:"),
+      error,
+    );
   }
 }
 
@@ -148,7 +152,6 @@ function useChatHandlers(
   };
 }
 
-// eslint-disable-next-line complexity
 const TUIChat: React.FC<TUIChatProps> = ({
   remoteUrl,
   configPath,
@@ -305,7 +308,10 @@ const TUIChat: React.FC<TUIChatProps> = ({
             {
               message: {
                 role: "system",
-                content: `Failed to export: Session ${sessionId} not found`,
+                content: t(
+                  `Failed to export: Session ${sessionId} not found`,
+                  `エクスポートに失敗しました: セッション ${sessionId} が見つかりません`,
+                ),
               },
               contextItems: [],
             },
@@ -332,7 +338,10 @@ const TUIChat: React.FC<TUIChatProps> = ({
           {
             message: {
               role: "system",
-              content: `Session exported to ${defaultPath}`,
+              content: t(
+                `Session exported to ${defaultPath}`,
+                `セッションを ${defaultPath} にエクスポートしました`,
+              ),
             },
             contextItems: [],
           },
@@ -344,7 +353,10 @@ const TUIChat: React.FC<TUIChatProps> = ({
           {
             message: {
               role: "system",
-              content: `Failed to export session: ${error.message}`,
+              content: t(
+                `Failed to export session: ${error.message}`,
+                `セッションのエクスポートに失敗しました: ${error.message}`,
+              ),
             },
             contextItems: [],
           },
@@ -426,7 +438,9 @@ const TUIChat: React.FC<TUIChatProps> = ({
           message=""
           showSpinner={true}
           additionalHint={
-            isBashToolRunning ? "ctrl+b to background" : undefined
+            isBashToolRunning
+              ? t("ctrl+b to background", "ctrl+b でバックグラウンド実行")
+              : undefined
           }
         />
 
@@ -434,7 +448,7 @@ const TUIChat: React.FC<TUIChatProps> = ({
         <ActionStatus
           visible={isCompacting && !!compactionStartTime}
           startTime={compactionStartTime || 0}
-          message="Compacting history"
+          message={t("Compacting history", "履歴を圧縮中")}
           showSpinner={true}
           loadingColor="grey"
         />

@@ -4,6 +4,7 @@ import type { ChatHistoryItem } from "core/index.js";
 import { encode } from "gpt-tokenizer";
 import { ChatCompletionTool } from "openai/resources.mjs";
 
+import { t } from "./i18n.js";
 import { streamChatResponse } from "./stream/streamChatResponse.js";
 import { StreamCallbacks } from "./stream/streamChatResponse.types.js";
 import { logger } from "./util/logger.js";
@@ -252,9 +253,20 @@ export interface AutoCompactParams {
  * @param model The model configuration
  * @returns A descriptive message explaining why compaction is needed
  */
+export const AUTO_COMPACT_MARKERS = [
+  "Auto-compacting",
+  "Approaching",
+  "自動圧縮",
+  "接近中",
+];
+
 export function getAutoCompactMessage(model: ModelConfig): string {
   const limit = getModelContextLimit(model);
-  return `Approaching context limit (${(limit / 1000).toFixed(0)}K tokens). Auto-compacting chat history...`;
+  const limitLabel = `${(limit / 1000).toFixed(0)}K`;
+  return t(
+    `Approaching context limit (${limitLabel} tokens). Auto-compacting chat history...`,
+    `コンテキスト上限に接近中です (${limitLabel} トークン)。チャット履歴を自動圧縮しています...`,
+  );
 }
 
 /**

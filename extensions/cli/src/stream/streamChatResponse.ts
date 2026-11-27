@@ -9,6 +9,7 @@ import type {
 } from "openai/resources.mjs";
 
 import { pruneLastMessage } from "../compaction.js";
+import { t } from "../i18n.js";
 import { services } from "../services/index.js";
 import { telemetryService } from "../telemetry/telemetryService.js";
 import { applyChatCompletionToolOverrides } from "../tools/applyToolOverrides.js";
@@ -28,6 +29,7 @@ import {
   handlePreApiCompaction,
 } from "./streamChatResponse.compactionHelpers.js";
 import {
+  excludeSystemHistoryItems,
   processChunkContent,
   processToolCallDelta,
   recordStreamTelemetry,
@@ -193,7 +195,7 @@ interface ProcessStreamingResponseOptions {
 }
 
 // Process a single streaming response and return whether we need to continue
-// eslint-disable-next-line max-statements, complexity
+// eslint-disable-next-line max-statements
 export async function processStreamingResponse(
   options: ProcessStreamingResponseOptions,
 ): Promise<{
@@ -246,12 +248,17 @@ export async function processStreamingResponse(
   }
 
   if (!validation.isValid) {
-    throw new Error(`Context length validation failed: ${validation.error}`);
+    throw new Error(
+      t(
+        `Context length validation failed: ${validation.error}`,
+        `コンテキスト長の検証に失敗しました: ${validation.error}`,
+      ),
+    );
   }
 
   // Create OpenAI format history with validated system message
   const openaiChatHistory = convertFromUnifiedHistoryWithSystemMessage(
-    chatHistory,
+    excludeSystemHistoryItems(chatHistory),
     systemMessage,
   ) as ChatCompletionMessageParam[];
   const requestStartTime = Date.now();
@@ -384,7 +391,12 @@ export async function processStreamingResponse(
     // Handle context length errors with helpful message
     if (isContextLengthError(error)) {
       logger.debug(`Context length exceeded: ${error}`);
-      throw new Error(`Context length exceeded: ${error}`);
+      throw new Error(
+        t(
+          `Context length exceeded: ${error}`,
+          `コンテキスト長を超えています: ${error}`,
+        ),
+      );
     }
 
     throw error;

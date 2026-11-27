@@ -3,6 +3,7 @@ import * as path from "path";
 
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 
+import { t } from "../i18n.js";
 import { logger } from "../util/logger.js";
 
 import { Tool } from "./types.js";
@@ -23,7 +24,7 @@ export const uploadArtifactTool: Tool = {
   name: "UploadArtifact",
   displayName: "Upload Artifact",
   description:
-    "Upload a file (screenshot, video, log) to the session artifacts for user review. Supported formats: images (png, jpg, jpeg, gif, webp), videos (mp4, mov, avi, webm), and text files. Maximum file size: 50MB. If an artifact with the same filename already exists, it will be overwritten with the new file.",
+    "ユーザーが確認できるセッションのアーティファクト（スクリーンショット、動画、ログ）としてファイルを送信します。対応形式: 画像 (png, jpg, jpeg, gif, webp)、動画 (mp4, mov, avi, webm)、テキストファイル。最大ファイルサイズ: 50MB。同一ファイル名のアーティファクトが既に存在する場合は新しいファイルで上書きされます。",
   parameters: {
     type: "object",
     required: ["filePath"],
@@ -31,7 +32,7 @@ export const uploadArtifactTool: Tool = {
       filePath: {
         type: "string",
         description:
-          "Absolute path to the file to upload (e.g., /tmp/screenshot.png)",
+          "アップロードするファイルへの絶対パス（例: /tmp/screenshot.png）",
       },
     },
   },
@@ -47,7 +48,10 @@ export const uploadArtifactTool: Tool = {
       if (!trimmedPath) {
         throw new ContinueError(
           ContinueErrorReason.Unspecified,
-          "filePath is required to upload an artifact.",
+          t(
+            "filePath is required to upload an artifact.",
+            "アーティファクトをアップロードするには filePath が必要です。",
+          ),
         );
       }
 
@@ -56,7 +60,10 @@ export const uploadArtifactTool: Tool = {
       if (!agentId) {
         throw new ContinueError(
           ContinueErrorReason.Unspecified,
-          "Agent ID is required. This tool only works with 'cn serve --id <agentId>'.",
+          t(
+            "Agent ID is required. This tool only works with 'cn serve --id <agentId>'.",
+            "エージェントIDが必要です。このツールは 'cn serve --id <agentId>' でのみ動作します。",
+          ),
         );
       }
 
@@ -65,7 +72,10 @@ export const uploadArtifactTool: Tool = {
       if (!accessToken) {
         throw new ContinueError(
           ContinueErrorReason.Unspecified,
-          "Artifact upload requires authentication, which has been removed.",
+          t(
+            "Artifact upload requires authentication, which has been removed.",
+            "アーティファクトのアップロードには認証が必要ですが、認証は削除されています。",
+          ),
         );
       }
 
@@ -82,7 +92,12 @@ export const uploadArtifactTool: Tool = {
       const fileSizeMB = (stats.size / (1024 * 1024)).toFixed(2);
       const filename = path.basename(trimmedPath);
 
-      logger.info(`Uploading artifact: ${filename} (${fileSizeMB} MB)`);
+      logger.info(
+        t(
+          `Uploading artifact: ${filename} (${fileSizeMB} MB)`,
+          `アーティファクト送信中: ${filename} (${fileSizeMB} MB)`,
+        ),
+      );
 
       // Upload the artifact
       const result = await services.artifactUpload.uploadArtifact({
@@ -92,11 +107,16 @@ export const uploadArtifactTool: Tool = {
       });
 
       if (result.success) {
-        logger.info(`Successfully uploaded artifact: ${result.filename}`);
+        logger.info(
+          t(
+            `Successfully uploaded artifact: ${result.filename}`,
+            `アーティファクトをアップロードしました: ${result.filename}`,
+          ),
+        );
         return `Artifact uploaded successfully: ${result.filename} (${fileSizeMB} MB). The user can view it in the Artifacts tab of the session.`;
       } else {
         // Handle specific error cases with helpful messages
-        const errorMsg = result.error || "Unknown error";
+        const errorMsg = result.error || t("Unknown error", "不明なエラー");
 
         if (errorMsg.includes("File size exceeds")) {
           throw new ContinueError(
@@ -130,10 +150,18 @@ export const uploadArtifactTool: Tool = {
 
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      logger.error(`Error uploading artifact: ${errorMessage}`);
+      logger.error(
+        t(
+          `Error uploading artifact: ${errorMessage}`,
+          `アーティファクトのアップロードでエラー: ${errorMessage}`,
+        ),
+      );
       throw new ContinueError(
         ContinueErrorReason.Unspecified,
-        `Error uploading artifact: ${errorMessage}`,
+        t(
+          `Error uploading artifact: ${errorMessage}`,
+          `アーティファクトのアップロードでエラー: ${errorMessage}`,
+        ),
       );
     }
   },

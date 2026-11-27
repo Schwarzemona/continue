@@ -1,6 +1,7 @@
 import { Box, Text, useInput } from "ink";
 import React, { useEffect, useState } from "react";
 
+import { t } from "../i18n.js";
 import {
   BackgroundJob,
   backgroundJobService,
@@ -24,6 +25,23 @@ function getStatusColor(status: BackgroundJob["status"]): string {
 function formatDuration(job: BackgroundJob): string {
   const endTime = job.endTime ? job.endTime.getTime() : Date.now();
   return `${Math.round((endTime - job.startTime.getTime()) / 1000)}s`;
+}
+
+function getStatusLabel(status: BackgroundJob["status"]): string {
+  switch (status) {
+    case "running":
+      return t("running", "実行中");
+    case "pending":
+      return t("pending", "待機中");
+    case "completed":
+      return t("completed", "完了");
+    case "cancelled":
+      return t("cancelled", "キャンセル済み");
+    case "failed":
+      return t("failed", "失敗");
+    default:
+      return status;
+  }
 }
 
 export function JobsSelector({ onCancel }: JobsSelectorProps) {
@@ -96,12 +114,14 @@ export function JobsSelector({ onCancel }: JobsSelectorProps) {
     return (
       <Box {...defaultBoxStyles("blue")}>
         <Text color="blue" bold>
-          Background Jobs
+          {t("Background Jobs", "バックグラウンドジョブ")}
         </Text>
         <Text> </Text>
-        <Text color="gray">No background jobs</Text>
+        <Text color="gray">
+          {t("No background jobs", "バックグラウンドジョブはありません")}
+        </Text>
         <Text> </Text>
-        <Text color="gray">Press Esc to go back</Text>
+        <Text color="gray">{t("Press Esc to go back", "Esc で戻ります")}</Text>
       </Box>
     );
   }
@@ -116,9 +136,14 @@ export function JobsSelector({ onCancel }: JobsSelectorProps) {
     return (
       <Box {...defaultBoxStyles("blue")} flexDirection="column">
         <Text color="blue" bold>
-          Job Details
+          {t("Job Details", "ジョブの詳細")}
         </Text>
-        <Text color="gray">Press Esc/b to go back, x to cancel job</Text>
+        <Text color="gray">
+          {t(
+            "Press Esc/b to go back, x to cancel job",
+            "Esc/b で戻る、x でジョブをキャンセル",
+          )}
+        </Text>
         <Text> </Text>
 
         <Box flexDirection="row" gap={1}>
@@ -127,23 +152,25 @@ export function JobsSelector({ onCancel }: JobsSelectorProps) {
         </Box>
 
         <Box flexDirection="row" gap={1}>
-          <Text color="gray">Status:</Text>
-          <Text color={getStatusColor(freshJob.status)}>{freshJob.status}</Text>
+          <Text color="gray">{t("Status:", "状態:")}</Text>
+          <Text color={getStatusColor(freshJob.status)}>
+            {getStatusLabel(freshJob.status)}
+          </Text>
         </Box>
 
         <Box flexDirection="row" gap={1}>
-          <Text color="gray">Duration:</Text>
+          <Text color="gray">{t("Duration:", "経過時間:")}</Text>
           <Text>{formatDuration(freshJob)}</Text>
         </Box>
 
         <Box flexDirection="row" gap={1}>
-          <Text color="gray">Command:</Text>
+          <Text color="gray">{t("Command:", "コマンド:")}</Text>
           <Text>{freshJob.command}</Text>
         </Box>
 
         {freshJob.exitCode !== null && (
           <Box flexDirection="row" gap={1}>
-            <Text color="gray">Exit Code:</Text>
+            <Text color="gray">{t("Exit Code:", "終了コード:")}</Text>
             <Text color={freshJob.exitCode === 0 ? "green" : "red"}>
               {freshJob.exitCode}
             </Text>
@@ -152,15 +179,17 @@ export function JobsSelector({ onCancel }: JobsSelectorProps) {
 
         {freshJob.error && (
           <Box flexDirection="row" gap={1}>
-            <Text color="gray">Error:</Text>
+            <Text color="gray">{t("Error:", "エラー:")}</Text>
             <Text color="red">{freshJob.error}</Text>
           </Box>
         )}
 
         <Text> </Text>
-        <Text color="gray">Last 10 lines of output:</Text>
+        <Text color="gray">
+          {t("Last 10 lines of output:", "出力の直近10行:")}
+        </Text>
         <Box borderStyle="single" borderColor="gray" paddingX={1}>
-          <Text>{lastOutput || "(no output)"}</Text>
+          <Text>{lastOutput || t("(no output)", "(出力なし)")}</Text>
         </Box>
       </Box>
     );
@@ -170,10 +199,13 @@ export function JobsSelector({ onCancel }: JobsSelectorProps) {
   return (
     <Box {...defaultBoxStyles("blue")}>
       <Text color="blue" bold>
-        Background Jobs ({jobs.length})
+        {t("Background Jobs", "バックグラウンドジョブ")} ({jobs.length})
       </Text>
       <Text color="gray">
-        ↑/↓ to navigate, Enter to view details, Esc to exit
+        {t(
+          "↑/↓ to navigate, Enter to view details, Esc to exit",
+          "↑/↓ で移動、Enter で詳細表示、Esc で終了",
+        )}
       </Text>
       <Text> </Text>
 
@@ -185,7 +217,7 @@ export function JobsSelector({ onCancel }: JobsSelectorProps) {
           <Box key={job.id} flexDirection="row" gap={1}>
             <Text color={isSelected ? "cyan" : undefined}>{prefix}</Text>
             <Text color={getStatusColor(job.status)}>
-              {job.status.padEnd(10)}
+              {getStatusLabel(job.status).padEnd(10)}
             </Text>
             <Text color="cyan">{job.id}</Text>
             <Text color="gray">({formatDuration(job)})</Text>

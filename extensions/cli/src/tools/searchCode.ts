@@ -5,6 +5,7 @@ import * as util from "util";
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 import { findUp } from "find-up";
 
+import { t } from "../i18n.js";
 import { parseEnvNumber } from "../util/truncateOutput.js";
 
 import { Tool } from "./types.js";
@@ -103,22 +104,22 @@ function getSearchMaxResultChars(): number {
 export const searchCodeTool: Tool = {
   name: "Search",
   displayName: "Search",
-  description: "Search the codebase using ripgrep (rg) for a specific pattern",
+  description: "コードベースを ripgrep (rg) で指定パターンにより検索します",
   parameters: {
     type: "object",
     required: ["pattern"],
     properties: {
       pattern: {
         type: "string",
-        description: "The search pattern to look for",
+        description: "検索するパターン",
       },
       path: {
         type: "string",
-        description: "The path to search in (defaults to current directory)",
+        description: "検索対象のパス（既定は現在のディレクトリ）",
       },
       file_pattern: {
         type: "string",
-        description: "Optional file pattern to filter results (e.g., '*.ts')",
+        description: "結果を絞り込むための任意のファイルパターン（例: '*.ts'）",
       },
     },
   },
@@ -134,7 +135,10 @@ export const searchCodeTool: Tool = {
       preview: [
         {
           type: "text",
-          content: `Will search for: "${truncatedPattern}"`,
+          content: t(
+            `Will search for: "${truncatedPattern}"`,
+            `検索予定: "${truncatedPattern}"`,
+          ),
         },
       ],
     };
@@ -148,7 +152,10 @@ export const searchCodeTool: Tool = {
     if (!fs.existsSync(searchPath)) {
       throw new ContinueError(
         ContinueErrorReason.Unspecified,
-        `Path does not exist: ${searchPath}`,
+        t(
+          `Path does not exist: ${searchPath}`,
+          `パスが存在しません: ${searchPath}`,
+        ),
       );
     }
 
@@ -174,7 +181,10 @@ export const searchCodeTool: Tool = {
       }
 
       if (stderr) {
-        return `Warning during search: ${stderr}\n\n${stdout}`;
+        return t(
+          `Warning during search: ${stderr}\n\n${stdout}`,
+          `検索中の警告: ${stderr}\n\n${stdout}`,
+        );
       }
 
       if (!stdout.trim()) {

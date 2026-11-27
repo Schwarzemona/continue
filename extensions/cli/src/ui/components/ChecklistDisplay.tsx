@@ -5,6 +5,9 @@ interface ChecklistDisplayProps {
   content: string;
 }
 
+/** Headers that must be hidden, for both locales. */
+const HIDDEN_PREFIXES = ["Task list", "タスクリスト"];
+
 /**
  * Renders checklist content with styled checkboxes
  */
@@ -27,7 +30,7 @@ export const ChecklistDisplay: React.FC<ChecklistDisplayProps> = ({
   return (
     <Box flexDirection="column" paddingLeft={2}>
       {lines.map((line, index) => {
-        if (line.startsWith("Task list")) {
+        if (HIDDEN_PREFIXES.some((prefix) => line.startsWith(prefix))) {
           return null;
         }
         // Match both completed [x] and incomplete [ ] checkboxes

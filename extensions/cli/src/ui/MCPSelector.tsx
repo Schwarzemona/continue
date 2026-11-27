@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { quote } from "shell-quote";
 
 import { useServices } from "../hooks/useService.js";
+import { t } from "../i18n.js";
 import {
   MCPConnectionInfo,
   MCPServerStatus,
@@ -13,11 +14,18 @@ import { logger } from "../util/logger.js";
 
 import { defaultBoxStyles } from "./styles.js";
 
+const MCP_STATUS_TEXT: Record<MCPServerStatus, [string, string]> = {
+  idle: ["idle", "待機中"],
+  connecting: ["connecting", "接続中"],
+  connected: ["connected", "接続済み"],
+  error: ["error", "エラー"],
+};
+
 // Utility function to get status icon and color based on server connection
 const getServerStatusDisplay = (conn: MCPConnectionInfo) => {
   let icon = "⚪️"; // note, white circle causes extra blank line bug
   let color: "green" | "yellow" | "red" | "white" | "dim" = "white";
-  let statusText = conn.status;
+  let statusLabel = t(...MCP_STATUS_TEXT[conn.status]);
 
   if (conn.status === "connecting") {
     icon = "🟡";
@@ -29,14 +37,14 @@ const getServerStatusDisplay = (conn: MCPConnectionInfo) => {
     if (conn.warnings && conn.warnings.length > 0) {
       icon = "🟡";
       color = "yellow";
-      statusText = "connected (with warnings)" as MCPServerStatus;
+      statusLabel = t("connected (with warnings)", "接続済み(警告あり)");
     } else {
       icon = "🟢";
       color = "green";
     }
   }
 
-  return { icon, color, statusText };
+  return { icon, color, statusLabel };
 };
 
 interface MCPSelectorProps {
@@ -63,7 +71,7 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
   const connections = services.mcp?.connections ?? [];
   const mcpService = services.mcp?.mcpService;
 
-  const backItem = { label: "Back", value: "back" };
+  const backItem = { label: t("Back", "戻る"), value: "back" };
 
   const handleBack = () => {
     if (menuState === "server-detail") {
@@ -113,14 +121,20 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
 
       // Add bulk actions
       options.push(
-        { label: "🔄 Restart all servers", value: "restart-all" },
-        { label: "⏹️  Stop all servers", value: "stop-all" },
+        {
+          label: t("🔄 Restart all servers", "🔄 全サーバーを再起動"),
+          value: "restart-all",
+        },
+        {
+          label: t("⏹️  Stop all servers", "⏹️  全サーバーを停止"),
+          value: "stop-all",
+        },
       );
     }
 
     // Add "Explore MCP Servers" option at the bottom
     options.push({
-      label: "🔍 Explore MCP Servers",
+      label: t("🔍 Explore MCP Servers", "🔍 MCPサーバーを検索"),
       value: "explore-mcp-servers",
     });
 
@@ -137,12 +151,18 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
     if (!serverInfo) return [];
 
     const items: MCPMenuItem[] = [
-      { label: "🔄 Restart server", value: "restart" },
+      {
+        label: t("🔄 Restart server", "🔄 サーバーを再起動"),
+        value: "restart",
+      },
     ];
 
     // Only show stop server if it's connected
     if (serverInfo.status === "connected") {
-      items.push({ label: "⏹️  Stop server", value: "stop" });
+      items.push({
+        label: t("⏹️  Stop server", "⏹️  サーバーを停止"),
+        value: "stop",
+      });
     }
 
     return items;
@@ -161,7 +181,7 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
         {serverInfo.status === "error" && serverInfo.error && (
           <Box flexDirection="column" marginBottom={1}>
             <Text color="red" bold>
-              🚫 Error:
+              {t("🚫 Error:", "🚫 エラー:")}
             </Text>
             <Text color="red">{serverInfo.error}</Text>
           </Box>
@@ -171,7 +191,7 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
         {serverInfo.warnings.length > 0 && (
           <Box flexDirection="column" marginBottom={1}>
             <Text color="yellow" bold>
-              ⚠️ Warnings:
+              {t("⚠️ Warnings:", "⚠️ 警告:")}
             </Text>
             {serverInfo.warnings.map((warning, index) => (
               <Text key={index} color="yellow">
@@ -184,7 +204,9 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
         {/* Add prompts if any */}
         {serverInfo.prompts.length > 0 && (
           <Box flexDirection="column" marginBottom={1}>
-            <Text color="blue">📝 Prompts: {serverInfo.prompts.length}</Text>
+            <Text color="blue">
+              {t("📝 Prompts:", "📝 プロンプト:")} {serverInfo.prompts.length}
+            </Text>
             {serverInfo.prompts.map((prompt, index) => (
               <Text key={index} color="dim">
                 • {prompt.name}
@@ -196,7 +218,9 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
         {/* Add tools if any */}
         {serverInfo.tools.length > 0 && (
           <Box flexDirection="column" marginBottom={1}>
-            <Text color="blue">🔧 Tools: {serverInfo.tools.length}</Text>
+            <Text color="blue">
+              {t("🔧 Tools:", "🔧 ツール:")} {serverInfo.tools.length}
+            </Text>
             {serverInfo.tools.map((tool, index) => (
               <Text key={index} color="dim">
                 • {tool.name}
@@ -259,7 +283,7 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
             break;
         }
       } catch (error: any) {
-        setMessage(`Error: ${error.message}`);
+        setMessage(`${t("Error:", "エラー:")} ${error.message}`);
       } finally {
         setIsLoading(false);
       }
@@ -279,17 +303,22 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
     switch (value) {
       case "restart-all":
         await mcpService?.restartAllServers();
-        setMessage("All servers restarted");
+        setMessage(t("All servers restarted", "全サーバーを再起動しました"));
         break;
       case "stop-all":
         await mcpService?.shutdownConnections();
-        setMessage("All servers stopped");
+        setMessage(t("All servers stopped", "全サーバーを停止しました"));
         break;
       case "explore-mcp-servers":
         // Open the MCP servers hub in the default browser
         const open = (await import("open")).default;
         await open("https://continue.dev/hub?type=mcpServers");
-        setMessage("Opened MCP servers hub in browser");
+        setMessage(
+          t(
+            "Opened MCP servers hub in browser",
+            "ブラウザでMCPサーバーハブを開きました",
+          ),
+        );
         break;
       case "back":
         onCancel();
@@ -305,21 +334,33 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
             return;
           }
           await mcpService?.restartServer(selectedServer);
-          setMessage(`Server "${selectedServer}" restarted`);
+          setMessage(
+            t(
+              `Server "${selectedServer}" restarted`,
+              `サーバー "${selectedServer}" を再起動しました`,
+            ),
+          );
           break;
         case "stop":
           if (!selectedServer) {
             return;
           }
           await mcpService?.stopServer(selectedServer);
-          setMessage(`Server "${selectedServer}" stopped`);
+          setMessage(
+            t(
+              `Server "${selectedServer}" stopped`,
+              `サーバー "${selectedServer}" を停止しました`,
+            ),
+          );
           break;
         case "back":
           handleBack();
           return;
       }
     } catch {
-      logger.error("Error handling MCP action");
+      logger.error(
+        t("Error handling MCP action", "MCPアクションの処理でエラー"),
+      );
     }
   };
 
@@ -328,11 +369,13 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
       <Box flexDirection="column" marginBottom={1}>
         <Text bold color="blue">
           {menuState === "server-detail" && selectedServer
-            ? `Server: ${selectedServer}`
-            : "MCP Servers"}
+            ? t(`Server: ${selectedServer}`, `サーバー: ${selectedServer}`)
+            : t("MCP Servers", "MCPサーバー")}
         </Text>
         {connections.length === 0 && (
-          <Text color="gray">No servers configured</Text>
+          <Text color="gray">
+            {t("No servers configured", "サーバーが設定されていません")}
+          </Text>
         )}
         {menuState === "server-detail" &&
           selectedServer &&
@@ -342,7 +385,7 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
             );
             if (!serverInfo) return null;
 
-            const { color: statusColor, statusText } =
+            const { color: statusColor, statusLabel } =
               getServerStatusDisplay(serverInfo);
 
             let configText = "";
@@ -350,17 +393,21 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
               const { command, args } = serverInfo.config;
               const cmd = command ? quote([command, ...(args ?? [])]) : "";
               if (cmd) {
-                configText = ` • Command: ${cmd}`;
+                configText = ` • ${t("Command:", "コマンド:")} ${cmd}`;
               }
             } else {
               const { url } = serverInfo.config;
               configText = ` • URL: ${url}`;
             }
-            configText = configText.replace(/\$\{\{.*\}\}/, "(secret)");
+            configText = configText.replace(
+              /\$\{\{.*\}\}/,
+              t("(secret)", "(シークレット)"),
+            );
 
             return (
               <Text color="dim">
-                Status: <Text color={statusColor}>{statusText}</Text>
+                {t("Status:", "状態:")}
+                <Text color={statusColor}>{statusLabel}</Text>
                 {configText}
               </Text>
             );
@@ -375,7 +422,9 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
 
       {message && (
         <Box marginBottom={1}>
-          <Text color={message.startsWith("Error:") ? "red" : "green"}>
+          <Text
+            color={message.startsWith(t("Error:", "エラー:")) ? "red" : "green"}
+          >
             {message}
           </Text>
         </Box>
@@ -385,7 +434,7 @@ export const MCPSelector: React.FC<MCPSelectorProps> = ({ onCancel }) => {
 
       {isLoading ? (
         <Box>
-          <Text color="yellow">Working...</Text>
+          <Text color="yellow">{t("Working...", "処理中...")}</Text>
         </Box>
       ) : (
         <Box flexDirection="column">

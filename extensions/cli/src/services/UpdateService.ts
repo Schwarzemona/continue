@@ -5,6 +5,7 @@ import { GlobalContext } from "core/util/GlobalContext.js";
 
 import { logger } from "src/util/logger.js";
 
+import { t } from "../i18n.js";
 import { compareVersions, getLatestVersion, getVersion } from "../version.js";
 
 import { BaseService } from "./BaseService.js";
@@ -54,7 +55,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       if (this.currentState.currentVersion === "0.0.0-dev") {
         this.setState({
           status: UpdateStatus.IDLE,
-          message: `Continue CLI`,
+          message: "Continue CLI",
         });
         return; // Uncomment to test auto-update behavior in dev
       }
@@ -62,7 +63,7 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       // Check for updates
       this.setState({
         status: UpdateStatus.CHECKING,
-        message: "Checking for updates",
+        message: t("Checking for updates", "アップデートを確認中"),
       });
 
       const latestVersion = await getLatestVersion();
@@ -100,7 +101,10 @@ export class UpdateService extends BaseService<UpdateServiceState> {
         this.setState({
           status: UpdateStatus.IDLE,
           message: isUpdateAvailable
-            ? `Update available: v${latestVersion}`
+            ? t(
+                `Update available: v${latestVersion}`,
+                `アップデートが利用可能です: v${latestVersion}`,
+              )
             : `Continue CLI v${this.currentState.currentVersion}`,
           isUpdateAvailable,
           latestVersion,
@@ -141,7 +145,10 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       this.setState({
         isAutoUpdate,
         status: UpdateStatus.UPDATING,
-        message: `${isAutoUpdate ? "Auto-updating" : "Updating"} to v${this.currentState.latestVersion}`,
+        message: t(
+          `${isAutoUpdate ? "Auto-updating" : "Updating"} to v${this.currentState.latestVersion}`,
+          `${isAutoUpdate ? "自動アップデート中" : "アップデート中"} v${this.currentState.latestVersion}`,
+        ),
       });
 
       // Install the update
@@ -161,7 +168,10 @@ export class UpdateService extends BaseService<UpdateServiceState> {
           }
           this.setState({
             status: UpdateStatus.ERROR,
-            message: `Error updating to v${this.currentState.latestVersion}`,
+            message: t(
+              `Error updating to v${this.currentState.latestVersion}`,
+              `v${this.currentState.latestVersion} へのアップデートに失敗しました`,
+            ),
             error: new Error(stderr),
           });
           return;
@@ -170,7 +180,10 @@ export class UpdateService extends BaseService<UpdateServiceState> {
 
       this.setState({
         status: UpdateStatus.UPDATED,
-        message: `Updated to v${this.currentState.latestVersion}`,
+        message: t(
+          `Updated to v${this.currentState.latestVersion}`,
+          `v${this.currentState.latestVersion} に更新しました`,
+        ),
         isUpdateAvailable: false,
       });
       this.restartCLI();
@@ -178,13 +191,16 @@ export class UpdateService extends BaseService<UpdateServiceState> {
       logger.error("Error updating CLI:", error);
       this.setState({
         status: UpdateStatus.ERROR,
-        message: "Update failed",
+        message: t("Update failed", "アップデートに失敗しました"),
         error,
       });
       setTimeout(() => {
         this.setState({
           status: UpdateStatus.IDLE,
-          message: `/update to v${this.currentState.latestVersion}`,
+          message: t(
+            `/update to v${this.currentState.latestVersion}`,
+            `/update で v${this.currentState.latestVersion} に更新できます`,
+          ),
         });
       }, 4000);
     }

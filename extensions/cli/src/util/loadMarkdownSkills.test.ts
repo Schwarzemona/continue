@@ -121,4 +121,30 @@ Content
     const names = result.skills.map((s) => s.name).sort();
     expect(names).toEqual(["Skill One", "Skill Two"]);
   });
+
+  it("returns skills in a stable order across calls", async () => {
+    const dirs = ["alpha", "bravo", "charlie", "delta", "echo"];
+    for (const dir of dirs) {
+      const skillDir = path.join(tmpDir, ".continue", "skills", dir);
+      fs.mkdirSync(skillDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(skillDir, "SKILL.md"),
+        `---
+name: ${dir}
+description: skill ${dir}
+---
+Content
+`,
+      );
+    }
+
+    const orders = await Promise.all(
+      Array.from({ length: 5 }, () =>
+        loadMarkdownSkills().then((r) => r.skills.map((s) => s.name).join(",")),
+      ),
+    );
+
+    expect(orders[0]).toBe("alpha,bravo,charlie,delta,echo");
+    expect(new Set(orders).size).toBe(1);
+  });
 });

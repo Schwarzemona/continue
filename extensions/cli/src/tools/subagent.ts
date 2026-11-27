@@ -1,3 +1,4 @@
+import { t } from "../i18n.js";
 import { services } from "../services/index.js";
 import { serviceContainer } from "../services/ServiceContainer.js";
 import { ModelServiceState, SERVICE_NAMES } from "../services/types.js";
@@ -28,7 +29,7 @@ export const subagentTool = async (): Promise<Tool> => {
         ...SUBAGENT_TOOL_META.parameters.properties,
         subagent_name: {
           type: "string",
-          description: `The type of specialized agent to use for this task. Available agents: ${
+          description: `このタスクに使用する専門化されたエージェントの種類。利用可能なエージェント: ${
             modelServiceState
               ? getSubagentNames(modelServiceState).join(", ")
               : ""
@@ -43,9 +44,14 @@ export const subagentTool = async (): Promise<Tool> => {
       const agent = getSubagent(modelServiceState, subagent_name);
       if (!agent) {
         throw new Error(
-          `Unknown agent type: ${subagent_name}. Available agents: ${getSubagentNames(
-            modelServiceState,
-          ).join(", ")}`,
+          t(
+            `Unknown agent type: ${subagent_name}. Available agents: ${getSubagentNames(
+              modelServiceState,
+            ).join(", ")}`,
+            `不明なエージェント種類: ${subagent_name}。利用可能なエージェント: ${getSubagentNames(
+              modelServiceState,
+            ).join(", ")}`,
+          ),
         );
       }
 
@@ -54,7 +60,10 @@ export const subagentTool = async (): Promise<Tool> => {
         preview: [
           {
             type: "text",
-            content: `Spawning ${agent.model.name} to: ${description}`,
+            content: t(
+              `Spawning ${agent.model.name} to: ${description}`,
+              `${agent.model.name} を起動します: ${description}`,
+            ),
           },
         ],
       };
@@ -63,18 +72,31 @@ export const subagentTool = async (): Promise<Tool> => {
     run: async (args: any, context?: { toolCallId: string }) => {
       const { prompt, subagent_name } = args;
 
-      logger.debug("subagent args", { args, context });
+      logger.debug(t("subagent args", "サブエージェント引数"), {
+        args,
+        context,
+      });
 
       // get agent configuration
       const agent = getSubagent(modelServiceState, subagent_name);
       if (!agent) {
-        throw new Error(`Unknown agent type: ${subagent_name}`);
+        throw new Error(
+          t(
+            `Unknown agent type: ${subagent_name}`,
+            `不明なエージェント種別: ${subagent_name}`,
+          ),
+        );
       }
 
       const chatHistoryService = services.chatHistory;
       const parentSessionId = chatHistoryService.getSessionId();
       if (!parentSessionId) {
-        throw new Error("No active session found");
+        throw new Error(
+          t(
+            "No active session found",
+            "アクティブなセッションが見つかりません",
+          ),
+        );
       }
 
       // Execute subagent with output streaming
@@ -98,12 +120,15 @@ export const subagentTool = async (): Promise<Tool> => {
           : undefined,
       });
 
-      logger.debug("subagent result", { result });
+      logger.debug(t("subagent result", "サブエージェント結果"), { result });
 
       const output = [
         result.response,
         "<task_metadata>",
-        `status: ${result.success ? "completed" : "failed"}`,
+        t(
+          `status: ${result.success ? "completed" : "failed"}`,
+          `状態: ${result.success ? "完了" : "失敗"}`,
+        ),
         "</task_metadata>",
       ]
         .filter(Boolean)

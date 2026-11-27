@@ -1,6 +1,7 @@
 import { Box, Text } from "ink";
 import React from "react";
 
+import { t } from "../../i18n.js";
 import { LoadingAnimation } from "../LoadingAnimation.js";
 import { Timer } from "../Timer.js";
 
@@ -31,7 +32,7 @@ const ActionStatus: React.FC<ActionStatusProps> = ({
       <Text color={color}>{message}</Text>
       <Text color="dim">(</Text>
       <Timer startTime={startTime} />
-      <Text color="dim">• esc to interrupt</Text>
+      <Text color="dim">{t("esc to interrupt", "esc で中断")}</Text>
       {additionalHint && <Text color="dim">• {additionalHint}</Text>}
       <Text color="dim">)</Text>
     </Box>

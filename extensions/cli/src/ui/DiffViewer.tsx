@@ -1,6 +1,8 @@
 import { Box, Text, useInput } from "ink";
 import React, { useEffect } from "react";
 
+import { t } from "../i18n.js";
+
 import { ColoredDiff } from "./ColoredDiff.js";
 
 interface DiffViewerProps {
@@ -39,7 +41,7 @@ export const DiffViewer: React.FC<DiffViewerProps> = ({
       {/* Header */}
       <Box marginBottom={1}>
         <Text color="blue" bold>
-          Git Diff (Press ESC to close)
+          {t("Git Diff (Press ESC to close)", "git diff（Esc で閉じます）")}
         </Text>
       </Box>
 
@@ -49,7 +51,7 @@ export const DiffViewer: React.FC<DiffViewerProps> = ({
           <ColoredDiff diffContent={diffContent} />
         ) : (
           <Text color="gray" italic>
-            No changes to display
+            {t("No changes to display", "表示する変更はありません")}
           </Text>
         )}
       </Box>
@@ -57,7 +59,7 @@ export const DiffViewer: React.FC<DiffViewerProps> = ({
       {/* Footer */}
       <Box marginTop={1} justifyContent="center">
         <Text color="gray" dimColor>
-          ESC to close
+          {t("ESC to close", "Esc で閉じる")}
         </Text>
       </Box>
     </Box>

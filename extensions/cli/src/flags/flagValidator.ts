@@ -3,6 +3,7 @@
  * Provides consistent validation across all commands and proper error reporting
  */
 
+import { t } from "../i18n.js";
 import { safeStderr } from "../init.js";
 
 export interface ValidationOptions {
@@ -49,7 +50,10 @@ function validateFormatFlag(options: ValidationOptions): ValidationError[] {
   if (options.format && !options.print) {
     errors.push({
       code: "FORMAT_REQUIRES_PRINT",
-      message: "Error: --format flag can only be used with -p/--print flag",
+      message: t(
+        "Error: --format flag can only be used with -p/--print flag",
+        "エラー: --format フラグは -p/--print フラグと併せてのみ使用できます",
+      ),
     });
   }
 
@@ -65,7 +69,10 @@ function validateSilentFlag(options: ValidationOptions): ValidationError[] {
   if (options.silent && !options.print) {
     errors.push({
       code: "SILENT_REQUIRES_PRINT",
-      message: "Error: --silent flag can only be used with -p/--print flag",
+      message: t(
+        "Error: --silent flag can only be used with -p/--print flag",
+        "エラー: --silent フラグは -p/--print フラグと併せてのみ使用できます",
+      ),
     });
   }
 
@@ -81,7 +88,10 @@ function validateFormatValue(options: ValidationOptions): ValidationError[] {
   if (options.format && options.format !== "json") {
     errors.push({
       code: "INVALID_FORMAT_VALUE",
-      message: "Error: --format currently only supports 'json'",
+      message: t(
+        "Error: --format currently only supports 'json'",
+        "エラー: --format は現在 'json' のみ対応しています",
+      ),
     });
   }
 
@@ -98,7 +108,10 @@ function validateModeFlags(options: ValidationOptions): ValidationError[] {
   if (options.readonly && options.auto) {
     errors.push({
       code: "CONFLICTING_MODE_FLAGS",
-      message: "Error: Cannot use both --readonly and --auto flags together",
+      message: t(
+        "Error: Cannot use both --readonly and --auto flags together",
+        "エラー: --readonly と --auto フラグを同時に使用することはできません",
+      ),
     });
   }
 
@@ -114,14 +127,20 @@ function validateSessionFlags(options: ValidationOptions): ValidationError[] {
   if (options.resume && options.fork) {
     errors.push({
       code: "CONFLICTING_SESSION_FLAGS",
-      message: "Error: Cannot use both --resume and --fork flags together",
+      message: t(
+        "Error: Cannot use both --resume and --fork flags together",
+        "エラー: --resume と --fork フラグを同時に使用することはできません",
+      ),
     });
   }
 
   if (options.fork !== undefined && (!options.fork || !options.fork.trim())) {
     errors.push({
       code: "FORK_REQUIRES_SESSION_ID",
-      message: "Error: --fork requires a session ID (e.g., --fork abc123)",
+      message: t(
+        "Error: --fork requires a session ID (e.g., --fork abc123)",
+        "エラー: --fork にはセッションIDが必要です(例: --fork abc123)",
+      ),
     });
   }
 
@@ -139,7 +158,10 @@ function validateConfigPath(options: ValidationOptions): ValidationError[] {
   if (options.config && typeof options.config !== "string") {
     errors.push({
       code: "INVALID_CONFIG_PATH",
-      message: "Error: --config must be a valid path",
+      message: t(
+        "Error: --config must be a valid path",
+        "エラー: --config は有効なパスでなければなりません",
+      ),
     });
   }
 
@@ -158,21 +180,30 @@ function validatePermissionFlags(
   if (options.allow?.some((tool) => !tool.trim())) {
     errors.push({
       code: "EMPTY_ALLOW_TOOL",
-      message: "Error: --allow requires a tool name (e.g., --allow readFile)",
+      message: t(
+        "Error: --allow requires a tool name (e.g., --allow readFile)",
+        "エラー: --allow にはツール名が必要です(例: --allow readFile)",
+      ),
     });
   }
 
   if (options.ask?.some((tool) => !tool.trim())) {
     errors.push({
       code: "EMPTY_ASK_TOOL",
-      message: "Error: --ask requires a tool name (e.g., --ask writeFile)",
+      message: t(
+        "Error: --ask requires a tool name (e.g., --ask writeFile)",
+        "エラー: --ask にはツール名が必要です(例: --ask writeFile)",
+      ),
     });
   }
 
   if (options.exclude?.some((tool) => !tool.trim())) {
     errors.push({
       code: "EMPTY_EXCLUDE_TOOL",
-      message: "Error: --exclude requires a tool name (e.g., --exclude Write)",
+      message: t(
+        "Error: --exclude requires a tool name (e.g., --exclude Write)",
+        "エラー: --exclude にはツール名が必要です(例: --exclude Write)",
+      ),
     });
   }
 
@@ -216,7 +247,12 @@ export function handleValidationErrors(errors: ValidationError[]): never {
   }
 
   if (errors.length > 1) {
-    safeStderr(`\nFound ${errors.length} validation errors.\n`);
+    safeStderr(
+      t(
+        `\nFound ${errors.length} validation errors.\n`,
+        `\n${errors.length} 件の検証エラーが見つかりました。\n`,
+      ),
+    );
   }
 
   // Use async graceful exit without awaiting (we must satisfy never)

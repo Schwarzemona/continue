@@ -3,7 +3,8 @@ import { Tool } from "../tools/types.js";
 export const SUBAGENT_TOOL_META: Tool = {
   name: "Subagent",
   displayName: "Subagent",
-  description: "Use a subagent to handle a specialized task.",
+  description:
+    "専門化されたタスクを処理するためにサブエージェントを使用します。",
   readonly: false,
   isBuiltIn: true,
   parameters: {
@@ -12,15 +13,15 @@ export const SUBAGENT_TOOL_META: Tool = {
     properties: {
       description: {
         type: "string",
-        description: "A short description of the task",
+        description: "タスクの短い説明",
       },
       prompt: {
         type: "string",
-        description: "The task for the agent to perform",
+        description: "エージェントに実行させるタスク",
       },
       subagent_name: {
         type: "string",
-        description: "The type of specialized agent to use for this task.",
+        description: "このタスクに使用する専門化されたエージェントの種類。",
       },
     },
   },

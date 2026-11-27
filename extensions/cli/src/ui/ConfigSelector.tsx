@@ -4,6 +4,7 @@ import * as path from "path";
 import React, { useEffect, useState } from "react";
 
 import { env } from "../env.js";
+import { t } from "../i18n.js";
 import { services } from "../services/index.js";
 
 import { Selector, SelectorOption } from "./Selector.js";
@@ -40,7 +41,7 @@ const ConfigSelector: React.FC<ConfigSelectorProps> = ({
         if (fs.existsSync(CONFIG_PATH)) {
           options.push({
             id: "local",
-            name: "Local config.yaml",
+            name: t("Local config.yaml", "ローカルの config.yaml"),
             type: "local",
             organizationId: null,
           });
@@ -61,7 +62,10 @@ const ConfigSelector: React.FC<ConfigSelectorProps> = ({
         setCurrentConfigId(currentId);
         setLoading(false);
       } catch (err: any) {
-        setError(err.message || "Failed to load configurations");
+        setError(
+          err.message ||
+            t("Failed to load configurations", "設定の読み込みに失敗しました"),
+        );
         setLoading(false);
       }
     };
@@ -71,12 +75,12 @@ const ConfigSelector: React.FC<ConfigSelectorProps> = ({
 
   return (
     <Selector
-      title="Select Configuration"
+      title={t("Select Configuration", "設定を選択")}
       options={configs}
       selectedIndex={selectedIndex}
       loading={loading}
       error={error}
-      loadingMessage="Loading configurations..."
+      loadingMessage={t("Loading configurations...", "設定を読み込み中...")}
       currentId={currentConfigId}
       onSelect={onSelect}
       onCancel={onCancel}

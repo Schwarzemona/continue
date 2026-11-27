@@ -197,4 +197,45 @@ describe("streamChatResponse system message validation", () => {
       }),
     ).rejects.toThrow(); // Will fail because we can't prune enough
   });
+
+  it("does not send system-role history items to the model", async () => {
+    const model = {
+      model: "test-model",
+      defaultCompletionOptions: {
+        contextLength: 1000,
+        maxTokens: 100,
+      },
+    } as ModelConfig;
+
+    const chatHistory: ChatHistoryItem[] = [
+      { message: { role: "user", content: "hello" }, contextItems: [] },
+      {
+        message: { role: "system", content: "Switched to model: X" },
+        contextItems: [],
+      },
+      { message: { role: "user", content: "again" }, contextItems: [] },
+    ];
+
+    const mockStream = {
+      [Symbol.asyncIterator]: async function* () {
+        yield { choices: [{ delta: { content: "ok" } }] };
+      },
+    };
+    mockLlmApi.chatCompletionStream = vi.fn().mockResolvedValue(mockStream);
+
+    await processStreamingResponse({
+      chatHistory,
+      model,
+      llmApi: mockLlmApi,
+      abortController,
+      systemMessage: "injected system prompt",
+    });
+
+    const sent = (mockLlmApi.chatCompletionStream as any).mock.calls[0][0];
+    expect(sent.messages.map((m: any) => [m.role, m.content])).toEqual([
+      ["system", "injected system prompt"],
+      ["user", "hello"],
+      ["user", "again"],
+    ]);
+  });
 });

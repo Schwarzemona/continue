@@ -1,5 +1,6 @@
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 
+import { t } from "../i18n.js";
 import { loadMarkdownSkills } from "../util/loadMarkdownSkills.js";
 import { logger } from "../util/logger.js";
 
@@ -9,7 +10,7 @@ export const SKILLS_TOOL_META: Tool = {
   name: "Skills",
   displayName: "Skills",
   description:
-    "Use this tool to read the content of a skill by its name. Skills contain detailed instructions for specific tasks.",
+    "このツールでスキル名を指定して内容を読み取ります。スキルには特定のタスクに関する詳細な手順が含まれています。",
   readonly: false,
   isBuiltIn: true,
   parameters: {
@@ -19,7 +20,7 @@ export const SKILLS_TOOL_META: Tool = {
       skill_name: {
         type: "string",
         description:
-          "The name of the skill to read. This should match the name from the available skills.",
+          "読み取るスキル名。利用可能なスキル一覧の名前と一致する必要があります。",
       },
     },
   },
@@ -32,7 +33,7 @@ export const skillsTool = async (): Promise<Tool> => {
   return {
     ...SKILLS_TOOL_META,
 
-    description: `Use this tool to read the content of a skill by its name. Skills contain detailed instructions for specific tasks. The skill name should match one of the available skills listed below:
+    description: `このツールでスキル名を指定して内容を読み取ります。スキルには特定のタスクに関する詳細な手順が含まれています。スキル名は以下の一覧に記載されたいずれかの名前と一致する必要があります:
 ${skills.map((skill) => `\nname: ${skill.name}\ndescription: ${skill.description}\n`)}`,
 
     preprocess: async (args: any) => {
@@ -43,7 +44,10 @@ ${skills.map((skill) => `\nname: ${skill.name}\ndescription: ${skill.description
         preview: [
           {
             type: "text",
-            content: `Reading skill: ${skill_name}`,
+            content: t(
+              `Reading skill: ${skill_name}`,
+              `スキルを読み込み中: ${skill_name}`,
+            ),
           },
         ],
       };
@@ -52,14 +56,17 @@ ${skills.map((skill) => `\nname: ${skill.name}\ndescription: ${skill.description
     run: async (args: any, context?: { toolCallId: string }) => {
       const { skill_name } = args;
 
-      logger.debug("skill args", { args, context });
+      logger.debug(t("skill args", "スキル引数"), { args, context });
 
       const skill = skills.find((s) => s.name === skill_name);
       if (!skill) {
         const availableSkills = skills.map((s) => s.name).join(", ");
         throw new ContinueError(
           ContinueErrorReason.SkillNotFound,
-          `Skill "${skill_name}" not found. Available skills: ${availableSkills || "none"}`,
+          t(
+            `Skill "${skill_name}" not found. Available skills: ${availableSkills || "none"}`,
+            `スキル "${skill_name}" が見つかりません。利用可能なスキル: ${availableSkills || "なし"}`,
+          ),
         );
       }
 
@@ -93,7 +100,7 @@ ${identifier}
 # Guidelines
 - There can be multiple skills in a single repository.
 - Use the available tools to fetch content and write files. When you are done, briefly summarize which skill you imported and where you saved it.
-- Use the "AskQuestion" tool where required to clarify with the user.
+- 必要に応じて "AskQuestion" ツールを使い、ユーザーに確認してください。
 
 # Process:
 

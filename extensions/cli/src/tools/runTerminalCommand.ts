@@ -6,6 +6,7 @@ import {
   type ToolPolicy,
 } from "@continuedev/terminal-security";
 
+import { t } from "../i18n.js";
 import { backgroundJobService } from "../services/BackgroundJobService.js";
 import { services } from "../services/index.js";
 import { telemetryService } from "../telemetry/telemetryService.js";
@@ -95,7 +96,10 @@ export function runCommandInBackground(command: string): {
   if (!job) {
     return {
       success: false,
-      error: "Cannot create background job: limit of 5 concurrent jobs reached",
+      error: t(
+        "Cannot create background job: limit of 5 concurrent jobs reached",
+        "バックグラウンドジョブを作成できません: 同時実行数の上限5個に達しました",
+      ),
     };
   }
 
@@ -105,7 +109,10 @@ export function runCommandInBackground(command: string): {
   if (!child) {
     return {
       success: false,
-      error: `Failed to start background job ${job.id}`,
+      error: t(
+        `Failed to start background job ${job.id}`,
+        `バックグラウンドジョブ ${job.id} を開始できませんでした`,
+      ),
     };
   }
 
@@ -118,11 +125,11 @@ export function runCommandInBackground(command: string): {
 export const runTerminalCommandTool: Tool = {
   name: "Bash",
   displayName: "Bash",
-  description: `Executes a terminal command and returns the output
+  description: `ターミナルコマンドを実行し、その出力を返します
 
-Commands are automatically executed from the current working directory (${process.cwd()}), so there's no need to change directories with 'cd' commands.
+コマンドは現在の作業ディレクトリ（${process.cwd()}）から自動的に実行されるため、「cd」コマンドでディレクトリを変更する必要はありません。
 
-IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed, awk, etc).
+重要: ファイルの編集には bash コマンド（sed、awk など）ではなく Edit/MultiEdit ツールを使用してください。
 `,
   parameters: {
     type: "object",
@@ -130,12 +137,12 @@ IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed
     properties: {
       command: {
         type: "string",
-        description: "The command to execute in the terminal.",
+        description: "ターミナルで実行するコマンド。",
       },
       timeout: {
         type: "number",
         description:
-          "Optional timeout in seconds (max 600). Use this parameter for commands that take longer than the default 180 second timeout.",
+          "任意のタイムアウト（秒、最大600）。既定の180秒を超えるコマンドでこのパラメータを使用してください。",
       },
     },
   },
@@ -153,7 +160,12 @@ IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed
   preprocess: async (args) => {
     const command = args.command;
     if (!command || typeof command !== "string") {
-      throw new Error("command arg is required and must be a non-empty string");
+      throw new Error(
+        t(
+          "command arg is required and must be a non-empty string",
+          "command 引数は必須であり、空でない文字列である必要があります",
+        ),
+      );
     }
     const truncatedCmd =
       command.length > 60 ? command.substring(0, 60) + "..." : command;
@@ -162,7 +174,7 @@ IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed
       preview: [
         {
           type: "text",
-          content: `Will run: ${truncatedCmd}`,
+          content: t(`Will run: ${truncatedCmd}`, `実行予定: ${truncatedCmd}`),
         },
       ],
     };
@@ -216,7 +228,10 @@ IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed
           return (
             output +
             `\n\n(Note: output limit reduced due to ${parallelCount} parallel tool calls. ` +
-            `Single-tool limit: ${baseMaxChars.toLocaleString()} characters or ${baseMaxLines.toLocaleString()} lines.)`
+            t(
+              `Single-tool limit: ${baseMaxChars.toLocaleString()} characters or ${baseMaxLines.toLocaleString()} lines.)`,
+              `1ツールあたりの上限: ${baseMaxChars.toLocaleString()} 文字または ${baseMaxLines.toLocaleString()} 行）`,
+            )
           );
         }
         return output;
@@ -256,7 +271,10 @@ IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed
           );
         } else {
           resolve(
-            `Failed to move to background (job limit reached). Command continues in foreground.\nOutput so far: ${stdout}`,
+            t(
+              `Failed to move to background (job limit reached). Command continues in foreground.\nOutput so far: ${stdout}`,
+              `バックグラウンドへ移動できませんでした（ジョブ数の上限に到達）。コマンドはフォアグラウンドで継続中です。\n現在の出力: ${stdout}`,
+            ),
           );
         }
       };
@@ -332,7 +350,12 @@ IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed
 
         // Only reject on non-zero exit code if there's also stderr
         if (code !== 0 && stderr) {
-          reject(`Error (exit code ${code}): ${stderr}`);
+          reject(
+            t(
+              `Error (exit code ${code}): ${stderr}`,
+              `エラー (終了コード ${code}): ${stderr}`,
+            ),
+          );
           return;
         }
 
@@ -368,7 +391,7 @@ IMPORTANT: To edit files, use Edit/MultiEdit tools instead of bash commands (sed
           clearTimeout(timeoutId);
         }
         backgroundSignalManager.off("backgroundRequested", moveToBackground);
-        reject(`Error: ${error.message}`);
+        reject(t(`Error: ${error.message}`, `エラー: ${error.message}`));
       });
     });
 

@@ -1,6 +1,8 @@
 import { Box, Text, useInput } from "ink";
 import React, { useState } from "react";
 
+import { t } from "../../i18n.js";
+
 interface ToolPermissionRequestProps {
   toolName: string;
   toolArgs: any;
@@ -50,24 +52,25 @@ export const ToolPermissionRequest: React.FC<ToolPermissionRequestProps> = ({
       <Box>
         <Text color="yellow">⚠ </Text>
         <Text color="yellow" bold>
-          Permission Required
+          {t("Permission Required", "権限が必要です")}
         </Text>
       </Box>
       <Box marginLeft={2}>
         <Text>
-          Tool: <Text color="cyan">{toolName}</Text>
+          {t("Tool:", "ツール:")} <Text color="cyan">{toolName}</Text>
         </Text>
       </Box>
       {formatArgs(toolArgs) && (
         <Box marginLeft={2}>
           <Text>
-            Args: <Text color="gray">{formatArgs(toolArgs)}</Text>
+            {t("Args:", "引数:")}{" "}
+            <Text color="gray">{formatArgs(toolArgs)}</Text>
           </Text>
         </Box>
       )}
       <Box marginLeft={2}>
         <Text>
-          Allow this tool call? (
+          {t("Allow this tool call?", "このツール呼び出しを許可しますか?")}(
           <Text color="green" bold>
             y
           </Text>

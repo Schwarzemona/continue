@@ -3,6 +3,7 @@ import React, { useState } from "react";
 
 import { ToolCallTitle } from "src/tools/ToolCallTitle.js";
 
+import { t } from "../../i18n.js";
 import { ToolCallPreview } from "../../tools/types.js";
 import { defaultBoxStyles } from "../styles.js";
 
@@ -36,17 +37,25 @@ interface ToolPermissionSelectorProps {
 
 const getPermissionOptions = (): PermissionOption[] => {
   return [
-    { id: "approve", name: "Continue", color: "green", approved: true },
+    {
+      id: "approve",
+      name: t("Continue", "続行"),
+      color: "green",
+      approved: true,
+    },
     {
       id: "approve_policy",
-      name: "Continue + don't ask again",
+      name: t("Continue + don't ask again", "続行 + 次回から確認しない"),
       color: "cyan",
       approved: true,
       createPolicy: true,
     },
     {
       id: "deny_stop",
-      name: "No, and tell Continue what to do differently",
+      name: t(
+        "No, and tell Continue what to do differently",
+        "拒否して、Continue に別の指示を与える",
+      ),
       color: "yellow",
       approved: false,
       stopStream: true,

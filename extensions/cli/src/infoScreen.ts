@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 
 import chalk from "chalk";
 
+import { t } from "./i18n.js";
 import { services } from "./services/index.js";
 import {
   getCurrentSession,
@@ -16,98 +17,128 @@ function getVersionInfo(): string[] {
   const cwd = process.cwd();
 
   return [
-    chalk.white("CLI Information:"),
-    `  Version: ${chalk.green(version)}`,
-    `  Working Directory: ${chalk.blue(cwd)}`,
+    chalk.white(t("CLI Information:", "CLI情報:")),
+    `  ${t("Version:", "バージョン:")} ${chalk.green(version)}`,
+    `  ${t("Working Directory:", "作業ディレクトリ:")} ${chalk.blue(cwd)}`,
   ];
 }
 
 function getConfigInfo(): string[] {
-  const lines: string[] = ["", chalk.white("Configuration:")];
+  const lines: string[] = ["", chalk.white(t("Configuration:", "設定:"))];
 
   try {
     const configState = services.config.getState();
     if (configState.config) {
-      lines.push(`  ${chalk.gray(`Using ${configState.config?.name}`)}`);
+      lines.push(
+        `  ${chalk.gray(
+          t(
+            `Using ${configState.config?.name}`,
+            `${configState.config?.name} を使用しています`,
+          ),
+        )}`,
+      );
     } else {
-      lines.push(`  ${chalk.red(`Config not found`)}`);
+      lines.push(
+        `  ${chalk.red(t("Config not found", "設定が見つかりません"))}`,
+      );
     }
     if (configState.configPath) {
-      lines.push(`  Path: ${chalk.blue(configState.configPath)}`);
+      lines.push(
+        `  ${t("Path:", "パス:")} ${chalk.blue(configState.configPath)}`,
+      );
     }
 
     // Add current model info
     try {
       const modelInfo = services.model?.getModelInfo();
       if (modelInfo) {
-        lines.push(`  Model: ${chalk.cyan(modelInfo.name)}`);
+        lines.push(`  ${t("Model:", "モデル:")} ${chalk.cyan(modelInfo.name)}`);
       } else {
-        lines.push(`  Model: ${chalk.red("Not available")}`);
+        lines.push(
+          `  ${t("Model:", "モデル:")} ${chalk.red(t("Not available", "利用不可"))}`,
+        );
       }
     } catch {
-      lines.push(`  Model: ${chalk.red("Error retrieving model info")}`);
+      lines.push(
+        `  ${t("Model:", "モデル:")} ${chalk.red(
+          t(
+            "Error retrieving model info",
+            "モデル情報の取得でエラーが発生しました",
+          ),
+        )}`,
+      );
     }
   } catch {
-    lines.push(`  ${chalk.red("Configuration service not available")}`);
+    lines.push(
+      `  ${chalk.red(t("Configuration service not available", "設定サービスが利用できません"))}`,
+    );
   }
 
   return lines;
 }
 
 function getSessionInfo(): string[] {
-  const lines: string[] = ["", chalk.white("Session:")];
+  const lines: string[] = ["", chalk.white(t("Session:", "セッション:"))];
 
   try {
     const currentSession = getCurrentSession();
     const sessionFilePath = getSessionFilePath();
     lines.push(
-      `  Title: ${chalk.green(currentSession.title)}`,
-      `  ID: ${chalk.gray(currentSession.sessionId)}`,
-      `  File: ${chalk.blue(sessionFilePath)}`,
+      `  ${t("Title:", "タイトル:")} ${chalk.green(currentSession.title)}`,
+      `  ${t("ID:", "ID:")} ${chalk.gray(currentSession.sessionId)}`,
+      `  ${t("File:", "ファイル:")} ${chalk.blue(sessionFilePath)}`,
     );
   } catch {
-    lines.push(`  ${chalk.red("Session not available")}`);
+    lines.push(
+      `  ${chalk.red(t("Session not available", "セッションが利用できません"))}`,
+    );
   }
 
   return lines;
 }
 
 function getUsageInfo(): string[] {
-  const lines: string[] = ["", chalk.white("Usage:")];
+  const lines: string[] = ["", chalk.white(t("Usage:", "使用量:"))];
 
   try {
     const usage = getSessionUsage();
     if (usage.totalCost > 0) {
       lines.push(
-        `  Total Cost: ${chalk.green(`$${usage.totalCost.toFixed(6)}`)}`,
+        `  ${t("Total Cost:", "総コスト:")} ${chalk.green(`$${usage.totalCost.toFixed(6)}`)}`,
       );
       lines.push(
-        `  Input Tokens: ${chalk.cyan(usage.promptTokens.toLocaleString())}`,
+        `  ${t("Input Tokens:", "入力トークン:")} ${chalk.cyan(usage.promptTokens.toLocaleString())}`,
       );
       lines.push(
-        `  Output Tokens: ${chalk.cyan(usage.completionTokens.toLocaleString())}`,
+        `  ${t("Output Tokens:", "出力トークン:")} ${chalk.cyan(usage.completionTokens.toLocaleString())}`,
       );
 
       if (usage.promptTokensDetails?.cachedTokens) {
         lines.push(
-          `  Cache Read Tokens: ${chalk.cyan(usage.promptTokensDetails.cachedTokens.toLocaleString())}`,
+          `  ${t("Cache Read Tokens:", "キャッシュ読み取りトークン:")} ${chalk.cyan(usage.promptTokensDetails.cachedTokens.toLocaleString())}`,
         );
       }
 
       if (usage.promptTokensDetails?.cacheWriteTokens) {
         lines.push(
-          `  Cache Write Tokens: ${chalk.cyan(usage.promptTokensDetails.cacheWriteTokens.toLocaleString())}`,
+          `  ${t("Cache Write Tokens:", "キャッシュ書き込みトークン:")} ${chalk.cyan(usage.promptTokensDetails.cacheWriteTokens.toLocaleString())}`,
         );
       }
 
       const totalTokens = usage.promptTokens + usage.completionTokens;
-      lines.push(`  Total Tokens: ${chalk.cyan(totalTokens.toLocaleString())}`);
+      lines.push(
+        `  ${t("Total Tokens:", "総トークン:")} ${chalk.cyan(totalTokens.toLocaleString())}`,
+      );
     } else {
-      lines.push(`  ${chalk.gray("No usage data yet")}`);
+      lines.push(
+        `  ${chalk.gray(t("No usage data yet", "まだ使用量データがありません"))}`,
+      );
     }
   } catch (error) {
     logger.warn("Failed to get session usage:", error);
-    lines.push(`  ${chalk.red("Usage data not available")}`);
+    lines.push(
+      `  ${chalk.red(t("Usage data not available", "使用量データが利用できません"))}`,
+    );
   }
 
   return lines;
@@ -131,10 +162,10 @@ function getDiagnosticInfo(): string[] {
 
   return [
     "",
-    chalk.white("Diagnostic Info"),
-    `  Currently running: npm-global (${chalk.green(npmVersion)})`,
-    `  Path: ${chalk.blue(nodePath)}`,
-    `  Invoked: ${chalk.blue(invokedPath)}`,
+    chalk.white(t("Diagnostic Info", "診断情報")),
+    `  ${t("Currently running:", "現在の実行:")} npm-global (${chalk.green(npmVersion)})`,
+    `  ${t("Path:", "パス:")} ${chalk.blue(nodePath)}`,
+    `  ${t("Invoked:", "起動方法:")} ${chalk.blue(invokedPath)}`,
   ];
 }
 

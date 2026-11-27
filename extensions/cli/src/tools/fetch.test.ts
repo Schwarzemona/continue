@@ -99,7 +99,7 @@ describe("fetchTool", () => {
     mockFetchUrlContentImpl.mockResolvedValue([]);
 
     await expect(fetchTool.run({ url: "https://example.com" })).rejects.toThrow(
-      "Could not fetch content from https://example.com",
+      "https://example.com からコンテンツを取得できませんでした",
     );
   });
 
@@ -136,7 +136,7 @@ describe("fetchTool", () => {
     expect(fetchTool.name).toBe("Fetch");
     expect(fetchTool.displayName).toBe("Fetch");
     expect(fetchTool.description).toBe(
-      "Fetches content from a URL, converts to markdown, and handles long content with truncation",
+      "URLからコンテンツを取得し、Markdownに変換します。長いコンテンツは切り詰めて扱います",
     );
     expect(fetchTool.readonly).toBe(true);
     expect(fetchTool.isBuiltIn).toBe(true);
@@ -146,7 +146,7 @@ describe("fetchTool", () => {
       properties: {
         url: {
           type: "string",
-          description: "The URL to fetch content from",
+          description: "コンテンツを取得するURL",
         },
       },
     });
@@ -160,7 +160,7 @@ describe("fetchTool", () => {
       preview: [
         {
           type: "text",
-          content: "Will fetch: https://example.com",
+          content: "取得予定: https://example.com",
         },
       ],
       args,

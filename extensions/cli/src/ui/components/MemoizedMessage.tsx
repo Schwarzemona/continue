@@ -4,6 +4,7 @@ import React, { memo } from "react";
 import { ToolCallTitle } from "src/tools/ToolCallTitle.js";
 
 import type { ChatHistoryItem } from "../../../../../core/index.js";
+import { t } from "../../i18n.js";
 import { MarkdownRenderer } from "../MarkdownRenderer.js";
 import { ToolResultSummary } from "../ToolResultSummary.js";
 
@@ -136,7 +137,11 @@ export const MemoizedMessage = memo<MemoizedMessageProps>(
                 {isErrored ? (
                   <Box marginLeft={2}>
                     <Text color="red">
-                      {toolState.output?.[0].content ?? "Tool execution failed"}
+                      {toolState.output?.[0].content ??
+                        t(
+                          "Tool execution failed",
+                          "ツールの実行に失敗しました",
+                        )}
                     </Text>
                   </Box>
                 ) : (

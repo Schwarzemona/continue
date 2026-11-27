@@ -9,6 +9,7 @@ import {
   getAutoCompactMessage,
   shouldAutoCompact,
 } from "../compaction.js";
+import { t } from "../i18n.js";
 import { updateSessionHistory } from "../session.js";
 import { formatError } from "../util/formatError.js";
 import { logger } from "../util/logger.js";
@@ -61,7 +62,10 @@ function handleCompactionSuccess(
 ) {
   if (isHeadless) return;
 
-  const successMessage = "Chat history auto-compacted successfully.";
+  const successMessage = t(
+    "Chat history auto-compacted successfully.",
+    "チャット履歴の自動圧縮が完了しました。",
+  );
 
   if (callbacks?.onSystemMessage) {
     callbacks.onSystemMessage(successMessage);
@@ -93,12 +97,15 @@ function handleCompactionError(
   isHeadless: boolean,
   callbacks?: AutoCompactionCallbacks,
 ) {
-  const errorMessage = `Auto-compaction error: ${formatError(error)}`;
+  const errorMessage = `${t("Auto-compaction error", "自動圧縮エラー")}: ${formatError(error)}`;
   logger.error(errorMessage);
 
   if (isHeadless) return;
 
-  const warningMessage = `Warning: ${errorMessage}. Continuing without compaction...`;
+  const warningMessage = t(
+    `Warning: ${errorMessage}. Continuing without compaction...`,
+    `警告: ${errorMessage}。圧縮を行わずに続行します...`,
+  );
 
   if (callbacks?.onSystemMessage) {
     callbacks.onSystemMessage(warningMessage);

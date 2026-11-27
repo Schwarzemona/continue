@@ -1,6 +1,6 @@
 {
   "name": "@continuedev/cli",
-  "version": "0.0.0-dev",
+  "version": "2.0.0",
   "description": "Continue CLI",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -34,14 +34,14 @@
     "semantic-release": "semantic-release",
     "semantic-release:dry-run": "semantic-release --dry-run"
   },
-  "author": "Continue Dev, Inc.",
+  "author": "Schwarzemona (forked from Continue Dev, Inc)",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/continuedev/continue.git"
+    "url": "https://github.com/Schwarzemona/continue.git"
   },
   "bugs": {
-    "url": "https://github.com/continuedev/continue/issues"
+    "url": "https://github.com/Schwarzemona/continue/issues"
   },
   "homepage": "https://continue.dev",
   "dependencies": {

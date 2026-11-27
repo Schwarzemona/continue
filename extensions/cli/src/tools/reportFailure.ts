@@ -1,5 +1,6 @@
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 
+import { t } from "../i18n.js";
 import {
   ApiRequestError,
   AuthenticationRequiredError,
@@ -26,14 +27,14 @@ export const reportFailureTool: Tool = {
   name: "ReportFailure",
   displayName: "Report Failure",
   description:
-    "Report that the task has failed due to an unrecoverable error. Include a succinct explanation for the user.",
+    "回復不可能なエラーによってタスクが失敗したことを報告します。ユーザー向けの簡潔な説明を含めてください。",
   parameters: {
     type: "object",
     required: ["errorMessage"],
     properties: {
       errorMessage: {
         type: "string",
-        description: "Explain what went wrong and why you cannot continue.",
+        description: "何が問題だったのか、継続できない理由を説明してください。",
       },
     },
   },
@@ -45,14 +46,19 @@ export const reportFailureTool: Tool = {
       if (!trimmedMessage) {
         throw new ContinueError(
           ContinueErrorReason.Unspecified,
-          "errorMessage is required to report a failure.",
+          t(
+            "errorMessage is required to report a failure.",
+            "失敗を報告するには errorMessage が必要です。",
+          ),
         );
       }
 
       const agentId = getAgentIdFromArgs();
       if (!agentId) {
-        const errorMessage =
-          "Agent ID is required. Please use the --id flag with cn serve.";
+        const errorMessage = t(
+          "Agent ID is required. Please use the --id flag with cn serve.",
+          "エージェントIDが必要です。cn serve に --id フラグを付けて指定してください。",
+        );
         logger.error(errorMessage);
         throw new ContinueError(ContinueErrorReason.Unspecified, errorMessage);
       }
@@ -75,7 +81,7 @@ export const reportFailureTool: Tool = {
       }
 
       logger.info(`Failure reported: ${trimmedMessage}`);
-      return "Failure reported to user.";
+      return t("Failure reported to user.", "失敗をユーザーに報告しました。");
     } catch (error) {
       if (error instanceof ContinueError) {
         throw error;
@@ -83,7 +89,9 @@ export const reportFailureTool: Tool = {
 
       if (error instanceof AuthenticationRequiredError) {
         logger.error(error.message);
-        throw new Error("Error: Authentication required");
+        throw new Error(
+          t("Error: Authentication required", "エラー: 認証が必要です"),
+        );
       }
 
       if (error instanceof ApiRequestError) {

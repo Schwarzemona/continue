@@ -1,5 +1,6 @@
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 
+import { t } from "../i18n.js";
 import {
   ApiRequestError,
   AuthenticationRequiredError,
@@ -25,24 +26,24 @@ function getAgentIdFromArgs(): string | undefined {
 export const statusTool: Tool = {
   name: "Status",
   displayName: "Status",
-  description: `Set the current status of your task for the user to see
+  description: `ユーザーに伝えるため、現在タスクのステータスを設定します
 
-The default available statuses are:
-- PLANNING: You are creating a plan before beginning implementation
-- WORKING: The task is in progress
-- DONE: The task is complete
-- BLOCKED: You need further information from the user in order to proceed
+既定で利用可能なステータスは次のとおりです:
+- PLANNING: 実装を開始する前に計画を立てています
+- WORKING: タスクの実施中です
+- DONE: タスクは完了しました
+- BLOCKED: 続行するためにユーザーからの追加情報が必要です
 
-However, if the user explicitly specifies in their prompt to use one or more different statuses, you can use those as well.
+ただし、ユーザーがプロンプトでそれ以外のステータスを明示的に指定した場合は、それらを使用することもできます。
 
-You should use this tool to notify the user whenever the state of your work changes. By default, the status is assumed to be "PLANNING" prior to you setting a different status.`,
+タスクの状態が変わったときは、このツールを使って必ずユーザーに通知してください。既定では、別のステータスを設定されるまで "PLANNING" とみなされます。`,
   parameters: {
     type: "object",
     required: ["status"],
     properties: {
       status: {
         type: "string",
-        description: "The status value to set",
+        description: "設定するステータス値",
       },
     },
   },
@@ -53,8 +54,10 @@ You should use this tool to notify the user whenever the state of your work chan
       // Get agent ID from --id flag
       const agentId = getAgentIdFromArgs();
       if (!agentId) {
-        const errorMessage =
-          "Agent ID is required. Please use the --id flag with cn serve.";
+        const errorMessage = t(
+          "Agent ID is required. Please use the --id flag with cn serve.",
+          "エージェントIDが必要です。cn serve に --id フラグを付けて指定してください。",
+        );
         logger.error(errorMessage);
         throw new ContinueError(ContinueErrorReason.Unspecified, errorMessage);
       }
@@ -62,7 +65,7 @@ You should use this tool to notify the user whenever the state of your work chan
       // Call the API endpoint using shared client
       await post(`agents/${agentId}/status`, { status: args.status });
 
-      logger.info(`Status: ${args.status}`);
+      logger.info(t(`Status: ${args.status}`, `ステータス: ${args.status}`));
 
       // If status is DONE or FAILED, mark agent as complete
       const normalizedStatus = args.status.toUpperCase();
@@ -70,18 +73,27 @@ You should use this tool to notify the user whenever the state of your work chan
         try {
           await updateAgentMetadata({ isComplete: true });
           logger.debug(
-            `Marked agent as complete due to status: ${args.status}`,
+            t(
+              `Marked agent as complete due to status: ${args.status}`,
+              `ステータス ${args.status} によりエージェントを完了としてマークしました`,
+            ),
           );
         } catch (metadataErr) {
           // Non-critical: log but don't fail the status update
           logger.debug(
-            "Failed to update completion metadata (non-critical)",
+            t(
+              "Failed to update completion metadata (non-critical)",
+              "完了メタデータの更新に失敗しました（致命的ではありません）",
+            ),
             metadataErr as any,
           );
         }
       }
 
-      return `Status set: ${args.status}`;
+      return t(
+        `Status set: ${args.status}`,
+        `ステータスを設定しました: ${args.status}`,
+      );
     } catch (error) {
       if (error instanceof ContinueError) {
         throw error;
@@ -89,7 +101,9 @@ You should use this tool to notify the user whenever the state of your work chan
 
       if (error instanceof AuthenticationRequiredError) {
         logger.error(error.message);
-        throw new Error("Error: Authentication required");
+        throw new Error(
+          t("Error: Authentication required", "エラー: 認証が必要です"),
+        );
       }
 
       if (error instanceof ApiRequestError) {
@@ -100,8 +114,18 @@ You should use this tool to notify the user whenever the state of your work chan
 
       const errorMessage =
         error instanceof Error ? error.message : String(error);
-      logger.error(`Error setting status: ${errorMessage}`);
-      throw new Error(`Error setting status: ${errorMessage}`);
+      logger.error(
+        t(
+          `Error setting status: ${errorMessage}`,
+          `ステータスの設定に失敗しました: ${errorMessage}`,
+        ),
+      );
+      throw new Error(
+        t(
+          `Error setting status: ${errorMessage}`,
+          `ステータスの設定に失敗しました: ${errorMessage}`,
+        ),
+      );
     }
   },
 };

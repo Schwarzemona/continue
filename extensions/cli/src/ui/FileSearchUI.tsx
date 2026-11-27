@@ -2,6 +2,7 @@ import { Box, Text, useInput } from "ink";
 import React, { useEffect, useState } from "react";
 
 import { useServices } from "../hooks/useService.js";
+import { t } from "../i18n.js";
 import {
   FileIndexServiceState,
   FileItem,
@@ -52,8 +53,25 @@ const FileSearchContainer: React.FC<{ children: React.ReactNode }> = ({
 );
 
 // Keyboard navigation shortcuts help text
-const KEYBOARD_SHORTCUTS =
-  "↑/↓ to navigate, Enter to select, Tab to complete, Ctrl+r to refresh list";
+const KEYBOARD_SHORTCUTS = t(
+  "↑/↓ to navigate, Enter to select, Tab to complete, Ctrl+r to refresh list",
+  "↑/↓ で移動、Enter で選択、Tab で補完、Ctrl+r で一覧を更新",
+);
+
+const REFRESH_HINT = t(
+  "Ctrl+r to refresh list (this may take several seconds)",
+  "Ctrl+r で一覧を更新します(数秒かかる場合があります)",
+);
+
+const NO_MATCHING_FILES = t(
+  "No matching files found",
+  "一致するファイルが見つかりません",
+);
+
+const INDEXING_ERROR = t(
+  "Error indexing files:",
+  "ファイルのインデックス作成でエラー:",
+);
 
 const FileSearchUI: React.FC<FileSearchUIProps> = ({
   filter,
@@ -112,7 +130,7 @@ const FileSearchUI: React.FC<FileSearchUIProps> = ({
       return (
         <FileSearchContainer>
           <Text color="gray" dimColor>
-            Ctrl+r to refresh list (this may take several seconds)
+            {REFRESH_HINT}
           </Text>
         </FileSearchContainer>
       );
@@ -122,7 +140,7 @@ const FileSearchUI: React.FC<FileSearchUIProps> = ({
     return (
       <FileSearchContainer>
         <Text color="red">
-          Error indexing files: {fileIndexServiceState.error}
+          {INDEXING_ERROR} {fileIndexServiceState.error}
         </Text>
       </FileSearchContainer>
     );
@@ -140,7 +158,7 @@ const FileSearchUI: React.FC<FileSearchUIProps> = ({
       return (
         <FileSearchContainer>
           <Text color="gray" dimColor>
-            No matching files found
+            {NO_MATCHING_FILES}
           </Text>
         </FileSearchContainer>
       );

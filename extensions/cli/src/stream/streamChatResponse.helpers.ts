@@ -1,7 +1,7 @@
 // Helper functions extracted from streamChatResponse.ts to reduce file size
 /* eslint-disable max-lines */
 
-import type { ToolStatus, Usage } from "core/index.js";
+import type { ChatHistoryItem, ToolStatus, Usage } from "core/index.js";
 import { calculateRequestCost } from "core/llm/utils/calculateRequestCost.js";
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 import { ChatCompletionToolMessageParam } from "openai/resources/chat/completions.mjs";
@@ -31,6 +31,17 @@ import { StreamCallbacks } from "./streamChatResponse.types.js";
 
 export interface ToolResultWithStatus extends ChatCompletionToolMessageParam {
   status: ToolStatus;
+}
+
+/**
+ * 履歴中の system 役割アイテムを除外する。
+ * システムプロンプトは別途先頭に注入されるため、モデル切替などの
+ * 通知が履歴途中に残っていると送信プロンプトの安定性が損なわれる。
+ */
+export function excludeSystemHistoryItems(
+  history: ChatHistoryItem[],
+): ChatHistoryItem[] {
+  return history.filter((item) => item.message.role !== "system");
 }
 
 // Helper function to handle permission denied

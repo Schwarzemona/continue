@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
 import { env } from "../env.js";
+import { t } from "../i18n.js";
 import { formatError } from "../util/formatError.js";
 import { getGitDiffSnapshot } from "../util/git.js";
 import { logger } from "../util/logger.js";
@@ -352,7 +353,12 @@ export class StorageSyncService {
         });
       }
 
-      throw new Error(`Storage upload failed (${statusText}): ${responseBody}`);
+      throw new Error(
+        t(
+          `Storage upload failed (${statusText}): ${responseBody}`,
+          `ストレージへのアップロードに失敗しました (${statusText}): ${responseBody}`,
+        ),
+      );
     }
   }
 

@@ -3,6 +3,7 @@ import { Box, Text } from "ink";
 import React, { useMemo } from "react";
 
 import { getDisplayableAsciiArt } from "../asciiArt.js";
+import { t } from "../i18n.js";
 import { MCPService } from "../services/MCPService.js";
 import { isModelCapable } from "../utils/modelCapability.js";
 
@@ -65,7 +66,7 @@ const IntroMessage: React.FC<IntroMessageProps> = ({
     allRules.length > 0 ? (
       <>
         <Text bold color="blue">
-          Rules:
+          {t("Rules:", "ルール:")}
         </Text>
         {allRules.map((rule, index) => (
           <Text key={index}>
@@ -80,7 +81,7 @@ const IntroMessage: React.FC<IntroMessageProps> = ({
     (config?.mcpServers?.length ?? 0) > 0 ? (
       <>
         <Text bold color="blue">
-          MCP Servers:
+          {t("MCP Servers:", "MCPサーバー:")}
         </Text>
         {config?.mcpServers?.map((server: any, index: number) => (
           <Text key={index}>
@@ -103,26 +104,29 @@ const IntroMessage: React.FC<IntroMessageProps> = ({
       {/* Organization name */}
       {organizationName && (
         <Text color="blue">
-          <Text bold>Org:</Text> <Text color="white">{organizationName}</Text>
+          <Text bold>{t("Org:", "組織:")}</Text>{" "}
+          <Text color="white">{organizationName}</Text>
         </Text>
       )}
 
       {/* Agent name */}
       {config && (
         <Text color="blue">
-          <Text bold>Config:</Text> <Text color="white">{config.name}</Text>
+          <Text bold>{t("Config:", "設定:")}</Text>{" "}
+          <Text color="white">{config.name}</Text>
         </Text>
       )}
 
       {/* Model */}
       {model ? (
         <Text color="blue">
-          <Text bold>Model:</Text>{" "}
+          <Text bold>{t("Model:", "モデル:")}</Text>{" "}
           <Text color="white">{model.name.split("/").pop()}</Text>
         </Text>
       ) : (
         <Text color="blue">
-          <Text bold>Model:</Text> <Text color="dim">Loading...</Text>
+          <Text bold>{t("Model:", "モデル:")}</Text>{" "}
+          <Text color="dim">{t("Loading...", "読み込み中...")}</Text>
         </Text>
       )}
 
