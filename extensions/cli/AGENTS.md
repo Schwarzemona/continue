@@ -1,94 +1,94 @@
 # AGENTS.md
 
-This file provides guidance to AI coding agents when working with code in this repository.
+このファイルは、このリポジトリ内のコードを扱うAIコーディングエージェントのためのガイダンスを提供します。
 
-## Development Commands
+## 開発コマンド
 
-- **Build**: `npm run build` - Compiles TypeScript to JavaScript in dist/
-- **Test**: `npm test` - Runs Vitest tests with ESM support
-- **Type Check**: `npm run lint` - Runs TypeScript compiler without emitting files for type checking
-- **Format**: `npm run format` - Runs Prettier with --write flag to check + fix formatting
-- **Start**: `npm start` - Runs the built CLI from dist/index.js
-- **Development**: After building, test locally with `node dist/index.js`
+- **ビルド**: `npm run build` - TypeScriptをJavaScriptにコンパイルし `dist/` に出力します。
+- **テスト**: `npm test` - ESMをサポートしたVitestテストを実行します。
+- **型チェック**: `npm run lint` - 型チェックのために、ファイルを出力せずにTypeScriptコンパイラを実行します。
+- **フォーマット**: `npm run format` - `--write` フラグを使用してPrettierを実行し、書式チェックと修正を行います。
+- **起動**: `npm start` - `dist/index.js` からビルドされたCLIを実行します。
+- **開発**: ビルド後、`node dist/index.js` でローカルテストが可能です。
 
-## Architecture Overview
+## アーキテクチャの概要
 
-This is a CLI tool for Continue Dev that provides an interactive AI-assisted development experience. The architecture consists of:
+これはContinue DevのためのCLIツールであり、インタラクティブなAI支援開発体験を提供します。アーキテクチャは以下の構成になっています。
 
-### Core Components
+### コアコンポーネント
 
-1. **Entry Point** (`src/index.ts`): Main CLI logic with two modes:
+1. **エントリポイント** (`src/index.ts`): 2つのモードを持つメインCLIロジック：
 
-   - **Headless mode**: Non-interactive mode for automation/CI
-   - **TUI mode**: Terminal User Interface using Ink/React
-   - **Standard mode**: Traditional readline-based chat interface
+   - **ヘッドレスモード**: 自動化やCI向けの非対話型モード
+   - **TUIモード**: Ink/Reactを使用したターミナルユーザーインターフェース
+   - **スタンダードモード**: 従来のreadlineベースのチャットインターフェース
 
-2. **Authentication** (`src/auth/`): WorkOS-based authentication system
+2. **認証** (`src/auth/`): WorkOSベースの認証システム
 
-   - `ensureAuth.ts`: Handles authentication flow
-   - `workos.ts`: WorkOS configuration and token management
+   - `ensureAuth.ts`: 認証フローを処理
+   - `workos.ts`: WorkOSの設定とトークン管理
 
-3. **Continue SDK Integration** (`src/continueSDK.ts`): Initializes the Continue SDK client with:
+3. **Continue SDK統合** (`src/continueSDK.ts`): 以下の内容でContinue SDKクライアントを初期化します：
 
-   - API key authentication
-   - Assistant configuration (slug-based)
-   - Organization support
+   - APIキー認証
+   - アシスタント設定（slugベース）
+   - オーガニゼーションのサポート
 
-4. **Terminal UI** (`src/ui/`): React/Ink-based TUI components
+4. **ターミナルUI** (`src/ui/`): React/InkベースのTUIコンポーネント
 
-   - `TUIChat.tsx`: Main chat interface component
-   - `UserInput.tsx`: Input handling with multi-line support
-   - `TextBuffer.ts`: Text display utilities
+   - `TUIChat.tsx`: メインのチャットインターフェースコンポーネント
+   - `UserInput.tsx`: マルチラインをサポートした入力処理
+   - `TextBuffer.ts`: テキスト表示ユーティリティ
 
-5. **Tools System** (`src/tools/`): Built-in development tools including:
+5. **ツールシステム** (`src/tools/`): 以下の内蔵開発ツールを含む：
 
-   - File operations (read, write, list)
-   - Code search functionality
-   - Terminal command execution
-   - Diff viewing
-   - Exit tool (headless mode only)
+   - ファイル操作（読み取り、書き込み、リスト表示）
+   - コード検索機能
+   - ターミナルコマンドの実行
+   - Diff表示
+   - 終了ツール（ヘッドレスモードのみ）
 
-6. **MCP Integration** (`src/mcp.ts`): Model Context Protocol service for extended tool capabilities
+6. **MCP統合** (`src/mcp.ts`): 拡張されたツール機能のためのModel Context Protocolサービス
 
-7. **Hooks System** (`src/hooks/`): Event interception system for extending CLI behavior
-   - `HookService.ts`: Service container integration, loads config and fires events
-   - `hookConfig.ts`: Loads hooks from settings files, merges configs from multiple sources
-   - `hookRunner.ts`: Executes hook handlers (command, HTTP) with exit code semantics
-   - `fireHook.ts`: Convenience functions for firing events from integration points
-   - `types.ts`: Claude Code-compatible type definitions for hook inputs/outputs
-   - **Config locations** (lowest to highest precedence):
-     - `~/.claude/settings.json`, `~/.continue/settings.json` (user-global)
-     - `.claude/settings.json`, `.continue/settings.json` (project)
-     - `.claude/settings.local.json`, `.continue/settings.local.json` (project-local)
-   - **Exit code semantics**: 0 = proceed, 2 = block (stderr becomes feedback), other = non-blocking error
-   - **JSON output**: Optional structured output with `hookSpecificOutput` for fine-grained control
-   - **Hook types**: `command` (shell), `http` (POST request), `prompt`/`agent` (not yet implemented)
+7. **フックシステム** (`src/hooks/`): CLIの動作を拡張するためのイベントインターセプトシステム
+   - `HookService.ts`: サービスコンテナの統合、設定のロード、イベントの実行
+   - `hookConfig.ts`: 設定ファイルからフックを読み込み、複数のソースから設定をマージ
+   - `hookRunner.ts`: 終了コードのセマンティクスを持つフックハンドラ（command, HTTP）を実行
+   - `fireHook.ts`: 統合ポイントからイベントを発火させるための便利な関数
+   - `types.ts`: フックの入出力に関するClaude Code互換の型定義
+   - **設定の場所**（優先度は低い順に）：
+     - `~/.claude/settings.json`, `~/.continue/settings.json` (ユーザーグローバル)
+     - `.claude/settings.json`, `.continue/settings.json` (プロジェクト)
+     - `.claude/settings.local.json`, `.continue/settings.local.json` (プロジェクトローカル)
+   - **終了コードのセマンティクス**: 0 = 続行, 2 = ブロック（stderrがフィードバックになる）、その他 = 非ブロッキングエラー
+   - **JSON出力**: 細かい制御のための `hookSpecificOutput` を備えたオプションの構造化出力
+   - **フックタイプ**: `command` (シェル), `http` (POSTリクエスト), `prompt`/`agent` (未実装)
 
-### Key Features
+### 主な機能
 
-- **Streaming Responses**: Real-time AI response streaming (`streamChatResponse.ts`)
-- **Slash Commands**: Built-in commands like `/help`, `/exit` (`slashCommands.ts`)
-- **Multi-mode Operation**: Supports TUI, headless, and standard chat modes
-- **Tool Integration**: Extensible tool system for development tasks
+- **ストリーミングレスポンス**: リアルタイムのAIレスポンス・ストリーミング (`streamChatResponse.ts`)
+- **スラッシュコマンド**: `/help`, `/exit` などの組み込みコマンド (`slashCommands.ts`)
+- **マルチモード動作**: TUI、ヘッドレス、スタンダードチャットモードをサポート
+- **ツール統合**: 開発タスクのための拡張可能なツールシステム
 
-### Testing Setup
+### テストセットアップ
 
-- Uses Vitest with TypeScript and ESM support
-- Configuration in `vitest.config.ts`
-- Tests should be written with `.test.ts` extension
-- No existing test files found - tests should be added when writing new functionality
-- Run tests using `npm run test path/or/pattern`
+- VitestをTypeScriptおよびESMサポートとともに使用
+- 設定は `vitest.config.ts` に記載
+- テストファイルは `.test.ts` 拡張子で作成してください
+- 既存のテストファイルは見つかりませんでした。新しい機能を追加する際にはテストを追加してください。
+- `npm run test path/or/pattern` を使用してテストを実行します。
 
-### Build System
+### ビルドシステム
 
-- TypeScript compilation with declaration files
-- ESNext target with NodeNext module resolution
-- Outputs to `dist/` directory
-- Source maps and inline sources enabled
-- JSX support for React components
-- Relative import paths require explicit file extensions, e.g. 'from "./test.js"' instead of 'from "./test"'
+- 宣言ファイル（declaration files）を伴うTypeScriptコンパイル
+- NodeNextモジュール解決を使用したESNextターゲット
+- `dist/` ディレクトリへ出力
+- ソースマップとインラインソースを有効化
+- Reactコンポーネント用のJSXサポート
+- 相対インポートパスには明示的なファイル拡張（例: 'from "./test.js"'）が必要です。
 
-### Important rules
+### 重要なルール
 
-- Whenever you create / update a test, you should run the test to be certain that it passes
-- If you ever create a PR, you should be sure to check the formatting and linting first with `npm run format` and `npm run lint` / `npm run lint:fix`.
+- テストを作成または更新する際は、必ずテストを実行してパスすることを確認してください。
+- PRを作成する場合は、必ず `npm run format` および `npm run lint` / `npm run lint:fix` で書式とリントを最初に確認してください。

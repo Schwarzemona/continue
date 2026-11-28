@@ -1,10 +1,10 @@
 # Continue CLI
 
-The Continue CLI (`cn`) is a customizable command line coding agent.
+Continue CLI (`cn`) は、カスタマイズ可能なコマンドライン型コーディングエージェントです。
 
 ![Continue CLI Demo](./media/demo.gif)
 
-## Installation
+## インストール
 
 **macOS / Linux:**
 
@@ -18,105 +18,105 @@ curl -fsSL https://raw.githubusercontent.com/continuedev/continue/main/extension
 irm https://raw.githubusercontent.com/continuedev/continue/main/extensions/cli/scripts/install.ps1 | iex
 ```
 
-Or install with npm if you have Node.js 20+:
+Node.js 20以上がインストールされている場合は、npmでもインストール可能です：
 
 ```bash
 npm i -g @continuedev/cli
 ```
 
-## Usage
+## 使い方
 
 ```bash
 cn
 ```
 
-### Headless Mode
+### ヘッドレスモード
 
-Headless mode (`-p` flag) runs without an interactive terminal UI, making it perfect for:
+ヘッドレスモード (`-p` フラグ) は対話型のターミナルUIなしで動作するため、以下に最適です：
 
-- Scripts and automation
-- CI/CD pipelines
-- Docker containers
-- VSCode/IntelliJ extension integration
-- Environments without a TTY
+- スクリプトや自動化
+- CI/CD パイプライン
+- Docker コンテナ
+- VSCode/IntelliJ 拡張機能との統合
+- TTYのない環境
 
 ```bash
-# Basic usage
-cn -p "Generate a conventional commit name for the current git changes."
+# 基本的な使用法
+cn -p "現在のgitの変更内容に基づいたconventional commit名を生成してください。"
 
-# With piped input
-echo "Review this code" | cn -p
+# パイプ入力の使用
+echo "このコードをレビューして" | cn -p
 
-# JSON output for scripting
-cn -p "Analyze the code" --format json
+# スクリプト用のJSON出力
+cn -p "コードを分析して" --format json
 
-# Silent mode (strips thinking tags)
-cn -p "Write a README" --silent
+# サイレントモード (思考タグを除去)
+cn -p "READMEを書いて" --silent
 ```
 
-**TTY-less Environments**: Headless mode is designed to work in environments without a terminal (TTY), such as when called from VSCode/IntelliJ extensions using terminal commands. The CLI will not attempt to read stdin or initialize the interactive UI when running in headless mode with a supplied prompt.
+**TTYのない環境**: ヘッドレスモードは、VSCode/IntelliJ拡張機能からターミナルコマンドを通じて呼び出される場合など、ターミナル (TTY) がない環境で動作するように設計されています。プロンプトが提供された状態でヘッドレスモードで実行される際、CLIは stdin の読み取りや対話型UIの初期化を試みません。
 
-### Session Management
+### セッション管理
 
-The CLI automatically saves your chat history for each terminal session. You can resume where you left off:
+CLIは各ターミナルセッションのチャット履歴を自動的に保存します。中断した箇所から再開できます：
 
 ```bash
-# Resume the last session in this terminal
+# このターミナルの前回のセッションを再開する
 cn --resume
 
-# List recent sessions and choose one to resume
+# 最近のセッションを一覧表示して、再開するものを選択する
 cn ls
 
-# List sessions in JSON format (for scripting)
+# セッションをJSON形式で一覧表示する (スクリプト用)
 cn ls --json
 ```
 
-## Command Line Options
+## コマンドラインオプション
 
-- `-p`: Run in headless mode (no TUI)
-- `--config <path>`: Specify agent configuration path
-- `--resume`: Resume the last session for this terminal
-- `<prompt>`: Optional prompt to start with
+- `-p`: ヘッドレスモード (TUIなし) で実行
+- `--config <path>`: エージェント設定ファイルのパスを指定
+- `--resume`: このターミナルの前回のセッションを再開
+- `<prompt>`: 開始時に使用するオプションのプロンプト
 
-## Environment Variables
+## 環境変数
 
-- `CONTINUE_CLI_DISABLE_COMMIT_SIGNATURE`: Disable adding the Continue commit signature to generated commit messages
-- `FORCE_NO_TTY`: Force TTY-less mode, prevents stdin reading (useful for testing and automation)
+- `CONTINUE_CLI_DISABLE_COMMIT_SIGNATURE`: 生成されたコミットメッセージにContinueのコミット署名を追加する機能を無効化します
+- `FORCE_NO_TTY`: TTYなしモードを強制し、stdinの読み取りを防止します (テストや自動化に有用)
 
-## Commands
+## コマンド
 
-- `cn`: Start an interactive chat session
-- `cn ls`: List recent sessions with TUI selector to choose one to resume
-- `cn login`: Authenticate with Continue
-- `cn logout`: Sign out of current session
-- `cn remote`: Launch a remote instance
-- `cn serve`: Start HTTP server mode
+- `cn`: インタラクティブなチャットセッションを開始
+- `cn ls`: 最近のセッションを一覧表示し、TUIセレクターで再開するセッションを選択
+- `cn login`: Continueに認証
+- `cn logout`: 現在のセッションからログアウト
+- `cn remote`: リモートインスタンスを起動
+- `cn serve`: HTTPサーバーモードを開始
 
-### Session Listing (`cn ls`)
+### セッション一覧 (`cn ls`)
 
-Shows recent sessions, limited by screen height to ensure it fits on your terminal.
+最近のセッションを表示します。ターミナルに収まるよう、画面の高さによって制限されます。
 
-- `--json`: Output in JSON format for scripting (always shows 10 sessions)
+- `--json`: スクリプト用にJSON形式で出力 (常に10件表示)
 
-## TTY-less Support
+## TTYレス・サポート
 
-The CLI fully supports running in environments without a TTY (terminal):
+CLIは TTY (ターミナル) がない環境での実行を全面的にサポートしています：
 
 ```bash
-# From Docker without TTY allocation
-docker run --rm my-image cn -p "Generate docs"
+# TTY割り当てなしのDockerから
+docker run --rm my-image cn -p "ドキュメントを生成して"
 
-# From CI/CD pipeline
-cn -p "Review changes" --format json
+# CI/CD パイプラインから
+cn -p "変更をレビューして" --format json
 
-# From VSCode/IntelliJ extension terminal tool
-cn -p "Analyze code" --silent
+# VSCode/IntelliJ 拡張機能のターミナルツールから
+cn -p "コードを分析して" --silent
 ```
 
-The CLI automatically detects TTY-less environments and adjusts its behavior:
+CLIはTTYがない環境を自動的に検出し、動作を調整します：
 
-- Skips stdin reading when a prompt is supplied
-- Disables interactive UI components
-- Ensures clean stdout/stderr output
+- プロンプトが提供されている場合、stdinの読み取りをスキップします
+- インタラクティブなUIコンポーネントを無効化します
+- きれいな stdout/stderr 出力を保証します
 
-For more details, see [`spec/tty-less-support.md`](./spec/tty-less-support.md).
+詳細については、[`spec/tty-less-support.md`](./spec/tty-less-support.md) を参照してください。
