@@ -17,7 +17,6 @@ import {
   ConfigServiceState,
   MCPServiceState,
   ModelServiceState,
-  UpdateServiceState,
 } from "../services/types.js";
 import { getTotalSessionCost } from "../session.js";
 import { bashToolEvents } from "../util/cli.js";
@@ -97,17 +96,8 @@ function useTUIChatServices(remoteUrl?: string) {
     model: ModelServiceState;
     mcp: MCPServiceState;
     apiClient: ApiClientServiceState;
-    update: UpdateServiceState;
     toolPermissions: ToolPermissionServiceState;
-  }>([
-    "auth",
-    "config",
-    "model",
-    "mcp",
-    "apiClient",
-    "update",
-    "toolPermissions",
-  ]);
+  }>(["auth", "config", "model", "mcp", "apiClient", "toolPermissions"]);
 
   return { services, allServicesReady, isRemoteMode };
 }
@@ -244,7 +234,6 @@ const TUIChat: React.FC<TUIChatProps> = ({
     onShowConfigSelector: () => navigateTo("config"),
     onShowModelSelector: () => navigateTo("model"),
     onShowMCPSelector: () => navigateTo("mcp"),
-    onShowUpdateSelector: () => navigateTo("update"),
     onShowSessionSelector: () => navigateTo("session"),
     onShowJobsSelector: () => navigateTo("jobs"),
     onShowExportSelector: () => navigateTo("export"),

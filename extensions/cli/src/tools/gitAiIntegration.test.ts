@@ -15,13 +15,6 @@ vi.mock("../services/index.js", () => ({
   serviceContainer: {},
 }));
 
-// Mock telemetry services
-vi.mock("../telemetry/telemetryService.js", () => ({
-  telemetryService: {
-    logToolResult: vi.fn(),
-  },
-}));
-
 // Mock logger
 vi.mock("../util/logger.js", () => ({
   logger: {

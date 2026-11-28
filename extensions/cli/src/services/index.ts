@@ -36,7 +36,6 @@ import {
   SERVICE_NAMES,
   ServiceInitOptions,
 } from "./types.js";
-import { UpdateService } from "./UpdateService.js";
 
 // Service instances
 const authService = new AuthService();
@@ -47,7 +46,6 @@ const mcpService = new MCPService();
 const fileIndexService = new FileIndexService();
 const resourceMonitoringService = new ResourceMonitoringService();
 const chatHistoryService = new ChatHistoryService();
-const updateService = new UpdateService();
 const storageSyncService = new StorageSyncService();
 const agentFileService = new AgentFileService();
 const toolPermissionService = new ToolPermissionService();
@@ -183,12 +181,6 @@ export async function initializeServices(initOptions: ServiceInitOptions = {}) {
         headless: initOptions.headless,
       }),
     [SERVICE_NAMES.TOOL_PERMISSIONS],
-  );
-
-  serviceContainer.register(
-    SERVICE_NAMES.UPDATE,
-    () => updateService.initialize(),
-    [], // No dependencies
   );
 
   serviceContainer.register(
@@ -379,7 +371,6 @@ export const services = {
   resourceMonitoring: resourceMonitoringService,
   systemMessage: systemMessageService,
   chatHistory: chatHistoryService,
-  updateService: updateService,
   storageSync: storageSyncService,
   agentFile: agentFileService,
   toolPermissions: toolPermissionService,

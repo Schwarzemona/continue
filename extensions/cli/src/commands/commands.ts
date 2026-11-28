@@ -35,11 +35,6 @@ export const SYSTEM_SLASH_COMMANDS: SystemCommand[] = [
     category: "system",
   },
   {
-    name: "update",
-    description: t("Update the Continue CLI", "Continue CLIを更新する"),
-    category: "system",
-  },
-  {
     name: "info",
     description: t("Show session information", "セッション情報を表示する"),
     category: "system",

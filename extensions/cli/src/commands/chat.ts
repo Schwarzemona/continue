@@ -26,7 +26,6 @@ import {
   updateSessionTitle,
 } from "../session.js";
 import { streamChatResponse } from "../stream/streamChatResponse.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { startTUIChat } from "../ui/index.js";
 import { gracefulExit } from "../util/exit.js";
 import { formatAnthropicError, formatError } from "../util/formatError.js";
@@ -359,9 +358,6 @@ async function processMessage(
     return handleManualCompaction(chatHistory, model, llmApi, isHeadless);
   }
 
-  // Track user prompt
-  telemetryService.logUserPrompt(userInput.length, userInput);
-
   // Check if auto-compacting is needed BEFORE adding user message
   // The handleAutoCompaction function decides whether compaction is actually needed
   const autoCompactionResult = await handleAutoCompaction(
@@ -426,7 +422,6 @@ async function processMessage(
     }
 
     // In headless mode, re-throw the error to bubble up to main error handler
-    // This preserves downstream logic like telemetry cleanup
     if (isHeadless) {
       throw error;
     }
@@ -550,12 +545,6 @@ export async function chat(prompt?: string, options: ChatOptions = {}) {
   logging.configureLogger({ headless: options.headless ?? false });
 
   try {
-    // Record session start
-    telemetryService.recordSessionStart();
-
-    // Start active time tracking
-    telemetryService.startActiveTime();
-
     // Critical routing: Explicit separation of headless and interactive modes
     if (options.headless) {
       // Headless path - no Ink, no TUI, works in TTY-less environments
@@ -629,12 +618,6 @@ export async function chat(prompt?: string, options: ChatOptions = {}) {
       logging.error(chalk.red(`Fatal error: ${formatError(err)}`));
     }
 
-    // Stop active time tracking BEFORE graceful exit
-    telemetryService.stopActiveTime();
-
     await gracefulExit(1);
-  } finally {
-    // Stop active time tracking for normal completion
-    telemetryService.stopActiveTime();
   }
 }

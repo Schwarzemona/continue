@@ -15,8 +15,7 @@ vi.mock("fs", async () => {
   };
 });
 
-// Mock telemetry service
-vi.mock("./src/telemetry/telemetryService.js"); // Mock diff module
+// Mock diff module
 vi.mock("diff", () => ({
   createTwoFilesPatch: vi.fn(),
 }));

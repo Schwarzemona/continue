@@ -4,13 +4,6 @@ import { validateMultiEdit } from "core/edit/searchAndReplace/multiEditValidatio
 import { executeMultiFindAndReplace } from "core/edit/searchAndReplace/performReplace.js";
 import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 
-import { t } from "../i18n.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
-import {
-  calculateLinesOfCodeDiff,
-  getLanguageFromFilePath,
-} from "../telemetry/utils.js";
-
 import { editTool, validateAndResolveFilePath } from "./edit.js";
 import { readFileTool } from "./readFile.js";
 import { Tool } from "./types.js";
@@ -140,24 +133,6 @@ export const multiEditTool: Tool = {
   }) => {
     try {
       fs.writeFileSync(args.file_path, args.newContent, "utf-8");
-
-      // Get lines for telemetry
-      const { added, removed } = calculateLinesOfCodeDiff(
-        args.originalContent,
-        args.newContent,
-      );
-      const language = getLanguageFromFilePath(args.file_path);
-
-      if (added > 0) {
-        telemetryService.recordLinesOfCodeModified("added", added, language);
-      }
-      if (removed > 0) {
-        telemetryService.recordLinesOfCodeModified(
-          "removed",
-          removed,
-          language,
-        );
-      }
 
       // Generate diff for result display
       const diff = generateDiff(

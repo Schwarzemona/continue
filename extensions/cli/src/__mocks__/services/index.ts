@@ -34,7 +34,6 @@ export const SERVICE_NAMES = {
   RESOURCE_MONITORING: "resourceMonitoring",
   SYSTEM_MESSAGE: "systemMessage",
   CHAT_HISTORY: "chatHistory",
-  UPDATE: "update",
   STORAGE_SYNC: "storageSync",
   AGENT_FILE: "agentFile",
   ARTIFACT_UPLOAD: "artifactUpload",

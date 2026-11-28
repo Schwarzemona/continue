@@ -1,9 +1,7 @@
 // Helper functions extracted from streamChatResponse.ts to reduce file size
-/* eslint-disable max-lines */
 
 import type { ChatHistoryItem, ToolStatus, Usage } from "core/index.js";
 import { calculateRequestCost } from "core/llm/utils/calculateRequestCost.js";
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 import { ChatCompletionToolMessageParam } from "openai/resources/chat/completions.mjs";
 
 import { ToolPermissionServiceState } from "src/services/ToolPermissionService.js";
@@ -17,7 +15,6 @@ import {
   services,
 } from "../services/index.js";
 import { trackSessionUsage } from "../session.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import {
   executeToolCall,
   getAllAvailableTools,
@@ -152,23 +149,13 @@ export async function checkToolPermissionApproval(
 export function trackFirstTokenTime(
   firstTokenTime: number | null,
   chunk: any,
-  requestStartTime: number,
-  model: any,
-  tools?: any[],
 ): number | null {
   if (
     firstTokenTime === null &&
     chunk.choices?.[0]?.delta &&
     (chunk.choices[0].delta.content || chunk.choices[0].delta.tool_calls)
   ) {
-    const tokenTime = Date.now();
-    telemetryService.recordResponseTime(
-      tokenTime - requestStartTime,
-      model.model,
-      "time_to_first_token",
-      (tools?.length || 0) > 0,
-    );
-    return tokenTime;
+    return Date.now();
   }
   return firstTokenTime;
 }
@@ -280,26 +267,14 @@ function calculateFallbackCost(
   return (inputTokens * 1 + outputTokens * 2) / 1_000_000;
 }
 
-// Helper function to record telemetry
-export function recordStreamTelemetry(options: {
-  requestStartTime: number;
-  responseEndTime: number;
+// Helper function to calculate the cost of a streamed response
+export function calculateStreamCost(options: {
   inputTokens: number;
   outputTokens: number;
   model: any;
-  tools?: any[];
   fullUsage?: any;
 }): number {
-  const {
-    requestStartTime,
-    responseEndTime,
-    inputTokens,
-    outputTokens,
-    model,
-    tools,
-    fullUsage,
-  } = options;
-  const totalDuration = responseEndTime - requestStartTime;
+  const { inputTokens, outputTokens, model, fullUsage } = options;
 
   // Calculate cost using comprehensive pricing that includes caching
   let cost: number;
@@ -339,47 +314,7 @@ export function recordStreamTelemetry(options: {
     cost = calculateFallbackCost(inputTokens, outputTokens);
   }
 
-  // Use tokens from fullUsage if available, otherwise use the passed params
-  const actualInputTokens = fullUsage?.prompt_tokens ?? inputTokens;
-  const actualOutputTokens = fullUsage?.completion_tokens ?? outputTokens;
-
-  telemetryService.recordTokenUsage(actualInputTokens, "input", model.model);
-  telemetryService.recordTokenUsage(actualOutputTokens, "output", model.model);
-
-  // Record cache tokens if available
-  if (fullUsage?.prompt_tokens_details?.cache_read_tokens) {
-    telemetryService.recordTokenUsage(
-      fullUsage.prompt_tokens_details.cache_read_tokens,
-      "cacheRead",
-      model.model,
-    );
-  }
-  if (fullUsage?.prompt_tokens_details?.cache_write_tokens) {
-    telemetryService.recordTokenUsage(
-      fullUsage.prompt_tokens_details.cache_write_tokens,
-      "cacheCreation",
-      model.model,
-    );
-  }
-
-  telemetryService.recordCost(cost, model.model);
   trackSessionUsage(cost, usage);
-
-  telemetryService.recordResponseTime(
-    totalDuration,
-    model.model,
-    "total_response_time",
-    (tools?.length || 0) > 0,
-  );
-
-  telemetryService.logApiRequest({
-    model: model.model,
-    durationMs: totalDuration,
-    success: true,
-    inputTokens: actualInputTokens,
-    outputTokens: actualOutputTokens,
-    costUsd: cost,
-  });
 
   return cost;
 }
@@ -405,7 +340,6 @@ export async function preprocessStreamedToolCalls(
 
   // Process each tool call
   for (const toolCall of toolCalls) {
-    const startTime = Date.now();
     try {
       const availableTools: Tool[] = await getAllAvailableTools(isHeadless);
       const tool = availableTools.find((t) => t.name === toolCall.name);
@@ -434,11 +368,6 @@ export async function preprocessStreamedToolCalls(
       // Notify the UI about the tool start, even though it failed
       callbacks?.onToolStart?.(toolCall.name, toolCall.arguments);
 
-      const errorReason =
-        error instanceof ContinueError
-          ? error.reason
-          : ContinueErrorReason.Unknown;
-
       const errorMessage =
         error instanceof Error ? error.message : String(error);
 
@@ -447,15 +376,6 @@ export async function preprocessStreamedToolCalls(
         error: errorMessage,
       });
 
-      const duration = Date.now() - startTime;
-      telemetryService.logToolResult({
-        toolName: toolCall.name,
-        success: false,
-        durationMs: duration,
-        error: errorMessage,
-        errorReason,
-        // modelName, TODO
-      });
       // Add error to chat history
       errorChatEntries.push({
         role: "tool",

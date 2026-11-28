@@ -11,7 +11,6 @@ import type {
 import { pruneLastMessage } from "../compaction.js";
 import { t } from "../i18n.js";
 import { services } from "../services/index.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { applyChatCompletionToolOverrides } from "../tools/applyToolOverrides.js";
 import { ToolCall } from "../tools/index.js";
 import {
@@ -29,10 +28,10 @@ import {
   handlePreApiCompaction,
 } from "./streamChatResponse.compactionHelpers.js";
 import {
+  calculateStreamCost,
   excludeSystemHistoryItems,
   processChunkContent,
   processToolCallDelta,
-  recordStreamTelemetry,
   trackFirstTokenTime,
 } from "./streamChatResponse.helpers.js";
 import {
@@ -317,13 +316,7 @@ export async function processStreamingResponse(
       }
 
       // Track first token time
-      firstTokenTime = trackFirstTokenTime(
-        firstTokenTime,
-        chunk,
-        requestStartTime,
-        model,
-        tools,
-      );
+      firstTokenTime = trackFirstTokenTime(firstTokenTime, chunk);
 
       const result = processChunk({
         chunk,
@@ -338,13 +331,10 @@ export async function processStreamingResponse(
     }
 
     const responseEndTime = Date.now();
-    const cost = recordStreamTelemetry({
-      requestStartTime,
-      responseEndTime,
+    const cost = calculateStreamCost({
       inputTokens,
       outputTokens,
       model,
-      tools,
       fullUsage,
     });
     const totalDuration = responseEndTime - requestStartTime;
@@ -367,16 +357,6 @@ export async function processStreamingResponse(
       duration: totalDuration,
     });
   } catch (error: any) {
-    const errorDuration = Date.now() - requestStartTime;
-
-    // Log failed API request
-    telemetryService.logApiRequest({
-      model: model.model,
-      durationMs: errorDuration,
-      success: false,
-      error: error.message || String(error),
-    });
-
     if (error.name === "AbortError" || abortController?.signal.aborted) {
       logger.debug("Stream aborted by user");
       return {

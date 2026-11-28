@@ -1,7 +1,5 @@
 import React from "react";
 
-import { UpdateServiceState } from "src/services/types.js";
-
 import type { ChatHistoryItem } from "../../../../../core/index.js";
 import { ConfigSelector } from "../ConfigSelector.js";
 import type { NavigationScreen } from "../context/NavigationContext.js";
@@ -15,7 +13,6 @@ import { JobsSelector } from "../JobsSelector.js";
 import { MCPSelector } from "../MCPSelector.js";
 import { ModelSelector } from "../ModelSelector.js";
 import type { ConfigOption, ModelOption } from "../types/selectorTypes.js";
-import { UpdateSelector } from "../UpdateSelector.js";
 
 import { ChatScreenContent } from "./ChatScreenContent.js";
 import { SessionSelectorWithLoading } from "./SessionSelectorWithLoading.js";
@@ -54,14 +51,6 @@ interface ScreenContentProps {
   onShowEditSelector?: () => void;
 }
 
-function hideScreenContent(state?: UpdateServiceState) {
-  return (
-    (state?.status === "checking" && state?.autoUpdate) ||
-    (state?.isAutoUpdate &&
-      (state?.status === "updating" || state?.status === "updated"))
-  );
-}
-
 export const ScreenContent: React.FC<ScreenContentProps> = ({
   isScreenActive,
   services,
@@ -90,10 +79,6 @@ export const ScreenContent: React.FC<ScreenContentProps> = ({
   handleEditMessage,
   onShowEditSelector,
 }) => {
-  if (hideScreenContent(services.update)) {
-    return null;
-  }
-
   // Config selector
   if (isScreenActive("config")) {
     return (
@@ -106,10 +91,6 @@ export const ScreenContent: React.FC<ScreenContentProps> = ({
 
   if (isScreenActive("mcp")) {
     return <MCPSelector onCancel={closeCurrentScreen} />;
-  }
-
-  if (isScreenActive("update")) {
-    return <UpdateSelector onCancel={closeCurrentScreen} />;
   }
 
   // Model selector

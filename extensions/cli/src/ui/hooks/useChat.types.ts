@@ -16,7 +16,6 @@ export interface UseChatProps {
   additionalPrompts?: string[];
   onShowConfigSelector: () => void;
   onShowMCPSelector: () => void;
-  onShowUpdateSelector: () => void;
   onShowModelSelector?: () => void;
   onShowSessionSelector?: () => void;
   onShowJobsSelector?: () => void;
@@ -66,7 +65,6 @@ export interface SlashCommandResult {
   openConfigSelector?: boolean;
   openModelSelector?: boolean;
   openMcpSelector?: boolean;
-  openUpdateSelector?: boolean;
   openSessionSelector?: boolean;
   openJobsSelector?: boolean;
   openExportSelector?: boolean;

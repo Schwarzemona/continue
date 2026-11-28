@@ -9,11 +9,6 @@ import {
 import { t } from "../i18n.js";
 import { backgroundJobService } from "../services/BackgroundJobService.js";
 import { services } from "../services/index.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
-import {
-  isGitCommitCommand,
-  isPullRequestCommand,
-} from "../telemetry/utils.js";
 import { backgroundSignalManager } from "../util/backgroundSignalManager.js";
 import { emitBashToolEnded, emitBashToolStarted } from "../util/cli.js";
 import {
@@ -357,15 +352,6 @@ export const runTerminalCommandTool: Tool = {
             ),
           );
           return;
-        }
-
-        // Track specific git operations only after successful execution
-        if (code === 0) {
-          if (isGitCommitCommand(command)) {
-            telemetryService.recordCommitCreated();
-          } else if (isPullRequestCommand(command)) {
-            telemetryService.recordPullRequestCreated();
-          }
         }
 
         let output = stdout;

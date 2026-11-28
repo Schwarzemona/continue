@@ -37,7 +37,7 @@ If we are inundated then we should build a system to solve that. For example, if
 
 ### Start with a spec
 
-High level concepts / features should have a spec when possible. Good examples of this are [modes](./modes.md), [permissions](./permissions.md), [OTLP metrics](./otlp-metrics.md), and [wire format](./wire-format.md). Like code, the spec can and should be largely auto-generated.
+High level concepts / features should have a spec when possible. Good examples of this are [modes](./modes.md), [permissions](./permissions.md), and [wire format](./wire-format.md). Like code, the spec can and should be largely auto-generated.
 
 ## Codebase Design
 

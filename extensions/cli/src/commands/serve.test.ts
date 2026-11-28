@@ -31,15 +31,6 @@ vi.mock("../systemMessage.js", () => ({
   constructSystemMessage: vi.fn(() => Promise.resolve("System message")),
 }));
 
-vi.mock("../telemetry/telemetryService.js", () => ({
-  default: {
-    recordSessionStart: vi.fn(),
-    startActiveTime: vi.fn(),
-    stopActiveTime: vi.fn(),
-    updateOrganization: vi.fn(),
-  },
-}));
-
 vi.mock("chalk", () => ({
   default: {
     green: (str: string) => str,

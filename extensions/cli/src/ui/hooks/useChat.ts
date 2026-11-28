@@ -14,7 +14,6 @@ import {
 } from "../../session.js";
 import { handleSlashCommands } from "../../slashCommands.js";
 import { messageQueue, QueuedMessage } from "../../stream/messageQueue.js";
-import { telemetryService } from "../../telemetry/telemetryService.js";
 import { formatError } from "../../util/formatError.js";
 import { logger } from "../../util/logger.js";
 
@@ -27,7 +26,6 @@ import {
   handleSpecialCommands,
   initChatHistory,
   processSlashCommandResult,
-  trackUserMessage,
 } from "./useChat.helpers.js";
 import {
   handleRemoteMessage,
@@ -56,7 +54,6 @@ export function useChat({
   additionalPrompts,
   onShowConfigSelector,
   onShowModelSelector,
-  onShowUpdateSelector,
   onShowMCPSelector,
   onShowSessionSelector,
   onShowJobsSelector,
@@ -352,9 +349,6 @@ export function useChat({
         },
       ]);
     } finally {
-      // Stop active time tracking
-      telemetryService.stopActiveTime();
-
       setAbortController(null);
       setIsWaitingForResponse(false);
       setResponseStartTime(null);
@@ -449,7 +443,6 @@ export function useChat({
       onShowMCPSelector,
       onShowSessionSelector,
       onShowJobsSelector,
-      onShowUpdateSelector,
       onShowExportSelector,
       onClear,
     });
@@ -510,9 +503,6 @@ export function useChat({
       return; // Command was handled and no further processing needed
     }
     message = processedMessage;
-
-    // Track telemetry
-    trackUserMessage(message, model);
 
     // In remote mode, send message to server instead of processing locally
     if (isRemoteMode && remoteUrl) {

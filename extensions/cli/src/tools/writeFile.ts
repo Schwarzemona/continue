@@ -5,11 +5,6 @@ import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 import { createTwoFilesPatch } from "diff";
 
 import { t } from "../i18n.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
-import {
-  calculateLinesOfCodeDiff,
-  getLanguageFromFilePath,
-} from "../telemetry/utils.js";
 
 import { Tool, ToolCallPreview } from "./types.js";
 
@@ -141,25 +136,7 @@ export const writeFileTool: Tool = {
       // Write new content
       fs.writeFileSync(args.filepath, args.content, "utf-8");
 
-      // Track lines of code changes if file existed before
       if (oldContent) {
-        const { added, removed } = calculateLinesOfCodeDiff(
-          oldContent,
-          args.content,
-        );
-        const language = getLanguageFromFilePath(args.filepath);
-
-        if (added > 0) {
-          telemetryService.recordLinesOfCodeModified("added", added, language);
-        }
-        if (removed > 0) {
-          telemetryService.recordLinesOfCodeModified(
-            "removed",
-            removed,
-            language,
-          );
-        }
-
         // Generate diff for result display
         const diff = generateDiff(oldContent, args.content, args.filepath);
 
@@ -168,16 +145,6 @@ export const writeFileTool: Tool = {
           `ファイルに書き込みました: ${args.filepath}\nDiff:\n${diff}`,
         );
       } else {
-        // New file creation - count all lines as added
-        const lineCount = args.content.split("\n").length;
-        const language = getLanguageFromFilePath(args.filepath);
-
-        telemetryService.recordLinesOfCodeModified(
-          "added",
-          lineCount,
-          language,
-        );
-
         return t(
           `Successfully created file: ${args.filepath}`,
           `ファイルを正常に作成しました: ${args.filepath}`,

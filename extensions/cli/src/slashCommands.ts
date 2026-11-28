@@ -11,7 +11,6 @@ import { handleInit } from "./commands/init.js";
 import { t } from "./i18n.js";
 import { handleInfoSlashCommand } from "./infoScreen.js";
 import { getCurrentSession, updateSessionTitle } from "./session.js";
-import { telemetryService } from "./telemetry/telemetryService.js";
 import { buildImportSkillPrompt } from "./tools/skills.js";
 import { SlashCommandResult } from "./ui/hooks/useChat.types.js";
 import {
@@ -321,9 +320,6 @@ const commandHandlers: Record<string, CommandHandler> = {
   init: (args, assistant) => {
     return handleInit(args, assistant);
   },
-  update: () => {
-    return { openUpdateSelector: true };
-  },
   jobs: handleJobs,
   skills: () => handleSkills(),
   "import-skill": (args) => handleImportSkill(args),
@@ -342,8 +338,6 @@ export async function handleSlashCommands(
   }
 
   const [command, ...args] = input.slice(1).split(" ");
-
-  telemetryService.recordSlashCommand(command);
 
   const handler = commandHandlers[command];
   if (handler) {

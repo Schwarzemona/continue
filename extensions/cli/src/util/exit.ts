@@ -2,7 +2,6 @@ import type { ChatHistoryItem } from "core/index.js";
 
 import { backgroundJobService } from "../services/BackgroundJobService.js";
 import { getSessionUsage } from "../session.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 
 import { hadUnhandledError } from "./errorState.js";
 import { getGitDiffSnapshot } from "./git.js";
@@ -183,8 +182,8 @@ function displaySessionUsage(): void {
 }
 
 /**
- * Exit the process after flushing telemetry and error reporting.
- * Use this instead of process.exit() to avoid losing metrics/logs.
+ * Exit the process after flushing error reporting.
+ * Use this instead of process.exit() to avoid losing logs.
  *
  * If any unhandled errors occurred during execution and the requested
  * exit code is 0 (success), this will exit with code 1 instead to
@@ -202,13 +201,6 @@ export async function gracefulExit(code: number = 0): Promise<void> {
     }
   } catch (err) {
     logger.debug("Background job cleanup error (ignored)", err as any);
-  }
-
-  try {
-    // Flush metrics (forceFlush + shutdown inside service)
-    await telemetryService.shutdown();
-  } catch (err) {
-    logger.debug("Telemetry shutdown error (ignored)", err as any);
   }
 
   // If we're trying to exit with success (0) but had unhandled errors,

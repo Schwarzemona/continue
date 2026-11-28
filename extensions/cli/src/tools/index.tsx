@@ -1,5 +1,4 @@
 // @ts-ignore
-import { ContinueError, ContinueErrorReason } from "core/util/errors.js";
 import { ChatCompletionTool } from "openai/resources.mjs";
 
 import { isModelCapable } from "src/utils/modelCapability.js";
@@ -14,7 +13,6 @@ import type {
   MCPTool,
   ModelServiceState,
 } from "../services/types.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { logger } from "../util/logger.js";
 
 import { ALL_BUILT_IN_TOOLS } from "./allBuiltIns.js";
@@ -215,64 +213,36 @@ export async function executeToolCall(
   toolCall: PreprocessedToolCall,
   options: { parallelToolCallCount: number } = { parallelToolCallCount: 1 },
 ): Promise<string> {
-  const startTime = Date.now();
+  logger.debug("Executing tool", {
+    toolName: toolCall.name,
+    arguments: toolCall.arguments,
+    parallelToolCallCount: options.parallelToolCallCount,
+  });
 
-  try {
-    logger.debug("Executing tool", {
-      toolName: toolCall.name,
-      arguments: toolCall.arguments,
-      parallelToolCallCount: options.parallelToolCallCount,
-    });
+  // Track edits if Git AI is enabled (no-op if not enabled)
+  await services.gitAiIntegration.trackToolUse(toolCall, "PreToolUse");
 
-    // Track edits if Git AI is enabled (no-op if not enabled)
-    await services.gitAiIntegration.trackToolUse(toolCall, "PreToolUse");
+  const context: ToolRunContext = {
+    toolCallId: toolCall.id,
+    parallelToolCallCount: options.parallelToolCallCount,
+  };
 
-    const context: ToolRunContext = {
-      toolCallId: toolCall.id,
-      parallelToolCallCount: options.parallelToolCallCount,
-    };
+  // IMPORTANT: if preprocessed args are present, uses preprocessed args instead of original args
+  // Preprocessed arg names may be different
+  const result = await toolCall.tool.run(
+    toolCall.preprocessResult?.args ?? toolCall.arguments,
+    context,
+  );
 
-    // IMPORTANT: if preprocessed args are present, uses preprocessed args instead of original args
-    // Preprocessed arg names may be different
-    const result = await toolCall.tool.run(
-      toolCall.preprocessResult?.args ?? toolCall.arguments,
-      context,
-    );
-    const duration = Date.now() - startTime;
+  // Track edits if Git AI is enabled (no-op if not enabled)
+  await services.gitAiIntegration.trackToolUse(toolCall, "PostToolUse");
 
-    // Track edits if Git AI is enabled (no-op if not enabled)
-    await services.gitAiIntegration.trackToolUse(toolCall, "PostToolUse");
+  logger.debug("Tool execution completed", {
+    toolName: toolCall.name,
+    resultLength: result?.length || 0,
+  });
 
-    telemetryService.logToolResult({
-      toolName: toolCall.name,
-      success: true,
-      durationMs: duration,
-      toolParameters: JSON.stringify(toolCall.arguments),
-    });
-    logger.debug("Tool execution completed", {
-      toolName: toolCall.name,
-      resultLength: result?.length || 0,
-    });
-
-    return result;
-  } catch (error) {
-    const duration = Date.now() - startTime;
-    const errorMessage = error instanceof Error ? error.message : String(error);
-    const errorReason =
-      error instanceof ContinueError
-        ? error.reason
-        : ContinueErrorReason.Unknown;
-
-    telemetryService.logToolResult({
-      toolName: toolCall.name,
-      success: false,
-      durationMs: duration,
-      error: errorMessage,
-      errorReason,
-      toolParameters: JSON.stringify(toolCall.arguments),
-    });
-    throw error;
-  }
+  return result;
 }
 
 // Only checks top-level required

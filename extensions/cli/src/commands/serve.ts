@@ -27,7 +27,6 @@ import {
 } from "../session.js";
 import { messageQueue } from "../stream/messageQueue.js";
 import { constructSystemMessage } from "../systemMessage.js";
-import { telemetryService } from "../telemetry/telemetryService.js";
 import { reportFailureTool } from "../tools/reportFailure.js";
 import { gracefulExit, updateAgentMetadata } from "../util/exit.js";
 import { formatError } from "../util/formatError.js";
@@ -70,7 +69,6 @@ export function shouldQueueInitialPrompt(
   return !hasConversation;
 }
 
-// eslint-disable-next-line max-statements
 export async function serve(prompt?: string, options: ServeOptions = {}) {
   // Set agent ID for error reporting if provided
   setAgentId(options.id);
@@ -203,10 +201,6 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
       storageSyncActive = false;
     }
   };
-
-  // Record session start
-  telemetryService.recordSessionStart();
-  telemetryService.startActiveTime();
 
   const app = express();
   app.use(express.json());
@@ -366,8 +360,6 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
     // Give a moment for the response to be sent
     const handleExitResponse = async () => {
       server.close(async () => {
-        telemetryService.stopActiveTime();
-
         // Update metadata one final time before exiting (with completion flag)
         try {
           const history = services.chatHistory?.getHistory();
@@ -554,8 +546,6 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
       state.serverRunning = false;
       stopStorageSync();
       server.close(async () => {
-        telemetryService.stopActiveTime();
-
         // Update metadata one final time before exiting (with completion flag)
         try {
           const history = services.chatHistory?.getHistory();
@@ -586,8 +576,6 @@ export async function serve(prompt?: string, options: ServeOptions = {}) {
       inactivityChecker = null;
     }
     server.close(async () => {
-      telemetryService.stopActiveTime();
-
       // Update metadata one final time before exiting (with completion flag)
       try {
         const history = services.chatHistory?.getHistory();

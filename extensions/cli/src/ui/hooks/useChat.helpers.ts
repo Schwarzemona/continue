@@ -8,7 +8,6 @@ import { logger } from "src/util/logger.js";
 
 import { DEFAULT_SESSION_TITLE } from "../../constants/session.js";
 import { loadSession, startNewSession } from "../../session.js";
-import { telemetryService } from "../../telemetry/telemetryService.js";
 
 import { processImagePlaceholder } from "./useChat.imageProcessing.js";
 import { SlashCommandResult } from "./useChat.types.js";
@@ -44,7 +43,6 @@ interface ProcessSlashCommandResultOptions {
   setChatHistory: React.Dispatch<React.SetStateAction<ChatHistoryItem[]>>;
   onShowConfigSelector: () => void;
   onShowModelSelector?: () => void;
-  onShowUpdateSelector?: () => void;
   onShowMCPSelector?: () => void;
   onShowSessionSelector?: () => void;
   onShowJobsSelector?: () => void;
@@ -60,7 +58,6 @@ export function processSlashCommandResult({
   chatHistory,
   setChatHistory,
   onShowConfigSelector,
-  onShowUpdateSelector,
   onShowModelSelector,
   onShowMCPSelector,
   onShowSessionSelector,
@@ -74,11 +71,6 @@ export function processSlashCommandResult({
 
   if (result.openMcpSelector) {
     onShowMCPSelector?.();
-    return null;
-  }
-
-  if (result.openUpdateSelector) {
-    onShowUpdateSelector?.();
     return null;
   }
 
@@ -228,14 +220,6 @@ export async function formatMessageWithFiles(
     },
     contextItems,
   };
-}
-
-/**
- * Track telemetry for user message
- */
-export function trackUserMessage(message: string, _model?: any): void {
-  telemetryService.startActiveTime();
-  telemetryService.logUserPrompt(message.length, message);
 }
 
 interface HandleSpecialCommandsOptions {

@@ -8,8 +8,6 @@ import * as versionModule from "./version.js";
 // Mock all dependencies
 vi.mock("./version.js", () => ({
   getVersion: vi.fn(() => "1.2.3"),
-  getLatestVersion: vi.fn(() => Promise.resolve(null)),
-  compareVersions: vi.fn(() => "same"),
 }));
 vi.mock("./session.js");
 

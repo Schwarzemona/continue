@@ -25,15 +25,6 @@ vi.mock("../util/tokenizer.js", () => ({
   validateContextLength: vi.fn(() => ({ isValid: true })),
 }));
 
-vi.mock("../telemetry/telemetryService.js", () => ({
-  telemetryService: {
-    logApiRequest: vi.fn(),
-    recordResponseTime: vi.fn(),
-    recordTokenUsage: vi.fn(),
-    recordCost: vi.fn(),
-  },
-}));
-
 vi.mock("../util/logger.js", () => ({
   logger: {
     info: vi.fn(),

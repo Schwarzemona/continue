@@ -5,7 +5,6 @@ import { t } from "../../i18n.js";
 import { setExitMessageCallback, shouldShowExitMessage } from "../../index.js";
 import type { PermissionMode } from "../../permissions/types.js";
 import type { NavigationScreen } from "../context/NavigationContext.js";
-import { UpdateNotification } from "../UpdateNotification.js";
 
 import { ContextPercentageDisplay } from "./ContextPercentageDisplay.js";
 import { ModeIndicator } from "./ModeIndicator.js";
@@ -93,7 +92,11 @@ export const BottomStatusBar: React.FC<BottomStatusBarProps> = ({
         )}
       </Box>
       <Box marginRight={2} marginLeft={2}>
-        <UpdateNotification isRemoteMode={isRemoteMode} />
+        {isRemoteMode ? (
+          <Text color="cyan">{`◉ ${t("Remote Mode", "リモートモード")}`}</Text>
+        ) : (
+          <Text color="dim">{"◉ Continue CLI"}</Text>
+        )}
       </Box>
     </Box>
   );
