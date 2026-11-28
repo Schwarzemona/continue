@@ -8,5 +8,6 @@ describe("Process SIGINT handling functions", () => {
     expect(typeof indexModule.shouldShowExitMessage).toBe("function");
     expect(typeof indexModule.setExitMessageCallback).toBe("function");
     expect(typeof indexModule.setTUIUnmount).toBe("function");
-  });
+    // Dynamic import of the whole CLI is slow under full-suite parallel load
+  }, 120_000);
 });

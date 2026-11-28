@@ -138,5 +138,7 @@ describe("serve command", () => {
     // Clean up spies
     initializeServicesSpy.mockRestore();
     getServiceSpy.mockRestore();
-  });
+    // Importing serve() pulls in the whole core dependency tree, which is
+    // slow under full-suite parallel load.
+  }, 120_000);
 });

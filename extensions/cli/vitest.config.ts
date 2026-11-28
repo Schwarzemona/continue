@@ -5,6 +5,12 @@ export default defineConfig({
   test: {
     globals: true,
     environment: "node",
+    // Chalk/ink detect color support from the actual TTY, so assertions that
+    // compare plain strings pass in CI but fail when run in a color terminal.
+    // Pin color level for deterministic output everywhere.
+    env: {
+      FORCE_COLOR: "0",
+    },
     setupFiles: ["./vitest.global-dir-setup.ts", "./vitest.setup.ts"],
     exclude: ["**/node_modules/**", "**/dist/**", "**/*.e2e.*", "**/e2e/**"],
     coverage: {

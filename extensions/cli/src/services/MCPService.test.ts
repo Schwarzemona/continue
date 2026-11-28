@@ -14,25 +14,31 @@ const mockClient = {
 };
 
 vi.mock("@modelcontextprotocol/sdk/client/index.js", () => ({
-  Client: vi.fn(() => mockClient),
+  Client: vi.fn(function (this: any) {
+    return mockClient;
+  }),
 }));
 
+// Transport classes are instantiated with `new`, so the mocks must be real
+// constructors (vitest >= 3 throws otherwise).
 vi.mock("@modelcontextprotocol/sdk/client/stdio.js", () => ({
-  StdioClientTransport: vi.fn(),
+  StdioClientTransport: vi.fn(function (this: any) {
+    this.stderr = undefined;
+  }),
 }));
 
 vi.mock("@modelcontextprotocol/sdk/client/sse.js", () => ({
-  SSEClientTransport: vi.fn(),
+  SSEClientTransport: vi.fn(function (this: any) {}),
 }));
 
 vi.mock("@modelcontextprotocol/sdk/client/streamableHttp.js", () => ({
-  StreamableHTTPClientTransport: vi.fn(),
+  StreamableHTTPClientTransport: vi.fn(function (this: any) {}),
 }));
 
 vi.mock("https", () => ({
-  Agent: vi.fn().mockImplementation(() => ({
-    rejectUnauthorized: false,
-  })),
+  Agent: vi.fn(function (this: any) {
+    this.rejectUnauthorized = false;
+  }),
 }));
 
 describe("MCPService", () => {
@@ -97,6 +103,11 @@ describe("MCPService", () => {
     });
 
     it("should get overall status", async () => {
+      // Connections start in the background, so wait for the final status
+      // before asserting.
+      await vi.waitFor(() => {
+        expect(mcpService.getOverallStatus().status).toBe("connected");
+      });
       const firstStatus = mcpService.getOverallStatus();
       expect(firstStatus.status).toBe("connected");
       expect(firstStatus.hasWarnings).toBe(false);

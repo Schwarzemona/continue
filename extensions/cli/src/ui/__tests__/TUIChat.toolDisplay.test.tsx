@@ -4,6 +4,8 @@ import React from "react";
 import { createUITestContext } from "../../test-helpers/ui-test-context.js";
 import { AppRoot } from "../AppRoot.js";
 
+import { waitForCondition } from "./TUIChat.testHelper.js";
+
 describe("TUIChat - Tool Display Tests", () => {
   let context: any;
 
@@ -65,23 +67,24 @@ describe("TUIChat - Tool Display Tests", () => {
     // Type / to see commands
     stdin.write("/");
 
-    // Wait longer for slash command menu
-    await new Promise((resolve) => setTimeout(resolve, 200));
+    // The slash command menu renders asynchronously; poll instead of a fixed
+    // sleep so the test doesn't depend on timing under full-suite load.
+    const hasSlashCommandIndicator = () => {
+      const frame = lastFrame();
+      return (
+        !!frame &&
+        (frame.includes("↑/↓ to navigate") ||
+          frame.includes("/exit") ||
+          frame.includes("◉ /") ||
+          frame.includes("/ for slash commands"))
+      );
+    };
+    await waitForCondition(hasSlashCommandIndicator);
 
     const frame = lastFrame();
 
     // Should show slash command character
     expect(frame).toContain("/");
-
-    // The slash command menu might show different UI states
-    // On Windows, the timing might be different
-    const hasSlashCommandIndicator = frame
-      ? frame.includes("↑/↓ to navigate") ||
-        frame.includes("/exit") ||
-        frame.includes("◉ /") ||
-        frame.includes("/ for slash commands")
-      : false;
-
-    expect(hasSlashCommandIndicator).toBe(true);
+    expect(hasSlashCommandIndicator()).toBe(true);
   });
 });

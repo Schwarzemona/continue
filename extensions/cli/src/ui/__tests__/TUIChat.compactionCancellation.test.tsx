@@ -31,7 +31,7 @@ describe("TUIChat - Compaction Cancellation", () => {
     vi.clearAllMocks();
   });
 
-  it("calls handleInterrupt when ESC is pressed during compaction", () => {
+  it("calls handleInterrupt when ESC is pressed during compaction", async () => {
     const compactionStartTime = Date.now();
 
     mockUseChat.mockReturnValue({
@@ -55,14 +55,13 @@ describe("TUIChat - Compaction Cancellation", () => {
     const { stdin, unmount } = render(React.createElement(AppRoot, {}));
 
     try {
-      // Give some time for the component to render and set up input handling
-      setTimeout(() => {
-        // Simulate ESC key press during compaction
-        stdin.write("\x1b"); // ESC key
+      stdin.write("\x1b"); // ESC key
+      // ink holds a trailing ESC byte pending for ~20ms before emitting the
+      // keypress, so wait for the input pipeline to deliver it.
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
-        // The handleInterrupt should be called
-        expect(mockHandleInterrupt).toHaveBeenCalledTimes(1);
-      }, 100);
+      // The handleInterrupt should be called
+      expect(mockHandleInterrupt).toHaveBeenCalledTimes(1);
     } finally {
       unmount();
     }
@@ -103,7 +102,7 @@ describe("TUIChat - Compaction Cancellation", () => {
     }
   });
 
-  it("prioritizes compaction cancellation over response cancellation", () => {
+  it("prioritizes compaction cancellation over response cancellation", async () => {
     // This tests the case where both might be true (theoretical edge case)
     const compactionStartTime = Date.now();
     const responseStartTime = Date.now();
@@ -131,6 +130,9 @@ describe("TUIChat - Compaction Cancellation", () => {
     try {
       // Simulate ESC key press when both states are active
       stdin.write("\x1b"); // ESC key
+      // ink holds a trailing ESC byte pending for ~20ms before emitting the
+      // keypress, so wait for the input pipeline to deliver it.
+      await new Promise((resolve) => setTimeout(resolve, 50));
 
       // Should still call handleInterrupt (which will prioritize compaction)
       expect(mockHandleInterrupt).toHaveBeenCalledTimes(1);
