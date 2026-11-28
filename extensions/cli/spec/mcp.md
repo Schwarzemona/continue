@@ -1,62 +1,63 @@
-# Continue CLI Model Context Protocol (MCP) integration
+# モデルコンテキストプロトコル（MCP）統合
 
-## Intro
+## はじめに
 
-Model Context Protocol is a protocol for giving models access to resources and tools. MCP servers can run locally (stdio) or be remote (http/streamable/etc). See https://modelcontextprotocol.io/specification. The Continue CLI uses MCP to extend model's capabilities with MCP prompts and tools. MCP server configurations are stored in the `mcpServers` field of an assistant/config.yaml configuration.
+Model Context Protocol（モデルコンテキストプロトコル）は、モデルがリソースやツールにアクセスできるようにするためのプロトコルです。MCP サーバーはローカル（stdio）で実行することも、リモート（http／streamable など）で実行することもできます。詳しくは https://modelcontextprotocol.io/specification を参照してください。Continue CLI は MCP を使って、MCP のプロンプトとツールによりモデルの能力を拡張します。MCP サーバーの設定は、アシスタント／config.yaml の設定にある `mcpServers` フィールドに保存されます。
 
-## Secret Resolution
+## シークレットの解決
 
-MCP server configurations often require secrets (API keys, tokens, etc.) referenced using template variables like `${{ secrets.API_KEY }}`. The CLI resolves these secrets in the following order:
+MCP サーバーの設定では、`${{ secrets.API_KEY }}` のようなテンプレート変数で参照されるシークレット（API キー、トークンなど）が必要になることが多くあります。CLI はこれらのシークレットを次の順序で解決します。
 
-1. **Organization/Package Secrets**: First attempts to resolve secrets through the Continue API for organization or package-level secrets
-2. **Local Environment Variables**: Falls back to local environment variables if:
-   - The API secret exists but isn't accessible locally (e.g., in devboxes or restricted environments)
-   - The secret isn't found in organization/package secrets
+1. **組織／パッケージのシークレット**: まず、組織レベルまたはパッケージレベルのシークレットとして Continue API 経由で解決を試みます
+2. **ローカルの環境変数**: 次の場合にはローカルの環境変数へフォールバックします
+   - API 上にシークレットが存在するもののローカルではアクセスできない場合（devbox や制限された環境など）
+   - 組織／パッケージのシークレット中に見つからなかった場合
 
-Local environment variables are checked in this priority order:
+ローカルの環境変数は次の優先順でチェックされます。
 
-- `process.env` (runtime environment variables)
+- `process.env`（実行環境の環境変数）
 - `~/.continue/.env`
 - `<workspace>/.continue/.env`
 - `<workspace>/.env`
 
-This fallback mechanism ensures MCP servers can start successfully in environments where organization secrets aren't accessible, such as development containers or CI/CD pipelines, by allowing environment variables to provide the required credentials.
+このフォールバック機構により、組織のシークレットにアクセスできない環境（開発コンテナや CI/CD パイプラインなど）でも、環境変数で必要な認証情報を提供することで、MCP サーバーを正常に起動できます。
 
-## MCP Service
+## MCP サービス
 
-The CLI has an MCP Service should manage connections to MCP servers and provide state to the terminal app regarding MCP server connections.
-Service initialization for MCP servers can take especially long, so it should not block service initialization. Instead, initialization should kick off server connections and then resolve.
-All configured server connections can be initialized simultaneously using Promise.all
-Each server configuration should have its own connection and state separated, but the service should also have an easy way to retrieve all tools and prompts from all servers to pass to the model.
-Servers should have a status "idle", "connecting", "connected", or "error". Only "connected" servers contribute prompts and tools.
-If a server successfully connects but there is an error retrieving prompts or tools, it should have an array of warning messages that can be accessed in the terminal app.
-When the process exits, all servers should be shut down and disconnected.
-Only MCP servers for the CURRENT config should be loaded
+CLI には MCP サービスがあり、MCP サーバーとの接続を管理し、MCP サーバー接続に関する状態をターミナルアプリへ提供する役割を担うべきです。
 
-- Logs from MCP servers should be routed through the winston logger, not the standard console.log (since this is a terminal app)
+MCP サーバーのサービス初期化は特に時間がかかり得るため、サービス初期化をブロックすべきではありません。代わりに、初期化ではサーバー接続を開始してから解決を完了させます。
+設定されたすべてのサーバー接続は `Promise.all` を使って同時に初期化できます。
+各サーバー設定はそれぞれ独立した接続と状態を持つべきですが、サービスには加えて、すべてのサーバーからすべてのツールとプロンプトを取り出してモデルへ渡す簡単な方法を持っていたいはずです。
+サーバーの状態は "idle"、"connecting"、"connected"、"error" のいずれかを持ちます。"connected" のサーバーのみがプロンプトとツールを提供します。
+サーバーの接続は成功したがプロンプトやツール取得でエラーが起きた場合は、警告メッセージの配列を持ち、ターミナルアプリからアクセスできるようにすべきです。
+プロセス終了時には、すべてのサーバーをシャットダウンし切断する必要があります。
+現在の（CURRENT）設定に属する MCP サーバーのみを読み込みます
 
-## MCP slash command
+- MCP サーバーからのログは、標準の console.log ではなく winston ロガー経由でルーティングすべきです（ターミナルアプリであるため）
 
-Users can manage MCP connections using the /mcp slash command.
-/mcp shows a menu with the following options
+## MCP スラッシュコマンド
 
-- "No servers" if there are no servers
-- Restart all servers
-- Stop all servers
-- View servers
-- Back (esc also goes back)
+ユーザーは `/mcp` スラッシュコマンドを使って MCP 接続を管理できます。
+`/mcp` は次のオプションを含むメニューを表示します
 
-View servers should open a submenu that has each server name with its status icon
+- サーバーがひとつもない場合は "No servers"
+- すべてのサーバーを再起動
+- すべてのサーバーを停止
+- サーバーを表示
+- 戻る（esc でも戻れます）
 
-- red if error, yellow if warnings, green if connected, gray if idle
-- "No Servers" if there are none
-- Back (esc also goes back)
+「サーバーを表示」を選ぶと、各サーバー名と状態アイコンを並べたサブメニューが開きます
 
-Finally, selecting a server opens a sub-submenu that keeps the name/icon as header and lists
+- error なら赤、警告があれば黄、connected なら緑、idle なら灰
+- サーバーがひとつもない場合は "No Servers"
+- 戻る（esc でも戻れます）
 
-- Back (esc also goes back)
-- Restart server
-- Stop server
-- warnings the server currently has
-- prompts the server contributes
-- tools the server contributes
+最後に、サーバーを選択すると名前とアイコンをヘッダーに保ったままのサブサブメニューが開き、次を並べます
+
+- 戻る（esc でも戻れます）
+- サーバーを再起動
+- サーバーを停止
+- そのサーバーが現在抱えている警告
+- そのサーバーが提供するプロンプト
+- そのサーバーが提供するツール

@@ -1,17 +1,17 @@
-# Onboarding
+# オンボーディング
 
-When a user first runs `cn` in interactive mode, they will be taken through "onboarding". After they have completed onboarding once, they will follow a normal config loading flow.
+ユーザーがインタラクティブモードで初めて `cn` を実行したとき、「オンボーディング」が進められます。一度オンボーディングを完了すると、以降は通常の設定読み込みフローに従います。
 
-## Onboarding flow
+## オンボーディングフロー
 
-**The onboarding flow runs when the user hasn't completed onboarding before, regardless of whether they have a valid config.yaml file.**
+**オンボーディングフローは、ユーザーが以前にオンボーディングを完了していない場合に実行されます。有効な config.yaml ファイルの有無にかかわらず実行されます。**
 
-1. If the --config flag is provided, load this config
-2. If the CONTINUE_USE_BEDROCK environment variable is set to "1", automatically use AWS Bedrock configuration and skip interactive prompts
-3. Present the user with available options:
+1. `--config` フラグが指定されている場合は、その設定を読み込みます
+2. `CONTINUE_USE_BEDROCK` 環境変数が "1" に設定されている場合は、AWS Bedrock 設定を自動的に使用し、インタラクティブなプロンプトをスキップします
+3. ユーザーに利用可能な選択肢を提示します:
 
-   - Log in with Continue: log them in, which will automatically create their assistant and then we can load the first assistant from the first org
-   - Enter your Anthropic API key: let them enter the key, and then either create a ~/.continue/config.yaml with the following contents OR update the existing config.yaml to add the model
+   - Continue でログインする: ログインさせるとアシスタントが自動作成されるため、最初の組織の最初のアシスタントを読み込むことができます
+   - Anthropic API キーを入力する: キーを入力してもらい、次の内容で `~/.continue/config.yaml` を作成するか、既存の config.yaml を更新してモデルを追加します
 
    ```yaml
    name: Local Config
@@ -24,33 +24,33 @@ When a user first runs `cn` in interactive mode, they will be taken through "onb
          ANTHROPIC_API_KEY: <THEIR_ANTHROPIC_API_KEY>
    ```
 
-   When CONTINUE_USE_BEDROCK=1 is detected, it will use AWS Bedrock configuration. The user must have AWS credentials configured through the standard AWS credential chain (AWS CLI, environment variables, IAM roles, etc.).
+   `CONTINUE_USE_BEDROCK=1` が検出された場合は、AWS Bedrock 設定が使用されます。ユーザーは標準の AWS 認証情報チェーン（AWS CLI、環境変数、IAM ロールなど）を通じて AWS の認証情報を設定済みの必要があります。
 
-When something in the onboarding flow is done automatically, we should tell the user what happened. For example, when CONTINUE_USE_BEDROCK=1 is detected, the CLI displays: "✓ Using AWS Bedrock (CONTINUE_USE_BEDROCK detected)"
+オンボーディングフロー内の何かが自動的に処理された場合は、ユーザーに何が起きたかを伝えるべきです。たとえば、`CONTINUE_USE_BEDROCK=1` が検出されたとき、CLI は次のように表示します: "✓ Using AWS Bedrock (CONTINUE_USE_BEDROCK detected)"
 
-### AWS Bedrock Environment Variable
+### AWS Bedrock 環境変数
 
-Users can bypass the interactive onboarding menu by setting the `CONTINUE_USE_BEDROCK` environment variable to "1":
+ユーザーは `CONTINUE_USE_BEDROCK` 環境変数を "1" に設定することで、インタラクティブなオンボーディングメニューをバイパスできます。
 
 ```bash
 export CONTINUE_USE_BEDROCK=1
 cn <command>
 ```
 
-This will:
+これにより次のことが行われます。
 
-- Skip the interactive onboarding prompts
-- Automatically configure the CLI to use AWS Bedrock
-- Require that AWS credentials are already configured through the standard AWS credential chain
-- Display a confirmation message to the user
-- Mark onboarding as completed
+- インタラクティブなオンボーディングプロンプトをスキップします
+- CLI が AWS Bedrock を 使用するよう自動的に設定されます
+- 標準の AWS 認証情報チェーンを通じて AWS 認証情報が既に設定済みである必要があります
+- 確認メッセージをユーザーに表示します
+- オンボーディングが完了済みとして記録されます
 
-## Normal flow
+## 通常のフロー
 
-**The normal flow runs when the user has already completed onboarding.**
+**通常のフローは、ユーザーが既にオンボーディングを完了している場合に実行されます。**
 
-1. If the --config flag is provided, load this config
-2. If the user is logged in, look for the first assistant in the selected org
-3. If there are no assistants in that org, then look for a local ~/.continue/config.yaml
-4. If there is no config.yaml, look for an ANTHROPIC_API_KEY in the environment and manually construct the config object to include just the claude-4-sonnet model with that API key
-5. If none of the above, then bring the user to step 3 of the onboarding flow
+1. `--config` フラグが指定されている場合は、その設定を読み込みます
+2. ユーザーがログイン済みの場合は、選択中の組織で最初のアシスタントを探します
+3. その組織にアシスタントがない場合は、ローカルの `~/.continue/config.yaml` を探します
+4. config.yaml がない場合は、環境内の `ANTHROPIC_API_KEY` を探して、その API キーで claude-4-sonnet モデルのみを含む設定オブジェクトを手動で構築します
+5. 上記のいずれにも該当しない場合は、ユーザーをオンボーディングフローのステップ 3 へ案内します

@@ -1,83 +1,83 @@
-# Modes
+# モード
 
-Modes are a system for managing tool permissions in the CLI. They can be set via command-line flags at startup or switched dynamically during chat sessions. The following modes are available:
+モードは、CLI におけるツール権限を管理するための仕組みです。起動時にコマンドラインフラグで設定することも、チャットセッション中に動的に切り替えることもできます。利用可能なモードは次のとおりです。
 
-## Available Modes
+## 利用可能なモード
 
-### `normal` (default)
+### `normal`（既定）
 
-The default mode that follows configured permission policies from `permissions.yaml` and command-line overrides without any additional restrictions or mode-specific policies.
+`permissions.yaml` に設定済みの権限ポリシーとコマンドラインによる上書き設定に従う既定のモードです。追加の制限やモード固有のポリシーは適用されません。
 
-- **UI Indicator:** No indicator shown (clean interface for default behavior)
-- **Current directory:** Visible in status bar for context
-- **Permission behavior:** Uses existing permission policies as configured
-- **Backward compatibility:** Existing configurations work unchanged
+- **UI インジケーター:** 表示されません（既定の挙動ではインターフェースをクリーンに保ちます）
+- **現在のディレクトリ:** 文脈としてステータスバーに表示されます
+- **権限の挙動:** 設定済みの既存の権限ポリシーを使用します
+- **後方互換性:** 既存の設定は変更なしで動作します
 
 ### `plan`
 
-Planning mode that **completely overrides all user permissions** to enforce read-only access with command execution. This mode prevents file modifications but allows command execution for analysis, regardless of user configuration.
+すべてのユーザー権限を**完全に上書き**し、コマンド実行を伴う読み取り専用アクセスを強制する計画モードです。このモードは、ユーザーの設定に関係なく、ファイル変更を防ぎつつ、分析のためのコマンド実行を許可します。
 
-- **Command-line flag:** `--readonly` (for backward compatibility)
-- **UI Indicator:** `[plan]` shown in blue
-- **Current directory:** Hidden to save space and focus on analysis
-- **Permission override:** **Absolute** - excludes write tools (Write, Edit, etc.) and allows read tools (Read, Grep, LS, etc.) and Bash for command execution
-- **User config ignored:** Any user `--allow` flags for write tools are overridden
+- **コマンドラインフラグ:** `--readonly`（後方互換性のため）
+- **UI インジケーター:** `[plan]` が青色で表示されます
+- **現在のディレクトリ:** 領域を節約し分析に集中するために非表示です
+- **権限の上書き:** **絶対的** - 書き込みツール（Write、Edit など）を除外し、読み取りツール（Read、Grep、LS など）とコマンド実行用の Bash を許可します
+- **ユーザー設定は無視されます:** 書き込みツールに対するユーザーの `--allow` フラグは上書きされます
 
 ### `auto`
 
-Auto mode that **completely overrides all user permissions** to allow everything without asking. This mode provides maximum automation by bypassing all permission policies and restrictions, regardless of user configuration.
+すべてのユーザー権限を**完全に上書き**し、確認なしですべてを許可する自動モードです。このモードは、ユーザーの設定に関係なく、すべての権限ポリシーと制限をバイパスすることで最大の自動化を提供します。
 
-- **Command-line flag:** `--auto` (starts in auto mode)
-- **UI Indicator:** `[auto]` shown in green
-- **Current directory:** Hidden to save space and focus on automation
-- **Permission override:** **Absolute** - allows all tools with `*: allow` policy
-- **User config ignored:** Any user `--exclude` flags are overridden - everything is allowed
+- **コマンドラインフラグ:** `--auto`（自動モードで起動します）
+- **UI インジケーター:** `[auto]` が緑色で表示されます
+- **現在のディレクトリ:** 領域を節約し自動化に集中するために非表示です
+- **権限の上書き:** **絶対的** - `*: allow` ポリシーによりすべてのツールを許可します
+- **ユーザー設定は無視されます:** ユーザーの `--exclude` フラグは上書きされ、すべてが許可されます
 
-## Usage
+## 使い方
 
-### Command-Line Initialization
+### コマンドラインによる初期化
 
-Modes can be set when starting the CLI:
+CLI 起動時にモードを設定できます。
 
 ```bash
-cn --readonly "Help me analyze this code"  # Starts in plan mode
-cn --auto "Fix all the linting errors"     # Starts in auto mode
-cn "Let me implement this feature"         # Starts in normal mode (default)
+cn --readonly "Help me analyze this code"  # 計画モードで起動
+cn --auto "Fix all the linting errors"     # 自動モードで起動
+cn "Let me implement this feature"         # 既定（normal）モードで起動
 ```
 
-### Dynamic Mode Switching
+### 動的なモード切り替え
 
-Users can switch modes during chat sessions using:
+ユーザーはチャットセッション中に次の方法でモードを切り替えられます。
 
-**Keyboard Shortcut:**
+**キーボードショートカット:**
 
-- **Shift+Tab** - Cycle through modes: normal → plan → auto → (repeat)
+- **Shift+Tab** - モードを巡回します: normal → plan → auto →（以降繰り返し）
 
-## Implementation
+## 実装
 
-Modes are implemented through the permission system:
+モードは権限システムを通じて実装されています。
 
-- **ToolPermissionService**: Rectifies current mode and tool policies
-- **ModeIndicator**: UI component showing current mode (hidden for normal mode)
-- **Keyboard shortcuts**: Shift+Tab cycles through modes instantly
-- **Backward compatibility**: Existing `--readonly` flag maps to plan mode
+- **ToolPermissionService**: 現在のモードとツールポリシーを整合させます
+- **ModeIndicator**: 現在のモードを表示する UI コンポーネントです（normal モードでは非表示）
+- **キーボードショートカット**: Shift+Tab でモードを即座に巡回します
+- **後方互換性**: 既存の `--readonly` フラグは plan モードへマップされます
 
-### Mode Policy Priority
+### モードポリシーの優先順位
 
-**Mode policies completely override all other configurations** when in plan or auto mode:
+**モードポリシーは、plan または auto モードでは他のすべての設定を完全に上書きします。**
 
-**Plan and Auto modes:**
+**plan モードと auto モード:**
 
-1. **Mode policies** (absolute override - ignores everything else)
+1. **モードポリシー**（絶対的な上書き - 他のすべてを無視します）
 
-**Normal mode only:**
+**normal モードのみ:**
 
-1. Command-line overrides (`--allow`, `--ask`, `--exclude`)
-2. Permission configuration from `permissions.yaml`
-3. Default tool policies
+1. コマンドラインによる上書き（`--allow`、`--ask`、`--exclude`）
+2. `permissions.yaml` からの権限設定
+3. デフォルトのツールポリシー
 
-### Mode-Specific Behaviors
+### モード固有の挙動
 
-- **normal**: No mode policies applied, uses existing user configuration; shows current directory
-- **plan**: **Absolute override** - excludes write tools (Write, Edit), allows read tools (Read, Grep, LS) and Bash; hides current directory
-- **auto**: **Absolute override** - allows all tools with `*: allow` policy; hides current directory
+- **normal**: モードポリシーは適用されず、既存のユーザー設定を使用します。現在のディレクトリを表示します
+- **plan**: **絶対的な上書き** - 書き込みツール（Write、Edit）を除外し、読み取りツール（Read、Grep、LS）と Bash を許可します。現在のディレクトリを非表示にします
+- **auto**: **絶対的な上書き** - `*: allow` ポリシーによりすべてのツールを許可します。現在のディレクトリを非表示にします

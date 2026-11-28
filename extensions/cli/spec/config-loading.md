@@ -1,191 +1,191 @@
-# Configuration Loading Behavior Specification
+# 設定読み込みの挙動仕様
 
-## Overview
+## 概要
 
-This document specifies the behavior of the CLI's configuration loading system, including precedence rules, authentication interactions, and error handling.
+このドキュメントは、CLI の設定読み込みシステムの挙動を仕様化したものです。優先順位ルール、認証との相互作用、エラー処理を含みます。
 
-## Authentication Precedence
+## 認証の優先順位
 
-**Authentication Source Priority:**
+**認証ソースの優先度:**
 
-1. **Environment Variable**: `CONTINUE_API_KEY` environment variable
-2. **File-Based Auth**: `~/.continue/auth.json` file
-3. **No Authentication**: Unauthenticated mode
+1. **環境変数**: `CONTINUE_API_KEY` 環境変数
+2. **ファイルベースの認証**: `~/.continue/auth.json` ファイル
+3. **認証なし**: 未認証モード
 
-**Authentication Effects:**
+**認証がもたらす効果:**
 
-- **Environment Auth**: Always uses personal organization, no config URI persistence
-- **File Auth**: Supports organizations, persists config URIs, token refresh
-- **No Auth**: Limited to default assistant, no personalization
+- **環境変数による認証**: 常に個人組織を使用し、設定 URI の永続化は行われません
+- **ファイル認証**: 組織をサポートし、設定 URI を永続化し、トークンのリフレッシュを行います
+- **未認証**: デフォルトのアシスタントのみに限定され、パーソナライズはありません
 
-## Configuration Source Precedence
+## 設定ソースの優先順位
 
-**When CLI is invoked, config source is determined in this order:**
+**CLI が起動されたとき、設定ソースは次の順序で決定されます:**
 
-1. **CLI `--config` Flag** (highest priority)
+1. **CLI の `--config` フラグ**（最優先）
 
-   - File path (starts with `.`, `/`, `~`): Loads local YAML file
-   - Assistant slug (`owner/package`): Fetches from Continue platform
-   - Overrides any saved preferences
+   - ファイルパス（`.`, `/`, `~` で始まる）: ローカルの YAML ファイルを読み込みます
+   - アシスタントのスラッグ（`owner/package`）: Continue プラットフォームから取得します
+   - 保存済みの設定をすべて上書きします
 
-2. **Saved Config URI** (if no `--config` flag)
+2. **保存済みの設定 URI**（`--config` フラグがない場合）
 
-   - Retrieved from authentication config
-   - Converts `file://` URIs back to file paths
-   - Converts `slug://` URIs back to assistant slugs
+   - 認証設定から取得されます
+   - `file://` URI をファイルパスへ変換し直します
+   - `slug://` URI をアシスタントスラッグへ変換し直します
 
-3. **Default Resolution** (if no flag and no saved URI)
-   - **Authenticated**: First user assistant from `listAssistants()`
-   - **config.yaml**: The saved config file at `~/.continue/config.yaml`
-   - **Unauthenticated**: Falls back to `continuedev/default-cli-config`
+3. **デフォルト解決**（フラグもなく保存済み URI もない場合）
+   - **認証済み**: `listAssistants()` が返す最初のユーザーアシスタント
+   - **config.yaml**: `~/.continue/config.yaml` に保存された設定ファイル
+   - **未認証**: `continuedev/default-cli-config` へフォールバックします
 
-## Authentication State Interactions
+## 認証状態との相互作用
 
-### Authenticated Users
+### 認証済みユーザー
 
-**Available Options:**
+**利用可能な選択肢:**
 
-- Personal assistants
-- Organization assistants (if organization selected)
-- Local YAML files
-- Public assistants
+- 個人のアシスタント
+- 組織のアシスタント（組織が選択されている場合）
+- ローカルの YAML ファイル
+- 公開のアシスタント
 
-**Behavior:**
+**挙動:**
 
-- `listAssistants()` returns personalized results
-- Config selections are saved as URIs in auth config
-- Organization context affects available assistants
+- `listAssistants()` はパーソナライズされた結果を返します
+- 設定の選択は認証設定内に URI として保存されます
+- 組織のコンテキストにより、利用可能なアシスタントが変わります
 
-### Unauthenticated Users
+### 未認証ユーザー
 
-**Available Options:**
+**利用可能な選択肢:**
 
-- Local YAML files only
-- Default assistant (`continuedev/default-cli-config`)
+- ローカルの YAML ファイルのみ
+- デフォルトのアシスタント（`continuedev/default-cli-config`）
 
-**Behavior:**
+**挙動:**
 
-- No access to personal or organization assistants
-- No config URI persistence
-- Direct fallback to default when no config specified
+- 個人または組織のアシスタントへのアクセスはありません
+- 設定 URI の永続化はありません
+- 設定が指定されていない場合は直接デフォルトへフォールバックします
 
-### Environment Variable Auth (`CONTINUE_API_KEY`)
+### 環境変数による認証（`CONTINUE_API_KEY`）
 
-**Behavior:**
+**挙動:**
 
-- Treated as authenticated for API access
-- Always uses personal organization context
-- No persistence of config URIs
-- Cannot switch organizations
+- API アクセスにおいては認証済みとして扱われます
+- 常に個人組織のコンテキストを使用します
+- 設定 URI の永続化は行われません
+- 組織の切り替えはできません
 
-## Organization Context
+## 組織のコンテキスト
 
-**Organization Selection:**
+**組織の選択:**
 
-- **Interactive Mode**: Auto-selects first available organization
-- **Headless Mode**: Defaults to personal organization
-- **Environment Auth**: Always personal organization
+- **インタラクティブモード**: 最初に利用可能な組織を自動選択します
+- **ヘッドレスモード**: 個人組織が既定になります
+- **環境変数認証**: 常に個人組織です
 
-**Effects on Config Loading:**
+**設定読み込みへの影響:**
 
-- Organization ID passed to all API calls
-- Affects which assistants appear in `listAssistants()`
-- Organization changes trigger complete config reload
+- 組織 ID がすべての API 呼び出しに渡されます
+- `listAssistants()` にどのアシスタントが表示されるかに影響します
+- 組織の変更は設定の完全な再読み込みをトリガーします
 
-## Error Handling Behavior
+## エラー処理の挙動
 
-### Config Loading Errors
+### 設定読み込みのエラー
 
-**File Not Found:**
+**ファイルが見つからない:**
 
-- Local file specified but doesn't exist
-- **Result**: Error thrown, CLI exits
+- ローカルファイルが指定されているが実在しない
+- **結果**: エラーがスローされ、CLI は終了します
 
-**Invalid YAML:**
+**不正な YAML:**
 
-- Local file exists but has syntax errors
-- **Result**: Parsing error thrown, CLI exits
+- ローカルファイルは存在するが構文エラーがある
+- **結果**: 解析エラーがスローされ、CLI は終了します
 
-**Network Failures:**
+**ネットワーク障害:**
 
-- API calls fail for assistant slugs
-- **Result**: Network error bubbled up, CLI exits
+- アシスタントスラッグに対する API 呼び出しが失敗する
+- **結果**: ネットワークエラーが伝播し、CLI は終了します
 
-**Assistant Not Found:**
+**アシスタントが見つからない:**
 
-- Valid slug format but assistant doesn't exist
-- **Result**: 404 error from API, CLI exits
+- スラッグの形式は正しいがアシスタントが存在しない
+- **結果**: API から 404 エラーが返り、CLI は終了します
 
-### Fallback Scenarios
+### フォールバックのシナリオ
 
-**No User Assistants:**
+**ユーザーのアシスタントが存在しない:**
 
-- Authenticated user has no personal assistants
-- **Result**: Falls back to `continuedev/default-cli-config`
+- 認証済みユーザーに個人アシスタントがない
+- **結果**: `continuedev/default-cli-config` へフォールバックします
 
-**Default Agent Unavailable:**
+**デフォルトエージェントが利用できない:**
 
-- Fallback to default agent fails
-- **Result**: Error thrown, CLI cannot start
+- デフォルトエージェントへのフォールバックが失敗する
+- **結果**: エラーがスローされ、CLI は起動できません
 
-**Token Expired:**
+**トークンの期限切れ:**
 
-- Saved auth token is expired
-- **Result**: Automatic refresh attempted, re-auth required if refresh fails
+- 保存された auth トークンの有効期限が切れている
+- **結果**: 自動リフレッシュが試行され、リフレッシュが失敗した場合は再認証が必要になります
 
-## Config URI Persistence
+## 設定 URI の永続化
 
-**When URIs are Saved:**
+**URI が保存されるタイミング:**
 
-- Any successful config load via service layer
-- File paths converted to `file://path/to/config.yaml`
-- Assistant slugs converted to `slug://owner/package`
+- サービス層を通じた設定読み込みが成功したとき
+- ファイルパスは `file://path/to/config.yaml` の形式へ変換されます
+- アシスタントスラッグは `slug://owner/package` の形式へ変換されます
 
-**When URIs are NOT Saved:**
+**URI が保存されないタイミング:**
 
-- Environment variable authentication in use
-- Config loading failures
-- Unauthenticated sessions
+- 環境変数による認証が使用されている
+- 設定読み込みが失敗した
+- 未認証のセッションである
 
-## Rule Integration
+## ルールの統合
 
-**Rule Processing:**
+**ルールの処理:**
 
-- `--rule` flags processed independently of config loading
-- Multiple rules supported, injected into system message
-- Rule failures are warnings, don't prevent config loading
-- Rule sources: file paths, hub slugs, direct strings
+- `--rule` フラグは設定読み込みとは独立して処理されます
+- 複数のルールをサポートし、システムメッセージに注入されます
+- ルールの失敗は警告であり、設定読み込みを妨げません
+- ルールのソース: ファイルパス、ハブのスラッグ、直接的な文字列
 
-## Session Continuity
+## セッションの連続性
 
-**Next Session Behavior:**
+**次セッションでの挙動:**
 
-- **With Saved URI**: Uses saved config automatically
-- **CLI Override**: `--config` flag overrides saved URI and updates it
-- **Config Switching**: UI actions update saved URI for future sessions
+- **保存済み URI がある場合**: 保存された設定を自動的に使用します
+- **CLI による上書き**: `--config` フラグは保存済み URI を上書きし、その URI も更新します
+- **設定の切り替え**: UI 上の操作が、将来のセッション向けに保存済み URI を更新します
 
-**Cross-Session State:**
+**セッション横断の状態:**
 
-- Authentication persists until logout
-- Organization selection persists
-- Config URI persists (except for environment auth)
+- 認証はログアウトするまで永続化されます
+- 組織の選択も永続化されます
+- 設定 URI も永続化されます（環境変数認証を除く）
 
-## Complete Decision Flow
+## 完全な判断フローチャート
 
 ```
-1. Parse CLI arguments
-2. Load authentication state (env var > file > none)
-3. Determine config source:
-   - CLI --config flag provided? Use it
-   - Saved config URI exists? Use it
-   - Default resolution based on auth state
-4. Load configuration:
-   - File path? Parse YAML locally
-   - Assistant slug? Fetch from API
-   - Default resolution? List assistants or use default
-5. Process and inject rules
-6. Save config URI (if authenticated via file)
-7. Initialize services with loaded config
+1. CLI 引数を解析する
+2. 認証状態を読み込む（環境変数 > ファイル > なし）
+3. 設定ソースを決定する:
+   - CLI の --config フラグが指定されている? それを使う
+   - 保存済みの設定 URI が存在する? それを使う
+   - 認証状態に基づくデフォルト解決を行う
+4. 設定を読み込む:
+   - ファイルパス? ローカルで YAML を解析する
+   - アシスタントスラッグ? API から取得する
+   - デフォルト解決? アシスタント一覧を取得するか既定値を使用する
+5. ルールを処理し注入する
+6. 設定 URI を保存する（ファイル経由で認証されている場合）
+7. 読み込んだ設定でサービスを初期化する
 ```
 
-This behavior ensures users get predictable config loading with clear precedence rules while maintaining session continuity and graceful fallbacks.
+この挙動により、明確な優先順位ルールを持つ予測可能な設定読み込みが保証され、同時にセッションの連続性と優雅なフォールバックが保たれます。

@@ -1,62 +1,62 @@
-# Permissions
+# 権限
 
-## Permission types
+## 権限の種別
 
-To make sure that users can oversee the actions of the LLM, we implement a permissions system. Every tool has one of the following permissions:
+LLM の行動をユーザーが監視できるように、権限システムを実装しています。すべてのツールは次のいずれかの権限を持ちます。
 
-- `allow`: The tool will be automatically called without asking
-- `ask`: We will ask the user before calling the tool, giving them the options to accept or reject
-- `exclude`: This tool will be completely excluded, so the model won't even know it exists
+- `allow`: 確認なしでツールが自動的に呼び出されます
+- `ask`: ツールを呼び出す前にユーザーへ確認し、承認または拒否の選択肢を提示します
+- `exclude`: このツールは完全に除外されるため、モデルはその存在すら知りません
 
-## Rule precedence
+## ルールの優先順位
 
-There is a default set of permissions for the builtin tools in [`src/permissions/defaultPolicies.ts`](../src/permissions/defaultPolicies.ts). But these policies can be overriden by multiple layers. The order of precedence is as follows, which the earlier items taking precedence:
+組み込みツールに対するデフォルトの権限セットは [`src/permissions/defaultPolicies.ts`](../src/permissions/defaultPolicies.ts) に定義されています。ただしこれらのポリシーは複数の層によって上書きできます。優先順位は次のとおりで、前にあるものほど優先されます。
 
-1. **Mode policies** (highest priority - see [modes.md](./modes.md))
-2. Command line flags (`--allow`, `--ask`, `--exclude`)
-3. Permissions in `config.yaml` / configuration
-4. Permissions in `~/.continue/permissions.yaml`
-5. Default policies
+1. **モードポリシー**（最優先 - [modes.md](./modes.md) を参照）
+2. コマンドラインフラグ（`--allow`、`--ask`、`--exclude`）
+3. `config.yaml` ／ 設定内の権限
+4. `~/.continue/permissions.yaml` 内の権限
+5. デフォルトポリシー
 
-**Note:** Mode policies **completely override all other permission settings** in plan and auto modes. Available modes:
+**注意:** モードポリシーは、plan モードと auto モードでは**他のすべての権限設定を完全に上書きします**。利用可能なモードは次のとおりです。
 
-- `normal`: No mode policies (uses existing configuration)
-- `plan`: **Absolute override** - excludes all write tools, allows only read tools (ignores user config)
-- `auto`: **Absolute override** - allows all tools without asking (ignores user config)
+- `normal`: モードポリシーなし（既存の設定を使用します）
+- `plan`: **絶対的な上書き** - すべての書き込みツールを除外し、読み取りツールのみを許可します（ユーザー設定は無視されます）
+- `auto`: **絶対的な上書き** - 確認なしですべてのツールを許可します（ユーザー設定は無視されます）
 
-## Tool matching patterns
+## ツールマッチングパターン
 
-We use a tool matching pattern to match tools to permissions. This format looks like the following:
+ツールと権限を対応付けるために、ツールマッチングパターンを使用します。この形式は次のようになります。
 
-- `Read` matches any call to the `Read` tool
-- `Read(*)` also matches any call to the `Read` tool
-- `Read(**/*.ts)` matches any call to the `Read` tool where the primary parameter matches the glob pattern `**/*.ts`.
+- `Read` は `Read` ツールのすべての呼び出しに一致します
+- `Read(*)` も `Read` ツールのすべての呼び出しに一致します
+- `Read(**/*.ts)` は、第一引数がグローブパターン `**/*.ts` に一致する `Read` ツールの呼び出しに一致します。
 
-Note that for an `exclude` policy, it doesn't make sense to have argument matching.
+`exclude` ポリシーにおいては、引数のマッチングに意味はない点に注意してください。
 
-## Command line flags
+## コマンドラインフラグ
 
-Each of the `--allow`, `--ask`, and `--exclude` flags allow you to set the permission for a tool. Usage must be a "tool matching pattern" as described above for each flag, with each providing a policy that will be added to the list of policies in order.
+`--allow`、`--ask`、`--exclude` の各フラグは、ツールの権限を設定するために使用できます。各フラグの値は前述の「ツールマッチングパターン」である必要があり、それぞれのポリシーがリストに追加される順番で適用されます。
 
 ```bash
-# Allow Read, Ask Write, and Exclude Bash
+# Read を許可、Write は確認、Bash を除外
 cn --allow Read --ask Write --exclude Bash
 
-# Start in plan mode (read-only tools only)
+# 計画モードで起動（読み取りツールのみ）
 cn --readonly "Help me understand this codebase"
 
-# Use mode switching during chat
-cn "Let me work on this feature"  # Starts in normal mode
-# Then use Shift+Tab to cycle through modes
+# チャット中にモードを切り替えて使用
+cn "Let me work on this feature"  # normal モードで起動
+# その後 Shift+Tab でモードを巡回します
 ```
 
-## `config.yaml` / Configuration (implement later)
+## `config.yaml` ／ 設定（将来的に実装）
 
 ::: info
-This should not be implemented yet.
+これはまだ実装すべきではありません。
 :::
 
-To let users define their permissions as a part of their custom assistant, they can do so in the permissions section of `config.yaml` or their configuration:
+ユーザーが自分のカスタムアシスタントの一部として権限を定義できるように、`config.yaml` またはその設定内の permissions セクションで記述できるようにします。
 
 ```yaml
 permissions:
@@ -70,9 +70,9 @@ permissions:
     - Write
 ```
 
-## `~/.continue/permissions.yaml` (personal settings)
+## `~/.continue/permissions.yaml`（個人設定）
 
-It would be frustrating for users to have to set the same permissions across all of their assistants, so we provide them a file for personal settings. It should be basically equivalent to the `permissions` section of `config.yaml`:
+すべてのアシスタントで同じ権限を設定させるとユーザーにとって煩わしいため、個人設定用のファイルを用意しています。内容は `config.yaml` の `permissions` セクションと基本的に同等であるべきです。
 
 ```yaml title="~/.continue/permissions.yaml"
 allow:
@@ -85,28 +85,28 @@ exclude:
   - Write
 ```
 
-Except that it's important to understand that this file is _not_ intended to be edited by the user. It is only for persistence, and users should interact with their permissions by using the TUI.
+ただし重要なのは、このファイルはユーザーによる直接編集を想定していないという点です。永続化専用であり、ユーザーは TUI を通じて権限と対話すべきです。
 
-This file should be created the first time that the CLI starts.
+このファイルは CLI が初めて起動されるときに作成される必要があります。
 
-## Headless mode permissions
+## ヘッドレスモードの権限
 
-When running in headless mode (using the `-p` or `--print` flag), the CLI uses the same default policies as normal mode, but with different behavior for tools that require confirmation:
+ヘッドレスモード（`-p` または `--print` フラグ）で実行する場合、CLI は normal モードと同じデフォルトポリシーを使用しますが、確認を要するツールの扱いが異なります。
 
-- **Normal mode**: Write operations and terminal commands require confirmation (`ask`) - user is prompted
-- **Headless mode**: Same default policies, but tools requiring confirmation (`ask`) will cause the process to exit with an error message
+- **normal モード**: 書き込み操作とターミナルコマンドは確認を必要とします（`ask`）- ユーザーへプロンプトが表示されます
+- **ヘッドレスモード**: 同じデフォルトポリシーですが、確認を要するツール（`ask`）はエラーメッセージ付きでプロセスを終了させます
 
-To use tools that normally require confirmation in headless mode, you must explicitly allow them:
+ヘッドレスモードで通常は確認を要するツールを使用するには、明示的に許可する必要があります。
 
 ```bash
-# Headless mode with explicit permissions for write operations
+# 書き込み操作を明示的に許可したヘッドレスモード
 cn -p --allow write_file "Write a hello world script"
 
-# Headless mode with wildcard permission (allow all tools)
+# ワイルドカード権限付きのヘッドレスモード（すべてのツールを許可）
 cn -p --allow "*" "Write and run a script"
 
-# Headless mode with specific restrictions
+# 具体的な制限を付けたヘッドレスモード
 cn -p --exclude run_terminal_command "Clean up the codebase"
 ```
 
-This approach ensures that headless mode is secure by default while providing clear guidance on how to enable the needed permissions.
+このアプローチにより、ヘッドレスモードは既定で安全に保たれつつ、必要な権限を有効にする方法が明確に示されます。

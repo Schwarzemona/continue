@@ -1,32 +1,32 @@
-# Ctrl+C Exit Behavior
+# Ctrl+C による終了挙動
 
-## Overview
+## 概要
 
-Ctrl+C operates on two levels:
+Ctrl+C は 2 つの層で機能します。
 
-1. **Menus/Selectors**: Immediate cancellation and return to previous state
-2. **Main Application**: Two-stage exit requiring double Ctrl+C within 1 second
+1. **メニュー／セレクター**: 即時にキャンセルし、前の状態へ戻ります
+2. **メインアプリケーション**: 1 秒以内の 2 回の Ctrl+C を必要とする 2 段階終了
 
-## Two-Stage Exit (Main Application)
+## 2 段階終了（メインアプリケーション）
 
-### First Ctrl+C
+### 1 回目の Ctrl+C
 
-- Shows temporary status message "ctrl+c to exit" in bottom-left status bar
-- Message automatically disappears after 1 second
-- Clears any text in the input field (if focused)
-- Does **not** exit the application
+- 左下のステータスバーに一時的なメッセージ「ctrl+c to exit」を表示します
+- メッセージは 1 秒後に自動的に消えます
+- 入力フィールド内のテキストをクリアします（フォーカスされている場合）
+- アプリケーションからは**終了しません**
 
-### Second Ctrl+C (within 1 second)
+### 2 回目の Ctrl+C（1 秒以内）
 
-- Exits the application immediately
-- Performs graceful shutdown
+- 即座にアプリケーションを終了します
+- グレースフルシャットダウンを実行します
 
-### Second Ctrl+C (after 1 second)
+### 2 回目の Ctrl+C（1 秒経過後）
 
-- Treated as a new "first Ctrl+C"
-- Shows exit message again
-- User must press Ctrl+C twice within 1 second window to actually exit
+- 新しい「1 回目の Ctrl+C」として扱われます
+- 終了メッセージが再び表示されます
+- 実際に終了するには、1 秒のウィンドウ内で Ctrl+C を 2 回押す必要があります
 
-## Menu/Selector Cancellation
+## メニュー／セレクターのキャンセル
 
-Ctrl+C immediately cancels and returns to the previous state in all interactive menus and selectors.
+すべてのインタラクティブメニューとセレクターにおいて、Ctrl+C は即時にキャンセルとなり、前の状態へ戻ります。

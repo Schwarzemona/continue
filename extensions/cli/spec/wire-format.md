@@ -1,22 +1,22 @@
-# HTTP Wire Protocol: `cn remote` � `cn serve`
+# HTTP ワイヤプロトコル: `cn remote` と `cn serve`
 
-This document describes the HTTP protocol used for communication between the `cn remote` client and `cn serve` server
+このドキュメントは、`cn remote` クライアントと `cn serve` サーバー間の通信で使用される HTTP プロトコルを説明します。
 
-## Overview
+## 概要
 
-The protocol uses a polling-based REST API where:
+本プロトコルはポーリングベースの REST API を使用します。
 
-- The server (`cn serve`) runs an Express HTTP server on port 3000
-- The client (`cn remote`) polls the server every 500ms for state updates
-- All communication uses JSON payloads
+- サーバー（`cn serve`）はポート 3000 で Express HTTP サーバーを起動します
+- クライアント（`cn remote`）は 500ms ごとにサーバーへポーリングして状態の更新を取得します
+- すべての通信は JSON ペイロードを使用します
 
-## Endpoints
+## エンドポイント
 
 ### `GET /state`
 
-Returns the current chat state including message history and processing status.
+メッセージ履歴と処理状態を含む現在のチャット状態を返します。
 
-**Response:**
+**レスポンス:**
 
 ```json
 {
@@ -37,9 +37,9 @@ Returns the current chat state including message history and processing status.
 
 ### `POST /message`
 
-Sends a user message to the server. Messages are queued and processed sequentially.
+ユーザーメッセージをサーバーへ送信します。メッセージはキューに投入され、順次処理されます。
 
-**Request Body:**
+**リクエストボディ:**
 
 ```json
 {
@@ -47,7 +47,7 @@ Sends a user message to the server. Messages are queued and processed sequential
 }
 ```
 
-**Response:**
+**レスポンス:**
 
 ```json
 {
@@ -57,16 +57,16 @@ Sends a user message to the server. Messages are queued and processed sequential
 }
 ```
 
-**Special Cases:**
+**特別ケース:**
 
-- Empty message (`""`) interrupts current processing
-- Message `/exit` initiates server shutdown
+- 空のメッセージ（`""`）は現在の処理を中断します
+- メッセージ `/exit` はサーバーのシャットダウンを開始します
 
 ### `GET /diff`
 
-Returns the git diff between the current branch and main branch.
+現在のブランチと main ブランチの間の git diff を返します。
 
-**Response (Success):**
+**レスポンス（成功時):**
 
 ```json
 {
@@ -74,16 +74,16 @@ Returns the git diff between the current branch and main branch.
 }
 ```
 
-**Response (Error):**
+**レスポンス（エラー時):**
 
-- 404: Not in a git repository
-- 500: Git command failed
+- 404: git リポジトリ内にいない
+- 500: git コマンドが失敗した
 
 ### `POST /exit`
 
-Gracefully shuts down the server.
+サーバーをグレースフルにシャットダウンします。
 
-**Response:**
+**レスポンス:**
 
 ```json
 {
@@ -92,80 +92,80 @@ Gracefully shuts down the server.
 }
 ```
 
-## Message Types
+## メッセージタイプ
 
-Messages in the chat history can have different types:
+チャット履歴内のメッセージは異なるタイプを持ち得ます。
 
-- **Regular messages**: Standard user/assistant messages
-- **Tool messages**: Messages with `messageType` set to:
-  - `tool-start`: Tool execution started
-  - `tool-result`: Tool execution completed
-  - `tool-error`: Tool execution failed
-  - `system`: System messages
+- **通常メッセージ**: 標準的なユーザー／アシスタントメッセージ
+- **ツールメッセージ**: `messageType` に次が設定されたメッセージ
+  - `tool-start`: ツール実行が開始された
+  - `tool-result`: ツール実行が完了した
+  - `tool-error`: ツール実行が失敗した
+  - `system`: システムメッセージ
 
-## Protocol Flow
+## プロトコルのフロー
 
-1. **Client starts**: Begins polling `GET /state` every 500ms
-2. **User sends message**: Client posts to `POST /message`
-3. **Server queues message**: Returns queue position
-4. **Server processes**: Updates state with streaming responses
-5. **Client displays**: Shows updates from state polling
-6. **Interruption**: Client sends empty message to interrupt
-7. **Exit**: Client sends `/exit` or `POST /exit` to shutdown
+1. **クライアント起動**: 500ms ごとに `GET /state` のポーリングを開始します
+2. **ユーザーがメッセージ送信**: クライアントは `POST /message` へ POST します
+3. **サーバーがキュー投入**: キュー内の位置を返します
+4. **サーバーが処理**: ストリーミングレスポンスで状態を更新します
+5. **クライアントが表示**: 状態ポーリングからの更新を表示します
+6. **割り込み**: クライアントは空メッセージを送信して中断します
+7. **終了**: クライアントは `/exit` または `POST /exit` を送信して終了させます
 
-## Implementation Files
+## 実装ファイル
 
-### Server Implementation
+### サーバー実装
 
-- **Main server**: `src/commands/serve.ts:51-363`
-  - Express server setup
-  - Endpoint handlers
-  - State management
-  - Message processing
+- **メインサーバー**: `src/commands/serve.ts:51-363`
+  - Express サーバーのセットアップ
+  - エンドポイントハンドラー
+  - 状態管理
+  - メッセージ処理
 
-### Client Implementation
+### クライアント実装
 
-- **Remote chat hook**: `src/ui/hooks/useChat.ts:170-310`
-  - State polling logic
-  - Message sending
-  - Interrupt handling
+- **リモートチャットフック**: `src/ui/hooks/useChat.ts:170-310`
+  - 状態ポーリングロジック
+  - メッセージ送信
+  - 割り込み処理
 
-### Type Definitions
+### 型定義
 
-- **Display message types**: `src/ui/types.ts:1-16`
-- **Server state interface**: `src/commands/serve.ts:20-33`
+- **表示メッセージ型**: `src/ui/types.ts:1-16`
+- **サーバー状態インターフェース**: `src/commands/serve.ts:20-33`
 
-### Testing
+### テスト
 
-- **Mock server**: `src/ui/__tests__/mockRemoteServer.ts`
-  - Complete mock implementation for testing
-  - Simulates streaming and message processing
+- **モックサーバー**: `src/ui/__tests__/mockRemoteServer.ts`
+  - テスト用の完全なモック実装
+  - ストリーミングとメッセージ処理をシミュレートします
 
-## Features
+## 機能
 
-### Message Queueing
+### メッセージのキューイング
 
-- Messages are queued and processed one at a time
-- Queue position returned on message submission
-- Supports interruption of current processing
+- メッセージはキューに投入され、1 件ずつ処理されます
+- メッセージ送信時にキュー内の位置が返されます
+- 現在の処理の中断をサポートします
 
-### Streaming Support
+### ストリーミング対応
 
-- `isStreaming` flag indicates ongoing response
-- Character-by-character updates for real-time display
+- `isStreaming` フラグがレスポンスの進行中を示します
+- リアルタイム表示のために文字単位で更新されます
 
-### Auto-shutdown
+### 自動シャットダウン
 
-- Server shuts down after timeout (default: 300 seconds)
-- Configurable via `--timeout` flag
+- サーバーはタイムアウト後にシャットダウンします（既定: 300 秒）
+- `--timeout` フラグで設定可能です
 
-### Error Handling
+### エラー処理
 
-- HTTP status codes for error conditions
-- Graceful error messages in responses
+- エラー状態には HTTP ステータスコードを返します
+- レスポンスには分かりやすいエラーメッセージを含めます
 
-## Security Considerations
+## セキュリティ上の考慮事項
 
-- Server binds to `127.0.0.1` (localhost only)
-- No authentication implemented (local use only)
-- File system access through tool execution
+- サーバーは `127.0.0.1`（ローカルホストのみ）にバインドします
+- 認証は実装されていません（ローカル利用のみを想定）
+- ツール実行を通じてファイルシステムへアクセスします

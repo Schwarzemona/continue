@@ -1,15 +1,15 @@
-# Continue CLI Terminal UI spec
+# Continue CLI ターミナル UI 仕様
 
-This spec is incomplete.
+この仕様は未完成です。
 
-## Stack
+## スタック
 
-The Continue CLI uses Ink as a react TUI library.
+Continue CLI は TUI ライブラリとして Ink（React ベース）を使用しています。
 
-## cwd/git display
+## cwd／git の表示
 
-The lower left corner of the TUI should display
+TUI の左下隅には次を表示すべきです。
 
-- the current git branch if in a git repo
-- also the current owner/repo if enough columns are available to display and it's a gh repo
-- if not in git, the cwd
+- git リポジトリ内であれば現在の git ブランチ
+- 表示に必要な列数が確保でき、かつ gh リポジトリであれば、owner/repo も併せて表示
+- git を使用していない場合は cwd

@@ -1,30 +1,30 @@
-# Artifact Upload Architecture
+# アーティファクトアップロードアーキテクチャ
 
-## Overview
+## 概要
 
-The artifact upload feature enables Continue agents running in devboxes to upload arbitrary files (screenshots, videos, logs) to agent session storage for review and debugging purposes. The architecture uses a two-step presigned URL pattern for secure, performant uploads.
+アーティファクトアップロード機能により、devbox 上で実行されている Continue エージェントは、任意のファイル（スクリーンショット、動画、ログ）をエージェントセッションストレージにアップロードし、レビューやデバッグに活用できるようになります。本アーキテクチャでは、安全かつ高性能なアップロードを実現するため、2 段階の presigned URL（署名付き URL）パターンを使用しています。
 
-## Architecture Pattern: Presigned URLs
+## アーキテクチャパターン: Presigned URL（署名付き URL）
 
-### Why Presigned URLs?
+### なぜ Presigned URL を使うのか？
 
-The artifact upload system uses **presigned URLs** for direct client-to-S3 uploads rather than proxying files through the backend. This design provides several benefits:
+アーティファクトアップロードシステムは、ファイルをバックエンド経由でプロキシするのではなく、クライアントから S3 への直接アップロードのために **presigned URL（署名付き URL）** を使用します。この設計には次のような利点があります。
 
-1. **Security**: The backend controls who can upload, validates file types/sizes, and enforces storage limits before issuing a presigned URL. The agent cannot bypass these validations.
+1. **セキュリティ**: バックエンドが、誰がアップロードできるかを制御し、ファイル形式・サイズを検証し、presigned URL を発行する前にストレージ上限を強制します。エージェントはこの検証を回避できません。
 
-2. **Performance**: Files upload directly from the devbox to S3, avoiding bandwidth costs and latency of routing through the backend API server.
+2. **パフォーマンス**: ファイルは devbox から S3 へ直接アップロードされるため、バックエンドの API サーバーを経由することによる帯域コストや遅延を回避できます。
 
-3. **Scalability**: The backend doesn't become a bottleneck for file uploads. S3 handles the heavy lifting of data transfer.
+3. **スケーラビリティ**: バックエンドがファイルアップロードのボトルネックになりません。データ転送の負荷は S3 が引き受けます。
 
-4. **Simplicity**: Presigned URLs are time-limited (15 minutes), self-contained credentials that require no complex token management.
+4. **シンプルさ**: Presigned URL は有効期限付き（15 分）の自己完結型の認証情報であり、複雑なトークン管理が不要です。
 
-## Two-Step Upload Flow
+## 2 段階のアップロードフロー
 
-### Step 1: Request Presigned URL
+### ステップ 1: Presigned URL のリクエスト
 
-The agent requests a presigned upload URL from the backend:
+エージェントはバックエンドに対して presigned アップロード URL をリクエストします。
 
-**Request:**
+**リクエスト:**
 
 ```http
 POST /agents/artifacts/upload-url
@@ -39,15 +39,15 @@ Content-Type: application/json
 }
 ```
 
-**Backend Validation:**
+**バックエンドでの検証:**
 
-- Authenticates the API key and verifies session ownership
-- Validates filename (no path traversal, allowed extension)
-- Validates file size against per-file limit (50MB default)
-- Validates content type against allowlist
-- Checks total session storage against limit (500MB default)
+- API キーの認証とセッション所有者の検証
+- ファイル名の検証（パストラバーサルの禁止、許可された拡張子であること）
+- ファイルサイズの検証（1 ファイルあたりの上限、既定は 50MB）
+- コンテンツタイプの検証（許可リストに対して実施）
+- セッション全体のストレージ量の検証（上限は既定で 500MB）
 
-**Response (if validation passes):**
+**レスポンス（検証が通過した場合):**
 
 ```json
 {
@@ -57,7 +57,7 @@ Content-Type: application/json
 }
 ```
 
-**Response (if validation fails):**
+**レスポンス（検証が失敗した場合):**
 
 ```http
 400 Bad Request
@@ -67,11 +67,11 @@ Content-Type: application/json
 }
 ```
 
-### Step 2: Upload to S3
+### ステップ 2: S3 へのアップロード
 
-The agent uploads the file directly to S3 using the presigned URL:
+エージェントは presigned URL を使ってファイルを直接 S3 にアップロードします。
 
-**Request:**
+**リクエスト:**
 
 ```http
 PUT <presigned-url>
@@ -79,11 +79,11 @@ Content-Type: image/png
 <file-contents>
 ```
 
-S3 validates the presigned URL signature and accepts the upload. The backend is not involved in this step.
+S3 が presigned URL の署名を検証し、アップロードを受け入れます。このステップにバックエンドは関与しません。
 
-## Storage Organization
+## ストレージの構成
 
-Artifacts are stored in S3 with the following path structure:
+アーティファクトは以下のパス構造で S3 に保存されます。
 
 ```
 sessions/
@@ -94,8 +94,8 @@ sessions/
           screenshot.png
           video.mp4
           debug.log
-        session.json        # Session state (existing)
-        diff.txt           # Git diff (existing)
+        session.json        # セッション状態（既存）
+        diff.txt           # Git diff（既存）
   org/
     <organizationId>/
       <sessionId>/
@@ -103,48 +103,48 @@ sessions/
           ...
 ```
 
-This structure:
+この構造により:
 
-- Maintains backward compatibility with existing `session.json` and `diff.txt` files
-- Isolates user/org data for security
-- Groups all session-related files together
-- Allows simple recursive deletion when a session is removed
+- 既存の `session.json` および `diff.txt` ファイルとの後方互換性を維持
+- ユーザー／組織のデータを分離しセキュリティを確保
+- セッション関連のファイルをすべて同じ場所にグループ化
+- セッション削除時にシンプルな再帰的削除が可能
 
-## File Type and Size Limits
+## ファイル形式とサイズの上限
 
-### Allowed File Types
+### 許可されるファイル形式
 
-The system validates both file extensions and MIME types:
+システムはファイル拡張子と MIME タイプの両方を検証します。
 
-**Images:** `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`
-**Videos:** `.mp4`, `.mov`, `.avi`, `.webm`
-**Text/Logs:** `.log`, `.txt`, `.json`, `.xml`, `.csv`, `.html`
+**画像:** `.png`, `.jpg`, `.jpeg`, `.gif`, `.webp`
+**動画:** `.mp4`, `.mov`, `.avi`, `.webm`
+**テキスト／ログ:** `.log`, `.txt`, `.json`, `.xml`, `.csv`, `.html`
 
-Content types are validated against an allowlist to prevent uploading executable files or other potentially dangerous content.
+コンテンツタイプは許可リストに対して検証され、実行可能ファイルやその他危険なコンテンツのアップロードを防止します。
 
-### Size Limits
+### サイズ上限
 
-Two limits are enforced:
+2 つの上限が強制されます。
 
-1. **Per-File Limit:** 50MB (configurable via `ARTIFACT_MAX_FILE_SIZE_MB`)
-2. **Total Session Storage:** 500MB (configurable via `ARTIFACT_MAX_TOTAL_SIZE_MB`)
+1. **1 ファイルあたりの上限:** 50MB（`ARTIFACT_MAX_FILE_SIZE_MB` で設定可能）
+2. **セッション全体のストレージ:** 500MB（`ARTIFACT_MAX_TOTAL_SIZE_MB` で設定可能）
 
-The backend calculates total storage by summing all files under the session's S3 prefix before issuing presigned URLs. This prevents a single session from consuming excessive storage.
+バックエンドは presigned URL を発行する前に、そのセッションの S3 プレフィックス配下の全ファイルの合計を計算して総ストレージ量を求めます。これにより、単一のセッションが過度なストレージを消費することを防ぎます。
 
-## CLI Usage
+## CLI の使用方法
 
-### Using the UploadArtifact Tool (Recommended)
+### UploadArtifact ツールの使用（推奨）
 
-The `UploadArtifact` tool is available when running with the beta flag:
+`UploadArtifact` ツールは beta フラグ付きで実行した場合に利用可能になります。
 
 ```bash
 cn serve --id <agentSessionId> --beta-upload-artifact-tool
 ```
 
-Agents can then use the built-in `UploadArtifact` tool to upload files:
+エージェントは組み込みの `UploadArtifact` ツールを使ってファイルをアップロードできます。
 
 ```typescript
-// The agent calls this tool with the file path
+// エージェントがファイルパスを指定してこのツールを呼び出す
 {
   "name": "UploadArtifact",
   "parameters": {
@@ -153,24 +153,24 @@ Agents can then use the built-in `UploadArtifact` tool to upload files:
 }
 ```
 
-The tool will:
+このツールは次の処理を行います。
 
-- Validate the file exists and is an allowed type
-- Check file size limits (50MB max per file)
-- Upload to session storage
-- Return success message or detailed error
+- ファイルが存在し、許可された形式であることを検証
+- ファイルサイズの上限をチェック（1 ファイル最大 50MB）
+- セッションストレージへアップロード
+- 成功メッセージまたは詳細なエラーを返却
 
-**Tool Description:** "Upload a file (screenshot, video, log) to the session artifacts for user review. Supported formats: images (png, jpg, jpeg, gif, webp), videos (mp4, mov, avi, webm), and text files (log, txt, json, xml, csv, html). Maximum file size: 50MB. **If an artifact with the same filename already exists, it will be overwritten with the new file.**"
+**ツールの説明:** "Upload a file (screenshot, video, log) to the session artifacts for user review. Supported formats: images (png, jpg, jpeg, gif, webp), videos (mp4, mov, avi, webm), and text files (log, txt, json, xml, csv, html). Maximum file size: 50MB. **If an artifact with the same filename already exists, it will be overwritten with the new file.**"
 
-**Requirements:**
+**必要条件:**
 
-- Must run with `--id <agentSessionId>` (agent mode)
-- Must enable `--beta-upload-artifact-tool` flag
-- User must be authenticated (`cn login`)
+- `--id <agentSessionId>`（エージェントモード）で実行していること
+- `--beta-upload-artifact-tool` フラグを有効にしていること
+- ユーザーが認証済みであること（`cn login`）
 
-### Programmatic Upload (Service API)
+### プログラムによるアップロード（サービス API）
 
-For custom implementations, use the service directly:
+独自の実装を行う場合は、サービスを直接利用してください。
 
 ```typescript
 import { services } from "./services/index.js";
@@ -188,7 +188,7 @@ if (result.success) {
 }
 ```
 
-### Multiple Files
+### 複数ファイルのアップロード
 
 ```typescript
 const results = await services.artifactUpload.uploadArtifacts(
@@ -202,43 +202,43 @@ results.forEach((result) => {
 });
 ```
 
-## Environment Variables
+## 環境変数
 
-The CLI requires these environment variables for artifact uploads:
+CLI はアーティファクトアップロードのために次の環境変数を必要とします。
 
-- `CONTINUE_API_KEY`: Bearer token for backend authentication
-- `CONTINUE_API_BASE`: API base URL (defaults to `https://api.continue.dev/`)
-- `AGENT_SESSION_ID`: The current agent session identifier
+- `CONTINUE_API_KEY`: バックエンド認証用の Bearer トークン
+- `CONTINUE_API_BASE`: API ベース URL（既定は `https://api.continue.dev/`）
+- `AGENT_SESSION_ID`: 現在のエージェントセッション識別子
 
-These are automatically provided when running in Continue's devbox environment.
+これらは Continue の devbox 環境で実行した際に自動的に提供されます。
 
-## Error Handling
+## エラー処理
 
-### Validation Errors (400)
+### 検証エラー（400）
 
-- Invalid filename (path traversal, disallowed extension)
-- File too large (exceeds per-file limit)
-- Storage limit exceeded (session total > 500MB)
-- Invalid content type
+- 不正なファイル名（パストラバーサル、許可されていない拡張子）
+- ファイルが大きすぎる（1 ファイルあたりの上限を超過）
+- ストレージ上限の超過（セッション合計が 500MB を超過）
+- 不正なコンテンツタイプ
 
-### Authentication Errors (401/403)
+### 認証エラー（401/403）
 
-- Missing or invalid API key
-- User doesn't own the agent session
+- API キーが存在しない、または不正
+- ユーザーがそのエージェントセッションを所有していない
 
-### Upload Errors (S3)
+### アップロードエラー（S3）
 
-- Network failure during upload
-- Presigned URL expired (15-minute timeout)
-- S3 service error
+- アップロード中のネットワーク障害
+- Presigned URL の期限切れ（15 分のタイムアウト）
+- S3 サービスエラー
 
-All errors are logged and returned with descriptive messages. Failed uploads don't crash the agent - they return an error result that the agent can handle gracefully.
+すべてのエラーはログに記録され、説明メッセージ付きで返されます。アップロードが失敗してもエージェントはクラッシュせず、エラー結果が返されるため、エージェントは適切に処理できます。
 
-## Frontend Access
+## フロントエンドからのアクセス
 
-The frontend can list and download artifacts using:
+フロントエンドは以下を使ってアーティファクトの一覧取得とダウンロードを行うことができます。
 
-**List artifacts:**
+**アーティファクトの一覧取得:**
 
 ```http
 GET /agents/{agentSessionId}/artifacts
@@ -257,7 +257,7 @@ Response:
 }
 ```
 
-**Download artifact:**
+**アーティファクトのダウンロード:**
 
 ```http
 GET /agents/{agentSessionId}/artifacts/{filename}/download
@@ -270,66 +270,66 @@ Response:
 }
 ```
 
-The frontend then uses the presigned download URL to fetch the artifact directly from S3.
+フロントエンドはその後、presigned ダウンロード URL を使って S3 から直接アーティファクトを取得します。
 
-## Security Considerations
+## セキュリティに関する考慮事項
 
-1. **Authentication**: All endpoints require valid API keys tied to user/org accounts
-2. **Authorization**: Session ownership is verified before issuing presigned URLs
-3. **Path Traversal Prevention**: Filenames are validated to prevent `../` attacks
-4. **Content Validation**: File types are restricted via extension and MIME type checks
-5. **Rate Limiting**: Storage limits prevent abuse (per-file and total session limits)
-6. **Time-Limited URLs**: Presigned URLs expire after 15 minutes for uploads, 1 hour for downloads
-7. **Storage Isolation**: Files are scoped to user/org prefixes, preventing cross-tenant access
+1. **認証**: すべてのエンドポイントは、ユーザー／組織アカウントに紐づく有効な API キーを必要とします
+2. **認可**: Presigned URL の発行前にセッションの所有者検証が実施されます
+3. **パストラバーサル対策**: ファイル名が検証され、`../` を用いた攻撃を防止します
+4. **コンテンツ検証**: ファイル形式は拡張子と MIME タイプのチェックにより制限されます
+5. **レート制限**: ストレージ上限（1 ファイルあたりおよびセッション合計）により乱用を防止します
+6. **有効期限付き URL**: Presigned URL はアップロードで 15 分、ダウンロードで 1 時間後に失効します
+7. **ストレージの分離**: ファイルはユーザー／組織のプレフィックスにスコープされ、テナント間のクロスアクセスを防止します
 
-## Design Trade-offs
+## 設計上のトレードオフ
 
-### Chosen: No Database Tracking
+### 採用: データベースでのトラッキングを行わない
 
-**Decision:** Store artifacts as files in S3 without tracking individual files in the database.
+**決定:** アーティファクトは S3 上のファイルとして保存し、個々のファイルをデータベースで追跡しません。
 
-**Rationale:**
+**根拠:**
 
-- Simpler implementation (no new database tables)
-- Files are the source of truth (no sync issues between DB and S3)
-- Fast listing via S3 API (ListObjects)
-- Automatic cleanup when deleting session folder
+- よりシンプルな実装（新しいデータベーステーブルが不要）
+- ファイルが信頼できる情報源（DB と S3 間の同期問題が発生しない）
+- S3 API（ListObjects）による高速な一覧取得
+- セッションフォルダ削除時の自動クリーンアップ
 
-**Trade-off:** Cannot query artifacts across sessions or track metadata without scanning S3.
+**トレードオフ:** アーティファクトをセッション横断でクエリすることや、S3 をスキャンせずにメタデータを追跡することはできません。
 
-### Chosen: Overwrite on Name Collision
+### 採用: 名前衝突時の上書き
 
-**Decision:** If the same filename is uploaded twice, the last upload wins.
+**決定:** 同じファイル名が 2 回アップロードされた場合、最後のアップロードが優先されます。
 
-**Rationale:**
+**根拠:**
 
-- Simpler than versioning or auto-renaming
-- Common use case: agent re-uploading updated screenshot
-- Reduces storage consumption
+- バージョニングや自動リネームよりシンプル
+- よくあるユースケース: エージェントが更新済みスクリーンショットを再アップロードする
+- ストレージ消費の削減
 
-**Trade-off:** No version history for artifacts.
+**トレードオフ:** アーティファクトのバージョン履歴は残りません。
 
-### Chosen: Direct S3 Upload (Presigned URLs)
+### 採用: S3 直接アップロード（Presigned URL）
 
-**Decision:** Use presigned URLs instead of proxying files through backend.
+**決定:** ファイルをバックエンド経由でプロキシする代わりに presigned URL を使用します。
 
-**Rationale:**
+**根拠:**
 
-- Better performance (no backend bottleneck)
-- Lower cost (no backend bandwidth charges)
-- Proven pattern (already used in StorageSyncService)
+- より良いパフォーマンス（バックエンドがボトルネックにならない）
+- 低いコスト（バックエンドの帯域課金が発生しない）
+- 実績のあるパターン（StorageSyncService で既に使用されている）
 
-**Trade-off:** Backend cannot inspect file contents before upload (relies on validation at URL generation).
+**トレードオフ:** バックエンドはアップロード前にファイルコンテンツを検査できません（URL 生成時の検証に依存します）。
 
-## Future Enhancements
+## 将来の拡張
 
-- **Compression**: Automatically compress screenshots/videos before upload
-- **Retention Policies**: Auto-delete artifacts after N days
-- **Artifact Types**: Support more file types (PDFs, archives)
-- **Preview Generation**: Generate thumbnails for images/videos
-- **Streaming**: Support large file uploads with multipart upload
-- **Metadata**: Attach custom metadata to artifacts (tags, descriptions)
+- **圧縮**: アップロード前にスクリーンショット／動画を自動圧縮
+- **リテンションポリシー**: N 日後にアーティファクトを自動削除
+- **アーティファクトの種類**: より多くのファイル形式（PDF、アーカイブなど）のサポート
+- **プレビュー生成**: 画像／動画のサムネイル生成
+- **ストリーミング**: マルチパートアップロードによる大容量ファイルのアップロードサポート
+- **メタデータ**: アーティファクトへのカスタムメタデータ（タグ、説明）の付与
 
 ---
 
-This document describes the initial artifact upload implementation. Update it when the architecture evolves.
+このドキュメントはアーティファクトアップロードの初期実装を説明したものです。アーキテクチャが進化した際には更新してください。

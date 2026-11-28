@@ -1,23 +1,23 @@
-# TTY-less Environment Support
+# TTY なし環境のサポート
 
-## Overview
+## 概要
 
-The Continue CLI supports running in TTY-less environments (environments without a terminal/TTY), which is essential for:
+Continue CLI は TTY なし環境（ターミナル／TTY が存在しない環境）での実行をサポートしています。これは次に不可欠なものです。
 
-- VSCode and IntelliJ extensions using the `run_terminal_command` tool
-- Docker containers without TTY allocation
-- CI/CD pipelines
-- Automated scripts and tools
-- Background processes
+- `run_terminal_command` ツールを使用する VSCode および IntelliJ 拡張機能
+- TTY 割り当てを行わない Docker コンテナ
+- CI/CD パイプライン
+- 自動化スクリプトやツール
+- バックグラウンドプロセス
 
-## Architecture
+## アーキテクチャ
 
-### Mode Separation
+### モードの分離
 
-The CLI has two distinct execution modes with complete separation:
+CLI は、完全に分離された 2 つの実行モードを持ちます。
 
-1. **Interactive Mode (TUI)**: Requires a TTY, uses Ink for rendering
-2. **Headless Mode**: Works in TTY-less environments, outputs to stdout/stderr
+1. **インタラクティブモード（TUI）**: TTY を必要とし、レンダリングに Ink を使用します
+2. **ヘッドレスモード**: TTY なし環境で動作し、stdout／stderr へ出力します
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -37,9 +37,9 @@ The CLI has two distinct execution modes with complete separation:
     └────────────────┘       └─────────────────┘
 ```
 
-### Safeguards Implemented
+### 実装済みのセーフガード
 
-#### 1. **TTY Detection Utilities** (`src/util/cli.ts`)
+#### 1. **TTY 検出ユーティリティ**（`src/util/cli.ts`）
 
 ```typescript
 // Check if running in TTY-less environment
@@ -52,24 +52,24 @@ export function supportsInteractive(): boolean;
 export function hasSuppliedPrompt(): boolean;
 ```
 
-#### 2. **Stdin Reading Protection** (`src/util/stdin.ts`)
+#### 2. **Stdin 読み取りの保護**（`src/util/stdin.ts`）
 
-Prevents stdin reading when:
+次が該当する場合、stdin の読み取りを防止します。
 
-- In headless mode with supplied prompt
-- `FORCE_NO_TTY` environment variable is set
-- In test environments
+- プロンプトが指定されたヘッドレスモードで実行中
+- `FORCE_NO_TTY` 環境変数が設定されている
+- テスト環境である
 
-This avoids blocking/hanging in TTY-less environments where stdin is not available or not readable.
+これにより、stdin が存在しない、または読み取りできない TTY なし環境でのブロッキング／ハングを回避します。
 
-#### 3. **TUI Initialization Guards** (`src/ui/index.ts`)
+#### 3. **TUI 初期化のガード**（`src/ui/index.ts`）
 
-The `startTUIChat()` function now includes multiple safeguards:
+`startTUIChat()` 関数には複数のセーフガードが含まれています。
 
-- **Headless mode check**: Throws error if called in headless mode
-- **TTY-less check**: Throws error if no TTY is available
-- **Raw mode test**: Validates stdin supports raw mode (required by Ink)
-- **Explicit stdin/stdout**: Passes streams explicitly to Ink
+- **ヘッドレスモードのチェック**: ヘッドレスモードで呼び出された場合はエラーをスローします
+- **TTY なしのチェック**: TTY が利用できない場合はエラーをスローします
+- **raw モードの検証**: stdin が Ink の必要とする raw モードをサポートしているか検証します
+- **明示的な stdin／stdout**: ストリームを明示的に Ink へ渡します
 
 ```typescript
 // Critical safeguard: Prevent TUI in headless mode
@@ -83,9 +83,9 @@ if (isTTYless() && !customStdin) {
 }
 ```
 
-#### 4. **Headless Mode Validation** (`src/commands/chat.ts`)
+#### 4. **ヘッドレスモードの検証**（`src/commands/chat.ts`）
 
-Ensures headless mode has all required inputs:
+ヘッドレスモードに必要な入力がすべて揃っていることを確認します。
 
 ```typescript
 if (!prompt) {
@@ -93,17 +93,17 @@ if (!prompt) {
 }
 ```
 
-#### 5. **Logger Configuration** (`src/util/logger.ts`)
+#### 5. **ロガー設定**（`src/util/logger.ts`）
 
-Configures output handling for TTY-less environments:
+TTY なし環境向けに出力処理を設定します。
 
-- Sets UTF-8 encoding
-- Leaves stdout/stderr buffering unchanged in headless mode.
-- Disables progress indicators
+- UTF-8 エンコーディングを設定します
+- ヘッドレスモードでは stdout／stderr のバッファリングを変更しません。
+- 進行状況の表示を無効化します
 
-## Usage Examples
+## 使用例
 
-### From VSCode/IntelliJ Extension
+### VSCode／IntelliJ 拡張機能から
 
 ```typescript
 // Using the run_terminal_command tool
@@ -111,14 +111,14 @@ const command = 'cn -p "Analyze the current git diff"';
 const result = await runTerminalCommand(command);
 ```
 
-### From Docker Container
+### Docker コンテナから
 
 ```bash
 # Without TTY allocation (-t flag)
 docker run --rm my-image cn -p "Generate a README"
 ```
 
-### From CI/CD Pipeline
+### CI/CD パイプラインから
 
 ```yaml
 - name: Run Continue CLI
@@ -126,7 +126,7 @@ docker run --rm my-image cn -p "Generate a README"
     cn -p "Review code changes" --format json
 ```
 
-### From Automated Script
+### 自動化スクリプトから
 
 ```bash
 #!/bin/bash
@@ -134,14 +134,14 @@ docker run --rm my-image cn -p "Generate a README"
 cn -p "Generate commit message for current changes" --silent
 ```
 
-## Environment Variables
+## 環境変数
 
-- `FORCE_NO_TTY`: Forces TTY-less mode, prevents stdin reading
-- `CONTINUE_CLI_TEST`: Marks test environment, prevents stdin reading
+- `FORCE_NO_TTY`: TTY なしモードを強制し、stdin の読み取りを防止します
+- `CONTINUE_CLI_TEST`: テスト環境であることを示し、stdin の読み取りを防止します
 
-## Testing
+## テスト
 
-### TTY-less Test
+### TTY なしテスト
 
 ```typescript
 const result = await runCLI(context, {
@@ -152,16 +152,16 @@ const result = await runCLI(context, {
 });
 ```
 
-### Expected Behavior
+### 期待される挙動
 
-- ✅ Should not hang on stdin
-- ✅ Should not attempt to initialize Ink
-- ✅ Should output results to stdout
-- ✅ Should exit cleanly
+- ✅ stdin でハングすべきではありません
+- ✅ Ink の初期化を試みるべきではありません
+- ✅ 結果を stdout へ出力すべきです
+- ✅ 正常に終了すべきです
 
-## Error Messages
+## エラーメッセージ
 
-### Attempting TUI in TTY-less Environment
+### TTY なし環境で TUI を起動しようとした場合
 
 ```
 Error: Cannot start TUI in TTY-less environment. No TTY available for interactive mode.
@@ -169,7 +169,7 @@ For non-interactive use, run with -p flag:
   cn -p "your prompt here"
 ```
 
-### Missing Prompt in Headless Mode
+### ヘッドレスモードでプロンプトがない場合
 
 ```
 Error: A prompt is required when using the -p/--print flag, unless --prompt or --agent is provided.
@@ -181,59 +181,59 @@ Usage examples:
   cn -p --agent my-org/my-agent
 ```
 
-## Troubleshooting
+## トラブルシューティング
 
-### CLI Hangs in Docker/CI
+### Docker／CI で CLI がハングする
 
-**Cause**: CLI attempting to read stdin in TTY-less environment
+**原因**: TTY なし環境で CLI が stdin の読み取りを試みている
 
-**Solution**: Ensure using `-p` flag with a prompt:
+**解決策**: `-p` フラグとプロンプトを必ず指定してください:
 
 ```bash
 cn -p "your prompt" --config config.yaml
 ```
 
-### "Cannot start TUI" Error
+### "Cannot start TUI" エラー
 
-**Cause**: Attempting interactive mode in TTY-less environment
+**原因**: TTY なし環境でインタラクティブモードを起動しようとしている
 
-**Solution**: Use headless mode:
+**解決策**: ヘッドレスモードを使用してください:
 
 ```bash
 cn -p "your prompt"
 ```
 
-### Raw Mode Error
+### raw モードのエラー
 
-**Cause**: Terminal doesn't support raw mode (required by Ink)
+**原因**: ターミナルが raw モード（Ink に必要）をサポートしていない
 
-**Solution**: Use headless mode instead of interactive mode
+**解決策**: インタラクティブモードの代わりにヘッドレスモードを使用してください
 
-## Design Principles
+## 設計原則
 
-1. **Fail Fast**: Detect environment early and fail with clear messages
-2. **Explicit Separation**: No code path should allow Ink to load in headless mode
-3. **No Blocking**: Never block on stdin in TTY-less environments
-4. **Clear Errors**: Provide actionable error messages with examples
-5. **Testing**: Comprehensive tests for TTY-less scenarios
+1. **Fail Fast**: 環境を早期に検出し、明確なメッセージで失敗します
+2. **明示的な分離**: どのコード経路でもヘッドレスモードで Ink が読み込まれることを許しません
+3. **ブロッキングなし**: TTY なし環境で stdin を決してブロックしません
+4. **明確なエラー**: 使用例を添えた、実効性のあるエラーメッセージを提供します
+5. **テスト**: TTY なしシナリオに対する包括的なテスト
 
-## Implementation Checklist
+## 実装チェックリスト
 
-- [x] Add TTY detection utilities
-- [x] Protect stdin reading in headless mode
-- [x] Guard TUI initialization
-- [x] Validate headless mode inputs
-- [x] Configure logger for TTY-less output
-- [x] Update test helpers
-- [x] Add TTY-less tests
-- [x] Document TTY-less support
+- [x] TTY 検出ユーティリティを追加
+- [x] ヘッドレスモードでの stdin 読み取りを保護
+- [x] TUI 初期化をガード
+- [x] ヘッドレスモードの入力を検証
+- [x] TTY なし出力向けにロガーを設定
+- [x] テストヘルパーを更新
+- [x] TTY なしテストを追加
+- [x] TTY なしサポートをドキュメント化
 
-## Related Files
+## 関連ファイル
 
-- `src/util/cli.ts` - TTY detection utilities
-- `src/util/stdin.ts` - Stdin reading protection
-- `src/ui/index.ts` - TUI initialization guards
-- `src/commands/chat.ts` - Mode routing and validation
-- `src/util/logger.ts` - Output configuration
-- `src/test-helpers/cli-helpers.ts` - Test support
-- `src/e2e/headless-minimal.test.ts` - TTY-less tests
+- `src/util/cli.ts` - TTY 検出ユーティリティ
+- `src/util/stdin.ts` - Stdin 読み取りの保護
+- `src/ui/index.ts` - TUI 初期化のガード
+- `src/commands/chat.ts` - モードルーティングと検証
+- `src/util/logger.ts` - 出力設定
+- `src/test-helpers/cli-helpers.ts` - テストサポート
+- `src/e2e/headless-minimal.test.ts` - TTY なしテスト

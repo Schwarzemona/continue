@@ -1,149 +1,149 @@
-# Testing Strategies
+# テスト戦略
 
-This document provides an overview of the different testing strategies used in this repository, when to use each type, and links to examples.
+このドキュメントは、本リポジトリで使用されている様々なテスト戦略の概要、各方式を使うべき場面、実例へのリンクを提供します。
 
-## Test Types
+## テストの種類
 
-### 1. Unit Tests
+### 1. ユニットテスト
 
-**Purpose**: Test individual functions, utilities, and modules in isolation.
+**目的**: 個々の関数、ユーティリティ、モジュールを独立してテストします。
 
-**When to use**:
+**使用すべき場面**:
 
-- Testing pure functions with predictable inputs/outputs
-- Testing utility functions and helpers
-- Testing business logic components
-- Testing error handling and edge cases
+- 予測可能な入力／出力を持つ純粋な関数のテスト
+- ユーティリティ関数やヘルパーのテスト
+- ビジネスロジックコンポーネントのテスト
+- エラー処理とエッジケースのテスト
 
-**Framework**: Vitest with TypeScript support
+**フレームワーク**: TypeScript サポート付きの Vitest
 
-**Examples**:
+**実例**:
 
-- [`src/util/formatError.test.ts`](../src/util/formatError.test.ts) - Tests error formatting utility
-- [`src/util/exponentialBackoff.test.ts`](../src/util/exponentialBackoff.test.ts) - Tests backoff logic
-- [`src/logging.test.ts`](../src/logging.test.ts) - Tests logging functionality
-- [`src/args.test.ts`](../src/args.test.ts) - Tests argument parsing
+- [`src/util/formatError.test.ts`](../src/util/formatError.test.ts) - エラーフォーマットユーティリティのテスト
+- [`src/util/exponentialBackoff.test.ts`](../src/util/exponentialBackoff.test.ts) - バックオフロジックのテスト
+- [`src/logging.test.ts`](../src/logging.test.ts) - ログ機能のテスト
+- [`src/args.test.ts`](../src/args.test.ts) - 引数解析のテスト
 
-**How to run**: `npm test` (includes linting)
+**実行方法**: `npm test`（リンティングを含みます）
 
-### 2. Service Tests
+### 2. サービステスト
 
-**Purpose**: Test service classes and dependency injection system.
+**目的**: サービスクラスと依存注入システムをテストします。
 
-**When to use**:
+**使用すべき場面**:
 
-- Testing service initialization and lifecycle
-- Testing service dependencies and injection
-- Testing service container behavior
-- Testing service configuration loading
+- サービスの初期化とライフサイクルのテスト
+- サービス間の依存と注入のテスト
+- サービスコンテナの挙動のテスト
+- サービスの設定読み込みのテスト
 
-**Examples**:
+**実例**:
 
-- [`src/services/ServiceContainer.test.ts`](../src/services/ServiceContainer.test.ts) - Tests dependency injection
-- [`src/services/ConfigService.test.ts`](../src/services/ConfigService.test.ts) - Tests configuration loading
-- [`src/services/circular-dependencies.test.ts`](../src/services/circular-dependencies.test.ts) - Tests circular dependency detection
+- [`src/services/ServiceContainer.test.ts`](../src/services/ServiceContainer.test.ts) - 依存注入のテスト
+- [`src/services/ConfigService.test.ts`](../src/services/ConfigService.test.ts) - 設定読み込みのテスト
+- [`src/services/circular-dependencies.test.ts`](../src/services/circular-dependencies.test.ts) - 循環依存検出のテスト
 
-### 3. UI Component Tests
+### 3. UI コンポーネントテスト
 
-**Purpose**: Test React components using Ink testing library for terminal UI.
+**目的**: ターミナル UI 向けに Ink のテストライブラリを使って React コンポーネントをテストします。
 
-**When to use**:
+**使用すべき場面**:
 
-- Testing component rendering and display
-- Testing user interactions and input handling
-- Testing component state changes
-- Testing message display and formatting
+- コンポーネントのレンダリングと表示のテスト
+- ユーザー操作と入力処理のテスト
+- コンポーネントの状態変化のテスト
+- メッセージ表示とフォーマットのテスト
 
-**Framework**: Vitest + Ink Testing Library + React Testing utilities
+**フレームワーク**: Vitest + Ink Testing Library + React テストユーティリティ
 
-**Examples**:
+**実例**:
 
-- [`src/ui/__tests__/TUIChat.basic.test.tsx`](../src/ui/__tests__/TUIChat.basic.test.tsx) - Basic rendering tests
-- [`src/ui/__tests__/TUIChat.messages.test.tsx`](../src/ui/__tests__/TUIChat.messages.test.tsx) - Message display tests
-- [`src/ui/__tests__/TUIChat.input.test.tsx`](../src/ui/__tests__/TUIChat.input.test.tsx) - Input handling tests
-- [`src/ui/MarkdownRenderer.test.tsx`](../src/ui/MarkdownRenderer.test.tsx) - Markdown rendering tests
+- [`src/ui/__tests__/TUIChat.basic.test.tsx`](../src/ui/__tests__/TUIChat.basic.test.tsx) - 基本的なレンダリングテスト
+- [`src/ui/__tests__/TUIChat.messages.test.tsx`](../src/ui/__tests__/TUIChat.messages.test.tsx) - メッセージ表示テスト
+- [`src/ui/__tests__/TUIChat.input.test.tsx`](../src/ui/__tests__/TUIChat.input.test.tsx) - 入力処理テスト
+- [`src/ui/MarkdownRenderer.test.tsx`](../src/ui/MarkdownRenderer.test.tsx) - Markdown レンダリングテスト
 
-**Test Checklist**: See [`src/ui/UI_TEST_CHECKLIST.md`](../src/ui/UI_TEST_CHECKLIST.md) for comprehensive UI testing guidelines.
+**テストチェックリスト**: 包括的な UI テストガイドラインは [`src/ui/UI_TEST_CHECKLIST.md`](../src/ui/UI_TEST_CHECKLIST.md) を参照してください。
 
-### 4. E2E (End-to-End) Tests
+### 4. E2E（エンドツーエンド）テスト
 
-**Purpose**: Test complete user workflows and CLI behavior in realistic scenarios.
+**目的**: 現実的なシナリオにおいて、完全なユーザーワークフローと CLI の挙動をテストします。
 
-**When to use**:
+**使用すべき場面**:
 
-- Testing full CLI command execution
-- Testing authentication flows
-- Testing configuration loading and switching
-- Testing tool execution and responses
-- Testing headless and interactive modes
+- CLI コマンドの完全な実行のテスト
+- 認証フローのテスト
+- 設定の読み込みと切り替えのテスト
+- ツール実行とその応答のテスト
+- ヘッドレスモードとインタラクティブモードのテスト
 
-**Examples**:
+**実例**:
 
-- [`src/e2e/auth.test.ts`](../src/e2e/auth.test.ts) - Authentication workflows
-- [`src/e2e/basic-commands.test.ts`](../src/e2e/basic-commands.test.ts) - Basic CLI commands
-- [`src/e2e/headless-tool-calls.test.ts`](../src/e2e/headless-tool-calls.test.ts) - Tool execution in headless mode
-- [`src/e2e/config-switching.test.tsx`](../src/e2e/config-switching.test.tsx) - Configuration switching
+- [`src/e2e/auth.test.ts`](../src/e2e/auth.test.ts) - 認証ワークフロー
+- [`src/e2e/basic-commands.test.ts`](../src/e2e/basic-commands.test.ts) - 基本的な CLI コマンド
+- [`src/e2e/headless-tool-calls.test.ts`](../src/e2e/headless-tool-calls.test.ts) - ヘッドレスモードでのツール実行
+- [`src/e2e/config-switching.test.tsx`](../src/e2e/config-switching.test.tsx) - 設定の切り替え
 
-## Testing Infrastructure
+## テストインフラ
 
-### Test Helpers
+### テストヘルパー
 
-**Service Container Testing**:
+**サービスコンテナのテスト**:
 
-- [`src/test-helpers/testServiceContainer.ts`](../src/test-helpers/testServiceContainer.ts) - Mock service container setup
-- [`src/test-helpers/ui-test-context.ts`](../src/test-helpers/ui-test-context.ts) - UI test context setup
+- [`src/test-helpers/testServiceContainer.ts`](../src/test-helpers/testServiceContainer.ts) - モックサービスコンテナのセットアップ
+- [`src/test-helpers/ui-test-context.ts`](../src/test-helpers/ui-test-context.ts) - UI テストコンテキストのセットアップ
 
-**CLI Testing**:
+**CLI のテスト**:
 
-- Test helpers in [`src/test-helpers/`](../src/test-helpers/) for CLI command execution
+- CLI コマンド実行用のテストヘルパーは [`src/test-helpers/`](../src/test-helpers/) にあります
 
-### Mocks
+### モック
 
-**UI Mocks**: [`src/ui/__mocks__/`](../src/ui/__mocks__/)
+**UI モック**: [`src/ui/__mocks__/`](../src/ui/__mocks__/)
 
-- Syntax highlighter mocks
-- Component mocks for testing
+- 構文ハイライトのモック
+- テスト向けのコンポーネントモック
 
-**Service Mocks**: [`src/__mocks__/`](../src/__mocks__/)
+**サービスモック**: [`src/__mocks__/`](../src/__mocks__/)
 
-- Authentication mocks
-- Service mocks
-- Logging mocks
+- 認証のモック
+- サービスのモック
+- ログのモック
 
-## Configuration
+## 設定
 
-**Vitest Configuration**: [`vitest.config.ts`](../vitest.config.ts)
+**Vitest 設定**: [`vitest.config.ts`](../vitest.config.ts)
 
-- TypeScript support with ES modules
-- React/Ink component testing setup
-- Mock configurations
-- Test timeout and environment settings
+- ES モジュールによる TypeScript サポート
+- React／Ink コンポーネントテストのセットアップ
+- モックの設定
+- テストタイムアウトと環境設定
 
-## Running Tests
+## テストの実行
 
 ```bash
-# Run all tests with linting
+# リンティング付きで全テストを実行
 npm test
 
-# Run tests in watch mode
+# ウォッチモードでテストを実行
 npx vitest --watch
 
-# Run specific test file
+# 特定のテストファイルを実行
 npx vitest src/util/formatError.test.ts
 
-# Run tests with coverage
+# カバレッジ付きでテストを実行
 npx vitest --coverage
 ```
 
-## Best Practices
+## ベストプラクティス
 
-1. **Unit Tests**: Focus on pure functions and isolated logic
-2. **Service Tests**: Test dependency injection and service lifecycle
-3. **UI Tests**: Test user-visible behavior, not implementation details
-4. **E2E Tests**: Test complete user workflows and CLI behavior
+1. **ユニットテスト**: 純粋な関数と独立したロジックに集中します
+2. **サービステスト**: 依存注入とサービスライフサイクルをテストします
+3. **UI テスト**: 実装詳細ではなく、ユーザーに見える挙動をテストします
+4. **E2E テスト**: 完全なユーザーワークフローと CLI の挙動をテストします
 
-5. **Keep tests focused**: One behavior per test
-6. **Use descriptive names**: Test names should explain what's being tested
-7. **Minimal mocking**: Only mock external dependencies and APIs
-8. **Test error cases**: Include negative test cases and edge conditions
-9. **Maintain test isolation**: Each test should be independent
+5. **テストを集中させる**: 1 テストにつき 1 挙動
+6. **説明的な名前を使う**: テスト名は何をテストしているかを説明すべきです
+7. **最小限のモック化**: 外部依存と API のみをモックします
+8. **エラーケースをテストする**: ネガティブなテストケースや境界条件を含めます
+9. **テストの独立性を維持する**: 各テストは独立しているべきです

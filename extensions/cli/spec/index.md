@@ -1,49 +1,49 @@
 # `cn`
 
-## Overall development goals
+## 全体的な開発目標
 
-Fight to keep `cn` simple. This is an active process. The default is that `cn` will become disastrously complicated.
+`cn` をシンプルに保つために戦い続けてください。これは継続的な営みです。放置すれば `cn` は壊滅的に複雑になる、というのがデフォルトの帰結です。
 
-### Maintainability
+### 保守性
 
-Maintain minimal code (avoid new features unless there is overwhelming demand or they remove a clear blocker for many users). If someone offers up a feature you should seek to understand what they actually want and then decide as a maintainer of `cn` whether this can fit into some larger concept in a simple way. If someone asks to make something configurable, you should probably consider just changing the default.
+コードは最小限に保ってください（多くのユーザーが強く求めている場合、またはその機能が多くのユーザーに対する明確な障害を取り除く場合に限り、新機能を追加する）。誰かが機能を追加しようと申し出た場合は、その人が本当に何を求めているのかを理解しようとし、そのうえで `cn` のメンテナーとして、それをシンプルな形でより大きなコンセプトに組み込めるかどうかを判断してください。誰かが何かを設定可能にしたいと求めた場合は、単に既定値を変更するだけでよい可能性を検討すべきです。
 
-### Don't write code by hand
+### コードを手で書かない
 
-Use `cn` for everything. You should very rarely need to write code by hand. If you find yourself doing this outside of small tweaks, you should ask what about the codebase is causing `cn` to be unable to make the change.
+あらゆることに `cn` を使ってください。コードを自らの手で書くことは、極めてまれであるべきです。小さな調整を除いてそうした作業をしている自分に気づいたら、コードベースの何が原因で `cn` がその変更を行えないのかを問い直してください。
 
-If we build a system that allows us to entrust all changes to `cn` then it will be more reliable than us writing the code. Not because we can't write better code, but because `cn` is consistently thorough + it will force us to build the right systems around the code.
+すべての変更を `cn` に委ねられるシステムを構築できれば、私たちがコードを書くよりも信頼性が高くなります。より良いコードを書けないからではなく、`cn` は一貫して周到であり、コードの周囲に適切なシステムを構築することを強制してくれるからです。
 
-### Do not test by hand
+### 手でテストしない
 
-If you find yourself using `npm run start` to test that existing functionality is still working, this means that you are missing a test. A green check mark from `npm test` should be full proof that the code can be shipped. See our testing strategies [here](./testing-strategies.md).
+既存の機能がまだ動作していることを確認するために `npm run start` を使っているなら、それはテストが欠けていることを意味します。`npm test` の緑のチェックマークは、そのコードが出荷可能であることの完全な証明でなければなりません。テスト戦略については[こちら](./testing-strategies.md)を参照してください。
 
-For new features you obviously need to run them yourself to apply your taste. `cn` can't match that right now.
+新機能については、当然ながら自分自身で実行してセンスを適用する必要があります。現時点では `cn` にはそれができません。
 
-### Minimize the number of concepts
+### コンセプトの数を最小化する
 
-The spec for `cn` (if it were to be fully written out) should be relatively short. This helps keep the code / spec consistent. It also allows us to keep the docs short and makes it easier for users to understand.
+`cn` の仕様（もし完全に書き下ろすことがあれば）は比較的短くあるべきです。これはコードと仕様の整合性を保つ助けになります。また、ドキュメントを短く保つことができ、ユーザーの理解もしやすくなります。
 
-### Low tolerance
+### 低い容忍度
 
-Tolerance for the following should be very close to zero:
+以下に対する容忍度は、ほぼゼロであるべきです。
 
-- Un-addressed code reviews
-- Failing tests
-- Flaky tests
-- Sentry issues
+- 未対応のコードレビュー
+- 失敗しているテスト
+- 不安定なテスト
+- Sentry の課題
 
-If we are inundated then we should build a system to solve that. For example, if it is tiresome to address all AI code reviews, then set up a trigger to have `cn` automatically address them.
+もし処理しきれないほど溢れているなら、それを解決するシステムを構築すべきです。たとえば、すべての AI コードレビューへの対応がうんざりするものなら、`cn` が自動的にそれらへ対応するようにトリガーを設定してください。
 
-### Start with a spec
+### 仕様から始める
 
-High level concepts / features should have a spec when possible. Good examples of this are [modes](./modes.md), [permissions](./permissions.md), and [wire format](./wire-format.md). Like code, the spec can and should be largely auto-generated.
+高レベルのコンセプトや機能は、可能な限り仕様を持つべきです。良い例として[モード](./modes.md)、[権限](./permissions.md)、[ワイヤーフォーマット](./wire-format.md)があります。コードと同様に、仕様もまた主に自動生成できるべきであり、そうすべきです。
 
-## Codebase Design
+## コードベースの設計
 
-- We intentionally write different implementations of the "loop" instead of trying to build a single engine that can be used across TUI, headless mode, `cn serve`, and more. So far, it would be more work than it is worth to add this abstraction.
-- "Everything is a service." Nobody (human or AI) should need to re-invent a polling mechanism or way to store / update state. This decision has been made already so we can focus on the business logic. The service setup lets us easily keep reactive state and avoid React anti-patterns like `useEffect`.
-- We use `ink` for UI, following the same usual React principles that we do elsewhere. Keep [components](../src/ui/components/) small, avoid `useEffect`, group logic into [hooks](../src/hooks).
-- Always use the [logger](../src/util/logger.ts) instead of `console.log`.
-- Use commander to define [commands](../src/commands/BaseCommandOptions.ts)
-- `cn remote` is intended to act the same as `cn`'s TUI in almost every way. There is a test helper that allows us to run any e2e test in _both_ remote and normal modes to ensure this is true.
+- TUI、headless モード、`cn serve` などで再利用できる単一のエンジンを構築する代わりに、意図的に「ループ」の異なる実装を書いています。現時点では、この抽象化を追加することは、得られる価値よりも多くの作業を要します。
+- 「すべてはサービスである。」人間でも AI でも、ポーリングの仕組みや状態の保存・更新手法を再発明する必要があってはなりません。この決定は既に済んでおり、私たちはビジネスロジックに集中できます。サービス設定により、リアクティブな状態を簡単に維持でき、`useEffect` のような React のアンチパターンを回避できます。
+- UI には `ink` を使用しており、他の場所と同じ通常の React の原則に従っています。[コンポーネント](../src/ui/components/)は小さく保ち、`useEffect` を避け、ロジックは[フック](../src/hooks)にグループ化してください。
+- `console.log` の代わりに必ず[ロガー](../src/util/logger.ts)を使ってください。
+- [コマンド](../src/commands/BaseCommandOptions.ts)を定義するために commander を使用します。
+- `cn remote` はほぼあらゆる点で `cn` の TUI と同じように振る舞うことを意図しています。あらゆる e2e テストを _remote モードと通常モードの両方_で実行できるようにするテストヘルパーが存在し、この同一性が保たれていることを確認しています。

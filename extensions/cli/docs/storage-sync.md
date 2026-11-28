@@ -1,18 +1,18 @@
-# Storage Sync Flow for `cn serve`
+# `cn serve` のストレージ同期フロー
 
-## Overview
+## 概要
 
-The `--id <storageId>` flag enables the `cn serve` command to periodically persist session state to an external Continue-managed storage bucket. On startup, the CLI exchanges the provided `storageId` for two pre-signed S3 URLs - one for `session.json` and one for `diff.txt` - and then pushes fresh copies of those files every 30 seconds.
+`--id <storageId>` フラグにより、`cn serve` コマンドはセッション状態を外部の Continue 管理ストレージバケットへ定期的に永続化できるようになります。起動時、CLI は指定された `storageId` をもとに 2 つのプレサイン済み（署名付き）S3 URL を取得します。1 つは `session.json` 用、もう 1 つは `diff.txt` 用です。その後、これらのファイルの新しいコピーを 30 秒ごとにプッシュします。
 
-This document captures the responsibilities for both the CLI and backend components so we can iterate on the feature together.
+このドキュメントは、CLI とバックエンドの両コンポーネントの責務を記述したもので、本機能を一緒に改善していくための基準点となります。
 
-## CLI Responsibilities
+## CLI の責務
 
-- **Flag plumbing**: When `cn serve` is invoked with `--id <storageId>`, the CLI treats that value as an opaque identifier.
-- **API key auth**: The CLI attaches the user-level Continue API key (same mechanism we already use for other authenticated requests) to backend calls.
-- **Presign handshake**:
-  1. On startup, issue `POST https://api.continue.dev/agents/storage/presigned-url` with JSON payload `{ "storageId": "<storageId>" }`.
-  2. Expect a response payload containing two pre-signed `PUT` URLs and their target object keys:
+- **フラグの受け渡し**: `cn serve` が `--id <storageId>` で起動された場合、CLI はその値を中身を解釈しない透明な識別子として扱います。
+- **API キー認証**: CLI は、他の認証済みリクエストで既に使っている仕組みと同じ方法で、ユーザーレベルの Continue API キーをバックエンド呼び出しに付与します。
+- **プレサインハンドシェイク**:
+  1. 起動時に `POST https://api.continue.dev/agents/storage/presigned-url` を JSON ペイロード `{ "storageId": "<storageId>" }` で発行します。
+  2. 2 つのプレサイン済み `PUT` URL と、それぞれの対象オブジェクトキーを含むレスポンスペイロードを受け取ります:
      ```json
      {
        "session": {
@@ -25,40 +25,40 @@ This document captures the responsibilities for both the CLI and backend compone
        }
      }
      ```
-  3. If the call fails, log and continue without remote storage (no retries yet).
-- **Periodic uploads**:
-  - Every 30 seconds (configurable later), serialize the in-memory session to `session.json` and fetch the `/diff` payload to produce `diff.txt`.
-  - Upload both artifacts using their respective `PUT` URLs. For now we overwrite the same objects each cycle.
-  - Errors should be logged but non-fatal; the server keeps running.
-  - If the repo check fails (no git repo or missing `main`), `diff.txt` uploads an empty string and we log the condition once for debugging.
+  3. 呼び出しが失敗した場合は、ログに記録してリモートストレージなしで継続します（現時点ではリトライなし）。
+- **定期的なアップロード**:
+  - 30 秒ごと（将来的に設定可能にする予定）に、メモリ内のセッションを `session.json` にシリアライズし、`/diff` ペイロードを取得して `diff.txt` を生成します。
+  - 両アーティファクトをそれぞれの `PUT` URL を使ってアップロードします。現時点では、毎サイクル同じオブジェクトを上書きします。
+  - エラーはログに記録しますが致命的ではないものとし、サーバーは稼働を継続します。
+  - リポジトリチェックが失敗した場合（git リポジトリではない、または `main` が存在しない）、`diff.txt` には空文字列をアップロードし、その状態をデバッグ用に 1 回だけログ出力します。
 
-## Backend Responsibilities
+## バックエンドの責務
 
-- **Endpoint surface**: `POST /agents/storage/presigned-url` accepts a JSON body `{ "storageId": string }`.
-- **Authentication**: Leverage the caller's Continue API key (the request arrives with the standard `Authorization: Bearer <apiKey>` header). Apply normal auth/tenant validation so users can only request URLs tied to their account/org.
-- **URL issuance**:
-  - Resolve `storageId` into the desired S3 prefix (e.g., `sessions/<org>/<storageId>/`).
-  - Generate two short-lived pre-signed `PUT` URLs: one for `session.json`, one for `diff.txt`.
-  - Return both URLs and their keys in the response payload described above.
-- **Expiration**: URLs are issued with a 60-minute TTL. The CLI automatically refreshes them before expiry (see URL Refresh Strategy below).
+- **エンドポイント**: `POST /agents/storage/presigned-url` は JSON ボディ `{ "storageId": string }` を受け付けます。
+- **認証**: 呼び出し元の Continue API キーを利用します（リクエストは標準の `Authorization: Bearer <apiKey>` ヘッダーとともに届きます）。通常の認証／テナント検証を適用し、ユーザーが自分のアカウント／組織に紐づく URL のみをリクエストできるようにします。
+- **URL の発行**:
+  - `storageId` を希望する S3 プレフィックス（例: `sessions/<org>/<storageId>/`）へ解決します。
+  - 有効期限の短いプレサイン済み `PUT` URL を 2 つ生成します。1 つは `session.json`、もう 1 つは `diff.txt` 用です。
+  - 前述のレスポンスペイロード形式で両 URL とキーを返します。
+- **有効期限**: URL は 60 分の TTL で発行されます。CLI は期限切れ前に自動的に更新します（以下の「URL 更新戦略」を参照）。
 
-## URL Refresh Strategy
+## URL 更新戦略
 
-Pre-signed URLs are automatically refreshed using a dual-strategy approach:
+プレサイン済み URL は、以下の 2 戦略を組み合わせた方式で自動的に更新されます。
 
-1. **Proactive Refresh**: URLs are refreshed at the 50-minute mark (10 minutes before expiry) to prevent disruption
-2. **Reactive Refresh**: If a 403 Forbidden error is detected (indicating expired URLs), an immediate refresh is triggered
-3. **Error Handling**: Upload errors are logged but non-fatal; the service continues running with automatic recovery
+1. **能動的な更新（Proactive Refresh）**: 混乱を防ぐため、URL は有効期限の 10 分前、すなわち 50 分経過時点で更新されます
+2. **受動的な更新（Reactive Refresh）**: 403 Forbidden エラー（URL 失効を示す）が検出された場合、即時の更新がトリガーされます
+3. **エラー処理**: アップロードエラーはログに記録されますが致命的ではないものとし、サービスは自動復旧しながら稼働を継続します
 
-This ensures continuous operation during devbox suspension, network interruptions, and clock drift.
+これにより、devbox の一時停止、ネットワーク分断、クロックドリフトが発生している間も連続的な動作が保証されます。
 
-## Open Questions & Future Enhancements
+## 未決の課題と将来の拡張
 
-- **Upload cadence**: The 30-second interval is hard-coded for now. Consider making it configurable in both CLI and backend policies.
-- **Error telemetry**: Decide if repeated upload failures should trip analytics or circuit breakers.
-- **Diff source**: `diff.txt` currently mirrors the `/diff` endpoint response. Confirm backend expectations for format and size limits.
-- **Security**: We might want to sign responses or enforce stricter scope on `storageId` mapping (e.g., require both org + storageId and validate ownership).
+- **アップロード間隔**: 30 秒の間隔は現時点ではハードコードされています。CLI とバックエンドの両方で設定可能することを検討してください。
+- **エラーのテレメトリ**: 繰り返しのアップロード失敗をアナリティクスやサーキットブレーカーで検知すべきかを決定します。
+- **diff のソース**: `diff.txt` は現状 `/diff` エンドポイントのレスポンスをそのまま反映しています。フォーマットとサイズ上限に関するバックエンド側の期待値を確認してください。
+- **セキュリティ**: レスポンスの署名付けや、`storageId` マッピングにより厳しいスコープ適用を要求する可能性があります（例: org と storageId の両方を要求し、所有者性を検証する）。
 
 ---
 
-This document should evolve alongside implementation details; update it whenever the API contract or client behavior changes.
+このドキュメントは実装詳細とともに発展させるべきものです。API コントラクトやクライアントの挙動が変わった際には必ず更新してください。

@@ -1,71 +1,71 @@
-Shell Mode (CLI TUI)
+シェルモード（CLI TUI）
 
-Overview
+概要
 
-- Shell mode lets users run shell commands directly from the chat input by starting their input with an exclamation mark (!).
-- It is intended for quick terminal command execution without leaving the TUI.
+- シェルモードでは、チャット入力欄で先頭に感嘆符（!）を付けることで、シェルコマンドを直接実行できます。
+- TUI から離れずに素早くターミナルコマンドを実行することを目的としています。
 
-Activation
+起動
 
-- Shell mode is activated when the current input (trimmed) starts with !
-  - Example: "!git status" or " !ls -la" both activate Shell mode.
-- Visual indicator:
-  - Input border color changes to yellow.
-  - The input prompt indicator changes to a yellow "$".
-  - The input placeholder includes "! for shell mode".
+- 現在の入力（trim 後）が ! で始まるとシェルモードが有効になります
+  - 例: "!git status" も " !ls -la" もシェルモードを有効にします。
+- 視覚的なインジケーター:
+  - 入力欄の枠線の色が黄色に変化します。
+  - 入力プロンプトのインジケーターが黄色の "$" に変わります。
+  - 入力欄のプレースホルダーに "! for shell mode" が含まれます。
 
-Deactivation / Exiting Shell Mode
+無効化／シェルモードの終了
 
-- Pressing Enter to submit the input exits shell mode immediately after submission, regardless of the command result.
-- Pressing Esc when the input (trimmed) is exactly ! clears the input and exits shell mode.
-- Editing the input so it no longer starts with ! also exits shell mode and restores normal input behavior.
+- Enter を押して入力を送信すると、コマンドの結果に関係なく、送信直後にシェルモードを抜けます。
+- 入力（trim 後）がちょうど ! である状態で Esc を押すと、入力をクリアしてシェルモードを抜けます。
+- 入力を編集して ! で始まらないようにした場合もシェルモードを抜け、通常の入力挙動に戻ります。
 
-Interaction with other input helpers
+他の入力ヘルパーとの相互作用
 
-- When in shell mode (input starts with !):
-  - "@" file search suggestions are disabled.
-  - "/" slash command UI is disabled.
-- When in slash command mode (input starts with /):
-  - "@" file search suggestions are disabled.
-  - Enter submits the highlighted slash command directly (except /title, which requires Tab to select first).
-  - Tab selects the highlighted command without submitting.
+- シェルモード中の場合（入力が ! で始まる場合）:
+  - "@" によるファイル検索サジェストは無効になります。
+  - "/" によるスラッシュコマンド UI は無効になります。
+- スラッシュコマンドモード中の場合（入力が / で始まる場合）:
+  - "@" によるファイル検索サジェストは無効になります。
+  - Enter はハイライトされたスラッシュコマンドを直接送信します（/title は先に Tab で選択する必要がある場合を除きます）。
+  - Tab は送信せずにハイライトされたコマンドを選択します。
 
-Submission behavior
+送信時の挙動
 
-- On submit (Enter) with a shell-mode input:
-  - The leading ! is removed and the remainder is treated as the shell command to run.
-  - The TUI immediately appends an assistant message representing a Shell tool call, with status set to calling, so users can see that the command is in progress.
-  - The shell command is executed asynchronously; when it completes, the tool call status is updated to done (or error) and the output is populated.
+- シェルモードの入力で送信（Enter）を行った場合:
+  - 先頭の ! が取り除かれ、残り部分が実行すべきシェルコマンドとして扱われます。
+  - TUI は直ちに、ステータスが calling に設定された Shell ツール呼び出しを表すアシスタントメッセージを追加します。これによりコマンドの実行中であることがユーザーに分かります。
+  - シェルコマンドは非同期に実行され、完了するとツール呼び出しのステータスが done（または error）に更新され、出力が反映されます。
 
-Execution semantics
+実行セマンティクス
 
-- The command is executed in the same way as terminal tool commands, minus permissions, and inserted into the chat history the same.
+- コマンドはターミナルツールのコマンドと同じ方法で実行されますが、権限チェックは適用されません。チャット履歴への挿入も同様に行われます。
 
-Output handling
+出力の取り扱い
 
-- Stdout is streamed into memory; Stderr is captured and appended as a trailing "Stderr: ..." section on success.
-- If the process exits non-zero and Stderr contains content, the tool call is marked as error and the error text is shown.
-- Output is truncated to the first 5000 lines if exceeded.
-- Timeout behavior: If no output is received for 120 seconds (configurable in tests), the process is terminated and the result includes a note like:
-  "[Command timed out after 120 seconds of no output]".
+- Stdout はメモリへストリーミングされ、Stderr は捕捉され、成功時には末尾に "Stderr: ..." セクションとして追記されます。
+- プロセスが 0 以外で終了し Stderr に内容がある場合、ツール呼び出しは error としてマークされ、エラーテキストが表示されます。
+- 出力が超過した場合は先頭の 5000 行に切り詰められます。
+- タイムアウトの挙動: 120 秒間出力が受信されない場合（テストでは設定可能）、プロセスは終了させられ、結果に次のような注記が含まれます:
+  "[Command timed out after 120 seconds of no output]"
 
-Keyboard behaviors (summary)
+キーボード挙動（要約）
 
-- Enter: submit input. If in shell mode, exits shell mode after submission and shows the pending Shell tool call immediately.
-- Shift+Enter: new line.
-- Backslash (\) at end-of-line: inserts a new line (line continuation) as usual.
-- Esc: if only ! (trimmed) is present, clears input and exits shell mode; otherwise cancels streaming or closes suggestions depending on context.
+- Enter: 入力を送信します。シェルモード中の場合は、送信後にシェルモードを抜け、保留中の Shell ツール呼び出しを即座に表示します。
+- Shift+Enter: 改行を挿入します。
+- 行末でのバックスラッシュ（\）: 通常どおり改行（行継続）を挿入します。
+- Esc: 入力（trim 後）が ! のみの場合は入力をクリアしてシェルモードを抜けます。それ以外の場合は、文脈に応じてストリーミングのキャンセルまたはサジェストのクローズを行います。
 
-Scope / Modes
+適用範囲／モード
 
-- Shell mode applies to interactive (TUI/standard) CLI usage. It is not part of headless (-p/--print) processing.
+- シェルモードはインタラクティブ（TUI／標準）な CLI の利用に適用されます。ヘッドレス（-p／--print）の処理には含まれません。
 
-Error handling
+エラー処理
 
-- Command execution errors are captured and surfaced in the tool call as status error with human-readable error text (including Stderr when available).
+- コマンド実行時のエラーは捕捉され、ツール呼び出し内でステータス error と、人間が読みやすいエラーテキスト（利用可能な場合は Stderr を含む）として表面化されます。
 
-Examples
+例
 
-- "!git status" → shows a Shell tool call immediately, then populates with the git status output.
-- "!echo hello" → shows a Shell tool call immediately, then output "hello".
-- "!some-unknown-cmd" → shows a Shell tool call immediately, then sets status to error with an error message.
+- "!git status" → 即座に Shell ツール呼び出しが表示され、その後 git status の出力が反映されます。
+- "!echo hello" → 即座に Shell ツール呼び出しが表示され、その後出力 "hello" が反映されます。
+- "!some-unknown-cmd" → 即座に Shell ツール呼び出しが表示され、その後ステータスが error に設定されエラーメッセージが表示されます。
